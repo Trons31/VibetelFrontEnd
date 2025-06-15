@@ -1,6 +1,6 @@
 'use client';
 
-import { login, registerUser } from "@/actions";
+import { login } from "@/actions";
 import clsx from "clsx";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -22,10 +22,7 @@ const CompleteForm = ({ email, name }: Props) => {
 
         const { password } = data;
         const lastname = "apellido"
-        const resp = await registerUser(name, lastname, email, password);
-        if (!resp.ok) {
-            return;
-        }
+      
 
         await login(email.toLowerCase(), password);
         window.location.replace('/profile');

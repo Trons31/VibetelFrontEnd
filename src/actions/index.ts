@@ -29,7 +29,6 @@ export { getExistingRating } from './rating/get-existing-rating';
 // Auth Actions
 export { login } from './auth/login';
 export { logout } from './auth/logout';
-export { registerUser } from './auth/register';
 
 // User Actions
 export { GetUserByEmail } from './user/get-user-by-email';

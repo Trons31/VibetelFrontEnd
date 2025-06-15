@@ -185,10 +185,10 @@ export const RoomInBooking = () => {
             <div>
               <p className="text-md font-bold mt-7 mb-4">Incluye</p>
 
-              {roomInBooking?.amenities &&
-                roomInBooking?.amenities.length > 0 && (
+              {roomInBooking?.amenitiesRoom &&
+                roomInBooking?.amenitiesRoom.length > 0 && (
                   <>
-                    <Amenities amenities={roomInBooking?.amenities} />
+                    <Amenities amenities={roomInBooking?.amenitiesRoom} />
                   </>
                 )}
 
