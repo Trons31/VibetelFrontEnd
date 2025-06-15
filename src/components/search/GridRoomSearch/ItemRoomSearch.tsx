@@ -25,7 +25,7 @@ export const ItemRoomSearch = ({ room, location }: Props) => {
   }
 
   const addRoomSueggested = () => {
-    addRoom(room);
+    //addRoom(room);
   };
 
   return (
