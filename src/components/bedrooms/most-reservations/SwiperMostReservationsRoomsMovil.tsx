@@ -60,7 +60,7 @@ export const SwiperMostReservationsRoomsMovil = ({
   const { addRoom } = useSuggestedRoomStore();
 
   const addRoomSueggested = (room: BedRooms) => {
-    addRoom(room);
+   // addRoom(room);
   };
 
   return (

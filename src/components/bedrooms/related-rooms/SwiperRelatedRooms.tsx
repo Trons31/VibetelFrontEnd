@@ -59,7 +59,7 @@ export const SwiperRelatedRooms = ({ rooms, className }: Props) => {
   const { addRoom } = useSuggestedRoomStore();
 
   const addRoomSueggested = (room: BedRooms) => {
-    addRoom(room);
+    //addRoom(room);
   };
 
   return (

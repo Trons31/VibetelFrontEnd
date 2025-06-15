@@ -4,13 +4,13 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link'
 import { FavoriteRoom, SharedLinkRoom } from '@/components';
-import { BedRooms } from '@/interfaces';
+import { BedRooms, RoomApi } from '@/interfaces';
 import { inFavorites } from '@/actions';
 import { IoIosArrowBack } from 'react-icons/io'
 import { useRouter } from 'next/navigation';
 
 interface Props {
-    room: BedRooms;
+    room: RoomApi;
 }
 
 export const TopMenuRoom = ({ room }: Props) => {
@@ -47,7 +47,7 @@ export const TopMenuRoom = ({ room }: Props) => {
 
                 <div className='flex justify-between items-center gap-2' >
                     <SharedLinkRoom
-                        bedroom={room}
+                        room={room}
                     />
 
                     <FavoriteRoom

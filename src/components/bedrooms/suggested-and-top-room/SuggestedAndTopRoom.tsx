@@ -2,12 +2,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { getTopReservedRooms } from "@/actions";
 import { SkeletonRooms } from "@/components";
-import { BedRooms, searchCity } from "@/interfaces";
+import { RoomAllApi, searchCity } from "@/interfaces";
 import { GridRoom } from "./GridRoom";
 import { useLocationStore, useSuggestedRoomStore } from "@/store";
 
 export const SuggestedAndTopRoom = () => {
-  const [topRooms, setTopRooms] = useState<BedRooms[]>([]);
+  const [topRooms, setTopRooms] = useState<RoomAllApi[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingSuggestedRoom, setisLoadingSuggestedRoom] = useState(true);
 
@@ -25,7 +25,7 @@ export const SuggestedAndTopRoom = () => {
   const getTopRooms = useCallback(async () => {
     setIsLoading(true);
     const { topRooms } = await getTopReservedRooms(locationUser?.city);
-    setTopRooms(topRooms);
+    //setTopRooms(topRooms);
     setIsLoading(false);
   }, [detectedLocation]);
 

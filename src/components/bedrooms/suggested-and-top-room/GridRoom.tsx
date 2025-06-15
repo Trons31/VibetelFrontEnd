@@ -1,9 +1,9 @@
-import { BedRooms, searchCity } from "@/interfaces";
+import { RoomAllApi, searchCity } from "@/interfaces";
 import React from "react";
 import { ItemRoom } from "./ItemRoom";
 
 interface Props {
-  rooms: BedRooms[];
+  rooms: RoomAllApi[];
   location: searchCity | undefined;
 }
 
