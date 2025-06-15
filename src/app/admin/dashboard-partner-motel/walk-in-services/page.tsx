@@ -1,0 +1,47 @@
+import { redirect } from "next/navigation";
+import { getDataServicesGeneral, traficServiceToday } from "@/actions";
+import { auth } from "@/auth.config";
+import { WalkInServices } from "./ui/WalkInServices";
+import { MotelApi } from "@/interfaces";
+import axios from "axios";
+
+export default async function WalkInServicesPage() {
+
+
+    const session = await auth();
+    if (!session?.user.roles.includes("motelPartner")) {
+        redirect("/motel-partner")
+    }
+    let motelExist: MotelApi | null = null;
+    try {
+        const response = await axios.get<MotelApi>(
+            `${process.env.NEXT_PUBLIC_API_ROUTE}motel/user`,
+            {
+                headers: {
+                    Authorization: `Bearer ${session.accessToken}`,
+                },
+            }
+        );
+
+        motelExist = response.data;
+    } catch (error: any) {
+        redirect("/auth/new-account-motel/register");
+    }
+
+    if (motelExist.isApproved !== "APPROVED") {
+        redirect("/admin/dashboard-partner-motel")
+    }
+
+    const servicesToday = await traficServiceToday(motelExist.id);
+    const services = await getDataServicesGeneral(motelExist.id);
+
+    return (
+        <>
+            <WalkInServices
+                motelId={motelExist.id}
+                serviceDataToday={servicesToday}
+                serviceData={services}
+            />
+        </>
+    );
+}

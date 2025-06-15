@@ -1,0 +1,15 @@
+
+.swiper {
+  width: 100%;
+}
+
+.swiper-slide {
+  height: 100%;
+  border-radius: 10px;
+}
+
+
+.swiper-slide-content {
+  display: flex;
+  flex-direction: column;
+}

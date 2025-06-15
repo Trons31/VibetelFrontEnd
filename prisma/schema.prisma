@@ -1,0 +1,480 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  user
+  motelPartner
+  SuperAdmin
+}
+
+model CategoryRooms {
+  id          String @id @default(uuid())
+  name        String @unique
+  description String
+  // Relaciones
+  room        Room[]
+}
+
+model Garage {
+  id   String @id @default(uuid())
+  name String @unique
+  // Relaciones
+  room Room[]
+}
+
+//TODO: ENUM ACTUALIZADA
+
+enum StatusRoom {
+  AVAILABLE // Disponible
+  IN_SERVICE // En servicio
+  CLEANING // En limpieza
+  DISABLED // Deshabilitada
+  SERVICE_COMPLETED // Servicio terminado recientemente
+}
+
+model Room {
+  id                  String     @id @default(uuid())
+  title               String
+  description         String
+  price               Float      @default(0)
+  promoActive         Boolean    @default(false)
+  promoPrice          Float?
+  slug                String     @unique
+  tags                String[]   @default([])
+  inAvailable         Boolean    @default(true)
+  status              StatusRoom @default(AVAILABLE)
+  timeLimit           Int        @default(0)
+  roomNumber          String
+  extraServicesActive Boolean    @default(false)
+  extraServices       Float?     @default(2000)
+  surcharge           Int        @default(0)
+  //
+  amenities           String[]   @default([])
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+
+  //AdTime
+  priceAddTime Float
+
+  //Relations
+
+  category   CategoryRooms @relation(fields: [categoryId], references: [id])
+  categoryId String
+  garage     Garage        @relation(fields: [garageId], references: [id])
+  garageId   String
+
+  motel   Motel  @relation(fields: [motelId], references: [id])
+  motelId String
+
+  roomImage      RoomImage[]
+  ServiceItem    ServiceItem[]
+  amenitiesRoom  AmenitiesRoom[]
+  LikeRoomByUser FavoriteRoomByUser[]
+
+  ratings       RoomRating[] //Relación con las calificaciones
+  averageRating Float?        @default(0) // Promedio de calificación
+  RoomCleaning  RoomCleaning?
+
+  @@index([categoryId])
+  @@index([garageId])
+}
+
+model RoomRating {
+  id        String   @id @default(uuid())
+  rating    Int // Calificación (1-5)
+  comment   String? // Comentarios opcionales
+  createdAt DateTime @default(now())
+
+  //   // Relaciones
+  room      Room    @relation(fields: [roomId], references: [id])
+  roomId    String
+  user      User?   @relation(fields: [userId], references: [id])
+  userId    String? @unique
+  service   Service @relation(fields: [serviceId], references: [id])
+  serviceId String  @unique
+
+  @@index([roomId])
+  @@index([serviceId])
+}
+
+model RoomCleaning {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  room   Room   @relation(fields: [roomId], references: [id])
+  roomId String @unique
+}
+
+model AmenitiesRoom {
+  id                   String              @id @default(uuid())
+  //relaciones
+  room                 Room                @relation(fields: [roomId], references: [id])
+  roomId               String
+  AmenitiesRoomlInfo   AmenitiesRoomlInfo? @relation(fields: [amenitiesRoomlInfoId], references: [id])
+  amenitiesRoomlInfoId String?
+}
+
+model AmenitiesRoomlInfo {
+  id            String          @id @default(uuid())
+  name          String          @unique
+  description   String
+  AmenitiesRoom AmenitiesRoom[]
+}
+
+model RoomImage {
+  id     Int    @id @default(autoincrement())
+  url    String
+  // Relaciones
+  room   Room   @relation(fields: [roomId], references: [id])
+  roomId String
+}
+
+model AmenitiesMotelInfo {
+  id             String           @id @default(uuid())
+  name           String           @unique
+  description    String
+  AmenitiesMotel AmenitiesMotel[]
+}
+
+model AmenitiesMotel {
+  id                   String             @id @default(uuid())
+  //Relaciones
+  amenitiesMotelInfo   AmenitiesMotelInfo @relation(fields: [amenitiesMotelInfoId], references: [id])
+  amenitiesMotelInfoId String
+
+  motel   Motel  @relation(fields: [motelId], references: [id])
+  motelId String
+}
+
+enum ApprovalStatus {
+  PENDING // En espera
+  APPROVED // Aprobado
+  DATA_CORRECTION // Corrección de datos
+  DISABLED
+}
+
+model Motel {
+  id          String         @id @default(uuid())
+  title       String
+  description String
+  slug        String         @unique
+  isApproved  ApprovalStatus @default(PENDING)
+
+  contactEmail String
+  contactPhone String
+  whatsapp     String
+  nit          String @unique
+
+  amenities String[] @default([])
+
+  address      String
+  neighborhood String
+  createdAt    DateTime @default(now())
+  freeService  Boolean  @default(true)
+  // Relaciones  
+
+  country   Country @relation(fields: [countryId], references: [id])
+  countryId String
+
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String
+
+  city   City   @relation(fields: [cityId], references: [id])
+  cityId String
+
+  motelPartner   User   @relation(fields: [motelPartnerId], references: [id])
+  motelPartnerId String @unique
+
+  legalRepresentativeMotel   LegalRepresentativeMotel @relation(fields: [legalRepresentativeMotelId], references: [id])
+  legalRepresentativeMotelId String
+
+  room           Room[]
+  motelImage     MotelImage[]
+  AmenitiesMotel AmenitiesMotel[]
+  bankAccount    BankAccount?
+  MotelConfig    MotelConfig?
+}
+
+model Bank {
+  id       String        @id @default(uuid())
+  name     String        @unique // Nombre del banco
+  accounts BankAccount[]
+}
+
+model AccountType {
+  id       String        @id @default(uuid())
+  typeName String        @unique
+  accounts BankAccount[]
+}
+
+model BankAccount {
+  id String @id @default(uuid())
+
+  accountHolderName String // Nombre del titular de la cuenta
+  accountHolderId   String
+  accountNumber     String   @unique
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relación uno a uno con el modelo Motel
+  motel   Motel  @relation(fields: [motelId], references: [id])
+  motelId String @unique
+
+  bank   Bank   @relation(fields: [bankId], references: [id])
+  bankId String
+
+  accountType   AccountType @relation(fields: [accountTypeId], references: [id])
+  accountTypeId String
+}
+
+//TODO: ACTUALIZAR MODELO PARA NUEVAS PROPIEDADES DE FUERA DE SERVICIO
+
+model MotelConfig {
+  id                   String @id @default(uuid())
+  timeMinutesCleanRoom Int?
+
+  defaultReservationAddTime Int?
+
+  inService         Boolean   @default(true)
+  outOfServiceStart DateTime?
+  outOfServiceEnd   DateTime?
+
+  locationLatitude  Float?
+  locationLongitude Float?
+
+  timeAwaitTakeReservation Int
+
+  motel   Motel  @relation(fields: [motelId], references: [id])
+  motelId String @unique
+}
+
+model MotelImage {
+  id      Int    @id @default(autoincrement())
+  url     String
+  // Relaciones
+  motel   Motel  @relation(fields: [motelId], references: [id])
+  motelId String
+}
+
+//TODO: Quitamos LegalRepresentativeMotel
+model LegalRepresentativeMotel {
+  id                 String  @id @default(uuid())
+  name               String
+  identificationCard String
+  root               String
+  Motel              Motel[]
+}
+
+model User {
+  id                           String               @id @default(uuid())
+  name                         String
+  lastname                     String
+  contactPhone                 String?
+  email                        String               @unique
+  emailVerfied                 DateTime?
+  resetPasswordToken           String?
+  resetPasswordTokenExpiration DateTime?
+  password                     String
+  role                         Role                 @default(user)
+  Motel                        Motel?
+  Order                        Service[]
+  LikeRoomByUser               FavoriteRoomByUser[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  RequestServiceInCity RequestServiceInCity[]
+  RoomRating           RoomRating?
+  Loyalty              Loyalty?
+}
+
+model Loyalty {
+  id              String    @id @default(uuid())
+  userId          String    @unique
+  points          Int       @default(0)
+  monthlyBookings Int       @default(0) // Reservas en el mes actual
+  streak          Int       @default(0) // Meses consecutivos reservando
+  lastBooking     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Country {
+  id         String       @id
+  name       String
+  Motel      Motel[]
+  Department Department[]
+}
+
+model Department {
+  id   String @id
+  name String
+
+  country   Country @relation(fields: [countryId], references: [id])
+  countryId String
+  City      City[]
+  Motel     Motel[]
+}
+
+model City {
+  id   String @id
+  name String
+
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String
+  Motel        Motel[]
+
+  RequestServiceInCity RequestServiceInCity[]
+}
+
+model RequestServiceInCity {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  // Relación con el modelo User
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  // Relación con el modelo City
+  city   City   @relation(fields: [cityId], references: [id])
+  cityId String
+
+  @@index([userId, cityId])
+}
+
+enum PaymentStatus {
+  ACCEPTED
+  REJECTED
+  PENDING
+  FAILED
+}
+
+enum ServiceType {
+  reservation
+  noReservation
+}
+
+model Service {
+  id            String        @id @default(uuid())
+  subTotal      Float
+  total         Float
+  phoneNumber   String?
+  mail          String?
+  paymentStatus PaymentStatus @default(PENDING)
+  paidAt        DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  type          ServiceType
+  // Relaciones
+  user          User?         @relation(fields: [userId], references: [id])
+  userId        String?
+
+  ServiceItem   ServiceItem?
+  transactionId String?
+  ServiceRating ServiceRating?
+  RoomRating    RoomRating?
+}
+
+model ServiceItem {
+  id            String   @id @default(uuid())
+  title         String
+  promoPrice    Float?
+  price         Float
+  arrivalDate   DateTime
+  departureDate DateTime
+  timeLimit     Int
+
+  updatedAt DateTime @updatedAt
+
+  roomNumber    String
+  extraServices Float?
+
+  // Nuevas propiedades
+  accessCode   String?
+  status       ServiceStatus @default(en_espera)
+  serviceTaken Boolean       @default(false)
+  dateTaken    DateTime?
+
+  // Nueva propiedad para el tiempo de servicio personalizado
+  customServiceTime Int? // Tiempo de servicio personalizado (opcional)
+
+  userConfirmServiceCompleted     Boolean   @default(false)
+  dateUserConfirmServiceCompleted DateTime?
+  serviceCompleted                Boolean   @default(false)
+  dateComplete                    DateTime?
+
+  canceledReservation     Boolean   @default(false)
+  dateCanceledReservation DateTime?
+
+  surchargeActive Boolean @default(false)
+  surchargeAmount Int     @default(0)
+  surchargePaid   Boolean @default(false)
+
+  // Relaciones
+  service   Service @relation(fields: [serviceId], references: [id])
+  serviceId String  @unique
+
+  room           Room             @relation(fields: [roomId], references: [id])
+  roomId         String
+  serviceAddTime ServiceAddTime[]
+
+  @@index([accessCode])
+  @@index([roomId, serviceId])
+}
+
+model ServiceAddTime {
+  id                 String        @id @default(uuid())
+  addTimeReservation Int
+  newDepartureDate   DateTime?
+  total              Float
+  paymentStatus      PaymentStatus @default(PENDING)
+  paidAt             DateTime?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  serviceItem        ServiceItem   @relation(fields: [serviceItemId], references: [id])
+  serviceItemId      String
+
+  transactionId String?
+}
+
+enum ServiceStatus {
+  en_espera
+  iniciado
+  completado
+  cancelado
+  no_iniciado
+}
+
+model ServiceRating {
+  id        String   @id @default(uuid())
+  rating    Int // Estrellas de 1 a 5
+  comment   String? // Comentarios del usuario sobre el servicio o la plataforma
+  createdAt DateTime @default(now())
+
+  // Relación con el modelo de Service
+  service   Service @relation(fields: [serviceId], references: [id])
+  serviceId String  @unique
+}
+
+model FavoriteRoomByUser {
+  id     String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  room   Room   @relation(fields: [roomId], references: [id])
+  roomId String
+}

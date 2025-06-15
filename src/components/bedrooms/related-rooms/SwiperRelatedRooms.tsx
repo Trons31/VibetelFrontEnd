@@ -1,0 +1,188 @@
+"use client";
+import Link from "next/link";
+import { BedRooms } from "@/interfaces/bedrooms.interface";
+import { Swiper, SwiperSlide } from "swiper/react";
+import styles from "./swiper.module.css";
+
+// Import Swiper styles
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/pagination";
+
+import { FreeMode, Pagination } from "swiper/modules";
+import { currencyFormat } from "@/utils/currencyFormat";
+import { RoomImage } from "../room-image/RoomImage";
+import Pusher from "pusher-js";
+import { useSuggestedRoomStore } from "@/store";
+import { RatingRoomCard } from "../rating-room/RatingRoomCard";
+import { BiSolidDiscount } from "react-icons/bi";
+import { TbPointFilled } from "react-icons/tb";
+import { FavoriteRoomCard } from "@/components";
+import { useState } from "react";
+
+interface Props {
+  rooms: BedRooms[];
+  className?: string;
+}
+
+interface PropsPusher {
+  idRoom: string;
+  inAvailable: boolean;
+}
+
+export const SwiperRelatedRooms = ({ rooms, className }: Props) => {
+  const [openModalLocationMotel, setOpenModalLocationMotel] = useState(false);
+  // const [room, setRoom] = useState<BedRooms[]>(bedrooms)
+
+  // useEffect(() => {
+  //   const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
+  //     cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+  //   });
+
+  //   const channel = pusher.subscribe('reservations');
+
+  //   channel.bind('confirm-reservation', (updateRoom: PropsPusher) => {
+  //     setRoom((prevRooms) =>
+  //       prevRooms.map((r) =>
+  //         r.id === updateRoom.idRoom ? { ...r, inAvailable: updateRoom.inAvailable } : r
+  //       )
+  //     );
+  //   });
+
+  //   return () => {
+  //     channel.unbind_all();
+  //     channel.unsubscribe();
+  //   };
+  // }, []);
+
+  const { addRoom } = useSuggestedRoomStore();
+
+  const addRoomSueggested = (room: BedRooms) => {
+    addRoom(room);
+  };
+
+  return (
+    <>
+
+      <div className={className}>
+        <Swiper
+          slidesPerView={4}
+          spaceBetween={30}
+          freeMode={true}
+          pagination={{
+            clickable: true,
+          }}
+          modules={[FreeMode, Pagination]}
+          className="mySwiper"
+        >
+          {rooms.map((room) => (
+            <SwiperSlide key={room.slug}>
+              <div
+                className={`${styles["card-content"]}  fade-in bg-white border border-transparent mb-1
+           hover:border-gray-300 transition-all duration-300 h-[390px] rounded-lg hover:shadow-lg shadow-gray-200 `}
+              >
+                <div className={`${styles["image-container"]} relative group`}>
+                  <Link
+                    onClick={() => addRoomSueggested(room)}
+                    href={`/rooms/${room.slug}`}
+                  >
+                    <RoomImage
+                      className="rounded-lg"
+                      src={room.images[0]}
+                      width={600}
+                      height={500}
+                      alt="img logo"
+                    />
+                  </Link>
+                  <div
+                    className="absolute top-2 flex justify-between w-full px-3 items-center"
+                  >
+                    {room.inAvailable ? (
+                      <div className="center relative inline-block select-none whitespace-nowrap rounded-lg bg-white py-1 md:py-1 px-2 md:px-3.5 align-baseline text-xs leading-none text-black">
+                        <p className="mt-px text-xs">Disponible</p>
+                      </div>
+                    ) : (
+                      <div className="center relative inline-block select-none whitespace-nowrap rounded-lg bg-white py-1 md:py-1 px-2 md:px-3.5 align-baseline leading-none text-black">
+                        <p className="mt-px text-xs">No disponible</p>
+                      </div>
+                    )}
+                    <FavoriteRoomCard
+                      roomId={room.id}
+                      inFavorites={room.isFavorite!}
+                    />
+                  </div>
+                  <div className="p-2 flex md:hidden rounded-b-sm md:group-hover:flex bg-red-600  justify-center  absolute right-0 bottom-0 w-full md:group-hover:bg-red-600 md:group-hover:transition-all md:group-hover:duration-300">
+                    <p className="text-white text-sm md:text-red-600 md:group-hover:text-white font-normal">
+                      Reservar ahora
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-2">
+                  <div className="mt-1">
+                    <div className="flex justify-between items-center" >
+                      <h2 className="text-gray-900 title-font capitalize text-lg font-medium">
+                        {" "}
+                        {room.title}{" "}
+                      </h2>
+                      {room.ratings.length > 0 && (
+                        <RatingRoomCard ratings={room.ratings} />
+                      )}
+                    </div>
+                    <p className="text-sm text-gray-700 -mt-1">
+                      Motel{" "}
+                      <button
+                        onClick={() => setOpenModalLocationMotel(true)}
+                        className="underline inline-block max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis align-bottom"
+                        title={room.motel.title} // Opcional: muestra el nombre completo al pasar el mouse
+                      >
+                        {room.motel.title}
+                      </button>
+                    </p>
+                    <div className="flex justify-start gap-1 items-center" >
+                      <span
+                        className="text-sm text-gray-700 font-extralight inline-flex items-center
+                "
+                      >
+                        {room.category.name}
+                      </span>
+                      <TbPointFilled className="w-2 h-2 flex-shrink-0" />
+                      <span
+                        className="text-sm text-gray-700 font-extralight inline-flex items-center
+                "
+                      >
+                        {room.timeLimit} horas
+                      </span>
+                    </div>
+                    <div className="text-start">
+                      {room.promoActive ? (
+                        <>
+                          <div className="flex">
+                            <p className="text-lg font-bold text-gray-900">
+                              {currencyFormat(room.promoPrice!)}
+                            </p>
+                            <del className="ml-1 align-super text-sm font-bold text-gray-600">
+                              {" "}
+                              {currencyFormat(room.price)}{" "}
+                            </del>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <p className="text-lg font-bold text-gray-900">
+                            {currencyFormat(room.price)}
+                          </p>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+    </>
+  );
+};

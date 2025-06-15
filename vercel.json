@@ -1,0 +1,12 @@
+{
+    "crons": [
+        {
+            "path": "/api/crons/deletePendingReservations",
+            "schedule": "0 0 * * *"
+        },
+        {
+            "path": "/api/crons/deletePendingAddTimeReservations",
+            "schedule": "0 0 * * *"
+        }
+    ]
+}

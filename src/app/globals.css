@@ -1,0 +1,190 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #274494;
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+ 
+}
+/* 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+} */ 
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-start-rgb))
+      )
+      rgb(var(--background-end-rgb))
+}
+
+
+
+@keyframes fadeIn {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+} 
+
+@-webkit-keyframes fadeIn {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+.fade-in {
+  -webkit-animation-duration: 0.5s;
+  animation-duration: 0.5s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn;
+}
+
+@keyframes fadeInLoad {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeInLoad 0.5s ease-in-out;
+}
+
+.btn-primary {
+  @apply bg-blue-600 hover:bg-blue-800 text-white py-2 px-4 rounded transition-all;
+}
+
+.btn-secondary {
+  @apply bg-gray-200 hover:bg-gray-300 text-black py-2 px-4 rounded transition-all;
+}
+
+.btn-disabled {
+  @apply bg-gray-200  text-white  rounded transition-all;
+}
+
+.btn-delete {
+  @apply bg-red-600 hover:bg-red-800 text-white py-2 px-4  transition-all;
+}
+
+.placeholder-black::placeholder {
+  color: #6F6F6F;
+  opacity: 1; 
+}
+
+/* Admin Sheet */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px; /* Ancho del scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Fondo del track */
+  border-radius: 8px; /* Radio del borde del track */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #888; /* Color del scrollbar */
+  border-radius: 8px; /* Radio del borde del scrollbar */
+  border: 2px solid #f1f1f1; /* Borde del scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color del scrollbar al hacer hover */
+}
+
+/* Admin sideBar */
+.custom-scrollbar-sidebar::-webkit-scrollbar {
+  width: 14px; /* Ancho del scrollbar */
+}
+
+.custom-scrollbar-sidebar::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Fondo del track */
+  border-radius: 8px; /* Radio del borde del track */
+}
+
+.custom-scrollbar-sidebar::-webkit-scrollbar-thumb {
+  background-color: #888; /* Color del scrollbar */
+  border-radius: 8px; /* Radio del borde del scrollbar */
+  border: 2px solid #f1f1f1; /* Borde del scrollbar */
+}
+
+.custom-scrollbar-sidebar::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color del scrollbar al hacer hover */
+}
+
+/* Admin table scroll */
+.custom-scrollbar-table::-webkit-scrollbar {
+  width: 14px; /* Ancho del scrollbar */
+}
+
+.custom-scrollbar-table::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Fondo del track */
+  border-radius: 8px; /* Radio del borde del track */
+}
+
+.custom-scrollbar-table::-webkit-scrollbar-thumb {
+  background-color: #888; /* Color del scrollbar */
+  border-radius: 8px; /* Radio del borde del scrollbar */
+  border: 2px solid #f1f1f1; /* Borde del scrollbar */
+}
+
+.custom-scrollbar-table::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color del scrollbar al hacer hover */
+}
+
+.carousel-container {
+  position: relative;
+  height: 120px;
+  overflow: hidden;
+}
+
+.carousel-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.carousel-item {
+  height: 40px;
+  flex-shrink: 0;
+  color: #2d3748; /* Color de texto gris para mayor contraste */
+  font-weight: 500; /* Peso medio para que el texto sea más legible */
+}
+
+/* Capa de desenfoque */
+.blur-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.blur-top, .blur-bottom {
+  backdrop-filter: blur(1px); /* Desenfoque más sutil para que el texto aún sea legible */
+  background: rgba(255, 255, 255, 0.2); /* Fondo ligeramente opaco para mejorar la legibilidad */
+}
+
+/* Área central enfocada */
+.focus-area {
+  backdrop-filter: none; /* Mantiene el enfoque en esta área */
+}
+
+/* Boton de pago */
+.epayco-button-render{
+  display: none !important;
+}
+
+
