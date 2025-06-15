@@ -12,7 +12,7 @@ export const BenefitItem = ({ text, tooltipText }: Props) => {
                 {text}
             </span>
             {tooltipText && (
-                <div className="absolute z-10 left-6 top-full mt-2 w-64 p-2 rounded-lg text-xs text-white bg-black shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                <div className="absolute z-10 left-6 top-full mt-2 w-64 p-2 rounded-lg text-xs text-white bg-red-600 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
                     {tooltipText}
                 </div>
             )}

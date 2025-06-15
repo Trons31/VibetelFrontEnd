@@ -1,10 +1,20 @@
-"use client"
-import { BenefitItem, SelectOption } from '@/components';
-import { currencyFormat } from '@/utils';
-import clsx from 'clsx';
-import Link from 'next/link';
-import React, { useState } from 'react'
-import { IoMdClose } from 'react-icons/io';
+"use client";
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { Swiper, SwiperSlide } from "swiper/react";
+import styles from "./swiper.module.css";
+
+// Import Swiper styles
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/pagination";
+
+import { FreeMode, Pagination } from "swiper/modules";
+import { currencyFormat } from "@/utils";
+import clsx from "clsx";
+import { BenefitItem, SelectOption } from "@/components";
+import { IoMdClose } from "react-icons/io";
 
 type Feature = {
     name: string;
@@ -22,8 +32,8 @@ type Plan = {
     ctaText?: string;
 };
 
-export const Pricing = () => {
 
+export const SlidePricingMovil = () => {
     const billingOptions = [
         { label: '1 Mes', value: 1 },
         { label: '12 Meses (10% Desc.)', value: 12 },
@@ -369,26 +379,32 @@ export const Pricing = () => {
     ];
 
     return (
-        <>
+        <div>
+
             <div className="flex justify-center mt-10">
                 <div>
                     <p className='text-md text-center text-gray-600' >Duración de la suscripción</p>
                     <SelectOption
-                    options={billingOptions}
-                    defaultOption={billingOptions[0]}
-                    onOptionSelect={(option) => setBillingPeriod(option.value)}
-                    className="w-[230px]"
-                    classNameSelect="ring-red-600 border-2 hover:border-red-600 text-gray-700"
-                />
+                        options={billingOptions}
+                        defaultOption={billingOptions[0]}
+                        onOptionSelect={(option) => setBillingPeriod(option.value)}
+                        className="w-[230px]"
+                        classNameSelect="ring-red-600 border-2 hover:border-red-600 text-gray-700"
+                    />
                 </div>
             </div>
 
-            {/* Pricing Cards */}
-            <div className="px-4 md:px-10 2xl:px-64">
-                <div className="mt-10 md:mt-10 grid w-full grid-cols-1 items-stretch gap-7 sm:mt-10 sm:gap-y-0 lg:grid-cols-4">
-                    {plans.map((plan, index) => (
+            <Swiper
+                slidesPerView={1}
+                spaceBetween={2}
+                freeMode={true}
+                pagination={true}
+                modules={[FreeMode, Pagination]}
+                className="mySwiper"
+            >
+                {plans.map((plan, index) => (
+                    <SwiperSlide key={index} className="p-5 mb-5" >
                         <div
-                            key={index}
                             className="relative flex flex-col bg-gray-50 py-8 px-6 rounded-3xl shadow-lg ring-2 ring-red-200 hover:ring-red-600 transition-all duration-300 h-full"
                         >
                             <h3 className="text-xl font-semibold text-black mb-4">{plan.name}</h3>
@@ -460,9 +476,9 @@ export const Pricing = () => {
                                 ))}
                             </ul>
                         </div>
-                    ))}
-                </div>
-            </div>
-        </>
+                    </SwiperSlide>
+                ))}
+            </Swiper>
+        </div>
     );
 };

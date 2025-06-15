@@ -54,7 +54,7 @@ export const SelectOption = ({ options, defaultOption, onOptionSelect,className,
       </div>
 
       {isOpen && (
-        <ul className="absolute z-10 w-full h-[150px] custom-scrollbar overflow-y-auto bg-white border rounded-b-lg shadow-xl transition-all duration-300">
+        <ul className="absolute z-10 w-full h-fit custom-scrollbar overflow-y-auto bg-white mt-1 border rounded-lg shadow-xl transition-all duration-300">
           {options.map((option) => (
             <li
               key={option.value}

@@ -288,8 +288,8 @@ export const RegisterForm = () => {
                             clsx(
 
                                 {
-                                    "flex items-center gap-x-4 mb-2 w-full mt-2 justify-center rounded-lg bg-black px-3 py-4 text-lg font-bold text-white": !showLoadingRegister,
-                                    "flex items-center gap-x-4 mb-2 w-full mt-2 justify-center rounded-lg bg-black px-3 py-4 text-lg font-bold text-white cursor-not-allowed": showLoadingRegister
+                                    "flex items-center gap-x-4 mb-2 w-full mt-2 justify-center rounded-lg bg-red-600 px-3 py-4 text-lg font-bold text-white": !showLoadingRegister,
+                                    "flex items-center gap-x-4 mb-2 w-full mt-2 justify-center rounded-lg bg-red-600 px-3 py-4 text-lg font-bold text-white cursor-not-allowed": showLoadingRegister
                                 }
                             )
                         }>

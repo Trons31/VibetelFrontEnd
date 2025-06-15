@@ -2,7 +2,8 @@ import Link from "next/link";
 import { Lobster } from "@/config/fonts";
 import { format } from "date-fns";
 import { MdEmail, MdLocationPin } from "react-icons/md";
-import { FaPhoneAlt } from "react-icons/fa";
+import { FaFacebook, FaPhoneAlt } from "react-icons/fa";
+import { RiInstagramFill } from "react-icons/ri";
 const currentYear = format(new Date(), "yyyy");
 
 export const FooterMotelPartners = () => {
@@ -10,8 +11,8 @@ export const FooterMotelPartners = () => {
     <>
       <footer className="bottom-0 bg-white border border-top border-gray-200 ">
         <div className="container mx-auto">
-          <div className="mx-auto max-w-7xl px-6 pb-5 md:pt-8">
-            <div className="hidden xl:grid xl:grid-cols-3 md:gap-14">
+          <div className="mx-auto w-full px-6 pb-5 md:pt-8">
+            <div className="hidden mt-5 md:grid md:grid-cols-3 xl:grid-cols-2 md:gap-14">
               <div className="">
                 <div>
                   <Link href="/motel-partner">
@@ -42,7 +43,7 @@ export const FooterMotelPartners = () => {
                 </div>
                 <div className="flex space-x-2">{/* Iconos */}</div>
               </div>
-              <div className="mt-16 col-span-2 flex justify-between w-full xl:mt-0">
+              <div className="md:col-span-2 flex justify-between xl:col-span-1 w-full">
                 <div>
                   <h3 className="text-md font-semibold leading-6 text-black">
                     Paginas
@@ -133,10 +134,48 @@ export const FooterMotelPartners = () => {
                     </li>
                   </ul>
                 </div>
-
               </div>
             </div>
-            <div className="mt-5 md:border-t md:border-gray-400/30 md:pt-4 md:mt-12 ">
+            <div className="flex justify-center md:justify-end items-center gap-5 mt-4 md:mt-8 md:mr-4" >
+              <a
+                href="https://www.instagram.com/vibe_tel/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-1"
+              >
+                <RiInstagramFill className="h-4 w-4" />
+                <span className="text-xs md:text-sm text-gray-600 group-hover:underline">Instagram</span>
+              </a>
+
+
+              <Link href="" className="group flex items-center gap-1" >
+                <FaFacebook className="h-4 w-4" />
+                <span className="text-xs md:text-sm text-gray-600 group-hover:underline" >Facebook</span>
+              </Link>
+            </div>
+            <div className="block md:hidden space-y-2 mt-5" >
+              <div className="p-2 bg-gray-100 rounded-xl" >
+                <p className="text-xs font-extralight text-center" >Contactenos</p>
+                <Link
+                  href="/about"
+                  className="flex ml-1 items-center gap-1 text-xs justify-center leading-6 text-gray-800 hover:text-gray-900"
+                >
+                  <MdEmail className="h-4 w-4 text-black" />
+                  vibetel@gmail.com
+                </Link>
+              </div>
+              <div className="p-2 bg-gray-100 rounded-xl">
+                <p className="text-xs font-extralight text-center" >Ubicacion</p>
+                <Link
+                  href="/"
+                  className="flex justify-center items-center gap-1 text-xs leading-6 text-gray-600 hover:text-gray-900"
+                >
+                  <MdLocationPin className="h-4 w-4 text-black" />
+                  Sincelejo, Sucre, Colombia
+                </Link>
+              </div>
+            </div>
+            <div className="mt-5 md:border-t md:border-gray-400/30 md:pt-4">
               <div className="flex flex-col md:flex-row justify-between items-center">
                 <div className="mb-0">
                   <p className="text-gray-600 text-center text-xs md:text-sm">

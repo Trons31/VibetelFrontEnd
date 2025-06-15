@@ -140,12 +140,12 @@ export default function HomePage() {
                 </ul>
             </div>
 
-            <div className="bg-black mt-10 text-white py-20 px-4 md:px-10 2xl:px-64 grid grid-cols-1 md:grid-cols-2 items-center gap-10">
+            <div className="bg-red-600 mt-10 text-white py-20 px-4 md:px-10 2xl:px-64 grid grid-cols-1 md:grid-cols-2 items-center gap-10">
                 <div>
                     <h2 className="text-2xl md:text-4xl font-extrabold mb-6">
                         ¡Moderniza tu motel hoy mismo y da el salto a la era digital con Vibetel!
                     </h2>
-                    <div className="bg-neutral-900 rounded-xl p-6 shadow-lg max-w-xl">
+                    <div className="bg-white rounded-xl p-6 shadow-lg max-w-xl">
                         <div className="flex items-center gap-4 mb-4">
                             <Image
                                 src="/motel-partner/ceo-google.jpg"
@@ -155,11 +155,11 @@ export default function HomePage() {
                                 height={100}
                             />
                             <div>
-                                <p className="font-semibold">Eric Schmidt</p>
-                                <p className="text-sm text-gray-400">Ex CEO de Google</p>
+                                <p className="font-semibold text-black">Eric Schmidt</p>
+                                <p className="text-sm text-gray-900">Ex CEO de Google</p>
                             </div>
                         </div>
-                        <p className="text-gray-300 text-md">
+                        <p className="text-gray-700 text-md">
                             &quot;Cada industria que no se digitalice quedará atrás. La tecnología no solo
                             mejora la eficiencia, transforma por completo cómo operamos. Adoptar sistemas
                             como Vibetel no es una opción, es una necesidad para liderar el futuro.&quot;

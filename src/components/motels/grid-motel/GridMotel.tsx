@@ -123,12 +123,12 @@ export const GridMotel = ({ motels }: Props) => {
                 </div>
               </div>
               <div className="hidden md:flex gap-2">
-                <Link href={`motels/${motel.slug}`} className="rounded-full py-1 px-3 border border-black text-xs text-black hover:bg-black hover:text-white transition-all duration-300" >
+                <Link href={`motels/${motel.slug}`} className="text-black px-2 md:px-4 py-1 text-xs md:text-sm rounded-xl transition-all bg-gray-200 hover:bg-gray-300" >
                   Ver todas las habitaciones
                 </Link>
                 <button
                   onClick={() => setOpenModalLocationMotel(true)}
-                  className="bg-blue-600 border border-blue-600 py-1 text-xs px-3 rounded-full text-white hover:text-blue-600 hover:bg-white transition-all duration-300">
+                  className="text-black px-2 md:px-4 py-1 text-xs md:text-sm rounded-xl transition-all bg-gray-200 hover:bg-gray-300">
                   Ver en el mapa
                 </button>
               </div>

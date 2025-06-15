@@ -11,7 +11,7 @@ export const Footer = () => {
     <>
       <footer className="bottom-0 bg-white border border-top border-gray-200 ">
         <div className="container mx-auto">
-          <div className="px-2 pb-5 md:pt-8">
+          <div className="mx-auto w-full px-6 pb-5 md:pt-8">
             <div className="hidden mt-5 md:grid md:grid-cols-3 xl:grid-cols-2 md:gap-14">
               <div className="">
                 <div>
@@ -170,8 +170,6 @@ export const Footer = () => {
                 <RiInstagramFill className="h-4 w-4" />
                 <span className="text-xs md:text-sm text-gray-600 group-hover:underline">Instagram</span>
               </a>
-
-
               <Link href="" className="group flex items-center gap-1" >
                 <FaFacebook className="h-4 w-4" />
                 <span className="text-xs md:text-sm text-gray-600 group-hover:underline" >Facebook</span>
@@ -198,7 +196,6 @@ export const Footer = () => {
                   Sincelejo, Sucre, Colombia
                 </Link>
               </div>
-
             </div>
             <div className="mt-5 md:border-t md:border-gray-400/30 md:pt-4 md:mt-5">
               <div className="flex flex-col md:flex-row justify-between items-center">

@@ -105,6 +105,7 @@ export * from "./ui-partners/auth/SwiperAuth";
 export * from "./ui-partners/footer/FooterMotelPartners";
 export * from "./ui-partners/side-menu-motel-partners/SideMenuMotelPartners";
 export * from "./ui-partners/pricing/BenefitItem";
+export * from "./ui-partners/slide-pricing-movil/SlidePricingMovil";
 
 export * from "./motels/sidebar-menu-filter/SideBarMenuFilter";
 export * from "./motels/grid-all-motel/GridAllMotel";

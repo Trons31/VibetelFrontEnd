@@ -262,26 +262,6 @@ export const SideMenuMotelPartners = () => {
                             <MdOutlinePolicy size={25} />
                             <span className="ml-5 text-md">Politica de privacidad</span>
                         </Link>
-
-                        <Link
-                            href="/help"
-                            onClick={closeSideMenu}
-                            className={clsx(
-                                "flex items-center mt-3 p-2 hover:bg-gray-200 rounded transition-all",
-                                {
-                                    "bg-red-500 text-white hover:text-gray-700":
-                                        pathname === "/help",
-                                }
-                            )}
-                        >
-                            <IoMdHelpCircleOutline size={25} />
-                            <span className="ml-5 text-md">Ayuda</span>
-                        </Link>
-
-                        <button className="flex w-full items-center mt-3 p-2 hover:bg-gray-200 rounded transition-all">
-                            <IoCallOutline size={25} />
-                            <span className="ml-5 text-md">Lineas de atencion</span>
-                        </button>
                     </div>
                 </div>
             </nav>

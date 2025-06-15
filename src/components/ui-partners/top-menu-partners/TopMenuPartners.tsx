@@ -43,9 +43,9 @@ export const TopMenuPartners = () => {
         <Link href='/motel-partner'
           className={
             clsx(
-              'm-2 px-2 py-1 rounded-md transition-all duration-150 hover:bg-black hover:text-white',
+              'm-2 px-2 py-1 rounded-md transition-all duration-150 hover:bg-red-600 hover:text-white',
               {
-                'bg-black text-white': pathname === '/motel-partner'
+                'bg-red-600 text-white': pathname === '/motel-partner'
               }
             )
           }  >
@@ -54,9 +54,9 @@ export const TopMenuPartners = () => {
         <Link href='/motel-partner/pricing'
           className={
             clsx(
-              'm-2 px-2 py-1 rounded-md transition-all duration-150 hover:bg-black hover:text-white',
+              'm-2 px-2 py-1 rounded-md transition-all duration-150 hover:bg-red-600 hover:text-white',
               {
-                'bg-black text-white': pathname === '/motel-partner/pricing'
+                'bg-red-600 text-white': pathname === '/motel-partner/pricing'
               }
             )
           }
@@ -65,9 +65,9 @@ export const TopMenuPartners = () => {
         </Link>
         <Link href='/motel-partner/contact-us' className={
           clsx(
-            'm-2 px-2 py-1 rounded-md transition-all duration-150 hover:bg-black hover:text-white',
+            'm-2 px-2 py-1 rounded-md transition-all duration-150 hover:bg-red-600 hover:text-white',
             {
-              'bg-black text-white': pathname === '/motel-partner/contact-us'
+              'bg-red-600 text-white': pathname === '/motel-partner/contact-us'
             }
           )
         }
@@ -83,7 +83,7 @@ export const TopMenuPartners = () => {
               ? (
                 <Link href="/admin/dashboard-partner-motel" >
                   <button
-                    className='hidden  md:flex fade-in text-black px-2 md:px-4 py-1 text-xs md:text-sm rounded-md border-2 transition-all border-black hover:border-black'
+                    className='hidden  md:flex fade-in text-black px-2 md:px-4 py-1 text-xs md:text-sm rounded-xl transition-all bg-gray-200 hover:bg-gray-300'
                   >
                     Dashboard
                   </button>
@@ -92,7 +92,7 @@ export const TopMenuPartners = () => {
                 <>
                   <Link href="/auth/partner" >
                     <button
-                      className='hidden md:flex fade-in text-black px-2 md:px-4 py-1 text-xs md:text-sm rounded-md border-2 transition-all border-black hover:bg-black hover:text-white'
+                      className='hidden md:flex fade-in text-black px-2 md:px-4 py-1 text-xs md:text-sm rounded-xl transition-all bg-gray-200 hover:bg-gray-300'
                     >
                       Ingresar
                     </button>
@@ -100,7 +100,7 @@ export const TopMenuPartners = () => {
 
                   <Link
                     href="/motel-partner"
-                    className='hidden md:flex fade-in text-white px-2 md:px-4 py-1 text-xs md:text-sm border-2 border-black rounded-md transition-all bg-black hover:bg-white hover:text-black'
+                    className='hidden md:flex fade-in text-black px-2 md:px-4 py-1 text-xs md:text-sm rounded-xl transition-all bg-gray-200 hover:bg-gray-300'
                   >
                     Registrar
                   </Link>

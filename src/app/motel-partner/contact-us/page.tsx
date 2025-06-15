@@ -15,20 +15,22 @@ export default function ContactUsPage() {
     return (
         <div>
 
-            <div className="h-screen flex items-center justify-center bg-black rounded-b-xl px-4">
+            <div className="h-screen flex items-center justify-center bg-red-600 px-4">
                 <div className="text-center text-white max-w-3xl leading-relaxed space-y-16">
                     <h1 className="text-3xl md:text-5xl font-extrabold">
                         Nos encantaría hablar sobre cómo podemos trabajar juntos
                     </h1>
-                    <p className="text-sm md:text-md font-light"
+                    <p
+                        className="text-sm md:text-md font-light"
                         style={{ textAlign: 'justify', textAlignLast: 'center' }}
                     >
-                        Somos expertos en gestión inteligente para moteles. Te ayudamos a centralizar y controlar todas tus reservas, habitaciones y operaciones desde una sola plataforma.
+                        En <strong>Vibetel</strong>, somos expertos en gestión inteligente para moteles. Nuestra plataforma te permite centralizar y controlar todas tus <strong>reservas, habitaciones y operaciones</strong> en un solo lugar.
                     </p>
+
                 </div>
             </div>
 
-            <div className="px-4 md:px-10 2xl:px-64 py-10 grid grid-cols md:grid-cols-3 gap-10" >
+            <div className="px-4 mt-20 md:px-10 2xl:px-64 py-10 grid grid-cols md:grid-cols-3 gap-10" >
                 <div className="">
                     <div className="relative">
                         {/* Fondo azul desplazado */}
@@ -76,7 +78,7 @@ export default function ContactUsPage() {
                 </div>
             </div>
 
-            <div className="px-4 md:px-10 2xl:px-64 grid grid-cols md:grid-cols-2 mt-5 gap-5 py-10" >
+            <div className="px-4 md:px-10 2xl:px-64 grid grid-cols md:grid-cols-2 mt-5 gap-5 py-10 mb-20" >
                 <div>
                     <p className="text-2xl md:text-4xl font-bold" >Optimiza los procesos de tu motel y toma el control total con Vibetel, la plataforma integral de gestión y reservas</p>
                     <p className="text-gray-600 mt-2 text-md" >Con Vibetel, transforma la operación de tu motel. controla, gestiona y optimiza cada proceso en un solo lugar.</p>
@@ -106,42 +108,6 @@ export default function ContactUsPage() {
                 <div className="hidden md:block relative w-full h-[500px]"> {/* Aquí el contenedor necesario */}
                     <Image
                         src="/motel-partner/hombre.png"
-                        alt="Imagen ilustrativa"
-                        fill
-                        className="object-contain" // o object-cover según lo que quieras
-                    />
-                </div>
-            </div>
-
-            <div className="bg-black text-white py-20 px-4 md:px-10 2xl:px-64 grid grid-cols-1 md:grid-cols-2 items-center gap-10">
-                <div>
-                    <h2 className="text-2xl md:text-4xl font-extrabold mb-6">
-                        ¡Moderniza tu motel hoy mismo y da el salto a la era digital con Vibetel!
-                    </h2>
-                    <div className="bg-neutral-900 rounded-xl p-6 shadow-lg max-w-xl">
-                        <div className="flex items-center gap-4 mb-4">
-                            <Image
-                                src="/motel-partner/ceo-google.jpg"
-                                alt="Eric Schmidt"
-                                className="w-12 h-12 rounded-full object-cover"
-                                width={100}
-                                height={100}
-                            />
-                            <div>
-                                <p className="font-semibold">Eric Schmidt</p>
-                                <p className="text-sm text-gray-400">Ex CEO de Google</p>
-                            </div>
-                        </div>
-                        <p className="text-gray-300 text-md">
-                        &quot;Cada industria que no se digitalice quedará atrás. La tecnología no solo
-                            mejora la eficiencia, transforma por completo cómo operamos. Adoptar sistemas
-                            como Vibetel no es una opción, es una necesidad para liderar el futuro.&quot;
-                        </p>
-                    </div>
-                </div>
-                <div className="hidden md:block relative w-full h-[500px]"> {/* Aquí el contenedor necesario */}
-                    <Image
-                        src="/motel-partner/mujer.png"
                         alt="Imagen ilustrativa"
                         fill
                         className="object-contain" // o object-cover según lo que quieras
