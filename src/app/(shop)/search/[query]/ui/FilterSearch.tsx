@@ -1,42 +1,23 @@
 "use client";
 import { getRoomBySearch } from "@/actions";
-import {
-  GridMotelFilter,
-  GridRoomSearch,
-  NoFoundSearch,
-  Pagination,
-  SideBarMenuFilter,
-  SideMenuFilter,
-  SkeletonRooms,
+import {  GridMotelFilter,  GridRoomSearch,  NoFoundSearch,  Pagination,  SideBarMenuFilter,  SideMenuFilter,  SkeletonRooms,
   SortRooms,
   SuggestedAndTopRoom,
 } from "@/components";
-import {
-  AmenitiesRoom,
-  BedRooms,
-  CategoryRoom,
-  GarageRoom,
-  searchCity,
-  TypeAmenities,
-} from "@/interfaces";
+import {  AmenitiesRoom,  AmenitiesRoomApi,  BedRooms,  CategoryRoomApi,  GarageRoomApi,  searchCity,} from "@/interfaces";
 import { useLocationStore, useSearchStore, useUIStore } from "@/store";
 import React, { useState, useEffect, useCallback } from "react";
 import { IoOptionsSharp } from "react-icons/io5";
 import { TbBedOff } from "react-icons/tb";
 
 interface Props {
-  categoryRoom: CategoryRoom[];
-  garageRoom: GarageRoom[];
-  amenitiesRoom: AmenitiesRoom[];
+  categoryRoom: CategoryRoomApi[];
+  garageRoom: GarageRoomApi[];
+  amenitiesRoom: AmenitiesRoomApi[];
   query: string;
 }
 
-export const FilterSearch = ({
-  garageRoom,
-  amenitiesRoom,
-  categoryRoom,
-  query,
-}: Props) => {
+export const FilterSearch = ({  garageRoom,  amenitiesRoom,  categoryRoom,  query,}: Props) => {
   const openSideMenuFilter = useUIStore((state) => state.openSideMenuFilter);
 
   const { locationUser } = useLocationStore();

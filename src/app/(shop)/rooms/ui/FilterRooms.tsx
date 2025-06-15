@@ -3,23 +3,14 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import { getRooms } from "@/actions";
 
-import {
-  GridMotelFilter,
-  ModalLocationUser,
-  ModalLocationUserMovil,
-  NoLocationUser,
+import {  GridMotelFilter,  ModalLocationUser,  ModalLocationUserMovil,  NoLocationUser,
   Pagination,
   SideBarMenuFilter,
   SideMenuFilter,
   SkeletonRooms,
   SortRooms,
 } from "@/components";
-import {
-  AmenitiesRoom,
-  AmenitiesRoomApi,
-  BedRooms,
-  CategoryRoomApi,
-  GarageRoomApi,
+import {  AmenitiesRoom,  AmenitiesRoomApi,  BedRooms,  CategoryRoomApi,  GarageRoomApi,
   RoomAllApi,
   searchCity,
 } from "@/interfaces";
