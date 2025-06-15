@@ -27,7 +27,7 @@ export default function ManageReservationsPage() {
                     Contamos con el respaldo de <strong>Davivienda</strong> para asegurar tus transacciones.
                 </p>
                 <p className="text-sm md:text-lg text-gray-700">
-                    Si por alguna razón el pago no se completa, tienes <strong>15 minutos</strong> para retomarlo desde el botón <strong>“Reserva en proceso”</strong> en el menú superior.
+                    Si por alguna razón el pago no se completa, tienes <strong>15 minutos</strong> para retomarlo desde el botón <strong>Reserva en proceso</strong> en el menú superior.
                     Pasado este tiempo, deberás iniciar una nueva reserva.
                 </p>
             </div>
@@ -36,7 +36,7 @@ export default function ManageReservationsPage() {
             <div className="bg-white border mt-5 border-gray-200 rounded-3xl px-4 py-6 md:p-8 space-y-4">
                 <h2 className="text-md md:text-xl font-semibold text-gray-800">¿Dónde veo el código de acceso?</h2>
                 <p className="text-sm md:text-lg text-gray-700">
-                    Para ver el código de acceso a un motel, entra a la sección de <strong>“Reservas”</strong> y selecciona la reserva correspondiente.
+                    Para ver el código de acceso a un motel, entra a la sección de <strong>Reservas</strong> y selecciona la reserva correspondiente.
                     Luego, en la página de detalles de la reserva, encontrarás un menú lateral derecho con opciones para gestionar tu reserva, incluyendo el <strong>código de acceso</strong>.
                 </p>
                 <p className="text-sm md:text-lg text-gray-700">
@@ -48,7 +48,7 @@ export default function ManageReservationsPage() {
             <div className="bg-white border mt-5 border-gray-200 rounded-3xl px-4 py-6 md:p-8 space-y-4">
                 <h2 className="text-md md:text-xl font-semibold text-gray-800">¿Puedo cancelar mi reserva?</h2>
                 <p className="text-sm md:text-lg text-gray-700">
-                    Sí, puedes cancelar tu reserva desde la sección <strong>“Reservas”</strong>. Selecciona la reserva que deseas cancelar y haz clic en <strong>“Cancelar reserva”</strong> desde el menú lateral derecho.
+                    Sí, puedes cancelar tu reserva desde la sección <strong>Reservas</strong>. Selecciona la reserva que deseas cancelar y haz clic en <strong>Cancelar reserva</strong> desde el menú lateral derecho.
                 </p>
                 <p className="text-sm md:text-lg text-gray-700">
                     Solo puedes hacerlo hasta <strong>30 minutos antes</strong> de que empiece la reserva. Si cumples con este tiempo, podrás obtener un reembolso según nuestra política.
@@ -59,10 +59,10 @@ export default function ManageReservationsPage() {
             <div className="bg-white border mt-5 border-gray-200 rounded-3xl px-4 py-6 md:p-8 space-y-4">
                 <h2 className="text-md md:text-xl font-semibold text-gray-800">¿Cómo agrego tiempo adicional a mi reserva?</h2>
                 <p className="text-sm md:text-lg text-gray-700">
-                    Accede a la sección de <strong>“Reservas”</strong>, selecciona la reserva activa y dirígete al menú lateral derecho.
+                    Accede a la sección de <strong>Reservas</strong>, selecciona la reserva activa y dirígete al menú lateral derecho.
                 </p>
                 <p className="text-sm md:text-lg text-gray-700">
-                    Allí encontrarás la opción <strong>“Adición de tiempo”</strong>, donde podrás extender tu reserva seleccionando el tiempo extra deseado y realizando el pago correspondiente.
+                    Allí encontrarás la opción <strong>Adición de tiempo</strong>, donde podrás extender tu reserva seleccionando el tiempo extra deseado y realizando el pago correspondiente.
                 </p>
             </div>
 
@@ -70,7 +70,7 @@ export default function ManageReservationsPage() {
             <div className="bg-white border mt-5 border-gray-200 rounded-3xl px-4 py-6 md:p-8 space-y-4">
                 <h2 className="text-md md:text-xl font-semibold text-gray-800">¿Dónde puedo ver mis reservas anteriores?</h2>
                 <p className="text-sm md:text-lg text-gray-700">
-                    En la sección <strong>“Reservas”</strong> puedes encontrar todas tus reservas anteriores.
+                    En la sección <strong>Reservas</strong> puedes encontrar todas tus reservas anteriores.
                     Puedes aplicar filtros para buscar por fecha, estado o tipo de habitación.
                 </p>
                 <p className="text-sm md:text-lg text-gray-700">

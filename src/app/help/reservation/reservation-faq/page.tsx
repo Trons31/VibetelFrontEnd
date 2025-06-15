@@ -32,7 +32,7 @@ export default function ReservationFAQPage() {
             <div className="bg-white border border-gray-200 rounded-3xl px-4 py-6 md:p-8 space-y-4 mb-5">
                 <h2 className="text-md md:text-xl font-semibold text-gray-800">¿Puedo hacer una reserva sin registrarme?</h2>
                 <p className="text-sm md:text-lg text-gray-700">
-                    Sí, puedes hacer una <Link href="/help/reservation/anonymous-reservation" className="text-blue-600 underline">reserva anónima</Link>. Solo debes marcar la opción "Reserva anónima" antes de confirmar el pago. Recibirás un código de acceso por SMS o correo para gestionar tu reserva.
+                    Sí, puedes hacer una <Link href="/help/reservation/anonymous-reservation" className="text-blue-600 underline">reserva anónima</Link>. Solo debes marcar la opción Reserva anónima antes de confirmar el pago. Recibirás un código de acceso por SMS o correo para gestionar tu reserva.
                 </p>
             </div>
 
@@ -51,7 +51,7 @@ export default function ReservationFAQPage() {
             <div className="bg-white border border-gray-200 rounded-3xl px-4 py-6 md:p-8 space-y-4 mb-5">
                 <h2 className="text-md md:text-xl font-semibold text-gray-800">¿Puedo cancelar una reserva?</h2>
                 <p className="text-sm md:text-lg text-gray-700">
-                    Sí, puedes cancelar una reserva desde la sección "Mis reservas" o desde el panel de gestión de tu reserva si es anónima. Se aplican políticas de reembolso según el caso.
+                    Sí, puedes cancelar una reserva desde la sección reservas o desde el panel de gestión de tu reserva si es anónima. Se aplican políticas de reembolso según el caso.
                 </p>
                 <p className="text-sm md:text-lg text-gray-700">
                     Consulta nuestra <Link href="/help/payments/refunds" className="text-blue-600 underline">política de reembolsos</Link> para conocer los casos aplicables.

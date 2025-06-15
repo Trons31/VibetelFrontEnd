@@ -64,7 +64,7 @@ export default function AnonymousReservationPage() {
                     ¿Dónde gestiono mi reserva anónima?
                 </h2>
                 <p className="text-sm md:text-lg text-gray-700">
-                    En el menú principal de la plataforma encontrarás la sección <strong>"Reservas anónimas"</strong>. Allí podrás ingresar el código de acceso que recibiste.
+                    En el menú principal de la plataforma encontrarás la sección <strong>Reservas anónimas</strong>. Allí podrás ingresar el código de acceso que recibiste.
                 </p>
                 <p className="text-sm md:text-lg text-gray-700">
                     Una vez ingreses, podrás:
