@@ -70,7 +70,7 @@ export default function PaymentFAQPage() {
                     <li>Referencia del pago y código de acceso.</li>
                 </ul>
                 <p className="text-sm md:text-lg text-gray-700">
-                    También puedes revisar tus comprobantes en la sección de "Mis reservas" dentro de tu cuenta.
+                    También puedes revisar tus comprobantes en la sección de reservas dentro de tu cuenta.
                 </p>
             </div>
 
