@@ -51,7 +51,6 @@ interface FormInputs {
     categoryId: string;
     garageId: string;
     motelId: string;
-
     images?: FileList;
 
 }
@@ -112,7 +111,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
             categoryId: room.category?.id,
             garageId: room.garage?.id,
             // otherAmenities: room.amenities,
-            slug: room.slug ? room.slug.replace(/-/g, ' ') : '',
+            slug: room.slug ? room.slug.replace(/[-_]/g, ' ') : '',
             inAvailable: room.inAvaible ? true : true,
             promoActive: room.promoActive ? room.promoActive : false,
             amenities: room.amenities?.map(amenitie => amenitie.amenities),
@@ -124,6 +123,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
 
     const OnSubmit = async (data: FormInputs) => {
         setShowLoadingButton(true);
+
         const isEmpty = inputsAmenities.some(input => input.trim() === "");
         if (isEmpty) {
             setShowMessageErrorAmenities(true);
@@ -139,113 +139,94 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
 
         const formData = new FormData();
         const { images, ...roomToSave } = data;
+        const {
+            title,
+            slug,
+            description,
+            price,
+            priceAddTime,
+            promoActive,
+            promotionPercentage,
+            tags,
+            inAvailable,
+            timeLimit,
+            roomNumber,
+            extraServicesActive,
+            extraServices,
+            surcharge,
+            categoryId,
+            garageId,
+        } = roomToSave;
 
-        // if (room.id) {
-        //     formData.append('id', room.id ?? '');
-        // }
-        // formData.append('title', roomToSave.title);
-        // formData.append('slug', roomToSave.slug);
-        // formData.append('description', roomToSave.description);
-        // formData.append('price', roomToSave.price.toString());
-        // formData.append('priceAddTime', roomToSave.priceAddTime.toString());
-        // formData.append('promoActive', roomToSave.promoActive.toString());
+        const promoPrice = promoActive
+            ? price - (price * promotionPercentage!) / 100
+            : 0;
 
-        // if (roomToSave.promoActive) {
-        //     formData.append('promoPrice', (roomToSave.price - (roomToSave.price * roomToSave.promotionPercentage! / 100)).toString())
-        // }
+        formData.append('title', title);
+        formData.append('slug', slug);
+        formData.append('description', description);
+        formData.append('price', price.toString());
+        formData.append('priceAddTime', priceAddTime.toString());
+        formData.append('promoActive', promoActive.toString());
+        formData.append('promoPrice', promoPrice.toString());
+        formData.append('promotionPercentage', promotionPercentage ? promotionPercentage.toString() : "");
 
+        const formattedTags = typeof tags === 'string' ? [tags] : tags || [];
+        formData.append('tags', JSON.stringify(formattedTags));
 
-        // formData.append('tags', roomToSave.tags.toString());
-        // formData.append('inAvailable', roomToSave.inAvailable.toString());
-        // formData.append('timeLimit', roomToSave.timeLimit.toString());
-        // formData.append('roomNumber', roomToSave.roomNumber);
-        // formData.append('extraServicesActive', roomToSave.extraServicesActive.toString());
+        formData.append('inAvailable', inAvailable.toString());
+        formData.append('timeLimit', timeLimit.toString());
+        formData.append('roomNumber', roomNumber.toString());
+        formData.append('extraServicesActive', extraServicesActive.toString());
+        formData.append('extraServices', extraServices?.toString() ?? '0');
+        formData.append('surcharge', surcharge.toString());
+        formData.append('categoryId', categoryId);
+        formData.append('garageId', garageId);
 
-        // if (roomToSave.extraServicesActive) {
-        //     formData.append('extraServices', roomToSave.extraServices!.toString());
-        // }
+        // Amenities como JSON
+        formData.append('amenitiesRoom', JSON.stringify(selectedAmenities));
 
-        // formData.append('surcharge', roomToSave.surcharge.toString());
-        // if (inputsAmenities.length > 0) {
-        //     formData.append('amenities', inputsAmenities.join(','));
-        // }
-        // formData.append('categoryId', roomToSave.categoryId);
-        // formData.append('garageId', roomToSave.garageId);
-        // //formData.append('motelId', motelId);
+        // Imágenes
+        selectedFiles.forEach((file: File) => {
+            formData.append('images', file);
+        });
 
-
-
-        // if (selectedFiles) {
-        //     for (let i = 0; i < selectedFiles.length; i++) {
-        //         formData.append('images', selectedFiles[i]);
-        //     }
-        // }
-
-        // if (selectedAmenities) {
-        //     for (let i = 0; i < selectedAmenities.length; i++) {
-        //         formData.append('amenitiesRoom', selectedAmenities[i]);
-        //     }
-        // }
-
-        const roomData = {
-            //id: room.id ?? '',
-            title: roomToSave.title,
-            slug: roomToSave.slug,
-            description: roomToSave.description,
-            price: Number(roomToSave.price),
-            priceAddTime: Number(roomToSave.priceAddTime),
-            promoActive: roomToSave.promoActive,
-            promotionPercentage: Number(roomToSave.promotionPercentage),
-            promoPrice:0,
-            tags: typeof roomToSave.tags === 'string' ? [roomToSave.tags] : roomToSave.tags,
-            inAvailable: roomToSave.inAvailable,
-            timeLimit: Number(roomToSave.timeLimit),
-            roomNumber: roomToSave.roomNumber.toString(),
-            extraServicesActive: roomToSave.extraServicesActive,
-            extraServices: roomToSave.extraServicesActive ? Number(roomToSave.extraServices) : null,
-            surcharge: Number(roomToSave.surcharge),
-            categoryId: roomToSave.categoryId,
-            garageId: roomToSave.garageId,
-            amenitiesRoom: selectedAmenities || [],
-            images:selectedFiles,
-        };  
-
-        console.log(roomData);
-
-        let CreateRoom: RoomApi | null = null;
+        console.log(formData);
 
         try {
             const response = await axios.post<RoomApi>(
-                `${process.env.NEXT_PUBLIC_API_ROUTE}room`, roomData,
+                `${process.env.NEXT_PUBLIC_API_ROUTE}room`,
+                formData,
                 {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },
                 }
             );
-            CreateRoom = response.data;
+
+            const CreateRoom = response.data;
 
             isNew
-                ? toast.success('Informacion guardada correctamente')
-                : toast.success('Informacion actualizada')
+                ? toast.success('Información guardada correctamente')
+                : toast.success('Información actualizada')
 
             setShowLoadingButton(false);
             setShowMessageError(false);
             setShowMessageErrorAmenities(false);
-            setshowMessageErrorServer(false)
-            setmessageErrorServer(undefined)
+            setshowMessageErrorServer(false);
+            setmessageErrorServer(undefined);
             setImageUrls([""]);
             setSelectedFiles([]);
-            router.replace(`/admin/dashboard-partner-motel/room/${CreateRoom?.slug}`)
+            router.replace(`/admin/dashboard-partner-motel/room/${CreateRoom?.slug}`);
         } catch (error: any) {
             console.log(error);
             isNew
-                ? toast.error("No se pudo guardar la informacion")
-                : toast.error("No se pudo actualizar la informacion")
+                ? toast.error("No se pudo guardar la información")
+                : toast.error("No se pudo actualizar la información");
             setShowLoadingButton(false);
         }
+    };
 
-    }
 
     const tooglePromoActive = () => {
         if (showPromoPrice) {
@@ -334,7 +315,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
                 reverseOrder={false}
             />
 
-            <form onSubmit={handleSubmit(OnSubmit)} className="grid px-5 mb-16 grid-cols-1 sm:px-0 sm:grid-cols-2 gap-6">
+            <form onSubmit={handleSubmit(OnSubmit)} className="grid mb-16 grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="w-full ">
 
                     <div className="mb-4">
@@ -959,8 +940,8 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
                             clsx(
 
                                 {
-                                    "flex items-center gap-x-4 w-full justify-center rounded-lg bg-blue-600 hover:bg-blue-700 px-7 py-2 font-medium text-white transition-all duration-200": !showLoadingButton,
-                                    "flex items-center gap-x-4 w-full rounded-lg bg-blue-600 px-7 py-2 font-medium text-white justify-center cursor-not-allowed ": showLoadingButton || showLoadingDeleteImage
+                                    "hidden md:flex items-center gap-x-4 w-full justify-center rounded-lg bg-blue-600 hover:bg-blue-700 px-7 py-2 font-medium text-white transition-all duration-200": !showLoadingButton,
+                                    "hidden md:flex items-center gap-x-4 w-full rounded-lg bg-blue-600 px-7 py-2 font-medium text-white justify-center cursor-not-allowed ": showLoadingButton || showLoadingDeleteImage
                                 }
                             )
                         }>
@@ -1000,7 +981,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
                         showMessageError &&
                         (
                             <>
-                                <div className="mt-4 flex justify-center items-center gap-2 w-full mb-2 select-none rounded-t-lg border-t-4 border-red-400 bg-red-100 py-3 px-2 font-medium ">
+                                <div className="mt-4 hidden md:flex justify-center items-center gap-2 w-full mb-2 select-none rounded-t-lg border-t-4 border-red-400 bg-red-100 py-3 px-2 font-medium ">
                                     <IoInformationOutline size={30} className="text-red-600" />
                                     Por favor, seleccione al menos una comodidad o ingrese una manualmente.
                                 </div>
@@ -1012,7 +993,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
                         showMessageErrorServer &&
                         (
                             <>
-                                <div className="mt-4 flex justify-center items-center gap-2 w-full mb-2 select-none rounded-t-lg border-t-4 border-red-400 bg-red-100 py-3 px-2 font-medium ">
+                                <div className="mt-4 hidden md:flex justify-center items-center gap-2 w-full mb-2 select-none rounded-t-lg border-t-4 border-red-400 bg-red-100 py-3 px-2 font-medium ">
                                     <IoInformationOutline size={30} className="text-red-600" />
                                     {messageErrorServer}
                                 </div>
@@ -1025,9 +1006,9 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
 
 
                 {/* Section Rigth */}
-                <div className="w-full">
+                <div className="w-full -mt-4 md:mt-0">
                     {/* As checkboxes */}
-                    <div className="flex flex-col mb-6">
+                    <div className="flex flex-col mb-4 md:mb-6">
                         <div className="flex flex-col mb-2">
                             <div className="flex mb-2 items-center gap-3" >
                                 <label className={
@@ -1066,7 +1047,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
                             </div>
                             <select className={
                                 clsx(
-                                    "bg-gray-50  border-gray-300 text-black text-sm rounded-lg appearance-none focus:outline-none focus:ring-0 border-2 focus:border-blue-600 block w-full p-2.5 placeholder-black",
+                                    "bg-gray-50 border-gray-300 text-black text-sm rounded-lg appearance-none focus:outline-none focus:ring-0 border-2 focus:border-blue-600 block w-full p-2.5 placeholder-black",
                                     {
                                         'focus:border-red-600 border-red-500': errors.categoryId
                                     }
@@ -1135,12 +1116,10 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
 
 
                     <div className="flex flex-col mb-4">
-
-
                         <label className="block  text-sm text-black font-semibold ">Comodidades</label>
                         <span className="text-xs mb-2 text-gray-500 block">Por favor, seleccione al menos una comodidad que ofrece su habitación.</span>
 
-                        <div className="flex flex-wrap mb-10">
+                        <div className="flex flex-wrap mb-1 md:mb-4">
                             <ul className="grid w-full gap-3 md:grid-cols-2">
                                 {amenities.map((amenityRoom) => (
                                     <li key={amenityRoom.id}>
@@ -1213,7 +1192,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
                         <button
                             type="button"
                             onClick={handleAddInput}
-                            className="bg-blue-600 w-fit text-white px-2 py-1 rounded-md"
+                            className="bg-blue-600 text-sm md:text-lg w-fit text-white px-2 py-1 rounded-md"
                         >
                             Agregar comodida
                         </button>
@@ -1223,7 +1202,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
                         <label className="block mb-2 text-sm text-black font-semibold ">Habitacion</label>
                         <label htmlFor="fileInput" className={
                             clsx(
-                                " bg-gray-300 inline-block py-2 px-4 rounded-lg cursor-pointer", {
+                                " bg-gray-300 inline-block text-sm md:text-lg py-2 px-4 rounded-lg cursor-pointer", {
                                 "border-red-500": errors.images
                             }
                             )
@@ -1242,13 +1221,13 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
 
                         <span className="text-xs text-gray-500 block">Se recomienda cargar tres imágenes de alta calidad de la habitación, destacando sus mejores características.</span>
 
-                        <div className="grid grid-cols-3 mt-4 gap-2">
+                        <div className="grid grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 mt-4 gap-2">
                             {
 
                                 selectedFiles.length > 0 &&
                                 (
                                     imageUrls.map((url, index) => (
-                                        <Image key={index} src={url} width={100} height={100} alt={`Imagen ${index + 1}`} className="w-36 h-36 object-cover rounded-md" />
+                                        <Image key={index} src={url} width={100} height={100} alt={`Imagen ${index + 1}`} className="w-44 h-44 object-cover rounded-md" />
                                     ))
                                 )
 
@@ -1304,12 +1283,49 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
                             ))
                         }
                     </div>
-                    <button type="submit" className="btn-primary block md:hidden mt-4 w-full">
-                        Guardar
-                    </button>
-                    {
+                    <button
+                        disabled={showLoadingButton || showLoadingDeleteImage}
+                        type="submit"
+                        className={
+                            clsx(
 
-                    }
+                                {
+                                    "flex md:hidden items-center gap-x-4 w-full justify-center rounded-lg bg-blue-600 hover:bg-blue-700 px-7 py-2 font-medium text-white transition-all duration-200": !showLoadingButton,
+                                    "flex md:hidden items-center gap-x-4 w-full rounded-lg bg-blue-600 px-7 py-2 font-medium text-white justify-center cursor-not-allowed ": showLoadingButton || showLoadingDeleteImage
+                                }
+                            )
+                        }
+                    >
+                        {
+                            showLoadingButton &&
+                            (<svg className="h-5 w-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" ></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>)
+                        }
+
+                        {
+                            showLoadingButton
+                                ? (
+                                    <span>Cargando...</span>
+                                ) : (
+                                    <span>
+                                        {isNew
+                                            ? (
+                                                <>
+                                                    Guardar
+                                                </>
+                                            )
+                                            : (
+                                                <>
+                                                    Actualizar
+                                                </>
+                                            )}
+                                    </span>
+                                )
+                        }
+                    </button>
+
                 </div>
             </form>
         </>

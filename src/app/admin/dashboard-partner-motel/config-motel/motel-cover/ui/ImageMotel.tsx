@@ -91,8 +91,8 @@ export const ImageMotel = ({ motelId, motelImage, imageId }: Props) => {
           ? (
             <>
               <div>
-                <div className="mt-5 flex justify-between mb-5" >
-                  <label htmlFor="fileInput" className=" bg-gray-200 inline-block py-2 px-4 rounded-lg cursor-pointer">
+                <div className="mt-5 block space-y-2 md:flex justify-between mb-5" >
+                  <label htmlFor="fileInput" className="text-xs md:text-sm bg-gray-200 inline-block py-2 px-4 rounded-lg cursor-pointer">
                     Seleccionar archivo
                     <input
                       id="fileInput"
@@ -114,8 +114,8 @@ export const ImageMotel = ({ motelId, motelImage, imageId }: Props) => {
                           clsx(
 
                             {
-                              "flex items-center gap-x-4 rounded-lg bg-blue-600 hover:bg-blue-700 px-7 py-2 font-medium text-white": !showLoadingButton,
-                              "flex items-center gap-x-4 rounded-lg bg-blue-600 px-7 py-2 font-medium text-white cursor-not-allowed": showLoadingButton
+                              "flex text-xs md:text-sm items-center gap-x-4 rounded-lg bg-blue-600 hover:bg-blue-700 px-7 py-2 font-medium text-white": !showLoadingButton,
+                              "flex text-xs md:text-sm items-center gap-x-4 rounded-lg bg-blue-600 px-7 py-2 font-medium text-white cursor-not-allowed": showLoadingButton
                             }
                           )
                         }>
@@ -177,8 +177,8 @@ export const ImageMotel = ({ motelId, motelImage, imageId }: Props) => {
 
 
                           <div>
-                            <div className="max-w-md bg-white border border-gray-200 rounded-lg shadow-lg shadow-gray-300 relative">
-                              <div className="border-2 flex justify-between border-gray-200 p-2 py-4" >
+                            <div className="max-w-md bg-white rounded-lg shadow-lg shadow-gray-300 relative">
+                              <div className="border-2 flex justify-betwee rounded-t-lg border-gray-200 p-2 py-4" >
 
                                 <div>
                                   <div className="rounded-full w-4 h-4 bg-gray-400" >
@@ -221,7 +221,7 @@ export const ImageMotel = ({ motelId, motelImage, imageId }: Props) => {
                       </>
                     )
                     : (
-                      <div className="grid grid-cols-2 gap-10" >
+                      <div className="block space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-10" >
                         <div className="flex items-center" >
                           <div className="max-w-xs" >
                             <div className=" bg-white border border-gray-200 rounded-lg shadow-lg shadow-gray-300 relative">
@@ -251,8 +251,8 @@ export const ImageMotel = ({ motelId, motelImage, imageId }: Props) => {
 
 
                         <div>
-                          <div className="max-w-md bg-white border border-gray-200 rounded-lg shadow-lg shadow-gray-300 relative">
-                            <div className="border-2 flex justify-between border-gray-200 p-2 py-4" >
+                          <div className="max-w-md bg-white rounded-lg shadow-lg shadow-gray-300 relative">
+                            <div className="border-2 flex justify-between rounded-t-lg border-gray-200 p-2 py-4" >
 
                               <div>
                                 <div className="rounded-full w-4 h-4 bg-gray-400" >
@@ -302,8 +302,8 @@ export const ImageMotel = ({ motelId, motelImage, imageId }: Props) => {
           (
             <>
               <div className="">
-                <div className="mt-5 flex justify-between mb-5" >
-                  <label htmlFor="fileInput" className=" bg-gray-200 inline-block py-2 px-4 rounded-lg cursor-pointer">
+                <div className="mt-5 block space-y-2 md:flex justify-between mb-5" >
+                  <label htmlFor="fileInput" className=" bg-gray-200 inline-block py-2 px-4 rounded-lg cursor-pointer text-xs md:text-sm">
                     Seleccionar archivo
                     <input
                       id="fileInput"
@@ -327,8 +327,8 @@ export const ImageMotel = ({ motelId, motelImage, imageId }: Props) => {
                           clsx(
 
                             {
-                              "flex items-center gap-x-4 rounded-lg bg-blue-600 hover:bg-blue-700 px-7 py-2 font-medium text-white": !showLoadingButton,
-                              "flex items-center gap-x-4 rounded-lg bg-blue-600 px-7 py-2 font-medium text-white cursor-not-allowed": showLoadingButton
+                              "flex text-xs md:text-sm items-center gap-x-4 rounded-lg bg-blue-600 hover:bg-blue-700 px-7 py-2 font-medium text-white": !showLoadingButton,
+                              "flex text-xs md:text-sm items-center gap-x-4 rounded-lg bg-blue-600 px-7 py-2 font-medium text-white cursor-not-allowed": showLoadingButton
                             }
                           )
                         }>
@@ -359,7 +359,7 @@ export const ImageMotel = ({ motelId, motelImage, imageId }: Props) => {
                 {selectedFile
                   ? (
                     <>
-                      <div className="grid grid-cols-2 gap-10" >
+                      <div className="block space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-10 " >
                         <div className="flex items-center" >
                           <div className="max-w-xs" >
                             <div className=" bg-white border border-gray-200 rounded-lg shadow-lg shadow-gray-300 relative">
@@ -389,8 +389,8 @@ export const ImageMotel = ({ motelId, motelImage, imageId }: Props) => {
 
 
                         <div>
-                          <div className="max-w-md bg-white border border-gray-200 rounded-lg shadow-lg shadow-gray-300 relative">
-                            <div className="border-2 flex justify-between border-gray-200 p-2 py-4" >
+                          <div className="max-w-md bg-white  rounded-lg shadow-lg shadow-gray-300 relative">
+                            <div className="border-2 flex justify-between rounded-t-lg border-gray-200 p-2 py-4" >
 
                               <div>
                                 <div className="rounded-full w-4 h-4 bg-gray-400" >
@@ -434,7 +434,7 @@ export const ImageMotel = ({ motelId, motelImage, imageId }: Props) => {
                   )
                   : (
                     <>
-                      <div className="grid grid-cols-2 gap-10" >
+                      <div className="block space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-10 " >
 
                         <div className="flex items-center" >
                           <div className="max-w-xs" >
@@ -453,14 +453,14 @@ export const ImageMotel = ({ motelId, motelImage, imageId }: Props) => {
                                 <div className="h-2.5 bg-gray-200 rounded-full  w-full mb-4"></div>
                               </div>
                             </div>
-                            <span className="mt-5 text-xs text-gray-700 block">Así se visualizará el logotipo del motel en la sección de moteles registrados</span>
+                            <span className="mt-2 md:mt-5 text-xs text-gray-700 block">Así se visualizará el logotipo del motel en la sección de moteles registrados</span>
                           </div>
                         </div>
 
 
                         <div>
-                          <div className="max-w-md bg-white border border-gray-200 rounded-lg shadow-lg shadow-gray-300 relative">
-                            <div className="border-2 flex justify-between border-gray-200 p-2 py-4" >
+                          <div className="max-w-md bg-white rounded-lg shadow-lg shadow-gray-300 relative">
+                            <div className="border-2 flex justify-between rounded-t-lg border-gray-200 p-2 py-4" >
 
                               <div>
                                 <div className="rounded-full w-4 h-4 bg-gray-400" >
@@ -491,7 +491,7 @@ export const ImageMotel = ({ motelId, motelImage, imageId }: Props) => {
                               <div className="h-2.5 bg-gray-200 rounded-full  w-full mb-4"></div>
                             </div>
                           </div>
-                          <span className="mt-5 text-xs text-gray-700 block">Así se visualizará el logotipo del motel en la sección de informacion del motel</span>
+                          <span className="mt-2 md:mt-5 text-xs text-gray-700 block">Así se visualizará el logotipo del motel en la sección de informacion del motel</span>
                         </div>
 
                       </div>

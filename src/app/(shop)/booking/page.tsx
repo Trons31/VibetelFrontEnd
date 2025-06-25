@@ -1,10 +1,9 @@
-
-
 import { auth } from '@/auth.config';
 import { redirect } from 'next/navigation';
-import { GetUserByEmail } from '@/actions';
 import CompleteForm from '../profile/ui/CompleteForm';
 import { ReservationPage } from './ui/ReservationPage';
+import axios from 'axios';
+import { UserApi } from '@/interfaces/user.interface';
 
 export async function generateMetadata() {
   return {
@@ -17,20 +16,27 @@ export default async function BookingPage() {
 
   const session = await auth();
 
-  if (!session?.user.roles.includes("user")) {
+  if (!session) {
     redirect("/");
   }
 
-  const userExistOnDatabase = await GetUserByEmail(session.user.email);
+  let user: UserApi;
+  try {
+    const response = await axios.get<UserApi>(`${process.env.NEXT_PUBLIC_API_ROUTE}user/${session.user.id}`)
+    user = response.data;
+  } catch (error: any) {
+    redirect("/");
+  }
 
-  if (!userExistOnDatabase?.user) {
+
+  if (!user) {
     return <CompleteForm name={session.user.name} email={session.user.email} />;
   }
 
 
   return (
     <>
-      <ReservationPage user={userExistOnDatabase.user} />
+      <ReservationPage user={user} />
     </>
   );
 }

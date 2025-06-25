@@ -5,9 +5,9 @@ export default function ShopLayout({ children }: {
 }) {
   return (
     <main className="" >
+      <ToastSuccessLocationUser />
       <TopMenu />
       <SideBar />
-      <ToastSuccessLocationUser />
 
       <div className="" >
         {children}

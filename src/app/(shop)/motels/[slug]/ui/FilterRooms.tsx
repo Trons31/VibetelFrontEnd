@@ -1,6 +1,6 @@
 "use client";
 import {
-  GridMotelBySlug, Pagination,
+  GridMotelBySlug, ModalLocationMotel, NoService, Pagination,
   SideBarMenuFilter,
   SideMenuFilter,
   SkeletonRooms,
@@ -11,12 +11,12 @@ import {
   AmenitiesRoomApi,
   CategoryRoomApi,
   GarageRoomApi,
-  MotelBySlugApi, RoomByMotelApi,
+  MotelBySlugApi, motelConfig, RoomByMotelApi,
   searchCity
 } from "@/interfaces";
 import { useLocationStore, useUIStore } from "@/store";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FaMagnifyingGlassLocation, FaRegStar } from "react-icons/fa6";
 import { IoChevronForward, IoLocationSharp, IoOptionsSharp } from "react-icons/io5";
 import { MdOutlineBed } from "react-icons/md";
@@ -27,12 +27,11 @@ interface Props {
   categoryRoom: CategoryRoomApi[];
   garageRoom: GarageRoomApi[];
   amenitiesRoom: AmenitiesRoomApi[];
-  BestPromotion?: number | null;
   slugMotel: string;
-  //motelConfig: motelConfig;
+  motelConfig: motelConfig;
 }
 
-export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom, BestPromotion, motel, slugMotel, }: Props) => {
+export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom, motel, motelConfig, }: Props) => {
   const openSideMenuFilter = useUIStore((state) => state.openSideMenuFilter);
 
   const { locationUser } = useLocationStore();
@@ -165,6 +164,28 @@ export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom, BestPromo
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentPage]);
 
+  const getBestPromotionRoom = (rooms: RoomByMotelApi[]) => {
+    const roomWithBestPromotion = rooms
+      .filter((room) => room.promoActive && room.promotionPercentage! > 0)
+      .sort((a, b) => b.promotionPercentage! - a.promotionPercentage!)[0];
+
+    if (!roomWithBestPromotion) return null;
+
+    const discount = (roomWithBestPromotion.price * roomWithBestPromotion.promotionPercentage!) / 100;
+    const finalPrice = roomWithBestPromotion.price - discount;
+
+    return {
+      ...roomWithBestPromotion,
+      discountedPrice: finalPrice,
+    };
+  };
+
+  // useMemo para BestPromotion, ahora usa originalRooms
+  const BestPromotion = useMemo(() => {
+    const best = getBestPromotionRoom(rooms);
+    return best?.discountedPrice || null;
+  }, [rooms]);
+
   return (
     <>
       <SideBarMenuFilter
@@ -179,20 +200,20 @@ export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom, BestPromo
         onToogleinAvailable={(aviable) => handleFilterAviable(aviable)}
       />
 
-      {/* <ModalLocationMotel
+      <ModalLocationMotel
         motelName={motel.razonSocial}
-        motelLocationLatitude={motel.MotelConfig!.locationLatitude!}
-        motelLocationLongitude={motel.MotelConfig!.locationLongitude!}
+        motelLocationLatitude={motelConfig!.locationLatitude!}
+        motelLocationLongitude={motelConfig!.locationLongitude!}
         isOpen={openModalLocationMotel}
         onClose={() => setOpenModalLocationMotel(false)}
-      /> */}
+      />
 
-      {/* {!motelConfig.inService && (
+      {!motelConfig.inService && (
         <NoService
           startDateOffService={motelConfig.outOfServiceStart!}
           endDateOffService={motelConfig.outOfServiceEnd!}
         />
-      )} */}
+      )}
 
       {isLoadingLocationUser ? (
         <>
@@ -299,7 +320,7 @@ export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom, BestPromo
                     </button>
                     <TbPointFilled className="w-2 h-2 flex-shrink-0" />
                     <Link
-                      href={`/motel/info/${motel!.slug} `}
+                      href={`/motel/info/${motel.slug} `}
                       className="text-xs text-black flex items-center
                         hover:underline"
                     >

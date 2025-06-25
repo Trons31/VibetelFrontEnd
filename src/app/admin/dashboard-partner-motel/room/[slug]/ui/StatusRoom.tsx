@@ -22,7 +22,7 @@ export const StatusRoom = ({ nameRoom, idRoom, status }: Props) => {
     return (
         <>
 
-            <div className='fixed bottom-14 right-10 '>
+            <div className='fixed bottom-5 md:bottom-14 right-5 md:right-10 '>
 
                 {
                     status !== "DISABLED"
@@ -30,13 +30,13 @@ export const StatusRoom = ({ nameRoom, idRoom, status }: Props) => {
                             <button
                                 onClick={() => setIsModalOpenDisabled(true)}
                                 className='bg-black p-2 rounded-full' >
-                                <BiBlock size={32} className='text-white' />
+                                <BiBlock className='h-6 w-6 md:w-8 md:h-8 text-white' />
                             </button>
                         ) : (
                             <button
                                 onClick={() => setIsModalOpenEnabled(true)}
                                 className='bg-black p-2 rounded-full' >
-                                <FaRegCheckCircle size={32} className='text-white' />
+                                <FaRegCheckCircle className='h-6 w-6 text-white' />
                             </button>
                         )
                 }

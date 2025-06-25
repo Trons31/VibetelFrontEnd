@@ -72,10 +72,10 @@ export default async function RoomAllPage({ searchParams }: Props) {
     return (
         <>
 
-            <div className="bg-white rounded-lg mb-10"  >
+            <div className="bg-white rounded-xl mb-10"  >
                 <div className="pb-10 py-10" >
-                    <div className="md:mx-5" >
-                        <p className="text-3xl font-semibold" >Habitaciones</p>
+                    <div className="px-2 md:mx-5" >
+                        <p className="text-lg md:text-2xl font-bold" >Habitaciones</p>
                         <BreadCrumb
                             breadcrumbCurrent="Habitaciones"
                             urlCurrent="/admin/dashboard-partner-motel/config-motel/motel-cover"
@@ -83,13 +83,13 @@ export default async function RoomAllPage({ searchParams }: Props) {
                             breadcrumbStart="Configuracion"
                             urlStart="/admin/dashboard-partner-motel"
                         />
-                        <p className="text-sm mt-1">
+                        <p className="text-xs md:text-sm mt-1" style={{ textAlign: 'justify' }}>
                             En esta sección podrás gestionar todas las habitaciones de tu motel. Asegúrate de mantener la información de disponibilidad, características y tarifas siempre actualizada para ofrecer una mejor experiencia a tus clientes y optimizar la administración de las reservas.
                         </p>
                     </div>
 
-                    <div className="flex justify-end md:mx-10 mt-10 mb-7" >
-                        <Link href="/admin/dashboard-partner-motel/room/new" target="_blank" rel="noopener noreferrer" className="btn-primary text-sm" >
+                    <div className="flex justify-end px-2 md:mx-10 mt-10 mb-7" >
+                        <Link href="/admin/dashboard-partner-motel/room/new" target="_blank" rel="noopener noreferrer" className="btn-primary text-xs md:text-sm" >
                             Nueva habitacion
                         </Link>
                     </div>

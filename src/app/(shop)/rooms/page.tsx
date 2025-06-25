@@ -14,16 +14,6 @@ export async function generateMetadata() {
 
 export default async function AllBedroomPage() {
 
-
-  let rooms: RoomAllApi[] | null = null;
-
-  try {
-    const response = await axios.get<RoomAllApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}room`);
-    rooms = response.data;
-  } catch (error: any) {
-    redirect("/");
-  }
-
   let category: CategoryRoomApi[];
   try {
     const response = await axios.get<CategoryRoomApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}room/category`);
@@ -48,16 +38,13 @@ export default async function AllBedroomPage() {
     throw new Error(`Ups! Error al obtener las comodidades de las habitaciones`);
   }
 
-  const RoomWithBestPromotion = await getRoomWithBestPromotion();
 
   return (
     <>
       <FilterRooms
-        rooms={rooms}
         categoryRoom={category}
         garageRoom={garage}
         amenitiesRoom={amenities}
-        BestPromotion={RoomWithBestPromotion.BestPromotion}
       />
     </>
   );

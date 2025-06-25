@@ -18,7 +18,7 @@ export interface MotelApi {
     nombreRepresentante: string;
     description: string;
     slug: string;
-    isApproved: isApprovedStatus;
+    isApproved: isApprovedStatus; // ajusta según posibles estados
     contactEmail: string;
     contactPhone: string;
     whatsapp: string;
@@ -26,33 +26,17 @@ export interface MotelApi {
     amenities: string[];
     address: string;
     neighborhood: string;
-    createdAt: Date;
-    updatedAt: Date;
-    freeService: boolean;
-    images: MotelImage[];
-    subscriptionTier: Tier | null;
-}
-
-export interface MotelAllApi {
-    id: string;
-    razonSocial: string;
-    identificationRepresentante: string;
-    nombreRepresentante: string;
-    description: string;
-    slug: string;
-    isApproved: isApprovedStatus; // puedes ajustar según los posibles estados
-    contactEmail: string;
-    contactPhone: string;
-    whatsapp: string;
-    nit: string;
-    amenities: string[]; // lista de comodidades
-    address: string;
-    neighborhood: string;
-    createdAt: string; // puedes usar Date si luego haces conversión
+    createdAt: string;
     updatedAt: string;
     freeService: boolean;
-    images: string[]; // si vas a manejar objetos con más datos, cambia a tipo personalizado
+    images: string[];
+    rooms: [];
+    motelConfig: motelConfig | null;
+    city: City;
+    totalRooms: number;
+    subscriptionTier: 'FREE' | 'BASIC' | 'PREMIUM';
 }
+
 
 export interface RoomByMotelApi {
     id: string;
@@ -61,8 +45,8 @@ export interface RoomByMotelApi {
     price: number;
     priceAddTime: number;
     promoActive: boolean;
-    promoPrice: number | null;
-    promotionPercentage: number | null;
+    promoPrice: number;
+    promotionPercentage: number;
     slug: string;
     tags: string[];
     inAvaible: boolean;
@@ -83,7 +67,7 @@ export interface MotelBySlugApi {
     nombreRepresentante: string;
     description: string;
     slug: string;
-    isApproved: isApprovedStatus;
+    isApproved: isApprovedStatus; // puedes ajustar según tus estados
     contactEmail: string;
     contactPhone: string;
     whatsapp: string;
@@ -94,9 +78,22 @@ export interface MotelBySlugApi {
     createdAt: string;
     updatedAt: string;
     freeService: boolean;
-    images: string[]; // Podrías usar un tipo más detallado si las imágenes tienen propiedades
+    images: string[]; // si luego cambia a objeto, se actualiza
     rooms: RoomByMotelApi[];
+    motelConfig: motelConfig;
+    city: City;
     totalRooms: number;
+}
+
+interface Department {
+    geonameId: string;
+    name: string;
+}
+
+interface City {
+    id: string;
+    name: string;
+    department: Department;
 }
 
 export interface MotelAdmin {

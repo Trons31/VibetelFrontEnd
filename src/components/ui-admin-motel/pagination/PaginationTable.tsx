@@ -44,53 +44,79 @@ export const PaginationTable = ({
   const showingTo = Math.min(currentPage * itemsPerPage, totalItems);
 
   return (
-    <div className="flex justify-between items-center px-4 py-4">
-      <div className="flex gap-4 items-center">
-        <p className="text-xs text-gray-600 sm:text-sm">Mostrar</p>
-        <select
-          disabled={totalPages === 0}
-          value={itemsPerPage}
-          onChange={handleItemsPerPageChange}
-          className="mr-1 block w-full shadow-sm shadow-gray-400 whitespace-pre rounded-lg border p-1 pr-10 text-base outline-none focus:shadow sm:text-sm"
-        >
-          <option value={1}>1</option>
-          <option value={5}>5</option>
-          <option value={10}>10</option>
-          <option value={15}>15</option>
-        </select>
-      </div>
+    <>
 
-      <div className="flex justify-center">
-        <button
-          onClick={() => onPageChange(currentPage - 1)}
-          className={`mx-1 px-3 py-1 rounded ${currentPage === 1 ? 'bg-gray-200 text-gray-700 cursor-not-allowed' : 'bg-blue-500 text-white'}`}
-          disabled={currentPage === 1}
-        >
-          Atrás
-        </button>
-        {visiblePages.map(page => (
-          <button
-            key={page}
-            onClick={() => onPageChange(page)}
-            className={`mx-1 px-3 py-1 rounded ${page === currentPage ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+      <div className="flex justify-end mt-5 mb-2 md:hidden" >
+        <div className="flex gap-4 items-center">
+          <p className="text-xs text-gray-600 sm:text-sm">Mostrar</p>
+          <select
+            disabled={totalPages === 0}
+            value={itemsPerPage}
+            onChange={handleItemsPerPageChange}
+            className="mr-1 block w-full shadow-sm shadow-gray-400 whitespace-pre rounded-lg border p-1 pr-10 text-xs outline-none focus:shadow sm:text-sm"
           >
-            {page}
-          </button>
-        ))}
-        <button
-          onClick={() => onPageChange(currentPage + 1)}
-          className={`mx-1 px-3 py-1 rounded ${currentPage === totalPages ? 'bg-gray-200 text-gray-700 cursor-not-allowed' : 'bg-blue-500 text-white'}`}
-          disabled={currentPage === totalPages || totalPages === 0}
-        >
-          Siguiente
-        </button>
+            <option value={1}>1</option>
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={15}>15</option>
+          </select>
+        </div>
       </div>
 
-      <div>
-        <p className="text-xs text-gray-600 sm:text-sm">
-          Mostrando {showingFrom} a {showingTo} de {totalItems} habitaciones
-        </p>
+      <div className="flex justify-between items-center md:px-4 py-4">
+        <div className="hidden md:flex gap-4 items-center">
+          <p className="text-xs text-gray-600 sm:text-sm">Mostrar</p>
+          <select
+            disabled={totalPages === 0}
+            value={itemsPerPage}
+            onChange={handleItemsPerPageChange}
+            className="mr-1 block w-full shadow-sm shadow-gray-400 whitespace-pre rounded-lg border p-1 pr-10 text-xs outline-none focus:shadow sm:text-sm"
+          >
+            <option value={1}>1</option>
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={15}>15</option>
+          </select>
+        </div>
+
+        <div className="flex justify-center">
+          <button
+            onClick={() => onPageChange(currentPage - 1)}
+            className={`mx-1 px-3 py-1 text-xs md:text-sm rounded ${currentPage === 1 ? 'bg-gray-200 text-gray-700 cursor-not-allowed' : 'bg-blue-500 text-white'}`}
+            disabled={currentPage === 1}
+          >
+            Atrás
+          </button>
+          {visiblePages.map(page => (
+            <button
+              key={page}
+              onClick={() => onPageChange(page)}
+              className={`mx-1 px-3 py-1 text-xs md:text-sm rounded ${page === currentPage ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+            >
+              {page}
+            </button>
+          ))}
+          <button
+            onClick={() => onPageChange(currentPage + 1)}
+            className={`mx-1 px-3 py-1 text-xs md:text-sm rounded ${currentPage === totalPages ? 'bg-gray-200 text-gray-700 cursor-not-allowed' : 'bg-blue-500 text-white'}`}
+            disabled={currentPage === totalPages || totalPages === 0}
+          >
+            Siguiente
+          </button>
+        </div>
+
+        <div className="hidden md:block" >
+          <p className="text-sm text-gray-600 sm:text-sm">
+            Mostrando {showingFrom} a {showingTo} de {totalItems} habitaciones
+          </p>
+        </div>
+
+        <div className="block md:hidden" >
+          <p className="text-xs text-gray-600 sm:text-sm">
+            {showingTo} de {totalItems}
+          </p>
+        </div>
       </div>
-    </div>
+    </>
   );
 };

@@ -1,13 +1,8 @@
 import { Metadata, ResolvingMetadata } from "next";
 import { notFound, redirect } from "next/navigation";
-import Image from 'next/image';
 
 import { auth } from "@/auth.config";
-import {
-  GetAmenitiesByRoom,
-  getBedroomBySlug,
-  inFavorites,
-} from "@/actions";
+import { inFavorites, } from "@/actions";
 import {
   Amenities,
   BedroomSlideShow,
@@ -54,10 +49,11 @@ export async function generateMetadata(
     const response = await axios.get<RoomApi>(`${process.env.NEXT_PUBLIC_API_ROUTE}room/${slug}`);
     room = response.data;
   } catch (error: any) {
-    redirect("/rooms");
+    notFound();
   }
 
   return {
+    metadataBase: new URL(`${process.env.NEXT_PUBLIC_METADATABASE}`),
     title: room.title ?? "Habitacion no encontrada",
     description: room.description ?? "",
     openGraph: {
@@ -79,10 +75,6 @@ export default async function BedRoomPage({ params }: Props) {
     const response = await axios.get<RoomApi>(`${process.env.NEXT_PUBLIC_API_ROUTE}room/${slug}`);
     room = response.data;
   } catch (error: any) {
-    redirect("/rooms");
-  }
-
-  if (!room) {
     notFound();
   }
 
@@ -133,6 +125,7 @@ export default async function BedRoomPage({ params }: Props) {
       />
 
       <div className="mt-12 md:mt-8 md:px-24 2xl:px-64 md:py-14 mb-24 md:mb-16">
+
         <div className="hidden md:flex justify-between items-end">
           <div>
             <p className="capitalize text-2xl font-medium">{room.title}</p>
@@ -158,17 +151,31 @@ export default async function BedRoomPage({ params }: Props) {
             /> */}
           </div>
         </div>
+
         <div className="mt-14 md:mt-4">
-          <BedroomSlideShow
-            images={room.images}
-            title={room.title}
-            className="hidden md:block"
-          />
-          <BedroomSlideShowMobile
-            images={room.images}
-            title={room.title}
-            className="block md:hidden"
-          />
+          {
+            room.images.length > 0
+              ? (
+                <>
+                  <BedroomSlideShow
+                    images={room.images.map(image => image.url)}
+                    title={room.title}
+                    className="hidden md:block"
+                  />
+                  <BedroomSlideShowMobile
+                    images={room.images.map(image => image.url)}
+                    title={room.title}
+                    className="block md:hidden"
+                  />
+                </>
+              ) : (
+                <div className='flex border-b border-gray-200 md:border md:border-gray-200 md:rounded-3xl items-center justify-center h-full p-32' >
+                  <svg className="w-28 h-28 text-gray-300 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                    <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
+                  </svg>
+                </div>
+              )
+          }
         </div>
 
         <div className="hidden md:grid mt-8 md:grid-cols-12 gap-16 relative">
@@ -271,51 +278,39 @@ export default async function BedRoomPage({ params }: Props) {
               <div className="flex justify-end" >
                 <MethodsPayds />
               </div>
-              <div className="grid grid-cols-2 mt-8 gap-0 py-3 overflow-hidden">
+              <div className="grid grid-cols-2 mt-8 gap-5 py-3 overflow-hidden">
                 {/* Fila superior */}
-                <div className="p-4 flex justify-center items-center border-b border-r border-gray-300">
-                  <Image
-                    src="/app/pse.jpg"
-                    width={80}
-                    height={50}
-                    alt="PSE"
-                    className="object-contain"
-                  />
+                <div
+                  className="flex items-center justify-center border border-blue-600 bg-blue-50 rounded-full shadow-sm py-4 px-1.5 md:p-6 text-center hover:bg-gray-100 transition-all cursor-pointer"
+                >
+                  <span className="text-base font-bold text-blue-600">
+                    PSE
+                  </span>
                 </div>
 
-                <div className="p-4 flex justify-center items-center border-b border-gray-300">
-                  <div className="text-center">
-                    <Image
-                      src="/app/nequi.jpg"
-                      width={150}
-                      height={120}
-                      alt="Nequi"
-                      className="mx-auto mt-2 object-contain"
-                    />
-                  </div>
+                <div
+                  className="flex items-center justify-center border border-blue-600 bg-blue-50 rounded-full shadow-sm py-4 px-1.5 md:p-6 text-center hover:bg-gray-100 transition-all cursor-pointer"
+                >
+                  <span className="text-base font-bold text-blue-600">
+                    Nequi
+                  </span>
                 </div>
 
                 {/* Fila inferior */}
-                <div className="p-4 flex justify-center items-center border-r border-gray-300">
-                  <div className="text-center py-2">
-                    <Image
-                      src="/app/bcolombia.png"
-                      width={160}
-                      height={150}
-                      alt="Bancolombia"
-                      className="mx-auto mt-2 object-contain"
-                    />
-                  </div>
+                <div
+                  className="flex items-center justify-center border border-blue-600 bg-blue-50 rounded-full shadow-sm py-4 px-1.5 md:p-6 text-center hover:bg-gray-100 transition-all cursor-pointer"
+                >
+                  <span className="text-base font-bold text-blue-600">
+                    Bancolombia
+                  </span>
                 </div>
 
-                <div className="p-4 flex justify-center items-center">
-                  <Image
-                    src="/app/credit.png"
-                    width={140}
-                    height={100}
-                    alt="Tarjetas de crédito"
-                    className="object-contain"
-                  />
+                <div
+                  className="flex items-center justify-center border border-blue-600 bg-blue-50 rounded-full shadow-sm py-4 px-1.5 md:p-6 text-center hover:bg-gray-100 transition-all cursor-pointer"
+                >
+                  <span className="text-base font-bold text-blue-600">
+                    Tarjeta de credito
+                  </span>
                 </div>
               </div>
             </div>
@@ -329,30 +324,28 @@ export default async function BedRoomPage({ params }: Props) {
                 </div>
                 <div className="flex items-center gap-1" >
                   <IoLocationSharp />
-                  {/* <p className="text-sm font-extralight" >{room.motel.city.name}, {room.motel.address}</p> */}
+                  <p className="text-sm font-extralight" >{room.motel.neighborhood}, {room.motel.address}</p>
                 </div>
               </div>
               <div className="mt-2 w-full h-72 md:h-96 rounded-lg overflow-hidden shadow-lg">
-                {/* <iframe
+                <iframe
                   title="Ubicación del Motel"
-                  src={`https://www.google.com/maps?q=${room.room.motel.MotelConfig?.locationLatitude!},${room.room.motel.MotelConfig?.locationLongitude!}&hl=es&z=15&output=embed`}
+                  src={`https://www.google.com/maps?q=${room.motel.motelConfig.locationLatitude!},${room.motel.motelConfig?.locationLongitude!}&hl=es&z=15&output=embed`}
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                ></iframe> */}
+                ></iframe> *
               </div>
             </div>
           </div>
           <div className="col-span-5 w-full">
-            <div className="sticky top-24">
-              <AddToReservationDeskTop
-                room={room}
-                MotelConfig={motelConfig}
-              />
-            </div>
+            <AddToReservationDeskTop
+              room={room}
+              MotelConfig={motelConfig}
+            />
           </div>
         </div>
 
@@ -373,22 +366,20 @@ export default async function BedRoomPage({ params }: Props) {
               <p className={`${Lobster.className} text-xl antialiased text-red-600 font-bold`}>{room.motel.razonSocial}</p>
             </div>
             <p className="capitalize text-xl">Habitacion: {room.title}</p>
-            <div className="flex mt-0.5 items-center gap-2">
+            <div className="block mt-2 space-y-2 ">
               <div className="flex gap-1 items-center">
-                <MdBedroomChild className="h-3 w-3 text-gray-600" />
-                <p className="text-xs font-extralight">
+                <MdBedroomChild className="h-4 w-4 text-gray-600" />
+                <p className="text-sm font-extralight">
                   N° {room.roomNumber}
                 </p>
               </div>
-              <TbPointFilled className="w-2 h-2 flex-shrink-0" />
               <div className="flex gap-1 items-center">
-                <BiSolidCarGarage className="h-3 w-3 text-gray-600" />
-                <p className="text-xs font-extralight">{room.garage.title}</p>
+                <BiSolidCarGarage className="h-4 w-4 text-gray-600" />
+                <p className="text-sm font-extralight">{room.garage.title}</p>
               </div>
-              <TbPointFilled className="w-2 h-2 flex-shrink-0" />
               <div className="flex gap-1 items-center">
-                <MdTimer className="h-3 w-3 text-gray-600" />
-                <p className="text-xs font-extralight">
+                <MdTimer className="h-4 w-4 text-gray-600" />
+                <p className="text-sm font-extralight">
                   {room.timeLimit} horas
                 </p>
               </div>
@@ -477,51 +468,39 @@ export default async function BedRoomPage({ params }: Props) {
           <div className="flex justify-end" >
             <MethodsPayds />
           </div>
-          <div className="grid grid-cols-2 mt-8 gap-0 py-3 overflow-hidden">
+          <div className="grid grid-cols-2 mt-8 gap-3 py-3 overflow-hidden">
             {/* Fila superior */}
-            <div className="p-4 flex justify-center items-center border-b border-r border-gray-300">
-              <Image
-                src="/app/pse.jpg"
-                width={60}
-                height={40}
-                alt="PSE"
-                className="object-contain"
-              />
+            <div
+              className="flex items-center justify-center border border-blue-600 bg-blue-50 rounded-full shadow-sm py-5 px-1.5 md:p-6 text-center hover:bg-gray-100 transition-all cursor-pointer"
+            >
+              <span className="text-xs font-bold text-blue-600">
+                PSE
+              </span>
             </div>
 
-            <div className="p-4 flex justify-center items-center border-b border-gray-300">
-              <div className="text-center">
-                <Image
-                  src="/app/nequi.jpg"
-                  width={120}
-                  height={90}
-                  alt="Nequi"
-                  className="mx-auto mt-2 object-contain"
-                />
-              </div>
+            <div
+              className="flex items-center justify-center border border-blue-600 bg-blue-50 rounded-full shadow-sm py-5 px-1.5 md:p-6 text-center hover:bg-gray-100 transition-all cursor-pointer"
+            >
+              <span className="text-xs font-bold text-blue-600">
+                Nequi
+              </span>
             </div>
 
             {/* Fila inferior */}
-            <div className="p-4 flex justify-center items-center border-r border-gray-300">
-              <div className="text-center py-2">
-                <Image
-                  src="/app/bcolombia.png"
-                  width={120}
-                  height={110}
-                  alt="Bancolombia"
-                  className="mx-auto mt-2 object-contain"
-                />
-              </div>
+            <div
+              className="flex items-center justify-center border border-blue-600 bg-blue-50 rounded-full shadow-sm py-5 px-1.5 md:p-6 text-center hover:bg-gray-100 transition-all cursor-pointer"
+            >
+              <span className="text-xs font-bold text-blue-600">
+                Bancolombia
+              </span>
             </div>
 
-            <div className="p-4 flex justify-center items-center">
-              <Image
-                src="/app/credit.png"
-                width={100}
-                height={60}
-                alt="Tarjetas de crédito"
-                className="object-contain"
-              />
+            <div
+              className="flex items-center justify-center border border-blue-600 bg-blue-50 rounded-full shadow-sm py-5 px-1.5 md:p-6 text-center hover:bg-gray-100 transition-all cursor-pointer"
+            >
+              <span className="text-sm font-bold text-blue-600">
+                Tarjeta de credito
+              </span>
             </div>
           </div>
         </div>
@@ -531,27 +510,23 @@ export default async function BedRoomPage({ params }: Props) {
 
         <div className="block md:hidden px-4" >
           <p className="text-xl font-extralight">A donde iras</p>
-          <div className="mt-4 flex justify-between items-center" >
-            <div className="flex items-center gap-2" >
-              <FaBuildingFlag className="h-3 w-3" />
-              <p className="text-xs font-extralight" >Motel {room.motel.razonSocial}</p>
-            </div>
+          <div className="mt-4 flex justify-start items-center" >
             <div className="flex items-center gap-2" >
               <IoLocationSharp />
-              {/* <p className="text-xs font-extralight" >{room.room.motel.city.name}, {room.room.motel.address}</p> */}
+              <p className="text-xs font-extralight" >{room.motel.neighborhood}, {room.motel.address}</p>
             </div>
           </div>
           <div className="mt-3 w-full h-72 md:h-96 rounded-lg overflow-hidden shadow-lg">
-            {/* <iframe
+            <iframe
               title="Ubicación del Motel"
-              src={`https://www.google.com/maps?q=${room.room.motel.MotelConfig?.locationLatitude!},${room.room.motel.MotelConfig?.locationLongitude!}&hl=es&z=15&output=embed`}
+              src={`https://www.google.com/maps?q=${room.motel.motelConfig?.locationLatitude!},${room.motel.motelConfig?.locationLongitude!}&hl=es&z=15&output=embed`}
               width="100%"
               height="100%"
               style={{ border: 0 }}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-            ></iframe> */}
+            ></iframe>
           </div>
         </div>
 

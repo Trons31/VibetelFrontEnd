@@ -33,6 +33,7 @@ export const ToastSuccessLocationUser = () => {
                         role: 'alert',
                         'aria-live': 'assertive',
                     },
+
                 }
             );
         }
@@ -40,11 +41,11 @@ export const ToastSuccessLocationUser = () => {
     }, [isToastSuccessLocationUserOpen, closeToastSuccessLocationUserOpen])
 
     return (
-        <>
+        <div className='z-50'>
             <Toaster
                 position="top-right"
                 reverseOrder={false}
             />
-        </>
+        </div>
     )
 }

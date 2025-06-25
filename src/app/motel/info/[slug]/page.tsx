@@ -4,6 +4,8 @@ import { SideInfo } from "./ui/SideInfo";
 import { InfoMotel } from "./ui/InfoMotel";
 import { TopMenuMotel } from "@/components";
 import { ResolvingMetadata, Metadata } from "next";
+import { MotelBySlugApi } from "@/interfaces";
+import axios from "axios";
 
 interface Props {
   params: {
@@ -20,14 +22,24 @@ export async function generateMetadata(
   const slug = params.slug
 
   // fetch data 
-  const motel = await getMotelInfoBySlug(slug);
+
+  let motel: MotelBySlugApi;
+
+  try {
+    const response = await axios.get<MotelBySlugApi>(`${process.env.NEXT_PUBLIC_API_ROUTE}motel/${slug}`);
+    motel = response.data;
+  } catch (error: any) {
+    notFound();
+  }
+
 
 
   return {
-    title: motel?.title ?? "Motel no encontrado",
+    metadataBase: new URL(`${process.env.NEXT_PUBLIC_METADATABASE}`),
+    title: motel?.razonSocial ?? "Motel no encontrado",
     description: motel?.description ?? "",
     openGraph: {
-      title: motel?.title ?? "Motel no encontrado",
+      title: motel?.razonSocial ?? "Motel no encontrado",
       description: motel?.description ?? "",
       images: [`${motel?.images[0]}`],
     },
@@ -37,9 +49,12 @@ export async function generateMetadata(
 export default async function MotelInfoPage({ params }: Props) {
 
   const { slug } = params;
-  const motel = await getMotelInfoBySlug(slug);
+  let motel: MotelBySlugApi;
 
-  if (!motel) {
+  try {
+    const response = await axios.get<MotelBySlugApi>(`${process.env.NEXT_PUBLIC_API_ROUTE}motel/${slug}`);
+    motel = response.data;
+  } catch (error: any) {
     notFound();
   }
 

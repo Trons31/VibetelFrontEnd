@@ -8,7 +8,7 @@ import {
   SwiperMostReservationsRooms,
   SwiperMostReservationsRoomsMovil,
 } from "@/components";
-import { MotelInfo } from "@/interfaces";
+import { MotelBySlugApi } from "@/interfaces";
 import { MdBed } from "react-icons/md";
 import { TbNotesOff } from "react-icons/tb";
 import { usePathname } from "next/navigation";
@@ -16,7 +16,7 @@ import { FaBuildingFlag } from "react-icons/fa6";
 import { IoLocationSharp } from "react-icons/io5";
 
 interface Props {
-  motel: MotelInfo;
+  motel: MotelBySlugApi;
 }
 
 export const InfoMotel = ({ motel }: Props) => {
@@ -26,15 +26,15 @@ export const InfoMotel = ({ motel }: Props) => {
 
   return (
     <>
-      <ModalAllRatingsMotel
+      {/* <ModalAllRatingsMotel
         isOpen={modalAllRatings}
         ratings={motel.allRatings}
         onClose={() => setModalAllRatings(false)}
-      />
+      /> */}
 
       <div className="px-2 md:col-span-7 mt-10 md:mt-0">
-        <div className="px-2">
-          <p className="text-2xl font-semibold">Acerca de {motel.title}</p>
+        <div className="hidden md:block px-2">
+          <p className="text-2xl font-semibold">Acerca de {motel.razonSocial}</p>
           <div className="mt-4">
             <p>
               <strong>Descripción:</strong> {motel.description}
@@ -47,17 +47,17 @@ export const InfoMotel = ({ motel }: Props) => {
         <div className="mt-5">
           <div className="flex justify-between items-center">
             <p className="text-lg md:text-xl font-light">Reseñas</p>
-            {motel.allRatings.length > 1 && (
+            {/* {motel.allRatings.length > 1 && (
               <button
                 onClick={() => setModalAllRatings(true)}
                 className="underline"
               >
                 Ver mas
               </button>
-            )}
+            )} */}
           </div>
 
-          {motel.allRatings.length > 0 ? (
+          {/* {motel.allRatings.length > 0 ? (
             <>
               <div className="mt-10 ">
                 <div className="hidden md:block">
@@ -84,7 +84,7 @@ export const InfoMotel = ({ motel }: Props) => {
                 </p>
               </div>
             </div>
-          )}
+          )} */}
         </div>
 
         <div className="border-t border-gray-300 mt-16 mb-10"></div>
@@ -94,17 +94,17 @@ export const InfoMotel = ({ motel }: Props) => {
           <div className="mt-4 flex justify-between items-center" >
             <div className="flex items-center gap-1" >
               <FaBuildingFlag />
-              <p className="text-sm font-extralight" >Motel {motel.title}</p>
+              <p className="text-sm font-extralight" >Motel {motel.razonSocial}</p>
             </div>
             <div className="flex items-center gap-1" >
               <IoLocationSharp />
-              <p className="text-sm font-extralight" >{motel.city}, {motel.address}</p>
+              <p className="text-sm font-extralight" >{motel.city.name}, {motel.address}</p>
             </div>
           </div>
           <div className="mt-2 w-full h-72 md:h-96 rounded-lg overflow-hidden shadow-lg">
             <iframe
               title="Ubicación del Motel"
-              src={`https://www.google.com/maps?q=${motel.locationLatitude},${motel.locationLongitude}&hl=es&z=15&output=embed`}
+              src={`https://www.google.com/maps?q=${motel.motelConfig.locationLatitude},${motel.motelConfig.locationLongitude}&hl=es&z=15&output=embed`}
               width="100%"
               height="100%"
               style={{ border: 0 }}
@@ -122,7 +122,7 @@ export const InfoMotel = ({ motel }: Props) => {
             Habitaciones mas reservadas
           </p>
 
-          {motel.topRooms.length > 0 ? (
+          {/* {motel.topRooms.length > 0 ? (
             <>
               <p className="text-sm font-extralight text-gray-800">
                 Aquí encontrarás una lista de las habitaciones que los usuarios
@@ -151,7 +151,7 @@ export const InfoMotel = ({ motel }: Props) => {
                 </p>
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </>

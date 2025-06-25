@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { auth } from '@/auth.config';
-import { MenuOptions, SideBarAdminMotel, SideBarMovil, TopMenuAdminMotel, TotalReservationRequests, Tracker } from '@/components';
+import { ContentWrapper, MenuOptions, SideBarAdminMotel, SideBarMovil, TopMenuAdminMotel, TotalReservationRequests, Tracker } from '@/components';
 import { getRoomInAviableByMotel, getTotalReservationTodayByMotel } from '@/actions';
 import axios from 'axios';
 import { MotelApi } from '@/interfaces';
@@ -49,28 +49,25 @@ export default async function DashboardLayout({
       <SideBarMovil
         motelStatus={motelExist.isApproved}
         motelName={motelExist.razonSocial}
-        motelImage={motelExist.images.length === 0 ? undefined : motelExist.images[0].url}
+        motelImage={motelExist.images.length === 0 ? undefined : motelExist.images[0]}
         subscription={motelExist.subscriptionTier}
       />
 
       <SideBarAdminMotel
         motelStatus={motelExist.isApproved}
-        motelImage={motelExist.images.length === 0 ? undefined : motelExist.images[0].url}
+        motelImage={motelExist.images.length === 0 ? undefined : motelExist.images[0]}
         motelName={motelExist.razonSocial}
         subscription={motelExist.subscriptionTier}
       />
 
 
-      <div className="ml-auto bg-gray-200  lg:w-[75%] xl:w-[80%] 2xl:w-[85%] min-h-screen">
-        <TopMenuAdminMotel
-          motelConfig={undefined}
-          motelStatus={motelExist.isApproved}
-          motelId={motelExist.id}
-        />
-        <div className="px-3 py-10 md:px-6 pt-6">
-          {children}
-        </div>
-      </div>
+      <ContentWrapper
+        isApproved={motelExist.isApproved}
+        accessToken={session.accessToken!}
+        motelConfig={motelExist.motelConfig}
+      >
+        {children}
+      </ContentWrapper>
 
 
       {/*Herramientas para plan gratuito*/}

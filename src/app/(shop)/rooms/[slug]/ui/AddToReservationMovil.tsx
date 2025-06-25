@@ -90,7 +90,7 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
             description: room.description,
             category: room.category.name,
             garage: room.garage.title,
-            image: room.images[0],
+            image: room.images[0].url,
             slug: room.slug,
             price: room.price,
             promoActive: room.promoActive,
@@ -106,8 +106,7 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
             createdAt: new Date(),
             motel: {
                 title: room.motel.razonSocial,
-                location: `sincelejo, sucre`,
-                //location: `${room.motel.city?.name}, ${room.motel.department?.name}`,
+                location: `${room.motel.city.name}, ${room.motel.city.department.name}`,
                 contactPhone: room.motel.contactPhone,
                 address: room.motel.address,
                 neighborhood: room.motel.neighborhood,
@@ -163,7 +162,7 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
             description: room.description,
             category: room.category.name,
             garage: room.garage.title,
-            image: room.images[0],
+            image: room.images[0].url,
             slug: room.slug,
             price: room.price,
             promoActive: room.promoActive,
@@ -179,8 +178,7 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
             createdAt: new Date(),
             motel: {
                 title: room.motel.razonSocial,
-                location: `sincelejo, sucre`,
-                //location: `${room.motel.city?.name}, ${room.motel.department?.name}`,
+                location: `${room.motel.city.name}, ${room.motel.city.department.name}`,
                 contactPhone: room.motel.contactPhone,
                 address: room.motel.address,
                 neighborhood: room.motel.neighborhood,
@@ -223,7 +221,7 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
 
             {isExpanded && (
                 <div
-                    className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-20"
+                    className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-30"
                     onClick={() => setIsExpanded(false)} // Cierra el modal al hacer clic fuera
                 />
             )}

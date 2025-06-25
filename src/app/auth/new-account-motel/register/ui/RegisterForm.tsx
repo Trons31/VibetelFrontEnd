@@ -159,7 +159,7 @@ export const RegisterForm = ({ motelPartner, departments, countries, cities, ame
             //         formData.append('amenitiesMotel', selectedAmenities[i]);
             //     }
             // }
-            cityId: "801d5586-690b-45b5-8598-74e21abf54e0"
+            cityId: "e46c3e23-b704-448e-a8ee-74943c245cde"
             //cityId: data.city
         };
 

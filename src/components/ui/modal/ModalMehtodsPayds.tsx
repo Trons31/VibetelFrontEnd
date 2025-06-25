@@ -13,7 +13,7 @@ const paymentMethods = [
     "Bancolombia",
     "Davivienda",
     "PSE",
-    "Efecty",
+    "Colpátria",
     "Banco de Bogotá",
     "Citibank",
     "BBVA",
@@ -62,9 +62,9 @@ export const ModalMethodsPayds = ({ isOpen, onClose }: ModalProps) => {
                     {paymentMethods.map((method, index) => (
                         <div
                             key={index}
-                            className="border border-blue-400 rounded-xl shadow-sm py-3 px-1.5 md:p-4 text-center hover:bg-gray-100 transition-all cursor-pointer"
+                            className="border border-blue-600 bg-blue-50 rounded-3xl shadow-sm py-3 px-1.5 md:p-4 text-center hover:bg-gray-100 transition-all cursor-pointer"
                         >
-                            <span className="text-base font-medium text-gray-800">
+                            <span className="text-base font-bold text-blue-600">
                                 {method}
                             </span>
                         </div>

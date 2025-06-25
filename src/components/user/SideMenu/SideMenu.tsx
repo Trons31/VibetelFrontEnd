@@ -1,5 +1,5 @@
 'use client';
-import { UserInterface } from '@/interfaces/user.interface';
+import { UserApi } from '@/interfaces/user.interface';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -9,12 +9,12 @@ import { IoGiftOutline } from 'react-icons/io5';
 import { LuHeart } from 'react-icons/lu';
 
 interface Props {
-  user: UserInterface
+  user: UserApi;
 }
 
 export const SideMenu = ({ user }: Props) => {
   const [loading, setLoading] = useState(true);
-  const [userInfo, setUserInfo] = useState<UserInterface>();
+  const [userInfo, setUserInfo] = useState<UserApi>();
   const pathname = usePathname();
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export const SideMenu = ({ user }: Props) => {
   }, [user]);
 
   return (
-    <div className="col-span-2 hidden pt-24 sm:block border-r border-solid bg-white ">
+    <div className="col-span-2 hidden pt-24 sm:block bg-white ">
 
       {
         loading

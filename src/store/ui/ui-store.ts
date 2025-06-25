@@ -9,6 +9,13 @@ interface State {
     openSideMenu: () => void;
     closeSideMenu: () => void;
 
+    //SearchInput
+    isSearchOpen: boolean;
+
+    openSearch: () => void;
+    closeSearch: () => void;
+
+
     //MenuMotelPartners
     isSideMenuOpenMotelPartners: boolean;
 
@@ -20,6 +27,11 @@ interface State {
 
     openSideMenuAdminMotel: () => void;
     closeSideMenuAdminMotel: () => void;
+
+    isMenuOpenAdminMotel: boolean;
+
+    openMenuAdminMotel: () => void;
+    closeMenuAdminMotel: () => void;
 
     //MenuFilter
     isSideMenuFilterOpen: boolean;
@@ -55,6 +67,13 @@ export const useUIStore = create<State>()((set) => ({
 
     closeSideMenu: () => set({ isSideMenuOpen: false }),
 
+    //SearchInput
+    isSearchOpen: false,
+
+    openSearch: () => set({ isSearchOpen: true }),
+
+    closeSearch: () => set({ isSearchOpen: false }),
+
     //MenuAppPartnerMotel
     isSideMenuOpenMotelPartners: false,
 
@@ -68,6 +87,12 @@ export const useUIStore = create<State>()((set) => ({
     openSideMenuAdminMotel: () => set({ isSideMenuOpenAdminMotel: true }),
 
     closeSideMenuAdminMotel: () => set({ isSideMenuOpenAdminMotel: false }),
+
+    isMenuOpenAdminMotel: true,
+
+    openMenuAdminMotel: () => set({ isMenuOpenAdminMotel: true }),
+
+    closeMenuAdminMotel: () => set({ isMenuOpenAdminMotel: false }),
 
     //MenuFilter
     isSideMenuFilterOpen: false,

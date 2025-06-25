@@ -1,12 +1,12 @@
 'use client';
 import React, { useEffect, useState } from 'react'
-import { MotelAdmin } from '@/interfaces';
+import { MotelApi } from '@/interfaces';
 import toast, { Toaster } from 'react-hot-toast';
 import clsx from 'clsx';
 import { createOrDeleteOtherAmenities } from '@/actions';
 
 interface Props {
-    motel: MotelAdmin;
+    motel: MotelApi;
 }
 
 export const OtherAmenities = ({ motel }: Props) => {
@@ -14,7 +14,7 @@ export const OtherAmenities = ({ motel }: Props) => {
     const [inputsAmenities, setInputs] = useState<string[]>(motel.amenities);
     const [showMessageErrorAmenities, setShowMessageErrorAmenities] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [motelInfo, setMotelInfo] = useState<MotelAdmin>();
+    const [motelInfo, setMotelInfo] = useState<MotelApi>();
     const [showLoadingButton, setShowLoadingButton] = useState(false);
 
 
@@ -60,7 +60,7 @@ export const OtherAmenities = ({ motel }: Props) => {
     useEffect(() => {
         setMotelInfo(motel);
         setLoading(false)
-    }, [motelInfo,motel]);
+    }, [motelInfo, motel]);
 
     return (
         <>
@@ -96,14 +96,14 @@ export const OtherAmenities = ({ motel }: Props) => {
                                     <textarea
                                         value={input}
                                         onChange={(e) => handleInputChange(index, e.target.value)}
-                                        className="border text-sm rounded-md px-2 py-1 w-full border-gray-300 bg-gray-100"
+                                        className="border text-xs md:text-sm rounded-md px-2 py-1 w-full border-gray-300 bg-gray-100"
                                         placeholder="ej: Nombre de la comodidad"
                                         rows={2}
                                     />
                                     <button
                                         type="button"
                                         onClick={() => handleRemoveInput(index)}
-                                        className="bg-red-500  text-white px-2 py-1 rounded-md"
+                                        className="bg-red-500 text-xs md:text-sm text-white px-2 py-1 rounded-md"
                                     >
                                         Eliminar
                                     </button>
@@ -121,7 +121,7 @@ export const OtherAmenities = ({ motel }: Props) => {
                                 <button
                                     type="button"
                                     onClick={handleAddInput}
-                                    className="bg-blue-600 w-fit text-white px-2 py-1 rounded-md"
+                                    className="bg-blue-600 text-xs md:text-sm w-fit text-white px-2 py-1 rounded-md"
                                 >
                                     Agregar comodida
                                 </button>
@@ -129,7 +129,7 @@ export const OtherAmenities = ({ motel }: Props) => {
                             </div>
 
 
-                            <div className='flex justify-end' >
+                            <div className='flex mt-5 md:mt-0 md:justify-end'>
 
                                 <button
                                     type='submit'
@@ -139,8 +139,8 @@ export const OtherAmenities = ({ motel }: Props) => {
                                         clsx(
 
                                             {
-                                                "flex items-center gap-x-4 rounded-lg bg-blue-600 hover:bg-blue-700 px-7 py-2 font-medium text-white": !showLoadingButton,
-                                                "flex items-center gap-x-4 rounded-lg bg-blue-600 px-7 py-2 font-medium text-white cursor-not-allowed": showLoadingButton
+                                                "flex justify-center w-full md:w-fit text-xs md:text-sm items-center gap-x-4 rounded-lg bg-blue-600 hover:bg-blue-700 px-7 py-2 font-medium text-white": !showLoadingButton,
+                                                "flex justify-center w-full md:w-fit text-xs md:text-sm items-center gap-x-4 rounded-lg bg-blue-600 px-7 py-2 font-medium text-white cursor-not-allowed": showLoadingButton
                                             }
                                         )
                                     }>

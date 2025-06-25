@@ -2,12 +2,12 @@
 import React, { useEffect, useState } from 'react'
 import clsx from 'clsx'
 import { useForm } from 'react-hook-form';
-import { UserInterface } from '@/interfaces/user.interface';
+import { UserApi } from '@/interfaces/user.interface';
 import toast, { Toaster } from 'react-hot-toast';
-import { updateMotelPartner } from '@/actions';
+import axios from 'axios';
 
 interface Props {
-    motelPartner: UserInterface,
+    motelPartner: UserApi,
 }
 
 type FormInputs = {
@@ -20,7 +20,7 @@ type FormInputs = {
 
 export const MotelPartnerForm = ({ motelPartner }: Props) => {
 
-    const [motelPartnerInfo, setMotelPartnerInfo] = useState<UserInterface>();
+    const [motelPartnerInfo, setMotelPartnerInfo] = useState<UserApi>();
     const [loading, setLoading] = useState(true);
     const [showLoadingButton, setShowLoadingButton] = useState(false);
 
@@ -40,16 +40,23 @@ export const MotelPartnerForm = ({ motelPartner }: Props) => {
         setShowLoadingButton(true);
         const { name, lastName, email, contactPhone } = data;
 
-        const response = await updateMotelPartner(motelPartner.id, name, lastName, email, contactPhone)
+        const user = {
+            name:name,
+            lastname:lastName,
+            email:email,
+        }
 
-        if (!response.ok) {
+        try {
+            await axios.patch(
+                `${process.env.NEXT_PUBLIC_API_ROUTE}user/${motelPartner.id}`, user
+            );
+            toast.success("Actualizacion correcta!")
+            setShowLoadingButton(false);
+        } catch (error: any) {
             toast.error("No se pudo actualizar la informacion")
             setShowLoadingButton(false);
             return;
         }
-
-        toast.success("Actualizacion correcta!")
-        setShowLoadingButton(false);
     }
 
 

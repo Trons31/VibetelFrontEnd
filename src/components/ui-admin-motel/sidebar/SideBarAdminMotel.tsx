@@ -1,5 +1,5 @@
 'use client';
-import Link from 'next/link'
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
@@ -8,15 +8,16 @@ import { logout } from '@/actions';
 import { AdminImage } from './AdminImage';
 import { MdContentPasteSearch, MdNotificationsActive, MdSupportAgent } from 'react-icons/md';
 import { TiHomeOutline } from 'react-icons/ti';
-import { useAdmintore } from '@/store';
+import { useAdmintore, useUIStore } from '@/store';
 import { IoBedOutline, IoLogIn } from 'react-icons/io5';
 import { LuUserCog } from 'react-icons/lu';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { BiLogOut, BiMoneyWithdraw } from 'react-icons/bi';
 import { PiUserCircleGearFill } from 'react-icons/pi';
 import { TbDeviceAnalytics, TbPresentationAnalytics, TbSettingsPlus } from 'react-icons/tb';
-import { RiBankCardFill, RiCalendarCheckFill, RiCalendarCloseFill } from 'react-icons/ri';
+import { RiBankCardFill, RiCalendarCheckFill, RiCalendarCloseFill } from 'react-icons/ri'; // Asumo que esta es la ruta correcta
 import { isApprovedStatus, Tier } from '@/interfaces';
+import { motion } from 'framer-motion';
 
 interface Props {
   motelStatus: isApprovedStatus;
@@ -27,12 +28,10 @@ interface Props {
 
 export const SideBarAdminMotel = ({ motelStatus, motelImage, motelName, subscription }: Props) => {
   const pathname = usePathname();
-
   const { newReservation, updateNewReservation, cleanNewReservation } = useAdmintore();
-
   const [isLoading, setisLoading] = useState(true);
   const [showSubMenuAnalitycs, setShowSubMenuAnalitycsfirst] = useState(false);
-
+  const isMenuOpenAdminMotel = useUIStore(state => state.isMenuOpenAdminMotel);
 
   useEffect(() => {
     if (pathname === "/admin/dashboard-partner-motel/booking") {
@@ -42,8 +41,32 @@ export const SideBarAdminMotel = ({ motelStatus, motelImage, motelName, subscrip
   }, [pathname, cleanNewReservation])
 
 
+  const sidebarVariants = {
+    open: {
+      x: 0,
+      transition: {
+        type: "spring",
+        stiffness: 260,
+        damping: 20
+      }
+    },
+    closed: {
+      x: "-100%", 
+      transition: {
+        type: "spring",
+        stiffness: 260,
+        damping: 20
+      }
+    }
+  };
+
   return (
-    <aside className="ml-[-100%] fixed z-10 top-0 pb-3 px-3 w-full flex flex-col justify-between h-screen border-r bg-white transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
+    <motion.aside
+      className="hidden md:flex fixed z-10 top-0 pb-3 px-3 w-full flex-col justify-between h-screen border-r bg-white md:w-4/12 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]"
+      initial={true} 
+      animate={isMenuOpenAdminMotel ? "open" : "closed"} 
+      variants={sidebarVariants} 
+    >
       <div className="flex flex-col h-full">
         <div className="flex px-2 justify-between items-center gap-3 py-4" >
           <Link href="/admin/dashboard-partner-motel">
@@ -256,19 +279,6 @@ export const SideBarAdminMotel = ({ motelStatus, motelImage, motelName, subscrip
                           }>
                             <RiCalendarCheckFill className="mr-4 h-5 w-5 align-middle" />
                             Servicio con reserva
-                            {/* {
-                              !isLoading && newReservation > 0 && (
-                                <div
-                                  className="flex items-center justify-center ml-auto text-xs text-white bg-red-500 h-4 w-4 rounded leading-none"
-                                >
-                                  {
-                                    newReservation > 9
-                                      ? "+9"
-                                      : newReservation
-                                  }
-                                </div>
-                              )
-                            } */}
                           </Link>
 
                           <Link href="/admin/dashboard-partner-motel/walk-in-services" className={
@@ -285,8 +295,7 @@ export const SideBarAdminMotel = ({ motelStatus, motelImage, motelName, subscrip
 
                         </nav>
                       </>
-                    )
-                  }
+                    )}
 
 
 
@@ -334,22 +343,17 @@ export const SideBarAdminMotel = ({ motelStatus, motelImage, motelName, subscrip
                       Cuenta bancaria
                     </Link>
 
-                    {
-                      subscription !== "FREE" && (
-                        <>
-                          <Link href="/admin/dashboard-partner-motel/additional-settings" className={
-                            clsx(
-                              "flex cursor-pointer items-center py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 ",
-                              {
-                                "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/additional-settings"
-                              }
-                            )
-                          }  >
-                            <TbSettingsPlus className="mr-4 h-5 w-5 align-middle" />
-                            Ajustes adicionales
-                          </Link>
-                        </>
-                      )}
+                    <Link href="/admin/dashboard-partner-motel/additional-settings" className={
+                      clsx(
+                        "flex cursor-pointer items-center py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 ",
+                        {
+                          "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/additional-settings"
+                        }
+                      )
+                    }  >
+                      <TbSettingsPlus className="mr-4 h-5 w-5 align-middle" />
+                      Ajustes adicionales
+                    </Link>
                   </nav>
                 </div>
               </div>
@@ -391,7 +395,6 @@ export const SideBarAdminMotel = ({ motelStatus, motelImage, motelName, subscrip
           <span className="group-hover:text-gray-700">Salir</span>
         </button>
       </div>
-    </aside>
+    </motion.aside>
   );
 };
-

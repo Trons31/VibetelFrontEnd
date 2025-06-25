@@ -106,14 +106,14 @@ export default async function BedroomPage({ params }: Props) {
   // }
 
   return (
-    <div className="bg-white  rounded-lg pb-20 mb-20" >
+    <div className="bg-white rounded-xl pb-20 mb-20" >
 
 
 
       <div className="py-14 px-5 md:mx-10">
         <div className="mb-8">
           <div className="flex justify-between items-center" >
-            <p className="text-3xl font-semibold capitalize" >
+            <p className="text-md md:text-3xl font-semibold capitalize" >
               {
                 room
                   ? (
@@ -131,13 +131,13 @@ export default async function BedroomPage({ params }: Props) {
                     room?.status === "DISABLED"
                       ? (
                         <div className="flex gap-2 items-center bg-gray-200 py-1 px-3 rounded w-fit" >
-                          <BiBlock className="h-4 w-4" />
-                          <p className="text-black font-semibold" >Desabilitada</p>
+                          <BiBlock className="h-3 w-3 md:h-4 md:w-4" />
+                          <p className="text-black text-sm md:text-lg font-semibold" >Desabilitada</p>
                         </div>
                       ) : (
                         <div className="flex gap-2 items-center bg-gray-200 py-1 px-3 rounded w-fit" >
-                          <FaCircleCheck className="h-4 w-4" />
-                          <p className="text-black font-semibold" >Habilitada</p>
+                          <FaCircleCheck className="h-3 w-3 md:h-4 md:w-4" />
+                          <p className="text-black text-sm md:text-lg font-semibold" >Habilitada</p>
                         </div>
                       )
                   }
@@ -177,7 +177,7 @@ export default async function BedroomPage({ params }: Props) {
             <StatusRoom
               nameRoom={room!.title}
               idRoom={room!.id}
-              status={room!.status}
+              status={room?.status!}
             />
           )
         }

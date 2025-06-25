@@ -1,7 +1,5 @@
 import { Metadata, ResolvingMetadata } from "next";
 import { notFound, redirect } from "next/navigation";
-import { getMotelBySlug } from "@/actions/motels/get-motel-by-slug";
-import { GetAmenitiesRoom, GetCategoryRoom, GetGarageRoom, getRoomWithBestPromotion } from '@/actions';
 import { FilterRooms } from "./ui/FilterRooms";
 import axios from "axios";
 import { AmenitiesRoomApi, CategoryRoomApi, GarageRoomApi, MotelBySlugApi } from "@/interfaces";
@@ -13,7 +11,6 @@ interface Props {
 
 }
 
-// TODO: Configurar metada para generar las imagenes de las habitaciones
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
@@ -28,13 +25,14 @@ export async function generateMetadata(
     const response = await axios.get<MotelBySlugApi>(`${process.env.NEXT_PUBLIC_API_ROUTE}motel/${slug}`);
     motel = response.data;
   } catch (error: any) {
-    redirect("/");
+    notFound();
   }
 
   // optionally access and extend (rather than replace) parent metadata
   // const previousImages = (await parent).openGraph?.images || []
 
   return {
+    metadataBase: new URL(`${process.env.NEXT_PUBLIC_METADATABASE}`),
     title: motel.razonSocial ?? "Motel no encontrado",
     description: motel.description ?? "",
     openGraph: {
@@ -56,7 +54,7 @@ export default async function MotelBySlugPage({ params }: Props) {
     const response = await axios.get<MotelBySlugApi>(`${process.env.NEXT_PUBLIC_API_ROUTE}motel/${slug}`);
     motel = response.data;
   } catch (error: any) {
-    console.log(error);
+    notFound();
   }
 
   let category: CategoryRoomApi[];
@@ -83,8 +81,6 @@ export default async function MotelBySlugPage({ params }: Props) {
     throw new Error(`Ups! Error al obtener las comodidades de las habitaciones`);
   }
 
-  const RoomWithBestPromotion = await getRoomWithBestPromotion();
-
   return (
     <>
       <FilterRooms
@@ -92,8 +88,7 @@ export default async function MotelBySlugPage({ params }: Props) {
         motel={motel!}
         garageRoom={garage}
         amenitiesRoom={amenities}
-        BestPromotion={RoomWithBestPromotion.BestPromotion}
-        //motelConfig={motel}
+        motelConfig={motel!.motelConfig!}
         slugMotel={motel!.slug}
       />
     </>

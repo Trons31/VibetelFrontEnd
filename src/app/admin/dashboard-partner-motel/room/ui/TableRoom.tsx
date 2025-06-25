@@ -170,9 +170,9 @@ export const TableRoom = ({ accessToken, garageRoom, categoryRoom }: Props) => {
 
     return (
         <>
-            <div className="flex justify-end w-full px-8" >
-                <div className="flex  bg-gray-200 rounded p-2 w-fit" >
-                    <p className="font-semibold text-sm" >{allRooms.length} Habitaciones registradas</p>
+            <div className="flex justify-end w-full px-2 md:px-8" >
+                <div className="flex bg-gray-200 rounded-full py-2 px-3 w-fit" >
+                    <p className="font-normal text-xs md:text-sm" >{allRooms.length} Habitaciones registradas</p>
                 </div>
             </div>
 
@@ -193,13 +193,13 @@ export const TableRoom = ({ accessToken, garageRoom, categoryRoom }: Props) => {
                 <table className="min-w-full shadow-sm">
                     <thead className="bg-gray-200 border-b">
                         <tr>
-                            <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                            <th scope="col" className="text-xs md:text-sm font-medium text-gray-900 px-6 py-4 text-left">
                                 Imagen
                             </th>
-                            <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                            <th scope="col" className="text-xs md:text-sm font-medium text-gray-900 px-6 py-4 text-center">
                                 Nombre
                             </th>
-                            <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                            <th scope="col" className="text-xs md:text-sm font-medium text-gray-900 px-6 py-4 text-center">
                                 <div className='flex justify-center items-center gap-2'>
                                     Estado
                                     <div className='flex flex-col items-center'>
@@ -219,7 +219,7 @@ export const TableRoom = ({ accessToken, garageRoom, categoryRoom }: Props) => {
                                     </div>
                                 </div>
                             </th>
-                            <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                            <th scope="col" className="text-xs md:text-sm font-medium text-gray-900 px-6 py-4 text-center">
                                 <div className='flex justify-center items-center gap-2'>
                                     Precio
                                     <div className='flex flex-col items-center'>
@@ -239,7 +239,7 @@ export const TableRoom = ({ accessToken, garageRoom, categoryRoom }: Props) => {
                                     </div>
                                 </div>
                             </th>
-                            <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                            <th scope="col" className="text-xs md:text-sm font-medium text-gray-900 px-6 py-4 text-center">
                                 <div className='flex justify-center items-center gap-2'>
                                     Promoción
                                     <div className='flex flex-col items-center'>
@@ -259,7 +259,7 @@ export const TableRoom = ({ accessToken, garageRoom, categoryRoom }: Props) => {
                                     </div>
                                 </div>
                             </th>
-                            <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                            <th scope="col" className="text-xs md:text-sm font-medium text-gray-900 px-6 py-4 text-center">
                                 Precio de promoción
                             </th>
                         </tr>
@@ -268,10 +268,10 @@ export const TableRoom = ({ accessToken, garageRoom, categoryRoom }: Props) => {
                         {!isLoading && paginatedRooms.length > 0 && (
                             paginatedRooms.map(room => (
                                 <tr key={room.id} className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    <td className=" md:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         <Link href={`/admin/dashboard-partner-motel/room/${room.slug}`} target="_blank" rel="noopener noreferrer">
                                             <RoomImageAdmin
-                                                src={room.images[0]}
+                                                src="room3.jpg"
                                                 width={300}
                                                 height={100}
                                                 alt={room.title}
@@ -279,28 +279,28 @@ export const TableRoom = ({ accessToken, garageRoom, categoryRoom }: Props) => {
                                             />
                                         </Link>
                                     </td>
-                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                        <Link href={`/admin/dashboard-partner-motel/room/${room.slug}`} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                                    <td className="text-center text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                        <Link href={`/admin/dashboard-partner-motel/room/${room.slug}`} target="_blank" rel="noopener noreferrer" className="hover:underline text-xs md:text-sm">
                                             {room.title}
                                         </Link>
                                     </td>
-                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                    <td className="text-sm text-center text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                         {room.inAvaible ? (
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex justify-center items-center gap-2">
                                                 <FaCheckCircle className='h-4 w-4 text-green-700' />
                                                 <span className='mx-2 text-green-700'>Disponible</span>
                                             </div>
                                         ) : (
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex justify-center items-center gap-2">
                                                 <IoTimerSharp className='h-5 w-5 text-red-700' />
                                                 <span className='mx-2 text-red-700'>No disponible</span>
                                             </div>
                                         )}
                                     </td>
-                                    <td className="text-sm text-gray-900 font-bold px-6 py-4 whitespace-nowrap">
+                                    <td className="text-sm text-center text-gray-900 font-bold px-6 py-4 whitespace-nowrap">
                                         {currencyFormat(room.price)}
                                     </td>
-                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                    <td className="text-sm text-center text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                         {room.promoActive ? (
                                             <span className='mx-2 text-white bg-blue-600 p-2 text-xs rounded-full font-normal'>Activada</span>
                                         ) : (
@@ -328,12 +328,12 @@ export const TableRoom = ({ accessToken, garageRoom, categoryRoom }: Props) => {
 
                 {!isLoading && paginatedRooms.length === 0 && isFiltering && (
                     <div className='flex justify-center px-5 items-center py-10'>
-                        <div className="no-file-found w-full md:w-1/2 flex flex-col items-center justify-center py-8 px-4 text-center bg-gray-200 dark:bg-gray-800 rounded-lg shadow-md">
+                        <div className="no-file-found w-full md:w-1/2 flex flex-col items-center justify-center py-8 px-4 text-center bg-gray-200 rounded-lg shadow-md">
                             <TbBedOff size={50} className="text-gray-500" />
-                            <h3 className="text-xl font-semibold mt-4 text-black">
+                            <h3 className="text-md md:text-xl font-semibold mt-4 text-black">
                                 Habitación no encontrada
                             </h3>
-                            <p className="text-gray-700 mt-2">
+                            <p className="text-xs md:text-lg text-gray-700 mt-2">
                                 Lo sentimos, no hemos podido encontrar la habitación que estás buscando. Por favor, intenta con una búsqueda diferente o revisa más tarde.
                             </p>
                         </div>
@@ -355,10 +355,10 @@ export const TableRoom = ({ accessToken, garageRoom, categoryRoom }: Props) => {
                     <div className='flex justify-center px-5 items-center py-10'>
                         <div className="no-file-found w-full md:w-1/2 flex flex-col items-center justify-center py-8 px-4 text-center bg-gray-200 rounded-lg shadow-md">
                             <TbBedOff size={50} className="text-gray-500" />
-                            <h3 className="text-xl font-semibold mt-4 text-black">
+                            <h3 className="text-md md:text-xl font-semibold mt-4 text-black">
                                 Aún no se han registrado habitaciones
                             </h3>
-                            <p className="text-gray-700 mt-2">
+                            <p className="text-xs md:text-lg text-gray-700 mt-2">
                                 Para activar tu motel, es necesario registrar al menos 10 habitaciones.
                             </p>
                         </div>

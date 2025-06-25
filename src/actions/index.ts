@@ -5,7 +5,6 @@ export { getBedroomBySlugByMotel } from './rooms/get-bedroom-by-slug-by-motel';
 export { getBedroomByMotel } from './rooms/get-bedroom-by-motel';
 export { CreateUpdateRoom } from './rooms/create-update-room';
 export { registerAmenitiesByRoom } from './rooms/register-amenities-by-room';
-export { getRoomWithImages } from './rooms/pagination-rooms';
 export { deleteRoomImage } from './rooms/delete-room-image';
 export { getRoomBySearch } from './rooms/get-room-search';
 export { disabledRoom } from './rooms/disabled-room';
@@ -31,9 +30,7 @@ export { login } from './auth/login';
 export { logout } from './auth/logout';
 
 // User Actions
-export { GetUserByEmail } from './user/get-user-by-email';
 export { updatePasswordByUser } from './user/update-password-by-user';
-export { updateMotelPartner } from './user/update-motelPartner';
 export { getFavoriteRoomByUser } from './user/get-favorite-room';
 export { deleteFavoriteRoom } from './user/delete-favorite-room';
 export { validateTokenResertPassword } from './user/validate-token-reset-password';
@@ -110,8 +107,6 @@ export { getReservationByRoomId } from './reservation/get-reservation-by-roomid'
 export { getReservationByTransactionId } from './reservation/get-reservation-by-transactionId';
 export { getAddTimeReservationByTransactionId } from './reservation/get-add-time-reservation-by-transactionId';
 
-//Wompi
-export { PaidWhitWompi } from './wompi/wompi';
 
 //Sheed Admin
 export { roomInServiceAdmin } from './sheet-admin/room-in-service';

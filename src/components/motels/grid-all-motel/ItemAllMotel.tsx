@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import { IoArrowForwardOutline } from 'react-icons/io5';
 import { MotelImage } from '@/components';
-import { MotelAllApi } from '@/interfaces';
+import { MotelApi } from '@/interfaces';
 
 interface Props {
-  motel: MotelAllApi
+  motel: MotelApi
 }
 
 export const ItemAllMotel = ({ motel }: Props) => {
@@ -24,13 +24,13 @@ export const ItemAllMotel = ({ motel }: Props) => {
           Más popular
         </div>
         <div className="flex absolute top-2 justify-start px-2">
-          {motel ? (
-            <div className="center inline-block select-none whitespace-nowrap rounded-lg bg-white py-1.5 px-3.5 align-baseline font-sans text-xs font-semibold leading-none text-black">
-              <div className="mt-px">En servicio</div>
+          {motel.motelConfig?.inService ? (
+            <div className="center inline-block select-none whitespace-nowrap rounded-lg bg-blue-600 py-2 px-3.5 align-baseline font-sans text-xs font-semibold leading-none text-white">
+              <p className="text-xs font-bold">En servicio</p>
             </div>
           ) : (
-            <div className="center inline-block select-none whitespace-nowrap rounded-lg bg-white py-1.5 px-3.5 align-baseline font-sans text-xs font-semibold leading-none text-black">
-              <div className="mt-px">Fuera de servicio</div>
+            <div className="center inline-block select-none whitespace-nowrap rounded-lg bg-black py-2 px-3.5 align-baseline font-sans text-xs font-semibold leading-none text-white">
+              <p className="text-xs font-bold">Fuera de servicio</p>
             </div>
           )}
         </div>

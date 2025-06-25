@@ -1,19 +1,20 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { createOrDeleteAmenitiesMotel } from '@/actions';
-import { AmenitiesMotelInfo, MotelAdmin } from '@/interfaces';
+import { AmenitiesMotelInfo, MotelApi } from '@/interfaces';
 import clsx from 'clsx';
 import toast, { Toaster } from 'react-hot-toast';
+import { UserApi } from '@/interfaces/user.interface';
 
 interface Props {
   amenitiesMotel: AmenitiesMotelInfo[],
-  motel: MotelAdmin
+  motel: MotelApi
 }
 
 export const Amenities = ({ amenitiesMotel, motel }: Props) => {
-  const [selectedAmenities, setSelectedAmenities] = useState<string[]>(motel.amentiesMotelMapId);
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>(motel.amenities);
   const [loading, setLoading] = useState(true);
-  const [motelInfo, setMotelInfo] = useState<MotelAdmin>(motel);
+  const [motelInfo, setMotelInfo] = useState<MotelApi>(motel);
 
   const toggleAmenity = async (id: string) => {
     if (!motelInfo) {

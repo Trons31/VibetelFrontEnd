@@ -1,7 +1,9 @@
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
 import { FavoritePage } from "./ui/FavoritePage";
-import { GetCategoryRoom, GetGarageRoom, GetUserByEmail } from "@/actions";
+import { GetCategoryRoom, GetGarageRoom } from "@/actions";
+import { UserApi } from "@/interfaces/user.interface";
+import axios from "axios";
 
 export async function generateMetadata() {
   return {
@@ -15,13 +17,20 @@ export default async function FavoriteRoomPage() {
 
   const session = await auth();
 
-  if (!session?.user.roles.includes("user")) {
+  if (!session) {
     redirect("/");
   }
 
-  const userExistOnDatabase = await GetUserByEmail(session.user.email);
+  let user: UserApi;
+  try {
+    const response = await axios.get<UserApi>(`${process.env.NEXT_PUBLIC_API_ROUTE}user/${session.user.id}`)
+    user = response.data;
+  } catch (error: any) {
+    redirect("/");
+  }
 
-  if (!userExistOnDatabase?.user) {
+
+  if (!user) {
     redirect("/");
   }
 
@@ -30,7 +39,10 @@ export default async function FavoriteRoomPage() {
   const garage = await GetGarageRoom();
   return (
     <>
-      <FavoritePage category={category} garage={garage} user={userExistOnDatabase.user} />
+      <FavoritePage 
+      category={category} 
+      garage={garage} 
+      user={user} />
     </>
   );
 }

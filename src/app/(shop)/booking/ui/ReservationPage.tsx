@@ -7,15 +7,10 @@ import { getReservationByUser } from '@/actions/reservation/get-reservation-by-u
 import { ReservationByUser } from '@/interfaces/reservation.interface';
 import { FilterReservation } from './FilterReservation';
 import { FaRegCalendarTimes } from 'react-icons/fa';
+import { UserApi } from '@/interfaces/user.interface';
 
 interface Props {
-  user: {
-    id: string;
-    name: string;
-    lastname: string;
-    email: string;
-    contactPhone?: string | null;
-  };
+  user: UserApi
 }
 
 export const ReservationPage = ({ user }: Props) => {
@@ -68,7 +63,7 @@ export const ReservationPage = ({ user }: Props) => {
 
 
   return (
-    <div className='w-full mb-20'>
+    <div className='w-full'>
       <div className='grid grid-cols-8 sm:grid-cols-10'>
         <SideMenu user={user} />
         <div className='col-span-8 bg-gray-100 w-full pt-32 md:pt-24 py-5 sm:px-8'>

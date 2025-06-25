@@ -32,7 +32,6 @@ export const TopMenu = () => {
   const { Booking } = useBookingStore();
   const { locationUser } = useLocationStore();
 
-
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {

@@ -137,7 +137,7 @@ export const SelecteDateAndTime = ({ timeLimit, onSelectedDate }: Props) => {
 
       {isModalOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm"
           onClick={handleBackdropClick}
         >
           <div className="bg-white md:rounded-lg shadow-lg w-full md:w-1/2 lg:w-1/3 p-6 max-h-full items-center">
@@ -184,7 +184,7 @@ export const SelecteDateAndTime = ({ timeLimit, onSelectedDate }: Props) => {
                 </div>
                 <div className="w-fit mt-5">
                   <p>Fecha seleccionada</p>
-                  <p className="text-lg font-bold  bg-gray-100 p-2 rounded-md">
+                  <p className="stext-lg font-bold  bg-gray-100 p-2 rounded-md">
                     {formatDate(selectedDate!)}
                   </p>
                 </div>

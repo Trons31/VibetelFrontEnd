@@ -93,7 +93,8 @@ export * from "./ui-admin-motel/service/DataGeneralOfService";
 export * from "./ui-admin-motel/service/AddTimeService";
 export * from "./ui-admin-motel/service/AddTimeService";
 export * from "./ui-admin-motel/service/DetailAddTimeService";
-export * from "./ui-admin-motel/reservation-requests/TotalReservationRequests"
+export * from "./ui-admin-motel/reservation-requests/TotalReservationRequests";
+export * from "./ui-admin-motel/content-wrapper/ContentWrapper";
 
 export * from "./ui-super-admin/sidebar/SideBarSuperAdmin";
 export * from "./ui-super-admin/top-menu/TopMenuSuperAdmin";

@@ -18,7 +18,7 @@ interface Props {
 
 export const ActiveMotel = ({ motelImage, totalRoom, configMotel, bankAccount, status }: Props) => {
 
-    const isCompleted = motelImage && totalRoom > 0 && configMotel && bankAccount;
+    const isCompleted = motelImage && totalRoom > 10 && configMotel && bankAccount;
 
     return (
         <>
@@ -55,8 +55,8 @@ export const ActiveMotel = ({ motelImage, totalRoom, configMotel, bankAccount, s
                                                     <FaCheck className='text-green-600 h-5 w-5' />
                                                 </div>
                                                 <div>
-                                                    <p className='text-black text-2xl md:text-3xl'>Configuraciones completadas</p>
-                                                    <p className='text-gray-700 text-sm'>Espere la notificación de activación del motel a través del correo registrado. El tiempo estimado para activar su motel es de 24 horas, mientras nuestro equipo valida su información y trabaja para activarlo lo antes posible.</p>
+                                                    <p className='text-black text-xl md:text-3xl'>Configuraciones completadas</p>
+                                                    <p className='text-gray-700 text-xs md:text-sm'>Espere la notificación de activación del motel a través del correo registrado. El tiempo estimado para activar su motel es de 24 horas, mientras nuestro equipo valida su información y trabaja para activarlo lo antes posible.</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -68,8 +68,8 @@ export const ActiveMotel = ({ motelImage, totalRoom, configMotel, bankAccount, s
                                                     <MdOutlineAccessTimeFilled className='text-purple-600 h-5 w-5' />
                                                 </div>
                                                 <div>
-                                                    <p className='text-black text-xl md:text-3xl'>Realize las configuraciones para activar su motel</p>
-                                                    <p className='text-gray-700 text-sm'>Complete todos los pasos acontinuacion y espere la activacion de su motel </p>
+                                                    <p className='text-black text-lg md:text-3xl'>Realize las configuraciones para activar su motel</p>
+                                                    <p className='text-gray-700 text-xs md:text-sm'>Complete todos los pasos acontinuacion y espere la activacion de su motel </p>
                                                 </div>
                                             </div>
                                         </div>
@@ -108,7 +108,7 @@ export const ActiveMotel = ({ motelImage, totalRoom, configMotel, bankAccount, s
 
                                             <PiUserCirclePlusDuotone size={30} className='text-gray-500' />
                                             <Link href="/admin/dashboard-partner-motel/config-motel/motel-cover">
-                                                <h5 className="text-xl font-semibold tracking-tight text-gray-900 ">Portada y logo</h5>
+                                                <h5 className="text-md md:text-xl font-semibold tracking-tight text-gray-900 ">Portada y logo</h5>
                                             </Link>
                                         </div>
                                         {
@@ -129,7 +129,7 @@ export const ActiveMotel = ({ motelImage, totalRoom, configMotel, bankAccount, s
                                         <div className='w-full h-px bg-gray-200 my-2' />
                                     </div>
                                     <div className='flex-grow p-4'>
-                                        <p className="mb-3 font-normal text-gray-500 ">Fortalece tu marca y capta la atención de los clientes subiendo el logo y una imagen de portada de tu motel.</p>
+                                        <p className="mb-3 font-normal text-xs md:text-sm text-gray-500 ">Fortalece tu marca y capta la atención de los clientes subiendo el logo y una imagen de portada de tu motel.</p>
                                     </div>
 
                                     <Link href="/admin/dashboard-partner-motel/config-motel/motel-cover" className="mt-auto">
@@ -150,7 +150,7 @@ export const ActiveMotel = ({ motelImage, totalRoom, configMotel, bankAccount, s
 
                                             <TbSettingsCheck size={30} className='text-gray-500' />
                                             <Link href="/admin/dashboard-partner-motel/config-motel/motel-cover">
-                                                <h5 className="text-xl font-semibold tracking-tight text-gray-900 ">Ajustes adicionales</h5>
+                                                <h5 className="text-md md:text-xl font-semibold tracking-tight text-gray-900 ">Ajustes adicionales</h5>
                                             </Link>
                                         </div>
                                         {
@@ -170,7 +170,7 @@ export const ActiveMotel = ({ motelImage, totalRoom, configMotel, bankAccount, s
                                         <div className='w-full h-px bg-gray-200 my-2' />
                                     </div>
                                     <div className='flex-grow p-4'>
-                                        <p className="mb-3 font-normal text-gray-500">Estos ajustes adicionales le permitirán establecer la configuración final para poder operar en Motelero Online.</p>
+                                        <p className="mb-3 font-normal text-xs md:text-sm text-gray-500">Estos ajustes adicionales le permitirán establecer la configuración final para poder operar en Motelero Online.</p>
                                     </div>
 
 
@@ -191,7 +191,7 @@ export const ActiveMotel = ({ motelImage, totalRoom, configMotel, bankAccount, s
                                         <div className='flex gap-2 items-center' >
                                             <RiBankCardFill size={30} className='text-gray-500' />
                                             <Link href="/admin/dashboard-partner-motel/config-motel/bank-account">
-                                                <h5 className="text-xl font-semibold tracking-tight text-gray-900 ">Cuenta bancaria</h5>
+                                                <h5 className="text-md md:text-xl font-semibold tracking-tight text-gray-900 ">Cuenta bancaria</h5>
                                             </Link>
                                         </div>
 
@@ -214,7 +214,7 @@ export const ActiveMotel = ({ motelImage, totalRoom, configMotel, bankAccount, s
                                         <div className='w-full h-px bg-gray-200 my-2' />
                                     </div>
                                     <div className='flex-grow p-4'>
-                                        <p className="mb-3 font-normal text-gray-500 ">Asegura tus pagos registrando tus datos bancarios para recibir ingresos automáticamente por cada reserva</p>
+                                        <p className="mb-3 font-normal text-xs md:text-sm text-gray-500 ">Asegura tus pagos registrando tus datos bancarios para recibir ingresos automáticamente por cada reserva</p>
                                     </div>
                                     <Link href="/admin/dashboard-partner-motel/config-motel/bank-account" className="mt-auto">
                                         <button className='bg-purple-600 p-2 text-white w-full transition-all duration-150 rounded-b-lg hover:bg-purple-700'>
@@ -232,12 +232,12 @@ export const ActiveMotel = ({ motelImage, totalRoom, configMotel, bankAccount, s
                                         <div className='flex gap-2 items-center' >
                                             <IoBedOutline size={30} className='text-gray-500' />
                                             <Link href="/admin/dashboard-partner-motel/room">
-                                                <h5 className="text-xl font-semibold tracking-tight text-gray-900 ">Habitaciones</h5>
+                                                <h5 className="text-md md:text-xl font-semibold tracking-tight text-gray-900 ">Habitaciones</h5>
                                             </Link>
                                         </div>
 
                                         {
-                                            totalRoom >= 1
+                                            totalRoom >= 10
                                                 ? (
                                                     <div className='p-2 bg-purple-100 rounded-lg'>
                                                         <FaCheck className='text-purple-600 h-5 w-5' />
@@ -257,13 +257,13 @@ export const ActiveMotel = ({ motelImage, totalRoom, configMotel, bankAccount, s
                                     </div>
 
                                     <div className='flex-grow p-4'>
-                                        <p className="mb-3 font-normal text-gray-500">Activa tu perfil añadiendo al menos 10 habitaciones inicialmente. Es importante registrar todas las habitaciones disponibles después para maximizar tus oportunidades de reserva</p>
+                                        <p className="mb-3 font-normal text-xs md:text-sm text-gray-500">Activa tu perfil añadiendo al menos 10 habitaciones inicialmente. Es importante registrar todas las habitaciones disponibles después para maximizar tus oportunidades de reserva</p>
                                     </div>
 
                                     <Link href="/admin/dashboard-partner-motel/room" className="mt-auto">
                                         <button className='bg-purple-600 p-2 text-white w-full transition-all duration-150 rounded-b-lg hover:bg-purple-700'>
                                             {
-                                                totalRoom >= 1
+                                                totalRoom >= 10
                                                     ? "Modificar"
                                                     : " Llenar"
                                             }

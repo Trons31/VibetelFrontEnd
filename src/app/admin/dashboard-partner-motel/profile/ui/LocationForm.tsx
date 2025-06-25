@@ -1,13 +1,13 @@
 'use client';
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import { updateLocationMotel } from '@/actions';
-import { City, Country, Department,  MotelAdmin } from '@/interfaces';
+import { City, Country, Department, MotelAdmin, MotelApi } from '@/interfaces';
 import clsx from 'clsx'
 import { useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
 
 interface Props {
-    motel: MotelAdmin,
+    motel: MotelApi
     countries: Country[]
     departments: Department[]
     cities: City[]
@@ -23,7 +23,7 @@ type FormInputs = {
 
 export const LocationForm = ({ motel, countries, departments, cities }: Props) => {
 
-    const [motelInfo, setMotelInfo] = useState<MotelAdmin | null>(null);
+    const [motelInfo, setMotelInfo] = useState<MotelApi | null>(null);
     const [loading, setLoading] = useState(true);
     const [showLoadingButton, setShowLoadingButton] = useState(false);
 
@@ -77,29 +77,29 @@ export const LocationForm = ({ motel, countries, departments, cities }: Props) =
         setFilteredCities(departmentCities);
     };
 
-    useEffect(() => {
-        if (motel) {
-            setMotelInfo(motel);
-            setValue('country', motel.country?.id || '');
-            setValue('department', motel.department?.id || '');
-            setValue('city', motel.city?.id || '');
-            setValue('neighborhood', motel.neighborhood || '');
-            setValue('address', motel.address || '');
+    // useEffect(() => {
+    //     if (motel) {
+    //         setMotelInfo(motel);
+    //         setValue('country', motel.country?.id || '');
+    //         setValue('department', motel.department?.id || '');
+    //         setValue('city', motel.city?.id || '');
+    //         setValue('neighborhood', motel.neighborhood || '');
+    //         setValue('address', motel.address || '');
 
-            if (motel.country) {
-                const countryDepartments: Department[] = departments.filter(department => department.countryId === motel.country?.id);
-                setFilteredDepartments(countryDepartments);
-                setSelectedCountry(motel.country.id);
+    //         if (motel.country) {
+    //             const countryDepartments: Department[] = departments.filter(department => department.countryId === motel.country?.id);
+    //             setFilteredDepartments(countryDepartments);
+    //             setSelectedCountry(motel.country.id);
 
-                if (motel.department) {
-                    const departmentCities: City[] = cities.filter(city => city.departmentId === motel.department?.id);
-                    setFilteredCities(departmentCities);
-                    setSelectedDepartment(motel.department.id);
-                }
-            }
-            setLoading(false);
-        }
-    }, [motel, departments, cities, setValue]);
+    //             if (motel.department) {
+    //                 const departmentCities: City[] = cities.filter(city => city.departmentId === motel.department?.id);
+    //                 setFilteredCities(departmentCities);
+    //                 setSelectedDepartment(motel.department.id);
+    //             }
+    //         }
+    //         setLoading(false);
+    //     }
+    // }, [motel, departments, cities, setValue]);
 
 
     return (
@@ -153,105 +153,96 @@ export const LocationForm = ({ motel, countries, departments, cities }: Props) =
                     )
                     : (
                         <form action="" onSubmit={handleSubmit(onUpdate)} >
-                            <div className='grid grid-cols-1 gap-3'>
-                                <div>
-                                    <div className="relative w-full">
-                                        <select
-                                            className={clsx(
-                                                "block  px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-xl border border-gray-300"
-                                            )}
-                                            {...register('country', { required: true })}
-                                            onChange={handleCountryChange}
-                                            defaultValue={motelInfo?.country?.id || ''}
-                                        >
-                                            <option value=""> [ Seleccione país]</option>
-                                            {countries.map(country => (
-                                                <option key={country.id} value={country.id}>{country.name}</option>
-                                            ))}
-                                        </select>
-                                        <label
-                                            className={clsx(
-                                                "absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-blue-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                                            )}
-                                        >
-                                            País
-                                        </label>
-                                    </div>
+                            <div className='grid grid-cols-1'>
+                                <div className="relative w-full">
+                                    <select
+                                        className={clsx(
+                                            "block  px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-xl border border-gray-300"
+                                        )}
+                                        {...register('country', { required: true })}
+                                        onChange={handleCountryChange}
+                                        defaultValue={motelInfo?.city.id || ''}
+                                    >
+                                        <option value=""> [ Seleccione país]</option>
+                                        {countries.map(country => (
+                                            <option key={country.id} value={country.id}>{country.name}</option>
+                                        ))}
+                                    </select>
+                                    <label
+                                        className={clsx(
+                                            "absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-blue-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+                                        )}
+                                    >
+                                        País
+                                    </label>
                                 </div>
                             </div>
-                            <div className='grid grid-cols mt-10 md:grid-cols-2 gap-4'>
-                                <div>
-                                    <div className="relative w-full">
-                                        <select
-                                            className={clsx(
-                                                "block  px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-xl border border-gray-300",
-                                                { "cursor-not-allowed": !selectedCountry }
-                                            )}
-                                            disabled={!selectedCountry}
-                                            {...register('department', { required: true })}
-                                            onChange={handleDepartmentChange}
-                                            defaultValue={motelInfo?.department?.id || ''}
-                                        >
-                                            <option value=""> [ Seleccione departamento ]</option>
-                                            {filteredDepartments.map(department => (
-                                                <option key={department.id} value={department.id}>{department.name}</option>
-                                            ))}
-                                        </select>
-                                        <label
-                                            className={clsx(
-                                                "absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-blue-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                                            )}
-                                        >
-                                            Departamento
-                                        </label>
-                                    </div>
+                            <div className='grid grid-cols mt-7 md:mt-10 md:grid-cols-2 md:gap-4'>
+                                <div className="relative w-full">
+                                    <select
+                                        className={clsx(
+                                            "block  px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-xl border border-gray-300",
+                                            { "cursor-not-allowed": !selectedCountry }
+                                        )}
+                                        disabled={!selectedCountry}
+                                        {...register('department', { required: true })}
+                                        onChange={handleDepartmentChange}
+                                        defaultValue={motelInfo?.city.department.geonameId || ''}
+                                    >
+                                        <option value=""> [ Seleccione departamento ]</option>
+                                        {filteredDepartments.map(department => (
+                                            <option key={department.id} value={department.id}>{department.name}</option>
+                                        ))}
+                                    </select>
+                                    <label
+                                        className={clsx(
+                                            "absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-blue-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+                                        )}
+                                    >
+                                        Departamento
+                                    </label>
                                 </div>
-
-                                <div className="grid grid-cols mb-5">
-                                    <div>
-                                        <div className="relative w-full">
-                                            <select
-                                                className={
-                                                    clsx(
-                                                        "block  px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-xl border border-gray-300 ",
-                                                        {
-                                                            "border-red-500": errors.city,
-                                                            "cursor-not-allowed": !selectedDepartment
-                                                        }
-                                                    )
+                                <div className="relative mt-7 w-full">
+                                    <select
+                                        className={
+                                            clsx(
+                                                "block  px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-xl border border-gray-300 ",
+                                                {
+                                                    "border-red-500": errors.city,
+                                                    "cursor-not-allowed": !selectedDepartment
                                                 }
-                                                defaultValue=""
-                                                {...register('city', { required: true })}
-                                                disabled={!selectedDepartment}
-                                            >
-                                                <option value="" disabled> [ Seleccione ciudad ]</option>
-                                                {filteredCities.map(city => (
-                                                    <option key={city.id} value={city.id}>{city.name}</option>
-                                                ))}
-                                            </select>
-                                            <label
-                                                className={
-                                                    clsx(
-                                                        "absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-blue-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1",
-                                                        {
-                                                            "text-red-500": errors.city
-                                                        }
-                                                    )
-                                                }
-                                            >
-                                                Ciudad
-                                            </label>
-                                        </div>
-                                        {
-                                            errors.city?.type === 'required' && (
-                                                <span className="text-red-500 text-xs">* Seleccione un ciudad</span>
                                             )
                                         }
-                                    </div>
+                                        defaultValue=""
+                                        {...register('city', { required: true })}
+                                        disabled={!selectedDepartment}
+                                    >
+                                        <option value="" disabled> [ Seleccione ciudad ]</option>
+                                        {filteredCities.map(city => (
+                                            <option key={city.id} value={city.id}>{city.name}</option>
+                                        ))}
+                                    </select>
+                                    <label
+                                        className={
+                                            clsx(
+                                                "absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-blue-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1",
+                                                {
+                                                    "text-red-500": errors.city
+                                                }
+                                            )
+                                        }
+                                    >
+                                        Ciudad
+                                    </label>
                                 </div>
+                                {
+                                    errors.city?.type === 'required' && (
+                                        <span className="text-red-500 text-xs">* Seleccione un ciudad</span>
+                                    )
+                                }
                             </div>
 
-                            <div className='grid grid-cols mt-4 md:grid-cols-2 gap-4'>
+                            <div className='grid grid-cols mt-4 md:grid-cols-2 md:gap-4'>
                                 <div className="mb-4">
                                     <label className={
                                         clsx(

@@ -1,6 +1,5 @@
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
-import { GetUserByEmail } from '../../../actions/user/get-user-by-email';
 
 export default async function SearchBookingLayout({
  children

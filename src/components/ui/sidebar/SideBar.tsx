@@ -73,7 +73,7 @@ export const SideBar = () => {
         isSideMenuOpen && (
           <>
             <div
-              className="fixed top-0 left-0 w-screen h-screen z-20  bg-black opacity-30"
+              className="fixed top-0 left-0 w-screen h-screen z-40  bg-black opacity-30"
             />
           </>
         )
@@ -84,7 +84,7 @@ export const SideBar = () => {
           <>
             <div
               onClick={closeSideMenu}
-              className="fade-in fixed top-0 left-0 w-screen h-screen z-20 backdrop-filter backdrop-blur-sm"
+              className="fade-in fixed top-0 left-0 w-screen h-screen z-40 backdrop-filter backdrop-blur-sm"
             />
           </>
         )

@@ -3,21 +3,49 @@ import { redirect } from "next/navigation";
 import { ConfigMotel } from "./ui/ConfigMotel";
 
 import { BreadCrumb } from "@/components";
-import { getMotelByMotelPartner, getAmenitiesMotel, GetCountries, GetDepartment, getCitiesByDepartment, GetUserByEmail } from "@/actions";
+import { getAmenitiesMotel, GetCountries, GetDepartment, getCitiesByDepartment } from "@/actions";
+import { UserApi } from "@/interfaces/user.interface";
+import axios from "axios";
+import { MotelApi } from "@/interfaces";
 
 export default async function ProfileMotelPartnerPage() {
 
+
   const session = await auth();
 
-  const user = await GetUserByEmail(session!.user.email);
+  if (!session) {
+    redirect("/");
+  }
+
+  let user: UserApi;
+  try {
+    const response = await axios.get<UserApi>(`${process.env.NEXT_PUBLIC_API_ROUTE}user/${session.user.id}`)
+    user = response.data;
+  } catch (error: any) {
+    redirect("/");
+  }
 
 
-  const motelExist = await getMotelByMotelPartner("5b6806ff-a271-4441-88f2-544d8c0f56a1");
-  console.log(motelExist);
+  if (!user) {
+    redirect("/auth/new-account-motel")
+  }
 
-  // if (!motelExist?.ok) {
-  //   redirect("/auth/new-account-motel")
-  // }
+  let motelExist: MotelApi | null = null;
+
+  try {
+    const response = await axios.get<MotelApi>(
+      `${process.env.NEXT_PUBLIC_API_ROUTE}motel/user`,
+      {
+        headers: {
+          Authorization: `Bearer ${session.accessToken}`,
+        },
+      }
+    );
+
+    motelExist = response.data;
+  } catch (error: any) {
+    redirect("/auth/new-account-motel/register");
+  }
 
   const amenitiesMotel = await getAmenitiesMotel();
   const countries = await GetCountries();
@@ -27,7 +55,7 @@ export default async function ProfileMotelPartnerPage() {
   return (
     <div className='bg-white p-3 md:p-10 mb-10 rounded-xl' >
       <div className="md:mx-5" >
-        <p className="text-3xl font-semibold" >Perfil</p>
+        <p className="text-lg md:text-2xl font-semibold" >Perfil</p>
         <BreadCrumb
           breadcrumbCurrent="Perfil"
           urlCurrent="/admin/dashboard-partner-motel/profile"
@@ -35,11 +63,17 @@ export default async function ProfileMotelPartnerPage() {
           breadcrumbStart="Inicio"
           urlStart="/admin/dashboard-partner-motel"
         />
-        <p className="text-sm mt-1">
+        <p className="text-xs md:text-sm mt-1">
           En esta sección podrás administrar todos los detalles de tu motel. Mantén la información siempre actualizada para garantizar que tus clientes reciban los datos correctos y mejorar la eficiencia de la gestión de tu motel.
         </p>
       </div>
-      <ConfigMotel motelPartner={user.user!} motel={motelExist.motelExist!} amenitiesMotel={amenitiesMotel} countries={countries} departments={deparment} cities={cities} />
+      <ConfigMotel
+        motelPartner={user}
+        motel={motelExist}
+        amenitiesMotel={amenitiesMotel}
+        countries={countries}
+        departments={deparment}
+        cities={cities} />
     </div>
   );
 }

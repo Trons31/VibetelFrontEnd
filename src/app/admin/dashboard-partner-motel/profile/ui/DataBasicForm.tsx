@@ -4,12 +4,12 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import clsx from 'clsx'
 import toast, { Toaster } from 'react-hot-toast';
-import { MotelAdmin } from '@/interfaces'
+import { MotelAdmin, MotelApi } from '@/interfaces'
 import { AdminImage } from '@/components';
 import { updateDataBasicMotel } from '@/actions';
 
 interface Props {
-    motel: MotelAdmin,
+    motel: MotelApi,
 }
 
 type FormInputs = {
@@ -23,7 +23,7 @@ type FormInputs = {
 
 export const DataBasicForm = ({ motel }: Props) => {
 
-    const [motelInfo, setMotelInfo] = useState<MotelAdmin>();
+    const [motelInfo, setMotelInfo] = useState<MotelApi>();
     const [loading, setLoading] = useState(true);
     const [showLoadingButton, setShowLoadingButton] = useState(false);
 
@@ -31,7 +31,7 @@ export const DataBasicForm = ({ motel }: Props) => {
     const { register, handleSubmit, formState: { errors } } = useForm<FormInputs>(
         {
             defaultValues: {
-                title: motel.title,
+                title: motel.razonSocial,
                 description: motel.description,
                 contactEmail: motel.contactEmail,
                 contactPhone: motel.contactPhone,

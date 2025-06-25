@@ -139,7 +139,7 @@ export const UpdatePassword = ({ motelPartnerId }: Props) => {
                 </div>
 
 
-                <p className="mt-2">Recuerda que puedes recuperar tu contraseña si la has olvidado. <Link className="text-sm font-semibold text-blue-600 underline decoration-2" href="#">Recuperar cuenta</Link></p>
+                <p className="text-xs md:text-sm mt-2">Recuerda que puedes recuperar tu contraseña si la has olvidado.</p>
 
 
                 <div className='w-fit' >
@@ -164,8 +164,8 @@ export const UpdatePassword = ({ motelPartnerId }: Props) => {
                             clsx(
 
                                 {
-                                    "flex items-center gap-x-4 rounded-lg bg-blue-600 hover:bg-blue-700 px-7 py-2 font-medium text-white": !showLoadingUpdate,
-                                    "flex items-center gap-x-4 rounded-lg bg-blue-600 px-7 py-2 font-medium text-white cursor-not-allowed": showLoadingUpdate
+                                    "flex text-xs md:text-sm items-center gap-x-4 rounded-lg bg-blue-600 hover:bg-blue-700 px-7 py-2 font-medium text-white": !showLoadingUpdate,
+                                    "flex text-xs md:text-sm items-center gap-x-4 rounded-lg bg-blue-600 px-7 py-2 font-medium text-white cursor-not-allowed": showLoadingUpdate
                                 }
                             )
                         }>

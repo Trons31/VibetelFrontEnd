@@ -42,41 +42,36 @@ export const InfoUser = ({ user }: Props) => {
                     : (
                         <>
                             <div className="col-span-8 rounded-x px-3 bg-gray-100 pt-10 md:pt-0 sm:px-8 sm:shadow">
-                                <div className="mt-16 bg-white p-4 rounded" style={{ textAlign: 'justify' }}>
+                                <div className="mt-20 bg-white p-4 rounded" style={{ textAlign: 'justify' }}>
                                     <h1 className="py-2 text-2xl font-semibold capitalize">{user.name} {user.lastname}</h1 >
                                     <p className="font- text-slate-600">Querido usuario de nuestra comunidad, te queremos informar que es importante mantener tu informacion actualizada</p>
-                                </div >
-                                <hr className="mt-8 mb-8" />
-                                <div className="mb-10 grid gap-y-8 lg:grid-cols-2 gap-5 lg:gap-y-0">
+                                </div>
+                                <div className="mb-10 mt-10 grid gap-y-8 lg:grid-cols-2 gap-5 lg:gap-y-0">
                                     <div className="space-y-8">
-                                        <div className="">
-                                            <div className="flex px-2">
+                                        <div className="block rounded-md border border-gray-100 bg-white py-3 shadow">
+                                            <div className="flex px-4 py-4">
                                                 <p className="font-semibold mb-1">Datos del usuario</p>
                                                 <ModalUpdate user={user} />
                                             </div>
-
-                                            <div className="block rounded-md border border-gray-100 bg-white py-3 shadow">
-                                                <div className="grid grid-cols md:grid-cols-2 gap-5" >
-                                                    <div className="ml-4 w-fit">
-                                                        <span className="text-xs text-gray-600 block">Nombre</span>
-                                                        <p className="capitalize text-lg font-medium" >{userInfo!.name}</p>
-                                                    </div>
-                                                    <div className="ml-4 w-fit">
-                                                        <span className="text-xs text-gray-600 block">Apellido</span>
-                                                        <p className="capitalize text-lg font-medium" >{userInfo!.lastname}</p>
-                                                    </div>
-                                                    <div className="ml-4 w-fit">
-                                                        <span className="text-xs text-gray-600 block">Correo electronico</span>
-                                                        <p className=" text-lg font-medium" >{userInfo!.email}</p>
-                                                    </div>
+                                            <div className="grid grid-cols md:grid-cols-2 gap-5" >
+                                                <div className="ml-4 w-fit">
+                                                    <span className="text-xs text-gray-600 block">Nombre</span>
+                                                    <p className="capitalize text-lg font-medium" >{userInfo!.name}</p>
                                                 </div>
-                                                <div className='flex justify-end px-3 mt-5 md:mt-0' >
-                                                    <span className="text-xs px-3 text-gray-500">ultima actulizacion {
-                                                        formatDate(user.updatedAt!)
-                                                    }</span>
+                                                <div className="ml-4 w-fit">
+                                                    <span className="text-xs text-gray-600 block">Apellido</span>
+                                                    <p className="capitalize text-lg font-medium" >{userInfo!.lastname}</p>
+                                                </div>
+                                                <div className="ml-4 w-fit">
+                                                    <span className="text-xs text-gray-600 block">Correo electronico</span>
+                                                    <p className=" text-lg font-medium" >{userInfo!.email}</p>
                                                 </div>
                                             </div>
-
+                                            <div className='flex justify-end px-3 mt-5 md:mt-0' >
+                                                <span className="text-xs px-3 text-gray-500">ultima actulizacion {
+                                                    formatDate(user.updatedAt!)
+                                                }</span>
+                                            </div>
                                         </div>
                                     </div>
 

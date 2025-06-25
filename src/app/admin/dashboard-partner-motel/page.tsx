@@ -1,6 +1,5 @@
 
 import { auth } from '@/auth.config';
-import { getRoomWithImages } from '@/actions';
 import { redirect } from 'next/navigation';
 import { ActiveMotel } from './ui/ActiveMotel';
 import { ReservationDashboard } from './ui/ReservationDashboard';
@@ -31,8 +30,6 @@ export default async function HomePage() {
     redirect("/auth/new-account-motel/register");
   }
 
-  const idMotel = motelExist.id
-  const totalRomms = await getRoomWithImages({ idMotel });
 
   return (
     <>
@@ -47,9 +44,9 @@ export default async function HomePage() {
             <>
               <ActiveMotel
                 status={motelExist.isApproved}
-                motelImage={motelExist.images.length === 0 ? undefined : motelExist.images[0].url}
-                totalRoom={totalRomms!.allResults}
-                configMotel={false}
+                motelImage={motelExist.images.length === 0 ? undefined : motelExist.images[0]}
+                totalRoom={motelExist.totalRooms}
+                configMotel={motelExist.motelConfig ? true : false}
                 bankAccount={false}
               />
             </>

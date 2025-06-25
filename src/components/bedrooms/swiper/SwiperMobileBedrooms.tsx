@@ -99,7 +99,7 @@ export const SwiperMobileBedrooms = ({ rooms, className }: Props) => {
                     inFavorites={session ? favorites[room.id] : false}
                   />
                 </div>
-                <div className="p-2 flex justify-center absolute rounded-b-sm right-0 bottom-0 w-full bg-red-600">
+                <div className="p-2 flex justify-center absolute rounded-b-md right-0 bottom-0 w-full bg-red-600">
                   <p className="text-white text-xs md:text-lg font-normal">
                     Reservar ahora
                   </p>

@@ -76,8 +76,8 @@ export const BankAccountForm = ({ accountType, bank, bankAccount, motelId }: Pro
 
       <form onSubmit={handleSubmit(OnSubmit)}  >
 
-        <div className='grid px-5 mb-2 mt-10 grid-cols-1 sm:px-0 sm:grid-cols-2 gap-6' >
-          <div className="flex flex-col mb-4">
+        <div className='grid mt-10 grid-cols-1 sm:grid-cols-2 gap-6' >
+          <div className="flex flex-col md:mb-4">
             <div className="flex mb-2 items-center gap-3" >
               <label className={
                 clsx(
@@ -115,9 +115,7 @@ export const BankAccountForm = ({ accountType, bank, bankAccount, motelId }: Pro
             </span>
           </div>
 
-
-
-          <div className="flex flex-col mb-4">
+          <div className="flex flex-col mb-6 md:mb-4">
             <div className="flex mb-2 items-center gap-3" >
               <label className={
                 clsx(
@@ -153,7 +151,7 @@ export const BankAccountForm = ({ accountType, bank, bankAccount, motelId }: Pro
           </div>
         </div>
 
-        <div className="mb-7" >
+        <div className="mb-7 md:mb-7" >
           <div>
             <label className={
               clsx(
@@ -181,8 +179,8 @@ export const BankAccountForm = ({ accountType, bank, bankAccount, motelId }: Pro
           </div>
         </div>
 
-        <div className='grid px-5 mb-8 grid-cols-1 sm:px-0 sm:grid-cols-2 gap-6' >
-          <div className="mb-4">
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:gap-6' >
+          <div className="mb-6 md:mb-4">
             <label className={
               clsx(
                 "block mb-2 text-sm text-black font-semibold ",
@@ -235,79 +233,41 @@ export const BankAccountForm = ({ accountType, bank, bankAccount, motelId }: Pro
           </div>
         </div>
 
+        <div className='flex mt-3 md:mt-0 md:justify-end' >
+          <button
+            type='submit'
+            disabled={isLoading}
+            className={
+              clsx(
 
-        <div className='flex justify-end' >
-
-          {
-            bankAccount
-              ? (
-                <button
-                  type='submit'
-                  disabled={isLoading}
-                  className={
-                    clsx(
-
-                      {
-                        "flex items-center gap-x-4 rounded-lg bg-blue-600 hover:bg-blue-700 px-7 py-2 font-medium text-white": !isLoading,
-                        "flex items-center gap-x-4 rounded-lg bg-blue-600 px-7 py-2 font-medium text-white cursor-not-allowed": isLoading
-                      }
-                    )
-                  }>
-                  {
-                    isLoading &&
-                    (<svg className="h-5 w-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" ></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>)
-                  }
-
-                  {
-                    isLoading
-                      ? (
-                        <span>Cargando...</span>
-                      ) : (
-                        <span>Actualizar informacion</span>
-                      )
-                  }
-
-                </button>
-              ) : (
-                <button
-                  type='submit'
-                  disabled={isLoading}
-                  className={
-                    clsx(
-
-                      {
-                        "flex items-center gap-x-4 rounded-lg bg-gray-300 hover:bg-gray-400 px-7 py-2 font-medium text-gray-600 transition-all duration-300": !isLoading,
-                        "flex items-center gap-x-4 rounded-lg bg-gray-300 px-7 py-2 font-medium text-gray-600 cursor-not-allowed": isLoading
-                      }
-                    )
-                  }>
-                  {
-                    isLoading &&
-                    (<svg className="h-5 w-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" ></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>)
-                  }
-
-                  {
-                    isLoading
-                      ? (
-                        <span>Cargando...</span>
-                      ) : (
-                        <span>Mandar aprobacion</span>
-                      )
-                  }
-
-                </button>
+                {
+                  "flex w-full md:w-fit items-center gap-x-4 rounded-lg bg-gray-300 hover:bg-gray-400 px-7 py-2 font-medium text-gray-600 transition-all duration-300": !isLoading && !bankAccount,
+                  "flex w-full md:w-fit items-center gap-x-4 rounded-lg bg-blue-600 hover:bg-blue-700 px-7 py-2 font-medium text-white": !isLoading && bankAccount,
+                  "flex w-full md:w-fit items-center gap-x-4 rounded-lg bg-gray-300 px-7 py-2 font-medium text-gray-600 cursor-not-allowed": isLoading
+                }
               )
-          }
+            }>
+            {
+              isLoading &&
+              (<svg className="h-5 w-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" ></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>)
+            }
 
+            {
+              isLoading
+                ? (
+                  <span>Cargando...</span>
+                ) : (
+                  bankAccount
+                    ? <span>Actualizar informacion</span>
+                    : <span>Mandar aprobacion</span>
+                )
+            }
 
+          </button>
         </div>
-
       </form >
 
     </>

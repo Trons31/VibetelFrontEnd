@@ -1,3 +1,5 @@
+import { isApprovedStatus } from "./motels.interface";
+
 export type statusRoom = "AVAILABLE" | "IN_SERVICE" | "CLEANING" | "DISABLED" | "SERVICE_COMPLETED";
 
 
@@ -6,60 +8,77 @@ export interface RoomApi {
   title: string;
   description: string;
   price: number;
+  priceAddTime: number;
   promoActive: boolean;
-  promoPrice: number | null;
+  promoPrice: number;
+  promotionPercentage: number;
   slug: string;
   tags: string[];
   inAvaible: boolean;
-  status: statusRoom; // ajusta según tus estados posibles
+  status: statusRoom; // Asumiendo posibles estados
   timeLimit: number;
   roomNumber: string;
   extraServicesActive: boolean;
   extraServices: number;
   surcharge: number;
-  createdAt: string; // o Date si parseas
-  updatedAt: string; // o Date
-  priceAddTime: number;
-  category: {
-    id: string;
-    name: string;
-    description: string;
-  };
-  garage: {
-    id: string;
-    title: string;
-  };
-  images: string[]; // asumiendo que son URLs, si es otro tipo, ajusta
-  amenities: {
-    id: string;
-    amenities: {
-      id: string;
-      name: string;
-      description: string;
-    };
-  }[];
-  motel: {
-    id: string;
-    razonSocial: string;
-    identificationRepresentante: string;
-    nombreRepresentante: string;
-    description: string;
-    slug: string;
-    isApproved: string; // podrías tipar como enum si tienes valores fijos
-    contactEmail: string;
-    contactPhone: string;
-    whatsapp: string;
-    nit: string;
-    amenities: string[]; // suponiendo que son nombres o ids, ajusta si es necesario
-    address: string;
-    neighborhood: string;
-    createdAt: string;
-    updatedAt: string;
-    freeService: boolean;
-    images: string[]; // asumiendo URLs o rutas
-  };
+  createdAt: string;
+  updatedAt: string;
+  category: CategoryRoomApi;
+  garage: GarageRoomApi;
+  images: Image[];
+  amenities: RoomAmenity[];
+  motel: Motel;
 }
 
+export interface Motel {
+  id: string;
+  razonSocial: string;
+  identificationRepresentante: string;
+  nombreRepresentante: string;
+  description: string;
+  slug: string;
+  isApproved: isApprovedStatus; // Asumiendo posibles estados
+  contactEmail: string;
+  contactPhone: string;
+  whatsapp: string;
+  nit: string;
+  amenities: string[]; // Si son solo strings de IDs o nombres
+  address: string;
+  neighborhood: string;
+  createdAt: string;
+  updatedAt: string;
+  freeService: boolean;
+  city: City;
+  motelConfig: MotelConfig;
+  images: Image[]; // Si el motel también tiene imágenes
+}
+
+interface Department {
+    geonameId: string;
+    name: string;
+}
+
+interface City {
+    id: string;
+    name: string;
+    department: Department;
+}
+
+export interface MotelConfig {
+  id: string;
+  timeMinutesCleanRoom: number;
+  inService: boolean;
+  outOfServiceStart: string | null;
+  outOdServiceEnd: string | null;
+  locationLatitude: number;
+  locationLongitude: number;
+  timeAwaitTakeReservation: number;
+}
+
+export interface Image {
+  id: string;
+  url: string; // Asumiendo que las imágenes tendrán una URL
+}
 
 export interface RoomAllApi {
   id: string;
@@ -110,17 +129,6 @@ export interface RoomAllApi {
       };
     };
   };
-}
-
-export interface RoomCategory {
-  id: string;
-  name: string;
-  description: string;
-}
-
-export interface Garage {
-  id: string;
-  title: string;
 }
 
 export interface AmenityDetail {

@@ -1,28 +1,20 @@
 'use client';
 import React, { useEffect, useState } from 'react'
 import { ModalLocationUser, ModalLocationUserMovil, NoLocationUser } from '@/components';
-import { MotelAllApi, searchCity } from '@/interfaces';
+import { MotelApi, searchCity } from '@/interfaces';
 import { useLocationStore } from '@/store';
 import { CardMotel } from './CardMotel';
 import { MotelsInMap } from './MotelsInMap';
 
 type Step = 'location' | 'motels';
 
-interface Props {
-    motels: MotelAllApi[] | null,
-}
-
-export const UiMotel = ({ motels }: Props) => {
-
-
+export const UiMotel = () => {
     const [step, setStep] = useState<Step>('motels');
 
     const { locationUser } = useLocationStore();
     const [detectedLocation, setDetectedLocation] = useState<searchCity | undefined>(undefined);
     const [modalLocationUser, setModalLocationUser] = useState(false);
     const [isLoadingLocationUser, setIsLoadingLocationUser] = useState(true);
-
-
 
     useEffect(() => {
         if (locationUser) {
@@ -60,7 +52,7 @@ export const UiMotel = ({ motels }: Props) => {
                             </div>
                         </>
                     ) : (
-                        detectedLocation && motels
+                        detectedLocation
                             ? (
                                 <div className='py-10' >
                                     <div className="flex justify-center mb-6">
@@ -101,7 +93,6 @@ export const UiMotel = ({ motels }: Props) => {
                                     {
                                         step === 'motels' && (
                                             <CardMotel 
-                                            motels={motels}
                                             location={detectedLocation} 
                                             />
                                         )

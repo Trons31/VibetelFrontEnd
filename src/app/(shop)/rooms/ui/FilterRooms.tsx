@@ -1,116 +1,70 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
-import { getRooms } from "@/actions";
-
-import {  GridMotelFilter,  ModalLocationUser,  ModalLocationUserMovil,  NoLocationUser,
+import {
+  GridMotelFilter, ModalLocationUser, ModalLocationUserMovil, NoLocationUser,
   Pagination,
   SideBarMenuFilter,
   SideMenuFilter,
   SkeletonRooms,
   SortRooms,
 } from "@/components";
-import {  AmenitiesRoom,  AmenitiesRoomApi,  BedRooms,  CategoryRoomApi,  GarageRoomApi,
+import {
+  AmenitiesRoom, AmenitiesRoomApi, CategoryRoomApi, GarageRoomApi,
   RoomAllApi,
   searchCity,
 } from "@/interfaces";
 import { useLocationStore, useUIStore } from "@/store";
 import { IoOptionsSharp } from "react-icons/io5";
 import { TbBedOff } from "react-icons/tb";
+import axios from "axios";
 
 interface Props {
-  rooms: RoomAllApi[];
   categoryRoom: CategoryRoomApi[];
   garageRoom: GarageRoomApi[];
   amenitiesRoom: AmenitiesRoomApi[];
-  BestPromotion?: number | null;
 }
 
-export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom, BestPromotion, rooms }: Props) => {
+export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom }: Props) => {
   const openSideMenuFilter = useUIStore((state) => state.openSideMenuFilter);
-
   const { locationUser } = useLocationStore();
 
-  const [detectedLocation, setDetectedLocation] = useState<
-    searchCity | undefined
-  >(undefined);
+  const [detectedLocation, setDetectedLocation] = useState<searchCity | undefined>(undefined);
   const [isLoadingLocationUser, setIsLoadingLocationUser] = useState(true);
-  const [locationLoaded, setLocationLoaded] = useState(false);
   const [modalLocationUser, setModalLocationUser] = useState(false);
 
-  const [AllRooms, setAllRooms] = useState<RoomAllApi[]>(rooms);
+  const [originalRooms, setOriginalRooms] = useState<RoomAllApi[]>([]);
+  const [displayedRooms, setDisplayedRooms] = useState<RoomAllApi[]>([]);
+
   const [isLoading, setIsLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCountResultsFilter, setTotalCountResultsFilter] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
 
+
   const [category, setCategory] = useState("");
   const [garage, setGarage] = useState("");
   const [amenities, setAmenities] = useState<AmenitiesRoom[]>([]);
-
   const [orderPrice, setOrderPrice] = useState("");
   const [onSale, setOnSale] = useState("");
   const [inAvailable, setInAvailable] = useState("");
   const [orderMostReserved, setOrderMostReserved] = useState("");
 
-  useEffect(() => {
-    let filteredRooms = [...rooms];
-
-    if (category) {
-      filteredRooms = filteredRooms.filter(room => room.category?.id === category);
+ 
+  const fetchRooms = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get<RoomAllApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}room`);
+      setOriginalRooms(response.data);
+    } catch (error: any) {
+      setOriginalRooms([]);
+      console.error("Error al cargar habitaciones:", error); 
+    } finally {
+      setIsLoading(false);
     }
+  }, []); 
 
-    if (garage) {
-      filteredRooms = filteredRooms.filter(room => room.garage?.id === garage);
-    }
-
-    if (amenities.length > 0) {
-      filteredRooms = filteredRooms.filter(room =>
-        amenities.every(a =>
-          room.amenities?.some(rAmenity => rAmenity.amenities.id === a.id)
-        )
-      );
-    }
-
-    // if (inAvailable === "true") {
-    //   filteredRooms = filteredRooms.filter(room => room.available === true);
-    // } else if (inAvailable === "false") {
-    //   filteredRooms = filteredRooms.filter(room => room.available === false);
-    // }
-
-    if (onSale === "true") {
-      filteredRooms = filteredRooms.filter(room => room.promoActive);
-    }
-
-    if (orderPrice === "asc") {
-      filteredRooms = filteredRooms.sort((a, b) => a.price - b.price);
-    } else if (orderPrice === "desc") {
-      filteredRooms = filteredRooms.sort((a, b) => b.price - a.price);
-    }
-
-    // if (orderMostReserved === "desc") {
-    //   filteredRooms = filteredRooms.sort((a, b) => (b.totalReservations || 0) - (a.totalReservations || 0));
-    // }
-
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const paginatedRooms = filteredRooms.slice(startIndex, endIndex);
-
-    setAllRooms(paginatedRooms);
-    setTotalPages(Math.ceil(filteredRooms.length / itemsPerPage));
-    setTotalCountResultsFilter(filteredRooms.length);
-  }, [
-    rooms,
-    category,
-    garage,
-    amenities,
-    inAvailable,
-    onSale,
-    orderPrice,
-    orderMostReserved,
-    currentPage,
-  ]);
 
   useEffect(() => {
     if (locationUser) {
@@ -119,41 +73,135 @@ export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom, BestPromo
     setIsLoadingLocationUser(false);
   }, [locationUser]);
 
+ 
   useEffect(() => {
     if (detectedLocation) {
-      setIsLoading(false);
+      fetchRooms();
     }
-  }, [detectedLocation]);
+  }, [detectedLocation, fetchRooms]); 
 
-  const handleFilterCategory = (category: string) => {
-    setCategory(category);
-    setCurrentPage(1); // Reiniciar a la primera página al cambiar los filtros
-  };
+  
+  const filteredAndPaginatedRooms = useMemo(() => {
+    let currentFilteredRooms = [...originalRooms]; // Trabaja con la copia original
 
-  const handleFilterGarage = (garage: string) => {
-    setGarage(garage);
-    setCurrentPage(1); // Reiniciar a la primera página al cambiar los filtros
-  };
+    if (category) {
+      currentFilteredRooms = currentFilteredRooms.filter(room => room.category?.id === category);
+    }
 
-  const handleFilterAviable = (aviable: string) => {
-    setInAvailable(aviable);
-    setCurrentPage(1); // Reiniciar a la primera página al cambiar los filtros
-  };
+    if (garage) {
+      currentFilteredRooms = currentFilteredRooms.filter(room => room.garage?.id === garage);
+    }
 
-  const handleFilterSale = (sale: string) => {
+    if (amenities.length > 0) {
+      currentFilteredRooms = currentFilteredRooms.filter(room =>
+        amenities.every(a =>
+          room.amenities?.some(rAmenity => rAmenity.amenities.id === a.id)
+        )
+      );
+    }
+
+    // Filtros comentados en tu código original, se mantienen así
+    // if (inAvailable === "true") {
+    //   currentFilteredRooms = currentFilteredRooms.filter(room => room.available === true);
+    // } else if (inAvailable === "false") {
+    //   currentFilteredRooms = currentFilteredRooms.filter(room => room.available === false);
+    // }
+
+    if (onSale === "true") {
+      currentFilteredRooms = currentFilteredRooms.filter(room => room.promoActive);
+    }
+
+    // Clonar para ordenar sin mutar el array original en cada paso de filtrado
+    let sortedRooms = [...currentFilteredRooms];
+    if (orderPrice === "asc") {
+      sortedRooms = sortedRooms.sort((a, b) => a.price - b.price);
+    } else if (orderPrice === "desc") {
+      sortedRooms = sortedRooms.sort((a, b) => b.price - a.price);
+    }
+
+    // if (orderMostReserved === "desc") {
+    //   sortedRooms = sortedRooms.sort((a, b) => (b.totalReservations || 0) - (a.totalReservations || 0));
+    // }
+
+    setTotalCountResultsFilter(sortedRooms.length);
+    setTotalPages(Math.ceil(sortedRooms.length / itemsPerPage));
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return sortedRooms.slice(startIndex, endIndex);
+  }, [
+    originalRooms, // Depende de las habitaciones originales cargadas
+    category,
+    garage,
+    amenities,
+    inAvailable,
+    onSale,
+    orderPrice,
+    orderMostReserved,
+    currentPage,
+    itemsPerPage // Asegúrate de incluir esto si itemsPerPage puede cambiar
+  ]);
+
+  // Efecto para actualizar 'displayedRooms' cada vez que cambien los filtros o la paginación
+  useEffect(() => {
+    setDisplayedRooms(filteredAndPaginatedRooms);
+  }, [filteredAndPaginatedRooms]);
+
+
+  // Handlers para los filtros, que reinician la página actual a 1
+  const handleFilterCategory = useCallback((cat: string) => {
+    setCategory(cat);
+    setCurrentPage(1);
+  }, []);
+
+  const handleFilterGarage = useCallback((g: string) => {
+    setGarage(g);
+    setCurrentPage(1);
+  }, []);
+
+  const handleFilterAviable = useCallback((avail: string) => {
+    setInAvailable(avail);
+    setCurrentPage(1);
+  }, []);
+
+  const handleFilterSale = useCallback((sale: string) => {
     setOnSale(sale);
-    setCurrentPage(1); // Reiniciar a la primera página al cambiar los filtros
-  };
+    setCurrentPage(1);
+  }, []);
 
-  const handleFilterAmenities = (amenitiesRoom: AmenitiesRoom[]) => {
+  const handleFilterAmenities = useCallback((amenitiesRoom: AmenitiesRoom[]) => {
     setAmenities(amenitiesRoom.map((item) => item));
-    setCurrentPage(1); // Reiniciar a la primera página al cambiar los filtros
-  };
+    setCurrentPage(1);
+  }, []);
 
-  const handlePageChange = (newPage: number) => {
+  const handlePageChange = useCallback((newPage: number) => {
     setCurrentPage(newPage);
+  }, []);
+
+  // getBestPromotionRoom no necesita ser memoizada a menos que la lista de rooms sea enorme y se llame muy a menudo
+  const getBestPromotionRoom = (rooms: RoomAllApi[]) => {
+    const roomWithBestPromotion = rooms
+      .filter((room) => room.promoActive && room.promotionPercentage! > 0)
+      .sort((a, b) => b.promotionPercentage! - a.promotionPercentage!)[0];
+
+    if (!roomWithBestPromotion) return null;
+
+    const discount = (roomWithBestPromotion.price * roomWithBestPromotion.promotionPercentage!) / 100;
+    const finalPrice = roomWithBestPromotion.price - discount;
+
+    return {
+      ...roomWithBestPromotion,
+      discountedPrice: finalPrice,
+    };
   };
 
+  // useMemo para BestPromotion, ahora usa originalRooms
+  const BestPromotion = useMemo(() => {
+    const best = getBestPromotionRoom(originalRooms);
+    return best?.discountedPrice || null;
+  }, [originalRooms]); // Depende de las habitaciones originales
+
+  // Efecto para scroll al principio de la página al cambiar de página
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentPage]);
@@ -175,11 +223,11 @@ export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom, BestPromo
         garageRoom={garageRoom}
         amenitiesRoom={amenitiesRoom}
         BestPromotion={BestPromotion}
-        onSelectedCategory={(category) => handleFilterCategory(category)}
-        onselectedGarage={(garage) => handleFilterGarage(garage)}
-        onSelectedAmenities={(amenities) => handleFilterAmenities(amenities)}
-        onToogleSale={(sale) => handleFilterSale(sale)}
-        onToogleinAvailable={(aviable) => handleFilterAviable(aviable)}
+        onSelectedCategory={handleFilterCategory}
+        onselectedGarage={handleFilterGarage}
+        onSelectedAmenities={handleFilterAmenities}
+        onToogleSale={handleFilterSale}
+        onToogleinAvailable={handleFilterAviable}
       />
 
       {isLoadingLocationUser ? (
@@ -221,10 +269,10 @@ export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom, BestPromo
                   Encuentra tu habitacion perfecta
                 </p>
               </div>
-              <div className="flex  justify-between mt-6 mx-3 mb-5">
+              <div className="flex justify-between mt-6 mx-3 mb-5">
                 <SortRooms
-                  onOrderMostReserved={(order) => setOrderMostReserved(order)}
-                  onSortByPrice={(order) => setOrderPrice(order)}
+                  onOrderMostReserved={setOrderMostReserved}
+                  onSortByPrice={setOrderPrice}
                 />
                 <button
                   className="flex justify-center text-sm gap-2 my-2 px-2 items-center"
@@ -249,8 +297,8 @@ export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom, BestPromo
 
               <div className="flex justify-start mt-2 md:mt-0 px-3 md:justify-end5 md:px-10 ">
                 <SortRooms
-                  onOrderMostReserved={(order) => setOrderMostReserved(order)}
-                  onSortByPrice={(order) => setOrderPrice(order)}
+                  onOrderMostReserved={setOrderMostReserved}
+                  onSortByPrice={setOrderPrice}
                 />
               </div>
             </div>
@@ -263,17 +311,11 @@ export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom, BestPromo
                     garageRoom={garageRoom}
                     amenitiesRoom={amenitiesRoom}
                     BestPromotion={BestPromotion}
-                    onSelectedCategory={(category) =>
-                      handleFilterCategory(category)
-                    }
-                    onselectedGarage={(garage) => handleFilterGarage(garage)}
-                    onSelectedAmenities={(amenities) =>
-                      handleFilterAmenities(amenities)
-                    }
-                    onToogleSale={(sale) => handleFilterSale(sale)}
-                    onToogleinAvailable={(aviable) =>
-                      handleFilterAviable(aviable)
-                    }
+                    onSelectedCategory={handleFilterCategory}
+                    onselectedGarage={handleFilterGarage}
+                    onSelectedAmenities={handleFilterAmenities}
+                    onToogleSale={handleFilterSale}
+                    onToogleinAvailable={handleFilterAviable}
                   />
                 </div>
               </div>
@@ -290,11 +332,12 @@ export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom, BestPromo
                       <SkeletonRooms />
                       <SkeletonRooms />
                       <SkeletonRooms />
+                      <SkeletonRooms />
                     </div>
                   </>
-                ) : AllRooms.length > 0 ? (
+                ) : displayedRooms.length > 0 ? (
                   <>
-                    <GridMotelFilter rooms={AllRooms} />
+                    <GridMotelFilter rooms={displayedRooms} />
                     <div className="mb-10">
                       <Pagination
                         currentPage={currentPage}
@@ -310,7 +353,7 @@ export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom, BestPromo
                       <h3 className="text-md md:text-xl font-semibold mt-4 text-black ">
                         No se encontraron habitaciones
                       </h3>
-                      <p className="text-gray-700 text-xs md:text-md  mt-2">
+                      <p className="text-gray-700 text-xs md:text-md mt-2">
                         Lo sentimos, no hemos podido encontrar ninguna
                         habitación que coincida con tu búsqueda.
                       </p>

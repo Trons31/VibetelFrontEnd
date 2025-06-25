@@ -108,40 +108,64 @@ export const SideBarMovil = ({ motelStatus, motelName, motelImage, subscription 
               <div className="flex mt-3 flex-1 flex-col">
                 <div className="">
                   <nav className="flex-1">
-                    <Link href="/admin/dashboard-partner-motel" title="" className={
-                      clsx(
-                        "flex cursor-pointer items-center  py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600",
-                        {
-                          "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel"
-                        }
-                      )
-                    }>
+                    <Link
+                      href="/admin/dashboard-partner-motel" title="" className={
+                        clsx(
+                          "flex cursor-pointer items-center  py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600",
+                          {
+                            "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel"
+                          }
+                        )
+                      }
+                      onClick={closeSideMenuAdminMotel}
+                    >
                       <TiHomeOutline className="mr-4 h-5 w-5 align-middle" />
                       Dashboard
                     </Link>
 
-                    <Link href="/admin/dashboard-partner-motel/room" className={
-                      clsx(
-                        "flex cursor-pointer items-center py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 ",
-                        {
-                          "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/room"
-                        }
-                      )
-                    }>
+                    <Link
+                      href="/admin/dashboard-partner-motel/room" className={
+                        clsx(
+                          "flex cursor-pointer items-center py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 ",
+                          {
+                            "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/room"
+                          }
+                        )
+                      }
+                      onClick={closeSideMenuAdminMotel}
+                    >
                       <IoBedOutline className="mr-4 h-5 w-5 align-middle" />
                       Habitaciones
                     </Link>
 
+                    <Link
+                      href="/admin/dashboard-partner-motel/reservation-requests" className={
+                        clsx(
+                          "flex cursor-pointer items-center py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 ",
+                          {
+                            "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/reservation-requests"
+                          }
+                        )
+                      }
+                      onClick={closeSideMenuAdminMotel}
+                    >
+                      <RiCalendarCheckFill className="mr-4 h-5 w-5 align-middle" />
+                      Solicitud de reservas
+                    </Link>
+
                     {
                       subscription !== "FREE" && (
-                        <Link href="/admin/dashboard-partner-motel/reports" className={
-                          clsx(
-                            "flex cursor-pointer items-center  py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600",
-                            {
-                              "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/reports"
-                            }
-                          )
-                        }>
+                        <Link
+                          href="/admin/dashboard-partner-motel/reports" className={
+                            clsx(
+                              "flex cursor-pointer items-center  py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600",
+                              {
+                                "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/reports"
+                              }
+                            )
+                          }
+                          onClick={closeSideMenuAdminMotel}
+                        >
                           <TbPresentationAnalytics className="mr-4 h-5 w-5 align-middle" />
                           Reportes
                           <span className="ml-auto rounded-full bg-rose-600 px-2 text-xs text-white">6</span>
@@ -157,26 +181,32 @@ export const SideBarMovil = ({ motelStatus, motelName, motelImage, subscription 
                         <span className="ml-3 mt-7 mb-2 block text-xs font-semibold text-gray-500">Gestion de acceso</span>
 
                         <nav className="flex-1">
-                          <Link href="/admin/dashboard-partner-motel/check-in" className={
-                            clsx(
-                              "flex cursor-pointer items-center py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 ",
-                              {
-                                "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/check-in"
-                              }
-                            )
-                          }>
+                          <Link
+                            href="/admin/dashboard-partner-motel/check-in" className={
+                              clsx(
+                                "flex cursor-pointer items-center py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 ",
+                                {
+                                  "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/check-in"
+                                }
+                              )
+                            }
+                            onClick={closeSideMenuAdminMotel}
+                          >
                             <MdContentPasteSearch className="mr-4 h-5 w-5 align-middle" />
                             Acceso con reserva
                           </Link>
 
-                          <Link href="/admin/dashboard-partner-motel/walk-in" className={
-                            clsx(
-                              "flex cursor-pointer items-center py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 ",
-                              {
-                                "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/walk-in"
-                              }
-                            )
-                          }>
+                          <Link
+                            href="/admin/dashboard-partner-motel/walk-in" className={
+                              clsx(
+                                "flex cursor-pointer items-center py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 ",
+                                {
+                                  "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/walk-in"
+                                }
+                              )
+                            }
+                            onClick={closeSideMenuAdminMotel}
+                          >
                             <IoLogIn className="mr-4 h-5 w-5 align-middle" />
                             Acceso sin reserva
                           </Link>
@@ -193,14 +223,17 @@ export const SideBarMovil = ({ motelStatus, motelName, motelImage, subscription 
                         <span className="ml-3 mt-7 mb-2 block text-xs font-semibold text-gray-500">Gestion de servicios</span>
 
                         <nav className="flex-1">
-                          <Link href="/admin/dashboard-partner-motel/booking" className={
-                            clsx(
-                              "flex cursor-pointer items-center py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 ",
-                              {
-                                "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/booking"
-                              }
-                            )
-                          }>
+                          <Link
+                            href="/admin/dashboard-partner-motel/booking" className={
+                              clsx(
+                                "flex cursor-pointer items-center py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 ",
+                                {
+                                  "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/booking"
+                                }
+                              )
+                            }
+                            onClick={closeSideMenuAdminMotel}
+                          >
                             <RiCalendarCheckFill className="mr-4 h-5 w-5 align-middle" />
                             Servicio con reserva
                             {/* {
@@ -218,14 +251,17 @@ export const SideBarMovil = ({ motelStatus, motelName, motelImage, subscription 
                             } */}
                           </Link>
 
-                          <Link href="/admin/dashboard-partner-motel/walk-in-services" className={
-                            clsx(
-                              "flex cursor-pointer items-center py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 ",
-                              {
-                                "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/walk-in-services"
-                              }
-                            )
-                          }>
+                          <Link
+                            href="/admin/dashboard-partner-motel/walk-in-services" className={
+                              clsx(
+                                "flex cursor-pointer items-center py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 ",
+                                {
+                                  "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/walk-in-services"
+                                }
+                              )
+                            }
+                            onClick={closeSideMenuAdminMotel}
+                          >
                             <RiCalendarCloseFill className="mr-4 h-5 w-5 align-middle" />
                             Servicio sin reserva
                           </Link>
@@ -239,14 +275,17 @@ export const SideBarMovil = ({ motelStatus, motelName, motelImage, subscription 
                   <span className="ml-3 mt-7 mb-2 block text-xs font-semibold text-gray-500">Soporte</span>
 
                   <nav className="flex-1">
-                    <Link href="/admin/dashboard-partner-motel/support" className={
-                      clsx(
-                        "flex cursor-pointer items-center py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 ",
-                        {
-                          "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/support"
-                        }
-                      )
-                    }>
+                    <Link
+                      href="/admin/dashboard-partner-motel/support" className={
+                        clsx(
+                          "flex cursor-pointer items-center py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 ",
+                          {
+                            "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/support"
+                          }
+                        )
+                      }
+                      onClick={closeSideMenuAdminMotel}
+                    >
                       <MdSupportAgent className="mr-4 h-5 w-5 align-middle" />
                       Acceder al soporte
                     </Link>
@@ -256,40 +295,49 @@ export const SideBarMovil = ({ motelStatus, motelName, motelImage, subscription 
                   <span className="ml-3 mt-7 mb-2 block text-xs font-semibold text-gray-500">Configuracion</span>
 
                   <nav className="flex-1">
-                    <Link href="/admin/dashboard-partner-motel/profile" className={
-                      clsx(
-                        "flex cursor-pointer items-center py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 ",
-                        {
-                          "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/profile"
-                        }
-                      )
-                    }  >
+                    <Link
+                      href="/admin/dashboard-partner-motel/profile" className={
+                        clsx(
+                          "flex cursor-pointer items-center py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 ",
+                          {
+                            "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/profile"
+                          }
+                        )
+                      }
+                      onClick={closeSideMenuAdminMotel}
+                    >
                       <LuUserCog className="mr-4 h-5 w-5 align-middle" />
                       Perfil
                     </Link>
 
-                    <Link href="/admin/dashboard-partner-motel/config-motel/bank-account" className={
-                      clsx(
-                        "flex cursor-pointer items-center py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 ",
-                        {
-                          "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/config-motel/bank-account"
-                        }
-                      )
-                    }  >
+                    <Link
+                      href="/admin/dashboard-partner-motel/config-motel/bank-account" className={
+                        clsx(
+                          "flex cursor-pointer items-center py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 ",
+                          {
+                            "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/config-motel/bank-account"
+                          }
+                        )
+                      }
+                      onClick={closeSideMenuAdminMotel}
+                    >
                       <RiBankCardFill className="mr-4 h-5 w-5 align-middle" />
                       Cuenta bancaria
                     </Link>
 
                     {
                       subscription !== "FREE" && (
-                        <Link href="/admin/dashboard-partner-motel/additional-settings" className={
-                          clsx(
-                            "flex cursor-pointer items-center py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 ",
-                            {
-                              "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/additional-settings"
-                            }
-                          )
-                        }  >
+                        <Link
+                          href="/admin/dashboard-partner-motel/additional-settings" className={
+                            clsx(
+                              "flex cursor-pointer items-center py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 ",
+                              {
+                                "border-l-4 border-l-rose-600 text-rose-600": pathname === "/admin/dashboard-partner-motel/additional-settings"
+                              }
+                            )
+                          }
+                          onClick={closeSideMenuAdminMotel}
+                        >
                           <TbSettingsPlus className="mr-4 h-5 w-5 align-middle" />
                           Ajustes adicionales
                         </Link>

@@ -41,13 +41,13 @@ export const NoService = ({ endDateOffService, startDateOffService }: Props) => 
             <button className={`group fixed hidden md:flex items-center gap-4 z-10 bottom-5 left-1/2 -translate-x-1/2 bg-black hover:bg-white hover:text-black border border-black  p-3 rounded shadow-lg transition-all duration-300 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
                 }`} >
                 <MdBlockFlipped className='h-5 w-5 text-white group-hover:text-black flex-shrink-0' />
-                <p className="text-white text-sm group-hover:text-black ">El motel está fuera de servicio desde {formatDate(startDateOffService)} hasta {formatDate(endDateOffService)}</p>
+                <p className="text-white text-sm group-hover:text-black ">El motel está fuera de servicio desde {startDateOffService ? formatDate(startDateOffService) : "desconocido"} hasta {endDateOffService ? formatDate(endDateOffService) : "desconocido"}</p>
             </button>
 
             <button className={`fixed flex md:hidden items-center gap-4 z-10 bottom-4 bg-black p-3 rounded-md mx-4 transition-all duration-300 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
                 }`}>
                 <MdBlockFlipped className='h-5 w-5 text-white flex-shrink-0' />
-                <p className="text-white text-xs text-center">El motel está fuera de servicio desde {formatDate(startDateOffService)} hasta {formatDate(endDateOffService)}</p>
+                <p className="text-white text-xs text-center">El motel está fuera de servicio desde {startDateOffService ? formatDate(startDateOffService) : "desconocido"} hasta {endDateOffService ? formatDate(endDateOffService) : "desconocido"}</p>
             </button>
         </>
     )

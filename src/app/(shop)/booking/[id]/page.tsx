@@ -3,8 +3,9 @@ import { notFound, redirect } from "next/navigation";
 import { Metadata, ResolvingMetadata } from "next";
 import { BookingPage } from "./ui/BookingPage";
 import { auth } from "@/auth.config";
-import { getReservationById, GetUserByEmail } from "@/actions";
-import CompleteForm from "../../profile/ui/CompleteForm";
+import { getReservationById } from "@/actions";
+import { UserApi } from "@/interfaces/user.interface";
+import axios from "axios";
 
 interface Props {
   params: {
@@ -40,15 +41,18 @@ export default async function BookingBySlugPage({ params }: Props) {
 
   const session = await auth();
 
-  if (!session?.user.roles.includes("user")) {
+  if (!session) {
     redirect("/");
   }
 
-  const userExistOnDatabase = await GetUserByEmail(session.user.email);
-
-  if (!userExistOnDatabase?.user) {
-    return <CompleteForm name={session.user.name} email={session.user.email} />;
+  let user: UserApi;
+  try {
+    const response = await axios.get<UserApi>(`${process.env.NEXT_PUBLIC_API_ROUTE}user/${session.user.id}`)
+    user = response.data;
+  } catch (error: any) {
+    redirect("/");
   }
+
   const { id } = params;
 
   const reservation = await getReservationById(id);
@@ -57,12 +61,12 @@ export default async function BookingBySlugPage({ params }: Props) {
     notFound();
   }
 
-  
+
   return (
     <>
       <BookingPage
-       user={userExistOnDatabase.user}
-       reservation={reservation.reservation} />
+        user={user}
+        reservation={reservation.reservation} />
     </>
 
   );

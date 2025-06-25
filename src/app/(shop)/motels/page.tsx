@@ -1,6 +1,6 @@
 import { SlideShow, SlideShowMobile } from '@/components';
 import { UiMotel } from './ui/UiMotel';
-import { MotelAllApi } from '@/interfaces';
+import { MotelApi } from '@/interfaces';
 import axios from 'axios';
 import { redirect } from 'next/navigation';
 
@@ -18,17 +18,7 @@ interface Props {
   }
 }
 
-export default async function MotelPage() {
-
-  let motels: MotelAllApi[] | null = null;
-
-  try {
-    const response = await axios.get<MotelAllApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}motel`);
-    motels = response.data;
-  } catch (error: any) {
-    redirect("/");
-  }
-
+export default  function MotelPage() {
   return (
     <div >
       <div className="hidden md:block mt-10" >
@@ -38,9 +28,7 @@ export default async function MotelPage() {
         <SlideShowMobile />
       </div>
 
-      <UiMotel
-        motels={motels}
-      />
+      <UiMotel/>
     </div>
   );
 }

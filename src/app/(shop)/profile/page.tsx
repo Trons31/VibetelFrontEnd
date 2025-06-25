@@ -1,4 +1,3 @@
-import { GetUserByEmail } from "@/actions";
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
 import CompleteForm from "./ui/CompleteForm";
@@ -19,10 +18,15 @@ export default async function ProfilePage() {
     if (!session) {
         redirect("/");
     }
+    
+    let user;
+    try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_ROUTE}user/${session.user.id}`)
+        user = response.data;
+    } catch (error: any) {
+        redirect("/");
+    }
 
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_ROUTE}user/${session.user.id}`)
-
-    const user = response.data;
 
     if (!user) {
         return <CompleteForm name={session.user.name} email={session.user.email} />;

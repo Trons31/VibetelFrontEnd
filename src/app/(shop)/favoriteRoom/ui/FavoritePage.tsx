@@ -7,10 +7,10 @@ import { FavoriteRoom } from '@/interfaces/favoriteRoom.interface';
 import { CategoryRoom, GarageRoom } from '@/interfaces';
 import { TbBedOff } from 'react-icons/tb';
 import Link from 'next/link';
-import { UserInterface } from '@/interfaces/user.interface';
+import { UserApi } from '@/interfaces/user.interface';
 
 interface Props {
-  user: UserInterface;
+  user: UserApi;
   garage: GarageRoom[];
   category: CategoryRoom[];
 }
