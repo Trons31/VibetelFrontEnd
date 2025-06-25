@@ -118,7 +118,7 @@ export const ModalSharedLinkRoom = ({ isOpen, onClose, room }: ModalProps) => {
               <div className="h-full w-[120px] relative object-cover mt-3">
                 <RoomImage
                   className="rounded"
-                  src={room.images[0]}
+                  src={room.images[0].url}
                   width={600}
                   height={500}
                   alt={room.title}

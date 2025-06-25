@@ -54,14 +54,14 @@ export interface Motel {
 }
 
 interface Department {
-    geonameId: string;
-    name: string;
+  geonameId: string;
+  name: string;
 }
 
 interface City {
-    id: string;
-    name: string;
-    department: Department;
+  id: string;
+  name: string;
+  department: Department;
 }
 
 export interface MotelConfig {
@@ -98,25 +98,12 @@ export interface RoomAllApi {
   extraServicesActive: boolean;
   extraServices: number;
   surcharge: number;
-  createdAt: string; // o Date si haces parse
-  updatedAt: string; // o Date si haces parse
-  category: {
-    id: string;
-    name: string;
-  };
-  garage: {
-    id: string;
-    title: string;
-  };
-  images: any[]; // puedes tipar mejor si tienes estructura
-  amenities: {
-    id: string;
-    amenities: {
-      id: string;
-      name: string;
-      description: string;
-    };
-  }[];
+  createdAt: string; 
+  updatedAt: string; 
+  category: CategoryRoomApi;
+  garage: GarageRoomApi;
+  images: Image[]; 
+  amenities: RoomAmenity[];
   motel: {
     id: string;
     razonSocial: string;
