@@ -11,17 +11,12 @@ import {
   TimerBooking,
 } from "@/components";
 import { Reservation } from "@/interfaces/reservation.interface";
+import { UserApi } from "@/interfaces/user.interface";
 import Pusher from "pusher-js";
 import { useEffect, useState } from "react";
 
 interface Props {
-  user: {
-    id: string;
-    name: string;
-    lastname: string;
-    email: string;
-    contactPhone?: string | null;
-  };
+  user: UserApi;
   reservation: Reservation;
 }
 
