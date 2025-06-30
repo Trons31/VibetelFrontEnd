@@ -1,8 +1,8 @@
-import { RoomByMotelApi } from "@/interfaces";
+import { RoomAllApi, RoomByMotelApi } from "@/interfaces";
 import { ItemGridMotelBySlug } from "./ItemGridMotelBySlug";
 
 interface Props {
-  rooms: RoomByMotelApi[];
+  rooms: RoomAllApi[];
 }
 
 export const GridMotelBySlug = ({ rooms }: Props) => {

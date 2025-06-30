@@ -149,15 +149,15 @@ export const ModalSharedLinkRoom = ({ isOpen, onClose, room }: ModalProps) => {
                   </p>
                 </div>
 
-                {/* <div className="md:flex gap-1 ml-1 items-center">
+                <div className="md:flex gap-1 ml-1 items-center">
                   <p className="capitalize text-md font-extralight">
-                    {room.motel.department?.name}
+                    {room.motel.city.department.name}
                   </p>
                   <span className="hidden md:block">
                     <TbPointFilled className="w-2 h-2 text-black" />
                   </span>
                   <p className="capitalize text-md font-extralight">
-                    {room.motel.city?.name}
+                    {room.motel.city.name}
                   </p>
                   <span className="hidden md:block">
                     <TbPointFilled className="w-2 h-2 text-black" />
@@ -166,9 +166,9 @@ export const ModalSharedLinkRoom = ({ isOpen, onClose, room }: ModalProps) => {
                     {room.motel.address}
                   </p>
                 </div>
-                {room.ratings.length > 0 && (
+                {/* {room.ratings.length > 0 && (
                   <RatingRoomReservation ratings={room.ratings} />
-                )} */}
+                )}  */}
               </div>
             </div>
 

@@ -9,12 +9,6 @@ interface State {
     openSideMenu: () => void;
     closeSideMenu: () => void;
 
-    //SearchInput
-    isSearchOpen: boolean;
-
-    openSearch: () => void;
-    closeSearch: () => void;
-
 
     //MenuMotelPartners
     isSideMenuOpenMotelPartners: boolean;
@@ -67,12 +61,6 @@ export const useUIStore = create<State>()((set) => ({
 
     closeSideMenu: () => set({ isSideMenuOpen: false }),
 
-    //SearchInput
-    isSearchOpen: false,
-
-    openSearch: () => set({ isSearchOpen: true }),
-
-    closeSearch: () => set({ isSearchOpen: false }),
 
     //MenuAppPartnerMotel
     isSideMenuOpenMotelPartners: false,

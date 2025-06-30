@@ -11,12 +11,13 @@ import {
   AmenitiesRoomApi,
   CategoryRoomApi,
   GarageRoomApi,
-  MotelBySlugApi, motelConfig, RoomByMotelApi,
+  MotelBySlugApi, motelConfig, RoomAllApi, RoomByMotelApi,
   searchCity
 } from "@/interfaces";
 import { useLocationStore, useUIStore } from "@/store";
+import axios from "axios";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { FaMagnifyingGlassLocation, FaRegStar } from "react-icons/fa6";
 import { IoChevronForward, IoLocationSharp, IoOptionsSharp } from "react-icons/io5";
 import { MdOutlineBed } from "react-icons/md";
@@ -43,7 +44,8 @@ export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom, motel, mo
   const [modalLocationUser, setModalLocationUser] = useState(false);
   const [openModalLocationMotel, setOpenModalLocationMotel] = useState(false);
 
-  const [rooms, setRooms] = useState<RoomByMotelApi[]>(motel.rooms);
+  const [originalRooms, setOriginalRooms] = useState<RoomAllApi[]>([]);
+  const [displayedRooms, setDisplayedRooms] = useState<RoomAllApi[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCountResultsFilter, setTotalCountResultsFilter] = useState(0);
@@ -59,63 +61,20 @@ export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom, motel, mo
   const [inAvailable, setInAvailable] = useState("");
   const [orderMostReserved, setOrderMostReserved] = useState("");
 
-  useEffect(() => {
-    let filteredRooms = [...rooms];
 
-    // if (category) {
-    //   filteredRooms = filteredRooms.filter(room => room.category?.id === category);
-    // }
-
-    // if (garage) {
-    //   filteredRooms = filteredRooms.filter(room => room.garage?.id === garage);
-    // }
-
-    // if (amenities.length > 0) {
-    //   filteredRooms = filteredRooms.filter(room =>
-    //     amenities.every(a =>
-    //       room.amenities?.some(rAmenity => rAmenity.amenities.id === a.id)
-    //     )
-    //   );
-    // }
-
-    // if (inAvailable === "true") {
-    //   filteredRooms = filteredRooms.filter(room => room.available === true);
-    // } else if (inAvailable === "false") {
-    //   filteredRooms = filteredRooms.filter(room => room.available === false);
-    // }
-
-    if (onSale === "true") {
-      filteredRooms = filteredRooms.filter(room => room.promoActive);
+  const fetchRooms = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get<RoomAllApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}room/motel/${motel.slug}`);
+      setOriginalRooms(response.data);
+    } catch (error: any) {
+      setOriginalRooms([]);
+      console.error("Error al cargar habitaciones:", error);
+    } finally {
+      setIsLoading(false);
     }
+  }, []);
 
-    if (orderPrice === "asc") {
-      filteredRooms = filteredRooms.sort((a, b) => a.price - b.price);
-    } else if (orderPrice === "desc") {
-      filteredRooms = filteredRooms.sort((a, b) => b.price - a.price);
-    }
-
-    // if (orderMostReserved === "desc") {
-    //   filteredRooms = filteredRooms.sort((a, b) => (b.totalReservations || 0) - (a.totalReservations || 0));
-    // }
-
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const paginatedRooms = filteredRooms.slice(startIndex, endIndex);
-
-    setRooms(paginatedRooms);
-    setTotalPages(Math.ceil(filteredRooms.length / itemsPerPage));
-    setTotalCountResultsFilter(filteredRooms.length);
-  }, [
-    rooms,
-    category,
-    garage,
-    amenities,
-    inAvailable,
-    onSale,
-    orderPrice,
-    orderMostReserved,
-    currentPage,
-  ]);
 
   useEffect(() => {
     if (locationUser) {
@@ -126,10 +85,74 @@ export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom, motel, mo
 
   useEffect(() => {
     if (detectedLocation) {
-      setIsLoadingLocationUser(false);
-      setIsLoading(false);
+      fetchRooms();
     }
-  }, [detectedLocation]);
+  }, [detectedLocation, fetchRooms]);
+
+  const filteredAndPaginatedRooms = useMemo(() => {
+    let currentFilteredRooms = [...originalRooms]; // Trabaja con la copia original
+
+    if (category) {
+      currentFilteredRooms = currentFilteredRooms.filter(room => room.category?.id === category);
+    }
+
+    if (garage) {
+      currentFilteredRooms = currentFilteredRooms.filter(room => room.garage?.id === garage);
+    }
+
+    if (amenities.length > 0) {
+      currentFilteredRooms = currentFilteredRooms.filter(room =>
+        amenities.every(a =>
+          room.amenities?.some(rAmenity => rAmenity.amenities.id === a.id)
+        )
+      );
+    }
+
+    // Filtros comentados en tu código original, se mantienen así
+    // if (inAvailable === "true") {
+    //   currentFilteredRooms = currentFilteredRooms.filter(room => room.available === true);
+    // } else if (inAvailable === "false") {
+    //   currentFilteredRooms = currentFilteredRooms.filter(room => room.available === false);
+    // }
+
+    if (onSale === "true") {
+      currentFilteredRooms = currentFilteredRooms.filter(room => room.promoActive);
+    }
+
+    // Clonar para ordenar sin mutar el array original en cada paso de filtrado
+    let sortedRooms = [...currentFilteredRooms];
+    if (orderPrice === "asc") {
+      sortedRooms = sortedRooms.sort((a, b) => a.price - b.price);
+    } else if (orderPrice === "desc") {
+      sortedRooms = sortedRooms.sort((a, b) => b.price - a.price);
+    }
+
+    // if (orderMostReserved === "desc") {
+    //   sortedRooms = sortedRooms.sort((a, b) => (b.totalReservations || 0) - (a.totalReservations || 0));
+    // }
+
+    setTotalCountResultsFilter(sortedRooms.length);
+    setTotalPages(Math.ceil(sortedRooms.length / itemsPerPage));
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return sortedRooms.slice(startIndex, endIndex);
+  }, [
+    originalRooms, // Depende de las habitaciones originales cargadas
+    category,
+    garage,
+    amenities,
+    inAvailable,
+    onSale,
+    orderPrice,
+    orderMostReserved,
+    currentPage,
+    itemsPerPage // Asegúrate de incluir esto si itemsPerPage puede cambiar
+  ]);
+
+   useEffect(() => {
+      setDisplayedRooms(filteredAndPaginatedRooms);
+    }, [filteredAndPaginatedRooms]);
 
   const handleFilterCategory = (category: string) => {
     setCategory(category);
@@ -164,7 +187,7 @@ export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom, motel, mo
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentPage]);
 
-  const getBestPromotionRoom = (rooms: RoomByMotelApi[]) => {
+  const getBestPromotionRoom = (rooms: RoomAllApi[]) => {
     const roomWithBestPromotion = rooms
       .filter((room) => room.promoActive && room.promotionPercentage! > 0)
       .sort((a, b) => b.promotionPercentage! - a.promotionPercentage!)[0];
@@ -182,9 +205,9 @@ export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom, motel, mo
 
   // useMemo para BestPromotion, ahora usa originalRooms
   const BestPromotion = useMemo(() => {
-    const best = getBestPromotionRoom(rooms);
+    const best = getBestPromotionRoom(originalRooms);
     return best?.discountedPrice || null;
-  }, [rooms]);
+  }, [originalRooms]);
 
   return (
     <>
@@ -377,9 +400,9 @@ export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom, motel, mo
                       <SkeletonRooms />
                     </div>
                   </>
-                ) : rooms.length > 0 ? (
+                ) : displayedRooms.length > 0 ? (
                   <>
-                    <GridMotelBySlug rooms={rooms} />
+                    <GridMotelBySlug rooms={displayedRooms} />
                     <div className="mb-10">
                       <Pagination
                         currentPage={currentPage}

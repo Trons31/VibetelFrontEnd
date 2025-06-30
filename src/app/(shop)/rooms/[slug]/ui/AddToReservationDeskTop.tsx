@@ -1,25 +1,19 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import {
-  BedroomBooking,
-  motelConfig,
-  RoomApi,
-} from "@/interfaces";
+
+import React, { useEffect, useState, useCallback } from "react";
+import { BedroomBooking, motelConfig, RoomApi } from "@/interfaces";
 import clsx from "clsx";
 import toast, { Toaster } from "react-hot-toast";
-import { SelecteDateAndTime } from "./SelecteDateAndTime";
-import { useBookingStore, useUIStore } from "@/store";
+import { useBookingStore } from "@/store";
 import { useRouter } from "next/navigation";
-import {
-  getTransactionIdReservation,
-  validateDateReservation,
-} from "@/actions";
+import { getTransactionIdReservation, validateDateReservation } from "@/actions";
 import { useSession } from "next-auth/react";
-import { currencyFormat } from "@/utils";
-import { TbPointFilled } from "react-icons/tb";
+import { currencyFormat, formatDate, formatTimeWithAmPm } from "@/utils";
+import { TbPointFilled, TbClockExclamation } from "react-icons/tb";
 import { MdOutlineSecurity } from "react-icons/md";
 import { IoArrowForwardOutline } from "react-icons/io5";
-import { ModalLoadingReservation } from "@/components";
+import { FaRegEdit } from "react-icons/fa";
+import { ModalLoadingReservation, CustomDatePicker, TimeSelector } from "@/components";
 
 interface Props {
   room: RoomApi;
@@ -27,212 +21,275 @@ interface Props {
 }
 
 export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
-  const isSearchOpen = useUIStore((state) => state.isSearchOpen);
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedTime, setSelectedTime] = useState("");
-  const [selectedDepartureDate, setSelectedDepartureDate] = useState<Date | null>(null);
-  const [showLoading, setshowLoading] = useState(false);
-  const [showLoadingLogin, setshowLoadingLogin] = useState(false);
+  const [isLoadingSession, setIsLoadingSession] = useState(true);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedTime, setSelectedTime] = useState<string>("");
+  const [departureDate, setDepartureDate] = useState<Date | null>(null);
+  const [showLoading, setShowLoading] = useState(false);
+  const [showLoadingLogin, setShowLoadingLogin] = useState(false);
   const [transactionId, setTransactionId] = useState<string | null>(null);
-  const [showModalReservationProcessing, setShowModalReservationProcessing] = useState(false);
-  const [showModalLoading, setshowModalLoading] = useState(false);
-  const [showErrorBooking, setShowErrorBooking] = useState(false);
-  const AddBedroomToBooking = useBookingStore((state) => state.addBedroomToBooking);
+  const [showModalLoadingReservation, setShowModalLoadingReservation] = useState(false);
+  const [isDateTimeModalOpen, setIsDateTimeModalOpen] = useState(false);
+  const [dateTimeStep, setDateTimeStep] = useState<"date" | "time">("date");
 
+  const addBedroomToBooking = useBookingStore((state) => state.addBedroomToBooking);
   const router = useRouter();
   const { data: session, status } = useSession();
   const isAuthenticated = !!session?.user;
 
-  let promotionPercentage;
-  if (room.promoActive) {
-    promotionPercentage = ((room.price - room.promoPrice!) * 100) / room.price;
-  }
+  const promotionPercentage = room.promoActive
+    ? ((room.price - room.promoPrice!) * 100) / room.price
+    : 0;
+
 
   useEffect(() => {
-    if (status !== "loading") {
-      setIsLoading(false);
-    }
-  }, [session, status]);
-
-  const addToReservationAnonymous = async () => {
-    if (transactionId) {
-      setShowModalReservationProcessing(true);
-      return;
-    }
-
-    if (!selectedDate) {
-      toast.error("Por favor selecciona una fecha antes de continuar.");
-      return;
-    }
-
-    if (selectedTime === "") {
-      toast.error("Por favor selecciona una hora antes de continuar.");
-      return;
-    }
-
-    setshowModalLoading(true);
-    setshowLoading(true);
-
-    const validationResult = await validateDateReservation(
-      selectedDate,
-      selectedDepartureDate!,
-      room.id,
-      room.motel.id
-    );
-    if (!validationResult.isValid) {
-      toast.error(validationResult.message, {
-        duration: 7000,
-      });
-      setshowModalLoading(false);
-      setshowLoading(false);
-      setShowErrorBooking(true);
-      return;
-    }
-
-    const bookingBedroom: BedroomBooking = {
-      id: room.id,
-      title: room.title,
-      description: room.description,
-      category: room.category.name,
-      garage: room.garage.title,
-      image: room.images[0].url,
-      slug: room.slug,
-      price: room.price,
-      promoActive: room.promoActive,
-      promoprice: room.promoPrice,
-      timeLimit: room.timeLimit,
-      amenitiesRoom: room.amenities.map((amenitie) => amenitie.amenities.name),
-      arrivalDate: selectedDate,
-      departureDate: selectedDepartureDate!,
-      extraServicesActive: room.extraServicesActive,
-      surcharge: room.surcharge,
-      extraServices: room.extraServices,
-      roomNumber: room.roomNumber,
-      createdAt: new Date(),
-      motel: {
-        title: room.motel.razonSocial,
-        location: `${room.motel.city.name}, ${room.motel.city.department.name}`,
-        contactPhone: room.motel.contactPhone,
-        address: room.motel.address,
-        neighborhood: room.motel.neighborhood,
-        slug: room.motel.slug,
-      },
-      timeAwait: MotelConfig.timeAwaitTakeReservation,
-    };
-
-    AddBedroomToBooking(bookingBedroom);
-    localStorage.setItem("redirectUrl", window.location.pathname);
-    router.push("/payment-processing/guest");
-  };
-
-  const AddToReservation = async () => {
-    if (transactionId) {
-      setShowModalReservationProcessing(true);
-      return;
-    }
-
-    if (!selectedDate) {
-      toast.error("Por favor selecciona una fecha antes de continuar.");
-      return;
-    }
-
-    if (selectedTime === "") {
-      toast.error("Por favor selecciona una hora antes de continuar.");
-      return;
-    }
-
-    setshowModalLoading(true);
-    setShowErrorBooking(false);
-    setshowLoading(true);
-
-    const validationResult = await validateDateReservation(
-      selectedDate,
-      selectedDepartureDate!,
-      room.id,
-      room.motel.id
-    );
-    if (!validationResult.isValid) {
-      setshowModalLoading(false);
-      toast.error(validationResult.message, {
-        duration: 7000,
-      });
-      setshowLoading(false);
-      setShowErrorBooking(true);
-      return;
-    }
-
-    const bookingBedroom: BedroomBooking = {
-      id: room.id,
-      title: room.title,
-      description: room.description,
-      category: room.category.name,
-      garage: room.garage.title,
-      image: room.images[0].url,
-      slug: room.slug,
-      price: room.price,
-      promoActive: room.promoActive,
-      promoprice: room.promoPrice,
-      timeLimit: room.timeLimit,
-      amenitiesRoom: room.amenities.map((amenitie) => amenitie.amenities.name),
-      arrivalDate: selectedDate,
-      departureDate: selectedDepartureDate!,
-      extraServicesActive: room.extraServicesActive,
-      extraServices: room.extraServicesActive ? room.extraServices : null,
-      surcharge: room.surcharge,
-      roomNumber: room.roomNumber,
-      createdAt: new Date(),
-      timeAwait: MotelConfig.timeAwaitTakeReservation,
-      motel: {
-        title: room.motel.razonSocial,
-        location: `${room.motel.city.name}, ${room.motel.city.department.name}`,
-        contactPhone: room.motel.contactPhone,
-        address: room.motel.address,
-        neighborhood: room.motel.neighborhood,
-        slug: room.motel.slug,
-      },
-    };
-
-    AddBedroomToBooking(bookingBedroom);
-    setshowLoading(true);
-    localStorage.setItem("redirectUrl", window.location.pathname);
-    router.push("/payment-processing/user");
-  };
+    setIsLoadingSession(status === "loading");
+  }, [status]);
 
   useEffect(() => {
     async function fetchTransactionId() {
-      const transactionId = await getTransactionIdReservation();
-      setTransactionId(transactionId);
+      const id = await getTransactionIdReservation();
+      setTransactionId(id);
     }
-
     fetchTransactionId();
   }, []);
 
-  const ridirectLogin = () => {
+  useEffect(() => {
+    if (selectedDate && selectedTime) {
+      const [hours, minutes] = selectedTime.split(":").map(Number);
+      const selectedDateTime = new Date(selectedDate);
+      selectedDateTime.setHours(hours, minutes, 0, 0);
+
+      const calculatedDepartureDate = new Date(selectedDateTime);
+      calculatedDepartureDate.setHours(
+        calculatedDepartureDate.getHours() + room.timeLimit
+      );
+
+      setDepartureDate(calculatedDepartureDate);
+    } else if (selectedDate) {
+      setDepartureDate(selectedDate);
+    }
+  }, [selectedDate, selectedTime, room.timeLimit]);
+
+  const openDateTimeModal = useCallback((step: "date" | "time") => {
+    setIsDateTimeModalOpen(true);
+    setDateTimeStep(step);
+    document.body.style.overflow = "hidden";
+  }, []);
+
+  const closeDateTimeModal = useCallback(() => {
+    setIsDateTimeModalOpen(false);
+    document.body.style.overflow = "auto";
+  }, []);
+
+  const handleConfirmDateTime = useCallback(() => {
+    if (selectedDate && selectedTime) {
+      const dateTime = new Date(selectedDate);
+      const [hours, minutes] = selectedTime.split(":").map(Number);
+      dateTime.setHours(hours, minutes, 0, 0);
+      toast.success("Fecha y hora seleccionada correctamente.");
+    } else {
+      toast.error("Por favor, selecciona una fecha y una hora.");
+    }
+    closeDateTimeModal();
+  }, [selectedDate, selectedTime, closeDateTimeModal]);
+
+  const createBookingBedroom = useCallback((): BedroomBooking => {
+    return {
+      id: room.id,
+      title: room.title,
+      description: room.description,
+      category: room.category.name,
+      garage: room.garage.title,
+      image: room.images[0].url,
+      slug: room.slug,
+      price: room.price,
+      promoActive: room.promoActive,
+      promoprice: room.promoPrice,
+      timeLimit: room.timeLimit,
+      amenitiesRoom: room.amenities.map((amenitie) => amenitie.amenities.name),
+      arrivalDate: selectedDate!,
+      departureDate: departureDate!,
+      extraServicesActive: room.extraServicesActive,
+      surcharge: room.surcharge,
+      extraServices: room.extraServicesActive ? room.extraServices : null,
+      roomNumber: room.roomNumber,
+      createdAt: new Date(),
+      timeAwait: MotelConfig.timeAwaitTakeReservation,
+      motel: {
+        title: room.motel.razonSocial,
+        location: `${room.motel.city.name}, ${room.motel.city.department.name}`,
+        contactPhone: room.motel.contactPhone,
+        address: room.motel.address,
+        neighborhood: room.motel.neighborhood,
+        slug: room.motel.slug,
+      },
+    };
+  }, [room, selectedDate, departureDate, MotelConfig]);
+
+  const handleReservation = async (isAnonymous: boolean) => {
+    if (transactionId) {
+      setShowModalLoadingReservation(true);
+      return;
+    }
+
+    if (!selectedDate || !selectedTime) {
+      toast.error("Por favor, selecciona una fecha y una hora antes de continuar.");
+      return;
+    }
+
+    setShowModalLoadingReservation(true);
+    setShowLoading(true);
+
+    const validationResult = await validateDateReservation(
+      selectedDate,
+      departureDate!,
+      room.id,
+      room.motel.id
+    );
+
+    if (!validationResult.isValid) {
+      toast.error(validationResult.message, { duration: 7000 });
+      setShowModalLoadingReservation(false);
+      setShowLoading(false);
+      return;
+    }
+
+    const bookingBedroom = createBookingBedroom();
+    addBedroomToBooking(bookingBedroom);
     localStorage.setItem("redirectUrl", window.location.pathname);
-    setshowLoadingLogin(true);
-    router.push("/auth/login");
+    router.push(isAnonymous ? "/payment-processing/guest" : "/payment-processing/user");
+
+    setShowLoading(false);
+    setShowModalLoadingReservation(false);
   };
+
+  const redirectToLogin = useCallback(() => {
+    localStorage.setItem("redirectUrl", window.location.pathname);
+    setShowLoadingLogin(true);
+    router.push("/auth/login");
+  }, [router]);
+
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      closeDateTimeModal();
+    }
+  };
+
+  const isReservationButtonDisabled = showLoading || !selectedDate || !selectedTime;
 
   return (
     <>
+      
+
       <ModalLoadingReservation
-        isOpen={showModalLoading}
-        onClose={() => setshowModalLoading(false)}
+        isOpen={showModalLoadingReservation}
+        onClose={() => setShowModalLoadingReservation(false)}
       />
 
-      <div 
-      className={
-        clsx(
-          {
-            "sticky z-20 top-24": !isSearchOpen,
-            "sticky z-0 top-24": isSearchOpen,
+      {isDateTimeModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+        onClick={handleBackdropClick}
+        >
+          <div className="bg-white md:rounded-lg shadow-lg w-full md:w-1/2 lg:w-1/3 p-6 items-center">
+            <h2 className="text-lg font-semibold mb-4">
+              {dateTimeStep === "date" ? "Selecciona una Fecha" : "Selecciona una Hora"}
+            </h2>
+            {dateTimeStep === "time" && (
+              <div className="relative items-center w-full py-3 mx-auto">
+                <div className="p-4 border-l-4 border-purple-500 rounded-r-xl bg-purple-100">
+                  <div className="flex">
+                    <div className="flex-shrink-0">
+                      <TbClockExclamation className="h-5 w-5 text-purple-600" />
+                    </div>
+                    <div className="ml-3">
+                      <div className="text-sm text-purple-600">
+                        <p>
+                          Es importante que la hora de tu dispositivo esté sincronizada
+                          correctamente.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {dateTimeStep === "date" ? (
+              <div className="w-full flex flex-col items-center mb-4">
+                <CustomDatePicker
+                  selectedDate={selectedDate}
+                  onChange={setSelectedDate}
+                />
+              </div>
+            ) : (
+              <div className="w-full mb-2">
+                <div className="flex justify-center">
+                  <TimeSelector
+                    date={selectedDate}
+                    selectedTime={selectedTime}
+                    onChange={setSelectedTime}
+                  />
+                </div>
+                <div className="w-fit mt-5">
+                  <p>Fecha seleccionada</p>
+                  <p className="text-sm md:text-lg font-bold bg-gray-100 p-2 rounded-md">
+                    {selectedDate ? formatDate(selectedDate) : "N/A"}
+                  </p>
+                </div>
+              </div>
+            )}
+            <div className="flex justify-between">
+              {dateTimeStep === "date" && (
+                <button
+                  onClick={closeDateTimeModal}
+                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 mt-4"
+                >
+                  Cancelar
+                </button>
+              )}
 
-          }
-        )
-      }
-      >
+              {dateTimeStep === "time" && (
+                <button
+                  onClick={() => setDateTimeStep("date")}
+                  className="bg-gray-300 text-gray-700 md:w-fit px-4 py-2 rounded-md hover:bg-gray-400 mt-4"
+                >
+                  Volver
+                </button>
+              )}
+
+              {dateTimeStep === "date" && (
+                <button
+                  onClick={() => selectedDate && setDateTimeStep("time")}
+                  className={clsx("px-4 py-2 rounded-md mt-4", {
+                    "bg-blue-600 text-white hover:bg-blue-700": selectedDate,
+                    "bg-gray-600 text-white hover:bg-gray-700 cursor-not-allowed": !selectedDate,
+                  })}
+                  disabled={!selectedDate}
+                >
+                  Siguiente
+                </button>
+              )}
+
+              {dateTimeStep === "time" && (
+                <button
+                  onClick={handleConfirmDateTime}
+                  disabled={!selectedTime}
+                  className={clsx("px-4 py-2 rounded-md mt-4", {
+                    "bg-blue-600 text-white hover:bg-blue-700": selectedTime,
+                    "bg-gray-600 text-white hover:bg-gray-700 cursor-not-allowed": !selectedTime,
+                  })}
+                >
+                  Confirmar
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Fin Selector de Fecha y Hora Integrado */}
+
+
+      <div className="sticky top-24">
         <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-xl w-full">
           <div className="flex gap-2 items-center justify-end mb-5">
             <p className="text-xs font-extralight">Reserva protegida</p>
@@ -273,16 +330,45 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
               </div>
             )}
           </div>
-          <SelecteDateAndTime
-            timeLimit={room.timeLimit}
-            onSelectedDate={(date, time, departureDate) => {
-              setSelectedDate(date),
-                setSelectedTime(time),
-                setSelectedDepartureDate(departureDate);
-            }}
-          />
+
+          {/* Selector de Fecha y Hora Integrado */}
+          <div className="inline-flex mt-4 w-full">
+            <button
+              onClick={() => openDateTimeModal("date")}
+              className="px-4 py-2 cursor-pointer text-start w-full font-medium text-gray-900 bg-white border border-b-gray-500 border-l-gray-500 border-t-gray-500 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+            >
+              <p className="text-xs font-semibold">Llegada</p>
+              <div className="flex justify-between items-center mt-1">
+                <p className="text-sm font-extralight">
+                  {selectedDate ? formatDate(selectedDate) : "Seleccionar fecha"}
+                </p>
+                <FaRegEdit className="h-4 w-4" />
+              </div>
+            </button>
+            <div className="px-4 py-2 w-full font-medium text-gray-900 bg-white border border-gray-500 rounded-e-lg">
+              <p className="text-xs font-semibold">Salida</p>
+              <p className="text-sm mt-1 font-extralight">
+                {departureDate ? formatDate(departureDate) : "Calculando..."}
+              </p>
+            </div>
+          </div>
+          {selectedDate && (
+            <button
+              onClick={() => openDateTimeModal("time")}
+              className="mt-2 border text-start w-full border-gray-500 px-4 py-2 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
+            >
+              <p className="text-xs font-semibold">Hora de entrada</p>
+              <div className="mt-1 flex items-center justify-between">
+                <p className="text-sm font-extralight">
+                  {selectedTime ? formatTimeWithAmPm(new Date(selectedDate.setHours(Number(selectedTime.split(":")[0]), Number(selectedTime.split(":")[1])))) : "Selecciona una hora"}
+                </p>
+                <FaRegEdit className="h-4 w-4" />
+              </div>
+            </button>
+          )}
+
           <div className="mt-3">
-            {isLoading ? (
+            {isLoadingSession ? (
               <div className="">
                 <div className="w-full h-20 mb-2 bg-gray-400 rounded-md animate-pulse"></div>
                 <div className="w-full h-20 mb-2 bg-gray-400 rounded-md animate-pulse"></div>
@@ -291,14 +377,15 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
               <>
                 <button
                   type="submit"
-                  disabled={showLoading || !selectedDate}
-                  onClick={AddToReservation}
-                  className={clsx({
-                    "flex items-center gap-x-4 w-full mt-2 justify-center rounded-lg bg-red-600 hover:bg-red-700 px-7 py-2 font-medium text-white":
-                      !showLoading,
-                    "flex items-center gap-x-4 w-full mt-2 justify-center rounded-lg bg-red-600 px-7 py-2 font-medium text-white cursor-not-allowed":
-                      showLoading,
-                  })}
+                  disabled={isReservationButtonDisabled}
+                  onClick={() => handleReservation(false)}
+                  className={clsx(
+                    "flex items-center gap-x-4 w-full mt-2 justify-center rounded-lg px-7 py-2 font-medium text-white",
+                    {
+                      "bg-red-600 hover:bg-red-700": !isReservationButtonDisabled,
+                      "bg-red-600 cursor-not-allowed opacity-70": isReservationButtonDisabled,
+                    }
+                  )}
                 >
                   {showLoading && (
                     <svg
@@ -320,10 +407,9 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
                       ></path>
                     </svg>
                   )}
-
                   {showLoading ? (
                     <span>Cargando...</span>
-                  ) : selectedDate ? (
+                  ) : selectedDate && selectedTime ? (
                     <span>Realizar reserva</span>
                   ) : (
                     <span>Seleccionar fecha y hora de entrada</span>
@@ -332,101 +418,99 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
               </>
             ) : (
               <>
-                {
-                  selectedTime === ""
-                    ? (
-                      <div className="p-3 rounded-lg bg-black" >
-                        <p className="text-white text-center" >Seleccinar fecha y hora</p>
+                {selectedTime === "" ? (
+                  <div className="p-3 rounded-lg bg-black">
+                    <p className="text-white text-center">Seleccionar fecha y hora</p>
+                  </div>
+                ) : (
+                  <ul className="mt-2 fade-in space-y-3 mb-6">
+                    <li>
+                      <div className="relative">
+                        {showLoadingLogin && (
+                          <div className="absolute bg-white bg-opacity-60 z-10 h-full w-full flex items-center justify-center">
+                            <div className="flex items-center">
+                              <svg
+                                width="25"
+                                height="25"
+                                fill="currentColor"
+                                className="mr-2 text-red-600 animate-spin"
+                                viewBox="0 0 1792 1792"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z"></path>
+                              </svg>
+                            </div>
+                          </div>
+                        )}
+                        <button onClick={redirectToLogin} disabled={isReservationButtonDisabled}>
+                          <label
+                            className={clsx(
+                              "inline-flex items-center md:gap-2 justify-between w-full p-3 md:p-5 text-gray-900 bg-white border border-gray-500 rounded-lg cursor-pointer text-start",
+                              {
+                                "hover:border-red-500 hover:text-red-500": !isReservationButtonDisabled,
+                                "opacity-70 cursor-not-allowed": isReservationButtonDisabled,
+                              }
+                            )}
+                          >
+                            <div className="block">
+                              <div className="w-full text-md font-semibold">
+                                Reservar con mi usuario
+                              </div>
+                              <div className="w-full text-gray-500 text-xs">
+                                Haz clic aquí para reservar con tu usuario. Inicia sesión
+                                para disfrutar de beneficios exclusivos.
+                              </div>
+                            </div>
+                            <IoArrowForwardOutline className="h-4 w-4 flex-shrink-0" />
+                          </label>
+                        </button>
                       </div>
-                    ) : (
-                      <ul className="mt-2 fade-in space-y-3 mb-6">
-                        <li>
-                          <div className="relative">
-                            {showLoadingLogin && (
-                              <div className="absolute bg-white bg-opacity-60 z-10 h-full w-full flex items-center justify-center">
-                                <div className="flex items-center">
-                                  <svg
-                                    width="25"
-                                    height="25"
-                                    fill="currentColor"
-                                    className="mr-2  text-red-600 animate-spin"
-                                    viewBox="0 0 1792 1792"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z"></path>
-                                  </svg>
-                                </div>
-                              </div>
-                            )}
+                    </li>
 
-                            {showLoading && (
-                              <div className="absolute bg-white bg-opacity-60 z-10 h-full w-full flex items-center justify-center">
-                                <div className="flex items-center"></div>
-                              </div>
-                            )}
-
-                            <button onClick={ridirectLogin}>
-                              <label className="inline-flex items-center md:gap-2 justify-between w-full p-3 md:p-5 text-gray-900 bg-white border border-gray-500 rounded-lg cursor-pointer  hover:border-red-500 hover:text-red-500 text-start">
-                                <div className="block">
-                                  <div className="w-full text-md font-semibold">
-                                    Reservar con mi usuario
-                                  </div>
-                                  <div className="w-full text-gray-500 text-xs">
-                                    Haz clic aquí para reservar con tu usuario. Inicia
-                                    sesión para disfrutar de beneficios exclusivos.
-                                  </div>
-                                </div>
-                                <IoArrowForwardOutline className="h-4 w-4 flex-shrink-0" />
-                              </label>
-                            </button>
+                    <li>
+                      <div className="relative">
+                        {showLoading && (
+                          <div className="absolute bg-white bg-opacity-60 z-10 h-full w-full flex items-center justify-center">
+                            <div className="flex items-center">
+                              <svg
+                                width="24"
+                                height="24"
+                                fill="currentColor"
+                                className="mr-2 text-red-600 animate-spin"
+                                viewBox="0 0 1792 1792"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z"></path>
+                              </svg>
+                            </div>
                           </div>
-                        </li>
-
-                        <li>
-                          <div className="relative">
-                            {showLoading && (
-                              <div className="absolute bg-white bg-opacity-60 z-10 h-full w-full flex items-center justify-center">
-                                <div className="flex items-center">
-                                  <svg
-                                    width="24"
-                                    height="24"
-                                    fill="currentColor"
-                                    className="mr-2 text-red-600 animate-spin"
-                                    viewBox="0 0 1792 1792"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z"></path>
-                                  </svg>
-                                </div>
-                              </div>
+                        )}
+                        <button onClick={() => handleReservation(true)} disabled={isReservationButtonDisabled}>
+                          <label
+                            className={clsx(
+                              "inline-flex items-center md:gap-2 justify-between w-full p-3 md:p-5 text-gray-900 bg-white border border-gray-500 rounded-lg cursor-pointer text-start",
+                              {
+                                "hover:border-red-500 hover:text-red-500": !isReservationButtonDisabled,
+                                "opacity-70 cursor-not-allowed": isReservationButtonDisabled,
+                              }
                             )}
-
-                            {showLoadingLogin && (
-                              <div className="absolute bg-white bg-opacity-60 z-10 h-full w-full flex items-center justify-center">
-                                <div className="flex items-center"></div>
+                          >
+                            <div className="block">
+                              <div className="w-full text-md font-semibold">
+                                Reservar de forma anónima
                               </div>
-                            )}
-
-                            <button onClick={addToReservationAnonymous}>
-                              <label className="inline-flex items-center md:gap-2 justify-between w-full p-3 md:p-5 text-gray-900 bg-white border border-gray-500 rounded-lg cursor-pointer hover:border-red-500 hover:text-red-500 text-start">
-                                <div className="block">
-                                  <div className="w-full text-md font-semibold">
-                                    Reservar de forma anónima
-                                  </div>
-                                  <div className="w-full text-gray-500 text-xs ">
-                                    Haz clic aquí para realizar una reserva de forma
-                                    anónima. Garantizamos la integridad y privacidad de
-                                    tus datos.
-                                  </div>
-                                </div>
-                                <IoArrowForwardOutline className="h-4 w-4 flex-shrink-0" />
-                              </label>
-                            </button>
-                          </div>
-                        </li>
-                      </ul>
-                    )
-                }
+                              <div className="w-full text-gray-500 text-xs">
+                                Haz clic aquí para realizar una reserva de forma anónima.
+                                Garantizamos la integridad y privacidad de tus datos.
+                              </div>
+                            </div>
+                            <IoArrowForwardOutline className="h-4 w-4 flex-shrink-0" />
+                          </label>
+                        </button>
+                      </div>
+                    </li>
+                  </ul>
+                )}
               </>
             )}
           </div>
@@ -436,20 +520,15 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
           <div className="mt-4 pt-4 border-t border-gray-200">
             <div className="flex justify-between text-sm font-medium">
               <span>Total</span>
-              {
-                room.promoActive
-                  ? (
-                    <span>{currencyFormat(room.promoPrice!)}</span>
-                  ) : (
-                    <span>{currencyFormat(room.price)}</span>
-                  )
-              }
+              {room.promoActive ? (
+                <span>{currencyFormat(room.promoPrice!)}</span>
+              ) : (
+                <span>{currencyFormat(room.price)}</span>
+              )}
             </div>
           </div>
         </div>
       </div>
-
-
     </>
   );
 };

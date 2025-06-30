@@ -1,18 +1,19 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { AmenitiesByRoom, BedroomBooking, BedRooms, motelConfig, RoomApi } from "@/interfaces";
 import { useSession } from "next-auth/react";
 import { motion } from "framer-motion";
 import { MdOutlineClose } from "react-icons/md";
 import clsx from "clsx";
-import { SelecteDateAndTime } from "./SelecteDateAndTime";
 import { IoArrowForwardOutline } from "react-icons/io5";
 import { useBookingStore } from "@/store";
 import toast, { Toaster } from "react-hot-toast";
 import { getTransactionIdReservation, validateDateReservation } from "@/actions";
 import { useRouter } from "next/navigation";
-import { ModalLoadingReservation } from "@/components";
-import { currencyFormat } from "@/utils";
+import { CustomDatePicker, ModalLoadingReservation, TimeSelector } from "@/components";
+import { currencyFormat, formatDate, formatTimeWithAmPm } from "@/utils";
+import { FaRegEdit } from "react-icons/fa";
+import { TbClockExclamation } from "react-icons/tb";
 
 interface Props {
     room: RoomApi;
@@ -31,15 +32,16 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
     const [showModalLoading, setshowModalLoading] = useState(false);
     const [showErrorBooking, setShowErrorBooking] = useState(false);
 
-    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-    const [selectedTime, setSelectedTime] = useState("");
-    const [selectedDepartureDate, setSelectedDepartureDate] = useState<Date | null>(null);
+    const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+    const [selectedTime, setSelectedTime] = useState<string>("");
+    const [departureDate, setDepartureDate] = useState<Date | null>(null);
+    const [isDateTimeModalOpen, setIsDateTimeModalOpen] = useState(false);
+    const [dateTimeStep, setDateTimeStep] = useState<"date" | "time">("date");
 
     const [showModalReservationProcessing, setShowModalReservationProcessing] = useState(false);
 
     const AddBedroomToBooking = useBookingStore((state) => state.addBedroomToBooking);
     const [transactionId, setTransactionId] = useState<string | null>(null);
-
 
     const router = useRouter();
 
@@ -48,6 +50,47 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
             setIsLoading(false);
         }
     }, [session, status]);
+
+
+    useEffect(() => {
+        if (selectedDate && selectedTime) {
+            const [hours, minutes] = selectedTime.split(":").map(Number);
+            const selectedDateTime = new Date(selectedDate);
+            selectedDateTime.setHours(hours, minutes, 0, 0);
+
+            const calculatedDepartureDate = new Date(selectedDateTime);
+            calculatedDepartureDate.setHours(
+                calculatedDepartureDate.getHours() + room.timeLimit
+            );
+
+            setDepartureDate(calculatedDepartureDate);
+        } else if (selectedDate) {
+            setDepartureDate(selectedDate);
+        }
+    }, [selectedDate, selectedTime, room.timeLimit]);
+
+    const openDateTimeModal = useCallback((step: "date" | "time") => {
+        setIsDateTimeModalOpen(true);
+        setDateTimeStep(step);
+        document.body.style.overflow = "hidden";
+    }, []);
+
+    const closeDateTimeModal = useCallback(() => {
+        setIsDateTimeModalOpen(false);
+        document.body.style.overflow = "auto";
+    }, []);
+
+    const handleConfirmDateTime = useCallback(() => {
+        if (selectedDate && selectedTime) {
+            const dateTime = new Date(selectedDate);
+            const [hours, minutes] = selectedTime.split(":").map(Number);
+            dateTime.setHours(hours, minutes, 0, 0);
+            toast.success("Fecha y hora seleccionada correctamente.");
+        } else {
+            toast.error("Por favor, selecciona una fecha y una hora.");
+        }
+        closeDateTimeModal();
+    }, [selectedDate, selectedTime, closeDateTimeModal]);
 
     const addToReservationAnonymous = async () => {
         if (transactionId) {
@@ -70,7 +113,7 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
 
         const validationResult = await validateDateReservation(
             selectedDate,
-            selectedDepartureDate!,
+            departureDate!,
             room.id,
             room.motel.id
         );
@@ -98,7 +141,7 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
             timeLimit: room.timeLimit,
             amenitiesRoom: room.amenities.map((amenitie) => amenitie.amenities.id),
             arrivalDate: selectedDate,
-            departureDate: selectedDepartureDate!,
+            departureDate: departureDate!,
             extraServicesActive: room.extraServicesActive,
             surcharge: room.surcharge,
             extraServices: room.extraServices,
@@ -142,7 +185,7 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
 
         const validationResult = await validateDateReservation(
             selectedDate,
-            selectedDepartureDate!,
+            departureDate!,
             room.id,
             room.motel.id
         );
@@ -170,7 +213,7 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
             timeLimit: room.timeLimit,
             amenitiesRoom: room.amenities.map((amenitie) => amenitie.amenities.id),
             arrivalDate: selectedDate,
-            departureDate: selectedDepartureDate!,
+            departureDate: departureDate!,
             extraServicesActive: room.extraServicesActive,
             surcharge: room.surcharge,
             extraServices: room.extraServices,
@@ -208,6 +251,18 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
         router.push("/auth/login");
     };
 
+    useEffect(() => {
+        if (isExpanded) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, [isExpanded]);
+
     return (
         <>
             <Toaster
@@ -219,9 +274,109 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
                 onClose={() => setshowModalLoading(false)}
             />
 
+            {isDateTimeModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+                >
+                    <div className="bg-white md:rounded-lg shadow-lg w-full md:w-1/2 lg:w-1/3 p-6 items-center">
+                        <h2 className="text-lg font-semibold mb-4">
+                            {dateTimeStep === "date" ? "Selecciona una Fecha" : "Selecciona una Hora"}
+                        </h2>
+                        {dateTimeStep === "time" && (
+                            <div className="relative items-center w-full py-3 mx-auto">
+                                <div className="p-4 border-l-4 border-purple-500 rounded-r-xl bg-purple-100">
+                                    <div className="flex">
+                                        <div className="flex-shrink-0">
+                                            <TbClockExclamation className="h-5 w-5 text-purple-600" />
+                                        </div>
+                                        <div className="ml-3">
+                                            <div className="text-sm text-purple-600">
+                                                <p>
+                                                    Es importante que la hora de tu dispositivo esté sincronizada
+                                                    correctamente.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        {dateTimeStep === "date" ? (
+                            <div className="w-full flex flex-col items-center mb-4">
+                                <CustomDatePicker
+                                    selectedDate={selectedDate}
+                                    onChange={setSelectedDate}
+                                />
+                            </div>
+                        ) : (
+                            <div className="w-full mb-2">
+                                <div className="flex justify-center">
+                                    <TimeSelector
+                                        date={selectedDate}
+                                        selectedTime={selectedTime}
+                                        onChange={setSelectedTime}
+                                    />
+                                </div>
+                                <div className="w-fit mt-5">
+                                    <p>Fecha seleccionada</p>
+                                    <p className="text-sm md:text-lg font-bold bg-gray-100 p-2 rounded-md">
+                                        {selectedDate ? formatDate(selectedDate) : "N/A"}
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+                        <div className="flex justify-between">
+                            {dateTimeStep === "date" && (
+                                <button
+                                    onClick={closeDateTimeModal}
+                                    className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 mt-4"
+                                >
+                                    Cancelar
+                                </button>
+                            )}
+
+                            {dateTimeStep === "time" && (
+                                <button
+                                    onClick={() => setDateTimeStep("date")}
+                                    className="bg-gray-300 text-gray-700 md:w-fit px-4 py-2 rounded-md hover:bg-gray-400 mt-4"
+                                >
+                                    Volver
+                                </button>
+                            )}
+
+                            {dateTimeStep === "date" && (
+                                <button
+                                    onClick={() => selectedDate && setDateTimeStep("time")}
+                                    className={clsx("px-4 py-2 rounded-md mt-4", {
+                                        "bg-blue-600 text-white hover:bg-blue-700": selectedDate,
+                                        "bg-gray-600 text-white hover:bg-gray-700 cursor-not-allowed": !selectedDate,
+                                    })}
+                                    disabled={!selectedDate}
+                                >
+                                    Siguiente
+                                </button>
+                            )}
+
+                            {dateTimeStep === "time" && (
+                                <button
+                                    onClick={handleConfirmDateTime}
+                                    disabled={!selectedTime}
+                                    className={clsx("px-4 py-2 rounded-md mt-4", {
+                                        "bg-blue-600 text-white hover:bg-blue-700": selectedTime,
+                                        "bg-gray-600 text-white hover:bg-gray-700 cursor-not-allowed": !selectedTime,
+                                    })}
+                                >
+                                    Confirmar
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* Fin Selector de Fecha y Hora Integrado */}
+
             {isExpanded && (
                 <div
-                    className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-30"
+                    className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-20"
                     onClick={() => setIsExpanded(false)} // Cierra el modal al hacer clic fuera
                 />
             )}
@@ -268,14 +423,41 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
 
                 {isExpanded && (
                     <div className="fade-in mb-4">
-                        <SelecteDateAndTime
-                            timeLimit={0}
-                            onSelectedDate={(date, time, departureDate) => {
-                                setSelectedDate(date),
-                                    setSelectedTime(time),
-                                    setSelectedDepartureDate(departureDate);
-                            }}
-                        />
+                        {/* Selector de Fecha y Hora Integrado */}
+                        <div className="inline-flex mt-4 w-full">
+                            <button
+                                onClick={() => openDateTimeModal("date")}
+                                className="px-4 py-2 cursor-pointer text-start w-full font-medium text-gray-900 bg-white border border-b-gray-500 border-l-gray-500 border-t-gray-500 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+                            >
+                                <p className="text-xs font-semibold">Llegada</p>
+                                <div className="flex justify-between items-center mt-1">
+                                    <p className="text-sm font-extralight">
+                                        {selectedDate ? formatDate(selectedDate) : "Seleccionar fecha"}
+                                    </p>
+                                    <FaRegEdit className="h-4 w-4" />
+                                </div>
+                            </button>
+                            <div className="px-4 py-2 w-full font-medium text-gray-900 bg-white border border-gray-500 rounded-e-lg">
+                                <p className="text-xs font-semibold">Salida</p>
+                                <p className="text-sm mt-1 font-extralight">
+                                    {departureDate ? formatDate(departureDate) : "Calculando..."}
+                                </p>
+                            </div>
+                        </div>
+                        {selectedDate && (
+                            <button
+                                onClick={() => openDateTimeModal("time")}
+                                className="mt-2 border text-start w-full border-gray-500 px-4 py-2 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
+                            >
+                                <p className="text-xs font-semibold">Hora de entrada</p>
+                                <div className="mt-1 flex items-center justify-between">
+                                    <p className="text-sm font-extralight">
+                                        {selectedTime ? formatTimeWithAmPm(new Date(selectedDate.setHours(Number(selectedTime.split(":")[0]), Number(selectedTime.split(":")[1])))) : "Selecciona una hora"}
+                                    </p>
+                                    <FaRegEdit className="h-4 w-4" />
+                                </div>
+                            </button>
+                        )}
 
                         <div className="mt-3">
                             {isLoading ? (

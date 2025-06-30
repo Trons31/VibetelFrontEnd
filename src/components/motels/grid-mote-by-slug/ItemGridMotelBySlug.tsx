@@ -7,10 +7,10 @@ import { RoomImage } from "../../bedrooms/room-image/RoomImage";
 import { useSuggestedRoomStore } from "@/store";
 import { FavoriteRoomCard, RatingRoomCard } from "@/components";
 import { TbPointFilled } from "react-icons/tb";
-import { RoomByMotelApi } from "@/interfaces";
+import { RoomAllApi } from "@/interfaces";
 
 interface Props {
-  room: RoomByMotelApi;
+  room: RoomAllApi;
 }
 
 export const ItemGridMotelBySlug = ({ room }: Props) => {
@@ -45,10 +45,12 @@ export const ItemGridMotelBySlug = ({ room }: Props) => {
           <div
             className={`${styles["image-container"]} relative`}
           >
-            <div className="aspect-[4/3] w-full overflow-hidden rounded-lg relative">
+            <div>
               <RoomImage
                 className="rounded-lg"
-                src={""}
+                src={room.images.length > 0
+                  ? room.images[0].url
+                  : ""}
                 width={600}
                 height={500}
                 alt={room.title}
@@ -92,12 +94,12 @@ export const ItemGridMotelBySlug = ({ room }: Props) => {
               )} */}
               </div>
               <div className="flex justify-start gap-1 items-center" >
-                {/* <span
-                className="text-sm text-gray-700 font-extralight inline-flex items-center
+                <span
+                  className="text-sm text-gray-700 font-extralight inline-flex items-center
                 "
-              >
-                {room.category.name}
-              </span> */}
+                >
+                  {room.category.name}
+                </span>
                 <TbPointFilled className="w-2 h-2 flex-shrink-0" />
                 <span
                   className="text-sm text-gray-700 font-extralight inline-flex items-center

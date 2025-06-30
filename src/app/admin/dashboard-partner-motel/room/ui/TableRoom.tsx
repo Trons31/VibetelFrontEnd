@@ -269,13 +269,15 @@ export const TableRoom = ({ accessToken, garageRoom, categoryRoom }: Props) => {
                             paginatedRooms.map(room => (
                                 <tr key={room.id} className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
                                     <td className=" md:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        <Link href={`/admin/dashboard-partner-motel/room/${room.slug}`} target="_blank" rel="noopener noreferrer">
+                                        <Link href={`/admin/dashboard-partner-motel/room/${room.slug}`} target="_blank" rel="noopener noreferrer" className='flex justify-start'>
                                             <RoomImageAdmin
-                                                src="room3.jpg"
+                                                src={room.images.length > 0
+                                                    ? room.images[0].url
+                                                    : ""}
                                                 width={300}
                                                 height={100}
                                                 alt={room.title}
-                                                className="w-24 h-24 object-cover rounded"
+                                                className="w-24 h-24 object-cover rounded-lg"
                                             />
                                         </Link>
                                     </td>

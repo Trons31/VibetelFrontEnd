@@ -42,10 +42,12 @@ export const ItemGridMotelFilter = ({ room }: Props) => {
            hover:border-gray-400 transition-all duration-300 hover:shadow-lg rounded-lg min-h-[370px] group `}
         >
           <div className={`${styles["image-container"]} relative`}>
-            <div className="aspect-[4/3] w-full overflow-hidden rounded-lg relative">
+            <div>
               <RoomImage
                 className="rounded-lg"
-                src={""}
+                src={room.images.length > 0
+                  ? room.images[0].url
+                  : ""}
                 width={600}
                 height={500}
                 alt={room.title}

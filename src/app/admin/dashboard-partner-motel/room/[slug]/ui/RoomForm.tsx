@@ -21,7 +21,7 @@ import { amenities } from '../../../../../../interfaces/motels.interface';
 
 interface Props {
     accessToken: string;
-    room: Partial<RoomApi> & { roomImage?: ProductWithImage[] };
+    room: Partial<RoomApi>;
     garage: GarageRoomApi[];
     category: CategoryRoomApi[];
     amenities: AmenitiesRoom[];
@@ -290,20 +290,18 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
     };
 
 
-    const OndeleteRoomImage = async (ImageId: number, imageUrl: string) => {
+    const OndeleteRoomImage = async (ImageId: string, imageUrl: string) => {
         setShowLoadingDeleteImage(true);
-        const { ok } = await deleteRoomImage(ImageId, imageUrl);
-        if (ok) {
-            setShowLoadingDeleteImage(false);
-            setValue('images', undefined)
-            toast.success("Imagen eliminada correctamente")
-        } else {
-            setShowLoadingDeleteImage(false);
-            toast.error("No se pudo eliminar la imagen")
+        // const { ok } = await deleteRoomImage(ImageId, imageUrl);
+        // if (ok) {
+        //     setShowLoadingDeleteImage(false);
+        //     setValue('images', undefined)
+        //     toast.success("Imagen eliminada correctamente")
+        // } else {
+        //     setShowLoadingDeleteImage(false);
+        //     toast.error("No se pudo eliminar la imagen")
 
-        }
-
-
+        //}
 
     }
 
@@ -1236,9 +1234,9 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
                     </div>
 
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" >
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3" >
                         {
-                            room.roomImage?.map(image => (
+                            room.images?.map(image => (
                                 <div key={image.id} >
                                     <RoomImage
                                         src={image.url}

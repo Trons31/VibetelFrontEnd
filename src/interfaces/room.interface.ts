@@ -1,4 +1,4 @@
-import { isApprovedStatus } from "./motels.interface";
+import { isApprovedStatus, motelConfig } from "./motels.interface";
 
 export type statusRoom = "AVAILABLE" | "IN_SERVICE" | "CLEANING" | "DISABLED" | "SERVICE_COMPLETED";
 
@@ -49,7 +49,7 @@ export interface Motel {
   updatedAt: string;
   freeService: boolean;
   city: City;
-  motelConfig: MotelConfig;
+  motelConfig: motelConfig;
   images: Image[]; // Si el motel también tiene imágenes
 }
 
@@ -64,16 +64,6 @@ interface City {
   department: Department;
 }
 
-export interface MotelConfig {
-  id: string;
-  timeMinutesCleanRoom: number;
-  inService: boolean;
-  outOfServiceStart: string | null;
-  outOdServiceEnd: string | null;
-  locationLatitude: number;
-  locationLongitude: number;
-  timeAwaitTakeReservation: number;
-}
 
 export interface Image {
   id: string;

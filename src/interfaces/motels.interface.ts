@@ -183,7 +183,6 @@ export interface motelConfig {
     locationLatitude: number | null;
     locationLongitude: number | null;
     timeAwaitTakeReservation: number;
-    motelId: string;
 }
 
 

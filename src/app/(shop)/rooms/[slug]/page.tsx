@@ -78,18 +78,6 @@ export default async function BedRoomPage({ params }: Props) {
     notFound();
   }
 
-  const motelConfig = {
-    id: "default-config-id",
-    timeMinutesCleanRoom: 20,
-    defaultReservationAddTime: 15,
-    inService: true,
-    outOfServiceStart: null,
-    outOfServiceEnd: null,
-    locationLatitude: 4.60971, // Coordenadas de ejemplo
-    locationLongitude: -74.08175,
-    timeAwaitTakeReservation: 20,
-    motelId: "motel-123",
-  };
 
   // if (session) {
   //   inFavoritesValidate = await inFavorites(room.room.id, session.user.id);
@@ -107,21 +95,19 @@ export default async function BedRoomPage({ params }: Props) {
     <>
       {/* <TopMenuRoom room={room.room} /> */}
 
-      {/* 
-      //TODO: Habilitar cuando se trabaje disponibilidad de habitaciones
-        {room.room.status !== "AVAILABLE" && <RoomNotAvailable />}
-      */}
-      {/* 
-      {!room.motel.MotelConfig?.inService && (
-        <NoService
-          startDateOffService={room.room.motel.MotelConfig?.outOfServiceStart!}
-          endDateOffService={room.room.motel.MotelConfig?.outOfServiceEnd!}
-        />
-      )} */}
+      {room.status !== "AVAILABLE" && <RoomNotAvailable />}
+
+      {
+        !room.motel.motelConfig?.inService && (
+          <NoService
+            startDateOffService={room.motel.motelConfig?.outOfServiceStart!}
+            endDateOffService={room.motel.motelConfig?.outOfServiceEnd!}
+          />
+        )}
 
       <AddToReservationMovil
         room={room}
-        MotelConfig={motelConfig}
+        MotelConfig={room.motel.motelConfig}
       />
 
       <div className="mt-12 md:mt-8 md:px-24 2xl:px-64 md:py-14 mb-24 md:mb-16">
@@ -344,7 +330,7 @@ export default async function BedRoomPage({ params }: Props) {
           <div className="col-span-5 w-full">
             <AddToReservationDeskTop
               room={room}
-              MotelConfig={motelConfig}
+              MotelConfig={room.motel.motelConfig}
             />
           </div>
         </div>
@@ -498,7 +484,7 @@ export default async function BedRoomPage({ params }: Props) {
             <div
               className="flex items-center justify-center border border-blue-600 bg-blue-50 rounded-full shadow-sm py-5 px-1.5 md:p-6 text-center hover:bg-gray-100 transition-all cursor-pointer"
             >
-              <span className="text-sm font-bold text-blue-600">
+              <span className="text-xs font-bold text-blue-600">
                 Tarjeta de credito
               </span>
             </div>

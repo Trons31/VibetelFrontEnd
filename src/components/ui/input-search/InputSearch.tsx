@@ -29,8 +29,6 @@ export const InputSearch = ({ openSearch, closeSearch, location }: Props) => {
     const router = useRouter();
 
     const { searches } = useSearchStore();
-    const closeSearchStore = useUIStore((state) => state.closeSearch);
-    const openSearchStore = useUIStore((state) => state.openSearch);
     const [topRooms, setTopRooms] = useState<room[]>([])
     const [suggestedRooms, setSuggestedRooms] = useState<room[]>([]);
 
@@ -68,7 +66,6 @@ export const InputSearch = ({ openSearch, closeSearch, location }: Props) => {
             setSuggestedRooms([]);
             setSearchTerm("");
             setShowSearch(false);
-            closeSearchStore();
             closeSearch();
         }
     };
@@ -254,8 +251,7 @@ export const InputSearch = ({ openSearch, closeSearch, location }: Props) => {
                             title="Buscar habitaciones"
                             onClick={() => {
                                 setShowSearch(true),
-                                    openSearch(),
-                                    openSearchStore()
+                                    openSearch()
                             }}
                             className='mx-1 hidden md:block p-2 rounded-md transition-all hover:bg-gray-200' >
                             <IoSearchOutline className="w-5 h-5" />
