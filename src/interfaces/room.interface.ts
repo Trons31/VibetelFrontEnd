@@ -30,7 +30,7 @@ export interface RoomApi {
   motel: Motel;
 }
 
-export interface Motel {
+interface Motel {
   id: string;
   razonSocial: string;
   identificationRepresentante: string;
