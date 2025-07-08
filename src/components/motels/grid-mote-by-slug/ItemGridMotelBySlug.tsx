@@ -40,7 +40,7 @@ export const ItemGridMotelBySlug = ({ room }: Props) => {
       >
         <div
           className={`${styles["card-content"]} cursor-pointer bg-white border border-transparent mb-1
-           hover:border-gray-400 transition-all duration-300 hover:shadow-lg rounded-lg min-h-[370px] group `}
+           hover:border-gray-300 transition-all duration-300 hover:shadow-lg rounded-lg min-h-[370px] group `}
         >
           <div
             className={`${styles["image-container"]} relative`}

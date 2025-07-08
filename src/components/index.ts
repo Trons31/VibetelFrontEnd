@@ -52,6 +52,9 @@ export * from "./ui/input-search/InputSearchMotelMovil";
 export * from "./ui/no-found-search/NoFoundSearch";
 export * from "./bedrooms/suggested-and-top-room/SuggestedAndTopRoom";
 export * from "./ui/no-location-user/NoLocationUser";
+export * from "./ui/dropdown/Dropdown";
+export * from "./ui/dropdown/DropdownItem";
+
 
 export * from "./search/GridRoomSearch/GridRoomSearch";
 
@@ -61,8 +64,6 @@ export * from "./ui-admin-motel/top-menu/TopMenuAdminMotel";
 
 export * from "./ui-admin-motel/sidebar-movil/SideBarMovil";
 export * from "./ui-admin-motel/sidebar/SideBarAdminMotel";
-export * from "./ui-admin-motel/sidebar/CompactSideBar";
-export * from "./ui-admin-motel/room/RoomImageAdmin";
 export * from "./ui-admin-motel/room/RoomManager";
 export * from "./ui-admin-motel/room/ActionsManager";
 export * from "./ui-admin-motel/room/CleaningTimeDisplay";
@@ -95,6 +96,11 @@ export * from "./ui-admin-motel/service/AddTimeService";
 export * from "./ui-admin-motel/service/DetailAddTimeService";
 export * from "./ui-admin-motel/reservation-requests/TotalReservationRequests";
 export * from "./ui-admin-motel/content-wrapper/ContentWrapper";
+export * from "./ui-admin-motel/app-sidebar/AppSidebar";
+export * from "./ui-admin-motel/app-header/AppHeader";
+export * from "./ui-admin-motel/room/RoomImageAdmin";
+
+
 
 export * from "./ui-super-admin/sidebar/SideBarSuperAdmin";
 export * from "./ui-super-admin/top-menu/TopMenuSuperAdmin";

@@ -4,7 +4,7 @@ import { FaImage } from 'react-icons/fa'
 export const SkeletonMotels = () => {
   return (
     <>
-      <div className='bg-gray-100 rounded-lg border-gray-200 shadow-md' >
+      <div className='bg-gray-100 max-w-md rounded-lg border-gray-200 shadow-md' >
 
         <div className="bg-gray-500 rounded-t-lg flex justify-center animate-pulse">
           <FaImage className='text-white h-56 w-36' />

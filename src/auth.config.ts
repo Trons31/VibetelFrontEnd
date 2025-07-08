@@ -20,6 +20,8 @@ export const authConfig: NextAuthConfig = {
                 token.accessToken = user.token;
                 token.user = {
                     id: user.id,
+                    name: user.name,
+                    lastName: user.lastName,
                     email: user.email,
                     roles: user.roles,
                 };
@@ -71,6 +73,8 @@ export const authConfig: NextAuthConfig = {
 
                     return {
                         id: user.id,
+                        name: user.name,
+                        lastName: user.lastname,
                         email: user.email,
                         roles: user.roles,
                         token: user.token

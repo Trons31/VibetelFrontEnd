@@ -2,7 +2,7 @@
 * Modulos node para la utilizacion de un proyecto : ___npm install__
 * Iconos : ___npm install react-icons --save___
 * Zustand ' Gestor de estado ' : ___npm install zustand__
-* Toast : ___npm install --save react-toastify__
+* Toast : ___npm install react-hot-toast__
 * TailWind Estilos condicionales : ___npm install clsx___
 * Slide : ___npm install swiper___
 * Auth.Js : __npm install next-auth@beta__

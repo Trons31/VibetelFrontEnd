@@ -58,7 +58,7 @@ export const SwiperBedrooms = ({ rooms, className }: Props) => {
             >
               <div
                 className={`${styles["card-content"]} group fade-in bg-white border border-transparent mb-12
-              hover:border-gray-400 transition-all duration-300 hover:shadow-lg h-[370px] rounded-lg `}
+              hover:border-gray-300 transition-all duration-300 hover:shadow-lg h-[370px] rounded-lg `}
               >
                 <div className={`${styles["image-container"]} relative`}>
                   <div className="aspect-[4/3] w-full overflow-hidden rounded-lg relative">

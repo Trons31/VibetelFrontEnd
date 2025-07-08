@@ -7,3 +7,5 @@ export * from './admin/admin-store';
 export * from './location/location-store';
 export * from './search/search-store';
 export * from './suggested-room/suggested-room-store';
+export * from './ui-admin/ui-sidebar';
+

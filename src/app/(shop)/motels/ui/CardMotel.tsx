@@ -91,7 +91,8 @@ export const CardMotel = ({ location }: Props) => {
             {
                 isLoading
                     ? (
-                        <div className="grid grid-cols md:grid-cols-3 gap-10 p-2 md:px-24">
+                        <div className="grid grid-cols md:grid-cols-3 xl:grid-cols-4 gap-0 md:gap-10 p-2 md:px-24">
+                            <SkeletonMotels />
                             <SkeletonMotels />
                             <SkeletonMotels />
                             <SkeletonMotels />

@@ -65,7 +65,7 @@ export const SwiperMobileBedrooms = ({ rooms, className }: Props) => {
           <SwiperSlide key={room.slug}>
             <div
               className={`${styles["card-content"]} bg-white border border-transparent mb-12
-          hover:border-gray-400 hover:shadow-lg h-[370px] rounded-lg `}
+          hover:border-gray-300 hover:shadow-lg h-[370px] rounded-lg `}
             >
               <div className={`${styles["image-container"]} relative`}>
                 <Link

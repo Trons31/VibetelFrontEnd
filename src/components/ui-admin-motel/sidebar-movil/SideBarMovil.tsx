@@ -32,6 +32,16 @@ export const SideBarMovil = ({ motelStatus, motelName, motelImage, subscription 
 
   const pathname = usePathname()
 
+  const TIER_ORDER: Tier[] = ['FREE', 'BASIC', 'PREMIUM', 'ENTERPRISE'];
+
+  const getNextTier = (current: Tier): Tier | null => {
+    const currentIndex = TIER_ORDER.indexOf(current);
+    return currentIndex < TIER_ORDER.length - 1 ? TIER_ORDER[currentIndex + 1] : null;
+  };
+
+  const nextTier = getNextTier(subscription);
+
+
   useEffect(() => {
     if (isSideMenuOpenAdminMotel) {
       document.body.style.overflowY = 'hidden';
@@ -373,12 +383,23 @@ export const SideBarMovil = ({ motelStatus, motelName, motelImage, subscription 
               )
           )}
         </div>
-        <div className="px-6 w-full pt-4 flex justify-center items-center border-t absolute bottom-0 left-0">
-          <button onClick={() => logout()} className="px-4 py-3 mb-5 flex items-center w-full hover:bg-gray-200 space-x-2 rounded-md text-gray-600 group">
-            <BiLogOut className='text-gray-600 w-5 h-5' />
-            <span className="group-hover:text-gray-700">Salir</span>
-          </button>
-        </div>
+
+        {nextTier && (
+          <div className="mx-auto mb-10 w-full max-w-60 rounded-2xl bg-gray-100 px-4 py-5 text-center">
+            <h3 className="mb-2 font-semibold text-gray-900">
+              Pasa al plan {nextTier}
+            </h3>
+            <p className="mb-4 text-gray-500 text-xs">
+              Mejora tu experiencia accediendo a más beneficios con el plan <strong>{nextTier}</strong>.
+            </p>
+            <Link
+              href={`/admin/dashboard-partner-motel/upgrade?tier=${nextTier}`}
+              className="flex items-center justify-center p-3 font-medium text-white rounded-lg bg-indigo-600 text-sm hover:bg-indigo-700"
+            >
+              Actualizar a {nextTier}
+            </Link>
+          </div>
+        )}
       </nav>
     </div>
   );

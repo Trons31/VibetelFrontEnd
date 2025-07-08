@@ -7,6 +7,7 @@ declare module "next-auth" {
     user: {
       id: string;
       name: string;
+      lastName: string;
       email: string;
       emailVerified?: boolean;
       roles: string[];
@@ -17,6 +18,8 @@ declare module "next-auth" {
   // Extiende la interfaz de `User` para incluir los campos personalizados
   interface User {
     id: string;
+    name: string;
+    lastName: string;
     email: string;
     roles: string[];
     token: string;  // <-- Aquí el token como lo tienes en tu respuesta
@@ -27,6 +30,8 @@ declare module "next-auth" {
     accessToken: string;
     user: {
       id: string;
+      name: string;
+      lastName: string;
       email: string;
       roles: string[];
     };

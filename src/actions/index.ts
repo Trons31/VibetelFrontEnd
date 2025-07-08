@@ -72,7 +72,6 @@ export { createUpdateBankMotel } from './motels/create-update-bank-motel';
 export { getMotelInfoBySlug } from './motels/get-motel-info-slug';
 export { getRoomInAviableByMotel } from './motels/get-room-in-aviable-by-motel';
 export { getMostFrecuentedMotels } from './motels/get-most-frequented-motels';
-export { getMostReservedMotels } from './motels/get-most-reserved-motels';
 export { updateInServiceMotel } from './motels/update-in-service-motel';
 
 

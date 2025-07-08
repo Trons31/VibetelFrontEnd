@@ -145,6 +145,16 @@ body {
   background: #555; /* Color del scrollbar al hacer hover */
 }
 
+
+.custom-scrollbar-hidden {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+.custom-scrollbar-hidden::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
 .carousel-container {
   position: relative;
   height: 120px;

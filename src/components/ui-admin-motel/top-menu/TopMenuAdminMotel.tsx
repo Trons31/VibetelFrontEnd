@@ -9,6 +9,7 @@ import clsx from 'clsx';
 import { formatDate } from '@/utils';
 import { IoIosArrowDown } from 'react-icons/io';
 import { FaCircleArrowLeft } from 'react-icons/fa6';
+import { UserDropdown } from './UserDropdown';
 
 interface Props {
   accessToken: string;
@@ -91,7 +92,7 @@ export const TopMenuAdminMotel = ({ accessToken, motelConfig, motelStatus }: Pro
             }
           </div>
 
-          <div className="flex space-x-2">
+          <div className="flex px-4 items-center">
             {/* <div hidden className="md:block">
           <div className="relative flex items-center text-gray-400 focus-within:text-cyan-400">
             <span className="absolute left-4 h-6 flex items-center pr-3 border-r border-gray-300">
@@ -101,15 +102,7 @@ export const TopMenuAdminMotel = ({ accessToken, motelConfig, motelStatus }: Pro
           </div>
         </div> */}
 
-            {/* <button className="flex items-center justify-center w-10 h-10 rounded-xl border bg-gray-100 focus:bg-gray-100 active:bg-gray-200 md:hidden">
-              <CiSearch />
-            </button> */}
-            <button className="flex items-center justify-center w-10 h-10 rounded-xl border bg-gray-100 focus:bg-gray-100 active:bg-gray-200">
-              <CiChat1 size={25} />
-            </button>
-            <button className="flex items-center justify-center w-10 h-10 rounded-xl border bg-gray-100 focus:bg-gray-100 active:bg-gray-200">
-              <CiBellOn size={25} />
-            </button>
+            <UserDropdown/>
           </div>
         </div>
       </div >

@@ -1,9 +1,9 @@
 import { redirect } from 'next/navigation';
 import { auth } from '@/auth.config';
-import { ContentWrapper, MenuOptions, SideBarAdminMotel, SideBarMovil, TopMenuAdminMotel, TotalReservationRequests, Tracker } from '@/components';
 import { getRoomInAviableByMotel, getTotalReservationTodayByMotel } from '@/actions';
 import axios from 'axios';
 import { MotelApi } from '@/interfaces';
+import ClientAdminLayout from '@/components/ui-admin-motel/layout/ClientAdminLayout';
 
 
 export default async function DashboardLayout({
@@ -45,60 +45,11 @@ export default async function DashboardLayout({
 
 
   return (
-    <>
-      <SideBarMovil
-        motelStatus={motelExist.isApproved}
-        motelName={motelExist.razonSocial}
-        motelImage={motelExist.images.length === 0 ? undefined : motelExist.images[0]}
-        subscription={motelExist.subscriptionTier}
-      />
-
-      <SideBarAdminMotel
-        motelStatus={motelExist.isApproved}
-        motelImage={motelExist.images.length === 0 ? undefined : motelExist.images[0]}
-        motelName={motelExist.razonSocial}
-        subscription={motelExist.subscriptionTier}
-      />
-
-
-      <ContentWrapper
-        isApproved={motelExist.isApproved}
-        accessToken={session.accessToken!}
-        motelConfig={motelExist.motelConfig}
-      >
-        {children}
-      </ContentWrapper>
-
-
-      {/*Herramientas para plan gratuito*/}
-      {
-        motelExist.isApproved === "APPROVED" && motelExist.subscriptionTier === "FREE" && (
-          <TotalReservationRequests />
-        )
-      }
-      {/*Herramientas para plan gratuito*/}
-
-
-
-      {/*Herramientas para plan pago*/}
-      {
-        motelExist.isApproved === "APPROVED" && motelExist.subscriptionTier && motelExist.subscriptionTier !== "FREE" && (
-          <MenuOptions
-            motelId={motelExist.id}
-            roomsInAvailable={rooms}
-            totalReservation={totalReservation}
-          />
-        )}
-
-      {
-        motelExist.isApproved === "APPROVED" && motelExist.subscriptionTier && motelExist.subscriptionTier !== "FREE" && (
-          <Tracker
-            motelId={motelExist.id!}
-          />
-        )
-      }
-      {/* Herramientas para plan con dashboard de administracion */}
-
-    </>
+    <ClientAdminLayout
+    motel={motelExist}
+    accessToken={session.accessToken}
+    >
+      {children}
+    </ClientAdminLayout>
   );
 }

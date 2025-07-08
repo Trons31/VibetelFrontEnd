@@ -35,7 +35,7 @@ export const ItemRoom = ({ room, location }: Props) => {
           <div>
             <RoomImage
               className="rounded-lg"
-              src={room.images[0]}
+              src={room.images[0].url}
               width={600}
               height={500}
               alt={room.title}

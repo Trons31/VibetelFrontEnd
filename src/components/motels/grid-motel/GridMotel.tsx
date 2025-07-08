@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { titleFont } from "@/config/fonts";
-import { MotelMostReserved } from "@/interfaces/motels.interface";
+import { MotelApi } from "@/interfaces/motels.interface";
 import { ItemMotel } from "./ItemMotel";
 import { formatDate } from "@/utils";
 import { ModalLocationMotel, ModalPopup, OptionsPopover } from "@/components";
@@ -14,7 +14,7 @@ import { TbPointFilled } from "react-icons/tb";
 import { FaBuildingCircleArrowRight } from "react-icons/fa6";
 
 interface Props {
-  motels: MotelMostReserved[];
+  motels: MotelApi[];
 }
 
 export const GridMotel = ({ motels }: Props) => {
@@ -27,29 +27,29 @@ export const GridMotel = ({ motels }: Props) => {
         {motels.map((motel) => (
           <div key={motel.slug} className="p-2 mb-5">
             <ModalLocationMotel
-              motelName={motel.title}
-              motelLocationLatitude={motel.MotelConfig!.locationLatitude!}
-              motelLocationLongitude={motel.MotelConfig!.locationLongitude!}
+              motelName={motel.razonSocial}
+              motelLocationLatitude={motel.motelConfig!.locationLatitude!}
+              motelLocationLongitude={motel.motelConfig!.locationLongitude!}
               isOpen={openModalLocationMotel}
               onClose={() => setOpenModalLocationMotel(false)}
             />
 
             <div className="flex py-4 justify-between items-center">
               <div>
-                {!motel.MotelConfig?.inService && (
+                {!motel.motelConfig?.inService && (
                   <button
                     onClick={() => setModalNoServiceMotel(true)}
                     className="hidden md:block bg-black px-2 py-1 rounded-lg"
                   >
                     <p className="text-white text-xs group-hover:text-black">
                       Fuera de servicio desde{" "}
-                      {formatDate(motel.MotelConfig?.outOfServiceStart!)} hasta{" "}
-                      {formatDate(motel.MotelConfig?.outOfServiceEnd!)}
+                      {formatDate(motel.motelConfig?.outOfServiceStart!)} hasta{" "}
+                      {formatDate(motel.motelConfig?.outOfServiceEnd!)}
                     </p>
                   </button>
                 )}
 
-                {!motel.MotelConfig?.inService && (
+                {!motel.motelConfig?.inService && (
                   <>
                     <button
                       onClick={() => setModalNoServiceMotel(true)}
@@ -57,12 +57,12 @@ export const GridMotel = ({ motels }: Props) => {
                     >
                       <p className="text-white text-xs group-hover:text-black">
                         Fuera de servicio hasta{" "}
-                        {formatDate(motel.MotelConfig?.outOfServiceEnd!)}
+                        {formatDate(motel.motelConfig?.outOfServiceEnd!)}
                       </p>
                       <FaQuestionCircle className="text-white" />
                     </button>
                     <ModalPopup
-                      title={motel.title}
+                      title={motel.razonSocial}
                       isOpen={modalNoServiceMotel}
                       onClose={() => setModalNoServiceMotel(false)}
                     >
@@ -72,13 +72,13 @@ export const GridMotel = ({ motels }: Props) => {
                           comprendidas desde el
                           <strong>
                             {` ${formatDate(
-                              motel.MotelConfig?.outOfServiceStart!
+                              motel.motelConfig?.outOfServiceStart!
                             )} `}
                           </strong>
                           hasta el
                           <strong>
                             {` ${formatDate(
-                              motel.MotelConfig?.outOfServiceEnd!
+                              motel.motelConfig?.outOfServiceEnd!
                             )}.`}
                           </strong>
                         </p>
@@ -99,14 +99,14 @@ export const GridMotel = ({ motels }: Props) => {
                     <p
                       className={` ${titleFont.className} antialiased capitalize text-2xl font-semibold mr-2  `}
                     >
-                      {motel.title}
+                      {motel.razonSocial}
                     </p>
                   </div>
                 </div>
                 <div className="flex gap-2 px-2 items-center mt-1" >
                   <p className="flex items-center text-xs gap-2" >
                     <MdOutlineBed className="h-4 w-4" />
-                    20 habitaciones
+                    {motel.totalRooms} habitaciones
                   </p>
                   <TbPointFilled className="w-2 h-2 flex-shrink-0" />
                   <p className="flex items-center text-xs gap-2" >
@@ -173,8 +173,7 @@ export const GridMotel = ({ motels }: Props) => {
                 </>
               </OptionsPopover>
             </div>
-            <ItemMotel motel={motel.id} />
-
+            <ItemMotel rooms={motel.rooms} />
           </div>
         ))}
       </div>

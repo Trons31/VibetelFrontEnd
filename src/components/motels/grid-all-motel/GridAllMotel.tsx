@@ -8,7 +8,7 @@ interface Props {
 export const GridAllMotel = ({ motels }: Props) => {
   return (
     <>
-      <div className="grid grid-cols md:grid-cols-3 gap-0 md:gap-10 justify-center md:px-24">
+      <div className="grid grid-cols md:grid-cols-3 xl:grid-cols-4 gap-0 md:gap-10 justify-center md:px-24">
         {
           motels.map(motel => (
             <ItemAllMotel

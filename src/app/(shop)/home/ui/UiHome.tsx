@@ -1,17 +1,18 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react'
-import { getMostReservedMotels } from '@/actions';
 import { GridMotel, ModalLocationUser, ModalLocationUserMovil, NoLocationUser } from '@/components';
-import { MotelMostReserved, searchCity } from '@/interfaces';
+import { MotelApi, searchCity } from '@/interfaces';
 import { useLocationStore } from '@/store';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import axios from 'axios';
 
 
 export const UiHome = () => {
 
     const { locationUser } = useLocationStore();
 
-    const [motels, setMotels] = useState<MotelMostReserved[]>([]);
+    const [motels, setMotels] = useState<MotelApi[]>([]);
     const [locationLoaded, setLocationLoaded] = useState(false);
     const [detectedLocation, setDetectedLocation] = useState<searchCity | undefined>(undefined);
     const [modalLocationUser, setModalLocationUser] = useState(false);
@@ -21,11 +22,19 @@ export const UiHome = () => {
     const fetchMotels = useCallback(async () => {
         if (!detectedLocation?.city) return;
         setIsLoading(true);
-        const data = await getMostReservedMotels(detectedLocation?.city!);
-        if (data.ok) {
-            const { motels } = data;
-            setMotels(motels ?? []);
+
+        try {
+            const response = await axios.get<{ motels: MotelApi[], total: number }>(`${process.env.NEXT_PUBLIC_API_ROUTE}motel`);
+            setMotels(response.data.motels);
+        } catch (error: any) {
+            setMotels([]);
+            console.error("Error al los moteles con sus habitaciones:", error);
+            redirect("/")
+        } finally {
+            setIsLoading(false);
         }
+
+
         setIsLoading(false);
     }, [detectedLocation]);
 
