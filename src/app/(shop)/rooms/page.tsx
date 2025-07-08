@@ -19,7 +19,7 @@ export default async function AllBedroomPage() {
     const response = await axios.get<CategoryRoomApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}room/category`);
     category = response.data;
   } catch (error: any) {
-    throw new Error(`Ups! Error al obtener las categorias de las habitaciones`);
+   redirect("/");
   }
 
   let garage: GarageRoomApi[];
@@ -27,7 +27,7 @@ export default async function AllBedroomPage() {
     const response = await axios.get<GarageRoomApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}room/garage`);
     garage = response.data;
   } catch (error: any) {
-    throw new Error(`Ups! Error al obtener los garajes de las habitaciones`);
+    redirect("/");
   }
 
   let amenities: AmenitiesRoomApi[];
@@ -35,7 +35,7 @@ export default async function AllBedroomPage() {
     const response = await axios.get<AmenitiesRoomApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}room/amenities`);
     amenities = response.data;
   } catch (error: any) {
-    throw new Error(`Ups! Error al obtener las comodidades de las habitaciones`);
+    redirect("/");
   }
 
 
