@@ -1,15 +1,14 @@
 'use client';
 
 import { useForm } from "react-hook-form";
-import { AmenitiesMotelInfo, City, Country, Department } from "@/interfaces";
+import { AmenitiesMotelInfo, City, CityApi, CountryApi, DepartmentApi } from "@/interfaces";
 import clsx from "clsx";
 import { IoAlertCircleOutline } from "react-icons/io5"
 import { ChangeEvent, useState } from "react";
-import { registerMotel } from "@/actions";
-import { useSession } from "next-auth/react";
 import axios from "axios";
 import { ModalPopup } from "@/components";
 import toast, { Toaster } from "react-hot-toast";
+import { useSession } from "next-auth/react";
 
 type FormInputs = {
     nameRepresent: string;
@@ -59,9 +58,9 @@ type stepsForm = "representativeMotel" | "DataMotel" | "LocationAndAmenitiesMote
 
 interface Props {
     motelPartner: string;
-    countries: Country[]
-    departments: Department[]
-    cities: City[]
+    countries: CountryApi[]
+    departments: DepartmentApi[]
+    cities: CityApi[]
     amenitiesMotel: AmenitiesMotelInfo[]
 }
 
@@ -83,8 +82,8 @@ export const RegisterForm = ({ motelPartner, departments, countries, cities, ame
     const [inputsAmenities, setInputs] = useState<string[]>(['']);
     const [selectedCountry, setSelectedCountry] = useState<string>('');
     const [selectedDepartment, setSelectedDepartment] = useState<string>('');
-    const [filteredDepartments, setFilteredDepartments] = useState<Department[]>([]);
-    const [filteredCities, setFilteredCities] = useState<City[]>([]);
+    const [filteredDepartments, setFilteredDepartments] = useState<DepartmentApi[]>([]);
+    const [filteredCities, setFilteredCities] = useState<CityApi[]>([]);
     const [formattedPhoneNumber, setFormattedPhoneNumber] = useState("");
     const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
 
@@ -159,8 +158,7 @@ export const RegisterForm = ({ motelPartner, departments, countries, cities, ame
             //         formData.append('amenitiesMotel', selectedAmenities[i]);
             //     }
             // }
-            cityId: "e46c3e23-b704-448e-a8ee-74943c245cde"
-            //cityId: data.city
+            cityId: data.city
         };
 
         try {
@@ -198,7 +196,7 @@ export const RegisterForm = ({ motelPartner, departments, countries, cities, ame
         setValueLocationAndAmenities('country', selectedCountryId);
         triggerLocationAndAmenities('country');
 
-        const countryDepartments: Department[] = departments.filter(department => department.countryId === selectedCountryId);
+        const countryDepartments: DepartmentApi[] = departments.filter(department => department.country.geonameId === selectedCountryId);
         setFilteredDepartments(countryDepartments);
 
         setFilteredCities([]);
@@ -212,7 +210,7 @@ export const RegisterForm = ({ motelPartner, departments, countries, cities, ame
         triggerLocationAndAmenities('department');
 
         // Filtrar las ciudades según el departamento seleccionado
-        const departmentCities: City[] = cities.filter(city => city.departmentId === selectedDepartmentId);
+        const departmentCities: CityApi[] = cities.filter(city => city.department.geonameId === selectedDepartmentId);
         setFilteredCities(departmentCities);
     };
 
@@ -723,7 +721,7 @@ export const RegisterForm = ({ motelPartner, departments, countries, cities, ame
                                             >
                                                 <option value=""> [ Seleccione país]</option>
                                                 {countries.map(country => (
-                                                    <option key={country.id} value={country.id}>{country.name}</option>
+                                                    <option key={country.geonameId} value={country.geonameId}>{country.name}</option>
                                                 ))}
                                             </select>
 
@@ -767,7 +765,7 @@ export const RegisterForm = ({ motelPartner, departments, countries, cities, ame
                                             >
                                                 <option value=""> [ Seleccione departamento ]</option>
                                                 {filteredDepartments.map(department => (
-                                                    <option key={department.id} value={department.id}>{department.name}</option>
+                                                    <option key={department.geonameId} value={department.geonameId}>{department.name}</option>
                                                 ))}
                                             </select>
                                             <label
@@ -808,7 +806,9 @@ export const RegisterForm = ({ motelPartner, departments, countries, cities, ame
                                                 {...registerLocationAndAmenities('city', { required: true })}
                                                 disabled={!selectedDepartment}
                                             >
-                                                <option value="" disabled> [ Seleccione ciudad ]</option>
+                                                <option 
+                                                value=""
+                                                 disabled> [ Seleccione ciudad ]</option>
                                                 {filteredCities.map(city => (
                                                     <option key={city.id} value={city.id}>{city.name}</option>
                                                 ))}

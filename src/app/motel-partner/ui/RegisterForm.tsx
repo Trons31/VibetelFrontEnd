@@ -1,5 +1,5 @@
 'use client';
-import { login, registerMotelPartner } from '@/actions';
+import { login } from '@/actions';
 import axios from 'axios';
 import clsx from "clsx";
 import Link from "next/link"
@@ -7,7 +7,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEye } from 'react-icons/fa';
 import { FaEyeSlash } from 'react-icons/fa';
-import { IoInformationOutline } from 'react-icons/io5';
 
 
 type FormInputs = {

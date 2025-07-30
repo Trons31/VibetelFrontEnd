@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { getMotelInfoBySlug } from "@/actions";
 import { SideInfo } from "./ui/SideInfo";
 import { InfoMotel } from "./ui/InfoMotel";
 import { TopMenuMotel } from "@/components";
@@ -62,7 +61,7 @@ export default async function MotelInfoPage({ params }: Props) {
     <>
       <TopMenuMotel />
       <div className="w-full">
-        <div className="mt-24 px-2 flex flex-col md:grid md:px-28 2xl:px-64 sm:grid-cols-10 md:space-x-20 mb-10 ">
+        <div className="mt-24 px-2 flex flex-col md:grid lg:px-28 2xl:px-64 sm:grid-cols-10 md:space-x-10 lg:space-x-20 mb-10 ">
           <SideInfo motel={motel} />
           <InfoMotel motel={motel} />
         </div>

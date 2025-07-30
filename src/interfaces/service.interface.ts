@@ -54,7 +54,7 @@ interface ServiceItem {
 export interface Service {
   id: string;
   departureDate: Date;
-  type: "reservation" | "noReservation",
+  type: "reservation" | "no-reservation",
   subTotal: number;
   total: number;
   nickName?: string | null;

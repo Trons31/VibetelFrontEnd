@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from "next/link";
 import { RoomImage } from '@/components/bedrooms/room-image/RoomImage';
-import { ReservationByUser } from '@/interfaces/reservation.interface';
+import { ReservationByUserApi } from '@/interfaces/reservation.interface';
 import { currencyFormat } from '@/utils';
 import { IoIosArrowForward } from "react-icons/io";
 import { format } from 'date-fns';
@@ -13,7 +13,7 @@ import { ModalPopup, MoldaRating } from '@/components';
 import { FaQuestionCircle } from 'react-icons/fa';
 
 interface Props {
-    reservation: ReservationByUser;
+    reservation: ReservationByUserApi;
 }
 
 const formatDate = (date: Date) => {
@@ -25,8 +25,9 @@ export const ItemReservation = ({ reservation }: Props) => {
     const [modalRating, setModalRating] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false)
 
+
     let StateOfReserve;
-    switch (reservation.status) {
+    switch (reservation.serviceItem?.status) {
         case 'en_espera':
             StateOfReserve = "En espera del servicio"
             break;
@@ -58,7 +59,7 @@ export const ItemReservation = ({ reservation }: Props) => {
     return (
         <>
 
-            <MoldaRating
+            {/* <MoldaRating
                 isOpen={modalRating}
                 serviceId={reservation.id}
 
@@ -67,11 +68,11 @@ export const ItemReservation = ({ reservation }: Props) => {
 
                 roomId={reservation.roomId!}
                 onClose={() => setModalRating(false)}
-            />
+            /> */}
 
             <div className="bg-white rounded-none md:rounded-md shadow-lg border border-gray-200 p-4 mb-5" >
 
-                <div className='flex justify-end w-full px-1 mb-2' >
+                {/*     <div className='flex justify-end w-full px-1 mb-2' >
                     {
                         reservation.ratings?.rating! > 0
                             ? (
@@ -107,14 +108,14 @@ export const ItemReservation = ({ reservation }: Props) => {
                                 )
                             )
                     }
-                </div>
+                </div> */}
 
                 <div className="flex justify-between  items-center" >
                     <div>
                         <div className='flex gap-2 items-center' >
                             <p className='text-xs md:text-sm flex-wrap w-[100%] md:w-auto' > {StateOfReserve} </p>
                             {
-                                reservation.status === "no_iniciado" && (
+                                reservation.serviceItem?.status === "no_iniciado" && (
                                     <>
                                         <button
                                             type="button"
@@ -174,16 +175,16 @@ export const ItemReservation = ({ reservation }: Props) => {
                     <div className=' w-fit' >
                         <div className='flex gap-2 items-center justify-center' >
                             <Link href={`/room/${reservation.roomSlug}`} className="text-sm flex gap-3 items-center hover:text-red-500 transition-all duration-150 px-2" >
-                                <p className='py-2 text-xs' >{reservation.motelName}</p>
+                                <p className='py-2 text-xs' >{reservation.motelRazonSocial}</p>
                                 <IoIosArrowForward />
-                                <p className='text-xs' > {reservation.room} </p>
+                                <p className='text-xs' > {reservation.serviceItem?.room} </p>
                             </Link>
                         </div>
                         <div className='flex gap-2'>
-                            {reservation.roomImages?.slice(0, 2).map((image, index) => (
+                            {reservation.roomImages?.map((image, index) => (
                                 <RoomImage
                                     key={index}
-                                    src={image.url}
+                                    src={image}
                                     width={200}
                                     height={200}
                                     alt={`Room image ${index + 1}`}
@@ -210,16 +211,16 @@ export const ItemReservation = ({ reservation }: Props) => {
                 <div className='block md:hidden w-full' >
                     <div className='flex  items-center justify-start mt-2' >
                         <Link href={`/booking/${reservation.id}`} className="text-sm flex gap-2 items-center hover:text-red-500 transition-all duration-150 px-2" >
-                            <p className='py-2 text-xs' >{reservation.motelName}</p>
+                            <p className='py-2 text-xs' >{reservation.motelRazonSocial}</p>
                             <IoIosArrowForward />
-                            <p className='text-xs' >{reservation.room}</p>
+                            <p className='text-xs' >{reservation.serviceItem?.room}</p>
                         </Link>
                     </div>
                     <div className='flex gap-2'>
-                        {reservation.roomImages?.slice(0, 2).map((image, index) => (
+                        {reservation.roomImages?.map((image, index) => (
                             <RoomImage
                                 key={index}
-                                src={image.url}
+                                src={image}
                                 width={200}
                                 height={200}
                                 alt={`Room image ${index + 1}`}
@@ -231,22 +232,16 @@ export const ItemReservation = ({ reservation }: Props) => {
                     <div className='flex justify-end mt-3 mb-2' >
                         <p className='text-xs  ' >Total : {currencyFormat(reservation.total)}</p>
                     </div>
-                    <div className='flex justify-end gap-4' >
-
+                    <div className='flex justify-end gap-2' >
                         <button className='px-4 py-2 text-xs border-gray-400 border rounded-md hover:border-red-600 hover:text-red-600 transition-all duration-200' >
                             Eliminar
                         </button>
-
                         <Link href={`/room/${reservation.roomSlug}`} className="bg-gradient-to-r text-xs from-red-500 to-orange-500 text-white px-4 py-2 rounded-md hover:from-red-600 hover:to-orange-600 transition-all duration-200">
                             Volver a reservar
                         </Link>
-
                     </div>
-
                 </div>
-
-
-            </div >
+            </div>
         </>
     )
 }

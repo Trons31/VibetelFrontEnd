@@ -1,6 +1,7 @@
 'use client';
-import { getSuggestedRooms, getTopReservedRooms } from '@/actions';
+import { RoomApi } from '@/interfaces';
 import { useSearchStore } from '@/store';
+import axios from 'axios';
 import { AnimatePresence, motion } from 'framer-motion';
 import debounce from 'lodash.debounce';
 import { useRouter } from 'next/navigation';
@@ -43,18 +44,18 @@ export const InputSearchMovil = ({ isOpen, onClose, location }: Props) => {
         };
     }, [isOpen]);
 
-    const onLoadTopReservedRooms = async () => {
-        const resp = await getTopReservedRooms();
-        if (resp.ok) {
-            setTopRooms(resp.topRooms);
-        } else {
-            setTopRooms([]);
-        }
-    }
+    // const onLoadTopReservedRooms = async () => {
+    //     const resp = await getTopReservedRooms();
+    //     if (resp.ok) {
+    //         setTopRooms(resp.topRooms);
+    //     } else {
+    //         setTopRooms([]);
+    //     }
+    // }
 
-    useEffect(() => {
-        onLoadTopReservedRooms();
-    }, []);
+    // useEffect(() => {
+    //     onLoadTopReservedRooms();
+    // }, []);
 
     const debouncedSearch = useMemo(() =>
         debounce(async (query: string) => {
@@ -69,8 +70,8 @@ export const InputSearchMovil = ({ isOpen, onClose, location }: Props) => {
             setLoading(true);
             setHasSearched(true);
             try {
-                const { suggestedRooms } = await getSuggestedRooms({ query, city: location });
-                setSuggestedRooms(suggestedRooms);
+                const response = await axios.get<RoomApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}room/search?term=${query}&cityId=${location}`);
+                setSuggestedRooms(response.data);
             } catch (err) {
                 setSuggestedRooms([]);
             } finally {

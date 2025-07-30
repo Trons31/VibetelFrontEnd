@@ -1,5 +1,5 @@
 'use client';
-import { AmenitiesMotelInfo, City, Country, Department, MotelApi } from '@/interfaces'
+import { AmenitiesMotelInfo, CityApi, CountryApi, DepartmentApi, MotelApi } from '@/interfaces'
 import { DataBasicForm } from './DataBasicForm';
 import { LocationForm } from './LocationForm';
 import { Amenities } from './Amenities';
@@ -13,9 +13,9 @@ interface Props {
     motelPartner: UserApi;
     motel: MotelApi,
     amenitiesMotel: AmenitiesMotelInfo[],
-    countries: Country[]
-    departments: Department[]
-    cities: City[]
+    countries: CountryApi[]
+    departments: DepartmentApi[]
+    cities: CityApi[]
 }
 
 export const ConfigMotel = ({ motel, amenitiesMotel, countries, cities, departments, motelPartner }: Props) => {

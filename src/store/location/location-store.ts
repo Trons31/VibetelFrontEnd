@@ -1,13 +1,13 @@
-import { searchCity } from "@/interfaces";
+import { LocationCity } from "@/interfaces";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 
 interface State{
 
-    locationUser: searchCity | null;
-    addLocationUser:(location:searchCity)=> void;
-    updateLocationUser:(location:searchCity) => void;
+    locationUser: LocationCity | null;
+    addLocationUser:(location:LocationCity)=> void;
+    updateLocationUser:(location:LocationCity) => void;
 
 
 }
@@ -22,11 +22,11 @@ export const useLocationStore= create<State>()(
     
             //Methods
 
-            addLocationUser: (location:searchCity) => {
+            addLocationUser: (location:LocationCity) => {
                  set({ locationUser: location });
             },
 
-            updateLocationUser: (location:searchCity) => {
+            updateLocationUser: (location:LocationCity) => {
                  set({ locationUser: location });
              },
     

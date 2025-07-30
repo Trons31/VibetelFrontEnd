@@ -1,4 +1,4 @@
-import { RoomAllApi, RoomByMotelApi } from "@/interfaces";
+import { RoomAllApi } from "@/interfaces";
 import { ItemGridMotelBySlug } from "./ItemGridMotelBySlug";
 
 interface Props {

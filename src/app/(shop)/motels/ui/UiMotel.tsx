@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react'
 import { ModalLocationUser, ModalLocationUserMovil, NoLocationUser } from '@/components';
-import { MotelApi, searchCity } from '@/interfaces';
+import { LocationCity } from '@/interfaces';
 import { useLocationStore } from '@/store';
 import { CardMotel } from './CardMotel';
 import { MotelsInMap } from './MotelsInMap';
@@ -12,7 +12,7 @@ export const UiMotel = () => {
     const [step, setStep] = useState<Step>('motels');
 
     const { locationUser } = useLocationStore();
-    const [detectedLocation, setDetectedLocation] = useState<searchCity | undefined>(undefined);
+    const [detectedLocation, setDetectedLocation] = useState<LocationCity | undefined>(undefined);
     const [modalLocationUser, setModalLocationUser] = useState(false);
     const [isLoadingLocationUser, setIsLoadingLocationUser] = useState(true);
 
@@ -61,8 +61,8 @@ export const UiMotel = () => {
                                                 type="button"
                                                 onClick={() => setStep('motels')}
                                                 className={`px-4 py-2 text-sm font-medium rounded-l-lg ${step === 'motels'
-                                                        ? 'bg-red-600 text-white'
-                                                        : 'bg-white text-gray-700 hover:bg-gray-100'
+                                                    ? 'bg-red-600 text-white'
+                                                    : 'bg-white text-gray-700 hover:bg-gray-100'
                                                     } border border-gray-200`}
                                             >
                                                 <span className="flex items-center">
@@ -76,8 +76,8 @@ export const UiMotel = () => {
                                                 type="button"
                                                 onClick={() => setStep('location')}
                                                 className={`px-4 py-2 text-sm font-medium rounded-r-lg ${step === 'location'
-                                                        ? 'bg-red-600 text-white'
-                                                        : 'bg-white text-gray-700 hover:bg-gray-100'
+                                                    ? 'bg-red-600 text-white'
+                                                    : 'bg-white text-gray-700 hover:bg-gray-100'
                                                     } border border-gray-200`}
                                             >
                                                 <span className="flex items-center">
@@ -92,8 +92,8 @@ export const UiMotel = () => {
 
                                     {
                                         step === 'motels' && (
-                                            <CardMotel 
-                                            location={detectedLocation} 
+                                            <CardMotel
+                                                location={detectedLocation}
                                             />
                                         )
                                     }

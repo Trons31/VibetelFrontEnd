@@ -1,6 +1,8 @@
 'use client';
-import { getSuggestedRooms, getTopReservedRooms } from '@/actions';
+import { getTopReservedRooms } from '@/actions';
+import { RoomApi } from '@/interfaces';
 import { useSearchStore, useUIStore } from '@/store';
+import axios from 'axios';
 import clsx from 'clsx';
 import debounce from 'lodash.debounce';
 import { useRouter } from 'next/navigation';
@@ -30,7 +32,7 @@ export const InputSearch = ({ openSearch, closeSearch, location }: Props) => {
 
     const { searches } = useSearchStore();
     const [topRooms, setTopRooms] = useState<room[]>([])
-    const [suggestedRooms, setSuggestedRooms] = useState<room[]>([]);
+    const [suggestedRooms, setSuggestedRooms] = useState<RoomApi[]>([]);
 
 
     const searchRef = useRef<HTMLDivElement>(null);
@@ -48,13 +50,14 @@ export const InputSearch = ({ openSearch, closeSearch, location }: Props) => {
             setLoading(true);
             setHasSearched(true);
             try {
-                const { suggestedRooms } = await getSuggestedRooms({ query, city: location });
-                setSuggestedRooms(suggestedRooms);
+                const response = await axios.get<RoomApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}room/search?term=${query}&cityId=${location}`);
+                setSuggestedRooms(response.data);
             } catch (err) {
                 setSuggestedRooms([]);
             } finally {
                 setLoading(false);
             }
+
         }, 300), [location]);
 
     useEffect(() => {
@@ -137,7 +140,7 @@ export const InputSearch = ({ openSearch, closeSearch, location }: Props) => {
                                 autoFocus
                                 onKeyDown={handleKeyDown}
                                 placeholder='Habitaciones, moteles'
-                                className='w-[600px] bg-gray-100 rounded py-2 pl-4 pr-10 border-b-2 text-sm border-gray-400 focus:outline-none focus:border-red-500'
+                                className='w-[500px] lg:w-[600px] bg-gray-100 rounded py-2 pl-4 pr-10 border-b-2 text-sm border-gray-400 focus:outline-none focus:border-red-500'
                             />
 
                             {loading && (

@@ -1,11 +1,11 @@
 'use client';
 import React, { useState } from 'react'
-import { CoverageDepartment } from '@/interfaces';
+import { CoverageDepartmentApi } from '@/interfaces';
 import { FaCircleCheck } from 'react-icons/fa6'
 import { ModalRequestCoverage } from '@/components';
 
 interface Props {
-    department: CoverageDepartment;
+    department: CoverageDepartmentApi;
 }
 
 export const ItemCoverageMotel = ({ department }: Props) => {
@@ -32,7 +32,7 @@ export const ItemCoverageMotel = ({ department }: Props) => {
                 onClose={() => setIsModalRequestCoverage(false)}
             />
 
-            <div className='mb-10 border border-gray-200 rounded-3xl p-6' >
+            <div className='mb-10 border border-gray-200 rounded-3xl py-6 px-3 md:p-6' >
 
                 <div>
                     <div className='flex justify-between items-center mb-2' >
@@ -50,7 +50,7 @@ export const ItemCoverageMotel = ({ department }: Props) => {
                                                 <div>Proximamente</div>
                                             </div>
                                         ) : (
-                                            <div className="center rounded-full bg-red-500 py-2 px-3 text-xs font-medium text-white">
+                                            <div className="center rounded-full bg-red-500 py-1 px-3 text-xs font-medium text-white">
                                                 <div> No tenemos cobertura</div>
                                             </div>
                                         )

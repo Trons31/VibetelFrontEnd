@@ -10,7 +10,8 @@ import {
 import {
   MdOutlineEventAvailable,
   MdSupportAgent,
-  MdContentPasteSearch
+  MdContentPasteSearch,
+  MdNotificationsActive
 } from "react-icons/md";
 import {
   FaRegUserCircle,
@@ -18,7 +19,8 @@ import {
 } from "react-icons/fa";
 import {
   RiCalendarCheckFill,
-  RiCalendarCloseFill
+  RiCalendarCloseFill,
+  RiSendPlaneFill
 } from "react-icons/ri";
 import {
   TbPresentationAnalytics,
@@ -70,6 +72,11 @@ const configItems: NavItem[] = [
     icon: <FaRegUserCircle />,
     name: "Perfil",
     path: "/admin/dashboard-partner-motel/profile",
+  },
+  {
+    icon: <RiSendPlaneFill  />,
+    name: "Mi plan",
+    path: "/admin/dashboard-partner-motel/my-plan",
   },
   {
     icon: <FaRegCreditCard />,
@@ -219,115 +226,146 @@ export const AppSidebar = ({ motelName, motelStatus, subscription, motelImage }:
         </div>
       </div>
 
-      <div className="flex mt-10 flex-col mb-10 overflow-y-auto duration-300 ease-linear custom-scrollbar-hidden px-2">
-        <nav className="mb-6">
-          <div className="flex flex-col gap-4">
+      {motelStatus === "APPROVED" ? (
+        <div className="flex mt-10 flex-col mb-10 overflow-y-auto duration-300 ease-linear custom-scrollbar-hidden px-2">
+          <nav className="mb-6">
+            <div className="flex flex-col gap-4">
 
-            {/* INICIO */}
-            <div>
-              <h2 className={`text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded ? "lg:justify-center mb-7" : "mb-4 justify-start"}`}>
-                {isExpanded || isMobileOpen ? "Inicio" : <BsThreeDots className="text-xl" />}
-              </h2>
-              {renderMenuItems(navItems, "main")}
-            </div>
+              {/* INICIO */}
+              <div>
+                <h2 className={`text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded ? "lg:justify-center mb-7" : "mb-4 justify-start"}`}>
+                  {isExpanded || isMobileOpen ? "Inicio" : <BsThreeDots className="text-xl" />}
+                </h2>
+                {renderMenuItems(navItems, "main")}
+              </div>
 
-            {/* ANALÍTICA */}
-            {subscription !== "FREE" && (
+              {/* ANALÍTICA */}
+              {subscription !== "FREE" && (
+                <div className="mt-4">
+                  <h2 className={`text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded ? "lg:justify-center mb-7" : "mb-4 justify-start"}`}>
+                    {isExpanded || isMobileOpen ? "Analítica" : <BsThreeDots className="text-xl" />}
+                  </h2>
+                  {renderMenuItems([
+                    {
+                      name: "Reportes",
+                      path: "/admin/dashboard-partner-motel/reports",
+                      icon: <TbPresentationAnalytics />
+                    },
+                    {
+                      name: "Reservas",
+                      path: "/admin/dashboard-partner-motel/analytics",
+                      icon: <BiMoneyWithdraw />
+                    }
+                  ], "main")}
+                </div>
+              )}
+
+              {/* GESTIÓN DE ACCESO */}
+              {subscription !== "FREE" && (
+                <div className="mt-4">
+                  <h2 className={`text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded ? "lg:justify-center mb-7" : "mb-4 justify-start"}`}>
+                    {isExpanded || isMobileOpen ? "Gestión de acceso" : <BsThreeDots className="text-xl" />}
+                  </h2>
+                  {renderMenuItems([
+                    {
+                      name: "Acceso con reserva",
+                      path: "/admin/dashboard-partner-motel/check-in",
+                      icon: <MdContentPasteSearch />
+                    },
+                    {
+                      name: "Acceso sin reserva",
+                      path: "/admin/dashboard-partner-motel/walk-in",
+                      icon: <IoLogIn />
+                    }
+                  ], "main")}
+                </div>
+              )}
+
+              {/* GESTIÓN DE SERVICIOS */}
+              {subscription !== "FREE" && (
+                <div className="mt-4">
+                  <h2 className={`text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded ? "lg:justify-center mb-7" : "mb-4 justify-start"}`}>
+                    {isExpanded || isMobileOpen ? "Gestión de servicios" : <BsThreeDots className="text-xl" />}
+                  </h2>
+                  {renderMenuItems([
+                    {
+                      name: "Servicio con reserva",
+                      path: "/admin/dashboard-partner-motel/booking",
+                      icon: <RiCalendarCheckFill />
+                    },
+                    {
+                      name: "Servicio sin reserva",
+                      path: "/admin/dashboard-partner-motel/walk-in-services",
+                      icon: <RiCalendarCloseFill />
+                    }
+                  ], "main")}
+                </div>
+              )}
+
+              {/* SOPORTE */}
               <div className="mt-4">
                 <h2 className={`text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded ? "lg:justify-center mb-7" : "mb-4 justify-start"}`}>
-                  {isExpanded || isMobileOpen ? "Analítica" : <BsThreeDots className="text-xl" />}
+                  {isExpanded || isMobileOpen ? "Soporte" : <BsThreeDots className="text-xl" />}
                 </h2>
-                {renderMenuItems([
-                  {
-                    name: "Reportes",
-                    path: "/admin/dashboard-partner-motel/reports",
-                    icon: <TbPresentationAnalytics />
-                  },
-                  {
-                    name: "Reservas",
-                    path: "/admin/dashboard-partner-motel/analytics",
-                    icon: <BiMoneyWithdraw />
-                  }
-                ], "main")}
+                {renderMenuItems(supportItems, "support")}
               </div>
-            )}
 
-            {/* GESTIÓN DE ACCESO */}
-            {subscription !== "FREE" && (
+              {/* CONFIGURACIÓN */}
               <div className="mt-4">
                 <h2 className={`text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded ? "lg:justify-center mb-7" : "mb-4 justify-start"}`}>
-                  {isExpanded || isMobileOpen ? "Gestión de acceso" : <BsThreeDots className="text-xl" />}
+                  {isExpanded || isMobileOpen ? "Configuración" : <BsThreeDots className="text-xl" />}
                 </h2>
-                {renderMenuItems([
-                  {
-                    name: "Acceso con reserva",
-                    path: "/admin/dashboard-partner-motel/check-in",
-                    icon: <MdContentPasteSearch />
-                  },
-                  {
-                    name: "Acceso sin reserva",
-                    path: "/admin/dashboard-partner-motel/walk-in",
-                    icon: <IoLogIn />
-                  }
-                ], "main")}
+                {renderMenuItems(configItems, "config")}
               </div>
-            )}
 
-            {/* GESTIÓN DE SERVICIOS */}
-            {subscription !== "FREE" && (
-              <div className="mt-4">
-                <h2 className={`text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded ? "lg:justify-center mb-7" : "mb-4 justify-start"}`}>
-                  {isExpanded || isMobileOpen ? "Gestión de servicios" : <BsThreeDots className="text-xl" />}
-                </h2>
-                {renderMenuItems([
-                  {
-                    name: "Servicio con reserva",
-                    path: "/admin/dashboard-partner-motel/booking",
-                    icon: <RiCalendarCheckFill />
-                  },
-                  {
-                    name: "Servicio sin reserva",
-                    path: "/admin/dashboard-partner-motel/walk-in-services",
-                    icon: <RiCalendarCloseFill />
-                  }
-                ], "main")}
+            </div>
+          </nav>
+
+          {isExpanded && nextTier && (
+            <div className="mx-auto fade-in mt-5 mb-10 w-full max-w-60 rounded-2xl bg-gray-100 px-2 py-5 text-center">
+              <h3 className="mb-2 font-semibold text-gray-900">Pasa al plan {nextTier}</h3>
+              <p className="mb-4 text-gray-500 text-xs">
+                Mejora tu experiencia accediendo a más beneficios con el plan <strong>{nextTier}</strong>.
+              </p>
+              <Link
+                href={`/admin/dashboard-partner-motel/upgrade?tier=${nextTier}`}
+                className="flex items-center justify-center p-3 font-medium text-white rounded-lg bg-indigo-600 text-sm hover:bg-indigo-700"
+              >
+                Actualizar a plan
+              </Link>
+            </div>
+          )}
+        </div>
+      ) : (
+        motelStatus === "PENDING" || motelStatus === "DATA_CORRECTION"
+          ? (
+            <div className="py-10">
+              <div className='border border-gray-200 rounded-xl p-2 bg-white shadow-md'>
+                <div className='flex justify-center'>
+                  <MdNotificationsActive size={20} />
+                </div>
+                <div className='mt-2 justify-center text-center'>
+                  <h1 className='text-sm font-bold'>El motel no está activado</h1>
+                  <p className='text-xs text-gray-700 font-normal'>No tiene permisos suficientes. Debe completar los últimos pasos para activar su motel.</p>
+                </div>
               </div>
-            )}
-
-            {/* SOPORTE */}
-            <div className="mt-4">
-              <h2 className={`text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded ? "lg:justify-center mb-7" : "mb-4 justify-start"}`}>
-                {isExpanded || isMobileOpen ? "Soporte" : <BsThreeDots className="text-xl" />}
-              </h2>
-              {renderMenuItems(supportItems, "support")}
             </div>
-
-            {/* CONFIGURACIÓN */}
-            <div className="mt-4">
-              <h2 className={`text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded ? "lg:justify-center mb-7" : "mb-4 justify-start"}`}>
-                {isExpanded || isMobileOpen ? "Configuración" : <BsThreeDots className="text-xl" />}
-              </h2>
-              {renderMenuItems(configItems, "config")}
+          ) : (
+            <div className="py-10" >
+              <div className='border border-gray-200 rounded-xl px-2 py-4 bg-white shadow-md'>
+                <div className='flex justify-center'>
+                  <MdNotificationsActive size={20} />
+                </div>
+                <div className='mt-2 justify-center text-center'>
+                  <h1 className='text-sm font-bold'>El motel no está desactivado</h1>
+                  <p className='text-xs text-gray-700 font-extralight'>No tiene permisos suficientes.</p>
+                </div>
+              </div>
             </div>
+          )
+      )
+      }
 
-          </div>
-        </nav>
-
-        {isExpanded && nextTier && (
-          <div className="mx-auto fade-in mt-5 mb-10 w-full max-w-60 rounded-2xl bg-gray-100 px-2 py-5 text-center">
-            <h3 className="mb-2 font-semibold text-gray-900">Pasa al plan {nextTier}</h3>
-            <p className="mb-4 text-gray-500 text-xs">
-              Mejora tu experiencia accediendo a más beneficios con el plan <strong>{nextTier}</strong>.
-            </p>
-            <Link
-              href={`/admin/dashboard-partner-motel/upgrade?tier=${nextTier}`}
-              className="flex items-center justify-center p-3 font-medium text-white rounded-lg bg-indigo-600 text-sm hover:bg-indigo-700"
-            >
-              Actualizar a plan
-            </Link>
-          </div>
-        )}
-      </div>
     </aside>
   );
 };

@@ -25,6 +25,8 @@ export const RoomInBooking = () => {
     setLoading(false);
   }, [roomInBooking?.id]);
 
+  if (!roomInBooking) return null;
+
   return (
     <>
       <div className="md:rounded-sm bg-white px-4 py-6">
@@ -127,7 +129,7 @@ export const RoomInBooking = () => {
           )}
 
           <div className="grid grid-cols md:grid-cols-2 mt-4 md:mt-0">
-            <div>
+            <div className="flex justify-start" >
               {loading && !roomInBooking ? (
                 <div className="flex justify-start">
                   <svg
@@ -175,13 +177,6 @@ export const RoomInBooking = () => {
             </div>
             <div>
               <p className="text-md font-bold mt-7 mb-4">Incluye</p>
-
-              {roomInBooking?.amenitiesRoom &&
-                roomInBooking?.amenitiesRoom.length > 0 && (
-                  <>
-                    <Amenities amenities={roomInBooking?.amenitiesRoom} />
-                  </>
-                )}
 
               {roomInBooking?.amenitiesRoom &&
                 roomInBooking?.amenitiesRoom.length > 0 && (

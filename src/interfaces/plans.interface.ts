@@ -1,4 +1,4 @@
-export type Tier = 'FREE' | 'BASIC' | 'PREMIUM' | 'ENTERPRISE';
+export type SubscriptionTier = 'FREE' | 'BASIC' | 'PREMIUM' | 'ENTERPRISE';
 
 export interface Benefit {
   id: string;
@@ -8,7 +8,7 @@ export interface Benefit {
 
 export interface Plan {
   id: string;
-  tier: Tier;
+  tier: SubscriptionTier;
   period: 'SEMESTRAL' | 'ANNUAL';
   price: number;
   commissionPercentage: number;

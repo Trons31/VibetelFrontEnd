@@ -14,7 +14,7 @@ import {
   ModalLocationUserMovil,
   RoomImage,
 } from "@/components";
-import { BedRooms, searchCity } from "@/interfaces";
+import { BedRooms, LocationCity } from "@/interfaces";
 import { getMostFrecuentedMotels, getTopReservedRooms } from "@/actions";
 
 interface motels {
@@ -29,9 +29,7 @@ export const UiPage = () => {
   const isAuthenticated = !!session?.user;
   const [isLoading, setIsLoading] = useState(true);
   const [locationLoaded, setLocationLoaded] = useState(false);
-  const [detectedLocation, setDetectedLocation] = useState<
-    searchCity | undefined
-  >(undefined);
+  const [detectedLocation, setDetectedLocation] = useState< LocationCity | undefined  >(undefined);
   const [searchInputMovil, setSearchInputMovil] = useState(false);
   const [loadingMotels, setLoadingMotels] = useState(true);
   const [modalLocationUser, setModalLocationUser] = useState(false);
@@ -58,35 +56,35 @@ export const UiPage = () => {
     }
   }, [locationUser, locationLoaded]);
 
-  useEffect(() => {
-    if (locationLoaded) {
-      const fetchMotels = async () => {
-        const { ok, motels } = await getMostFrecuentedMotels(
-          detectedLocation?.city
-        );
-        if (ok && motels) {
-          setMostFrequentedMotels(motels);
-        }
-      };
+  // useEffect(() => {
+  //   if (locationLoaded) {
+  //     const fetchMotels = async () => {
+  //       const { ok, motels } = await getMostFrecuentedMotels(
+  //         detectedLocation?.city
+  //       );
+  //       if (ok && motels) {
+  //         setMostFrequentedMotels(motels);
+  //       }
+  //     };
 
-      const fetchRooms = async () => {
-        const { ok, topRooms } = await getTopReservedRooms(
-          detectedLocation?.city
-        );
-        if (ok && topRooms) {
-          setTopRooms(topRooms);
-        }
-      };
+  //     const fetchRooms = async () => {
+  //       const { ok, topRooms } = await getTopReservedRooms(
+  //         detectedLocation?.city
+  //       );
+  //       if (ok && topRooms) {
+  //         setTopRooms(topRooms);
+  //       }
+  //     };
 
-      fetchRooms();
-      fetchMotels();
-    }
-  }, [locationLoaded]);
+  //     fetchRooms();
+  //     fetchMotels();
+  //   }
+  // }, [locationLoaded]);
 
   return (
     <>
       <InputSearchMovil
-        location={detectedLocation?.city}
+        location={detectedLocation?.id}
         isOpen={searchInputMovil}
         onClose={() => setSearchInputMovil(false)}
       />
@@ -110,7 +108,7 @@ export const UiPage = () => {
             {!isLoading &&
               (locationUser !== null && detectedLocation ? (
                 <>
-                  <InputSearchRooms location={detectedLocation?.city} />
+                  <InputSearchRooms location={detectedLocation?.id} />
 
                   <div className="fade-in flex md:hidden relative w-full">
                     <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
@@ -168,6 +166,8 @@ export const UiPage = () => {
           </div>
         </div>
       </div>
+
+      
 
       {mostFrequentedMotels.length > 0 && (
         <div className="p-3 md:px-24 py-5 mt-16 mb-10 ">

@@ -1,32 +1,30 @@
 'use client';
-import { getTransactionIdReservation } from "@/actions";
 import { useBookingStore } from "@/store";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { FaCalendarTimes } from "react-icons/fa";
 import { FaRegCalendarXmark } from "react-icons/fa6";
-import { LuCalendarX2 } from "react-icons/lu";
 
 export const DeleteBooking = () => {
     const removeBooking = useBookingStore(state => state.removeBooking);
     const roomInBooking = useBookingStore(state => state.Booking);
-    const [isLoading, setIsLoading] = useState(true);
+    const { isLoading, finishLoading } = useBookingStore();
     const [transactionId, setTransactionId] = useState<string | null>(null);
 
     useEffect(() => {
-        setIsLoading(false);
-        if (!roomInBooking) return;
-        removeBooking();
-    }, [roomInBooking?.id])
+        finishLoading();
+    }, []);
 
     useEffect(() => {
-        async function fetchTransactionId() {
-            const transactionId = await getTransactionIdReservation();
-            setTransactionId(transactionId);
+        if (!isLoading) {
+            if (!roomInBooking) {
+                removeBooking();
+                localStorage.removeItem("persist-token-reservation");
+            }else{
+                
+            }
         }
+    }, [roomInBooking?.id])
 
-        fetchTransactionId();
-    }, []);
 
     return (
         <>

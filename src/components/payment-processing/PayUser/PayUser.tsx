@@ -1,16 +1,20 @@
 'use client';
 import React, { useEffect, useState } from 'react'
 import Script from 'next/script';
-import { getReservationByTransactionId, getTransactionIdReservation, placeReservation } from '@/actions';
 import { useBookingStore } from '@/store';
 import { IoBagCheck } from 'react-icons/io5';
 import { MdOutlinePayment } from 'react-icons/md';
+import { redirect, usePathname } from 'next/navigation';
+import axios from 'axios';
 
 type StatusTransaction = "ACCEPTED" | "REJECTED" | "PENDING" | "FAILED"
 
 type transactionData = {
+    id: string;
     transactionId: string;
     total: number;
+    mail?: string;
+    phoneNumber?: string;
 }
 
 export const PayUser = () => {
@@ -20,7 +24,7 @@ export const PayUser = () => {
 
 
     const [statusTransaction, setStatusTransaction] = useState<StatusTransaction>("PENDING")
-    const [transactionId, setTransactionId] = useState<string | null>(null);
+    const [tokenTransaction, setTokenTransaction] = useState<string | null>(null);
 
 
     const { Booking } = useBookingStore(state => ({
@@ -30,25 +34,24 @@ export const PayUser = () => {
 
     const [transactionData, setTransactionData] = useState<transactionData | undefined>(undefined);
 
+    const pathName = usePathname();
+    const [redirectUrl, setRedirectUrl] = useState("/home");
 
-    const OnPaidAndPlaceReservation = async () => {
-        setLoading(true);
-        const reservation = {
-            roomId: Booking!.id,
-            arrivalDate: Booking!.arrivalDate,
-            departureDate: Booking!.departureDate,
+    useEffect(() => {
+        const storedRedirectUrl = localStorage.getItem("redirectUrl");
+        if (storedRedirectUrl) {
+            setRedirectUrl(storedRedirectUrl);
         }
-        const response = await placeReservation(reservation);
-        if (response.ok) {
-            setTransactionData({
-                transactionId: response.transactionId,
-                total: response.total
-            });
-        } else {
-            console.error("Error en la reserva:", response.message);
-        }
+    }, [pathName]);
 
-    }
+    const decodeToken = (encodedToken: string): string => {
+        try {
+            return atob(encodedToken); // Decodifica de Base64
+        } catch (e) {
+            console.error("Error al decodificar el token:", e);
+            return encodedToken; // Retorna sin decodificar si hay un error
+        }
+    };
 
     useEffect(() => {
         if (!Booking) return;
@@ -57,39 +60,55 @@ export const PayUser = () => {
 
 
     useEffect(() => {
-        async function fetchTransactionId() {
-            const cookieTransactionId = await getTransactionIdReservation();
-            setTransactionId(cookieTransactionId);
-            if (!cookieTransactionId) {
-                setLoadingExistTransactionId(false)
+        async function fetchTokenTransaction() {
+            setLoadingExistTransactionId(true);
+            if (typeof window !== 'undefined') {
+                const storedEncodedToken = localStorage.getItem("persist-token-reservation");
+                if (storedEncodedToken) {
+                    const decodedToken = decodeToken(storedEncodedToken);
+                    setTokenTransaction(decodedToken);
+                }
             }
+            setLoadingExistTransactionId(false);
         }
-
-        fetchTransactionId();
+        fetchTokenTransaction();
     }, []);
 
 
     useEffect(() => {
-        if (transactionId) {
-            // Llama a la función para obtener los datos de la transacción
-            getReservationByTransactionId(transactionId)
-                .then((res) => {
-                    if (res.reservation.transactionId) {
+
+        async function fetchTransaction() {
+            if (tokenTransaction) {
+                try {
+                    const response = await axios.get(
+                        `${process.env.NEXT_PUBLIC_API_ROUTE}service/by-reservation-token/${tokenTransaction}`
+                    );
+
+                    if (response.data.isConfirmed === true) {
                         setTransactionData({
-                            transactionId: res.reservation.transactionId,
-                            total: res.reservation.total
+                            id: response.data.id,
+                            transactionId: response.data.transactionId,
+                            total: response.data.total,
+                            mail: response.data.mail,
+                            phoneNumber: response.data.phoneNumber,
                         });
-                        setStatusTransaction(res.reservation.status!)
+                        setStatusTransaction(response.data.paymentStatus)
                     } else {
-                        console.error("No se encontró la transacción.");
+                        redirect(redirectUrl);
                     }
-                })
-                .catch((error) => {
-                    console.error("Error al obtener la transacción:", error);
-                })
-                .finally(() => setLoadingExistTransactionId(false));
+
+                } catch (error: any) {
+                    localStorage.removeItem("persist-token-reservation");
+                } finally {
+                    setLoadingExistTransactionId(false)
+                }
+            }
+
+
         }
-    }, [transactionId]);
+
+        fetchTransaction();
+    }, [tokenTransaction]);
 
 
 
@@ -124,40 +143,6 @@ export const PayUser = () => {
                         </>
                     ) : (
                         <>
-
-                            {
-                                !transactionData && (
-                                    <>
-                                        <div>
-                                            <button
-                                                onClick={OnPaidAndPlaceReservation}
-                                                disabled={loading}
-                                                className="mt-2 mb-2 w-full rounded-lg bg-red-600 px-6 py-3 font-medium text-white">
-                                                {
-                                                    loading
-                                                        ? (
-                                                            <>
-                                                                <div className="flex-grow flex justify-center items-center">
-                                                                    <div className="px-5" >
-                                                                        <svg className="h-5 w-5 animate-spin text-white " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                                            <circle className="opacity-25" cx="12" cy="12" r="10"></circle>
-                                                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                                                        </svg>
-                                                                    </div>
-                                                                </div>
-                                                            </>
-                                                        ) : (
-                                                            "Confirmar reserva"
-                                                        )
-                                                }
-                                            </button>
-                                        </div>
-                                    </>
-                                )
-                            }
-
-
-
                             {
                                 transactionData && (
                                     statusTransaction === "ACCEPTED"

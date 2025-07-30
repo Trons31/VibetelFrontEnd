@@ -1,7 +1,7 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react'
 import { GridMotel, ModalLocationUser, ModalLocationUserMovil, NoLocationUser } from '@/components';
-import { MotelApi, searchCity } from '@/interfaces';
+import { LocationCity, MotelApi } from '@/interfaces';
 import { useLocationStore } from '@/store';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -14,17 +14,17 @@ export const UiHome = () => {
 
     const [motels, setMotels] = useState<MotelApi[]>([]);
     const [locationLoaded, setLocationLoaded] = useState(false);
-    const [detectedLocation, setDetectedLocation] = useState<searchCity | undefined>(undefined);
+    const [detectedLocation, setDetectedLocation] = useState<LocationCity | undefined>(undefined);
     const [modalLocationUser, setModalLocationUser] = useState(false);
 
     const [isLoading, setIsLoading] = useState(true);
 
     const fetchMotels = useCallback(async () => {
-        if (!detectedLocation?.city) return;
+        if (!detectedLocation) return;
         setIsLoading(true);
 
         try {
-            const response = await axios.get<{ motels: MotelApi[], total: number }>(`${process.env.NEXT_PUBLIC_API_ROUTE}motel`);
+            const response = await axios.get<{ motels: MotelApi[], total: number }>(`${process.env.NEXT_PUBLIC_API_ROUTE}motel?cityId=${detectedLocation.id}`);
             setMotels(response.data.motels);
         } catch (error: any) {
             setMotels([]);

@@ -1,8 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { deleteCookieCodeBookingAnonymous } from '@/actions';
 import { AccessCode, AddTimeReservation, ModalCancelBooking, ModalCompletedBooking } from '@/components';
-import { Reservation } from '@/interfaces/reservation.interface';
+import { ReservationApi } from '@/interfaces/reservation.interface';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useSession } from 'next-auth/react';
 import { BsIncognito } from 'react-icons/bs';
@@ -12,7 +11,7 @@ import { IoIosArrowForward } from 'react-icons/io';
 import { sleep } from '@/utils';
 
 interface Props {
-    reservation: Reservation;
+    reservation: ReservationApi;
 }
 
 
@@ -105,8 +104,8 @@ export const ActionsBooking = ({ reservation }: Props) => {
     }
 
     const handleLogout = () => {
-        deleteCookieCodeBookingAnonymous();
-        window.location.replace("/searchBooking");
+        localStorage.removeItem("persist-reservation-anonymous");
+        window.location.reload();
     };
 
     return (
@@ -237,12 +236,12 @@ export const ActionsBooking = ({ reservation }: Props) => {
                 onClose={handleAccessCodeClose}
             />
 
-            <AddTimeReservation
+            {/* <AddTimeReservation
                 isAviable={isAddTimeReservation}
                 reservation={reservation}
                 isOpen={isOpenAddTimeReservation}
                 onClose={handleAddTimeReservationClose}
-            />
+            />  */}
 
             <ModalCancelBooking
                 isAviable={isCancelBooking}

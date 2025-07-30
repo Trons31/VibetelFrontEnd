@@ -1,20 +1,20 @@
 'use client';
 import React, { useEffect } from 'react';
 import Link from 'next/link';
-import { deleteTransactionIdReservation } from '@/actions';
 import { Toaster } from 'react-hot-toast';
 import { TiWarning } from 'react-icons/ti';
 import { useSession } from 'next-auth/react';
+import { useBookingStore } from '@/store';
 
 interface ModalProps {
     isOpen: boolean;
     onClose: () => void;
-    newReservation: () => void;
 }
 
-export const ModalReservationInProcessing = ({ isOpen, onClose, newReservation }: ModalProps) => {
+export const ModalReservationInProcessing = ({ isOpen, onClose }: ModalProps) => {
 
     const { data: session } = useSession();
+    const removeBooking = useBookingStore((state) => state.removeBooking);
 
     const isAuthenticated = !!session?.user;
 
@@ -39,14 +39,14 @@ export const ModalReservationInProcessing = ({ isOpen, onClose, newReservation }
     };
 
     const OnNewReservation = async () => {
-        deleteTransactionIdReservation();
-        newReservation();
+        localStorage.removeItem("persist-token-reservation");
+        window.location.reload();
+        removeBooking();
         onClose();
     }
 
     return (
         <>
-            <Toaster position="top-right" reverseOrder={false} />
             <div
                 className="fixed fade-in inset-0 z-50 overflow-y-hidden md:p-5 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
                 onClick={handleBackdropClick}

@@ -1,9 +1,9 @@
-import { BedRooms, searchCity } from "@/interfaces";
+import { BedRooms, LocationCity, RoomAllApi } from "@/interfaces";
 import { ItemRoomSearch } from "./ItemRoomSearch";
 
 interface Props {
-  rooms: BedRooms[];
-  location: searchCity | undefined;
+  rooms: RoomAllApi[];
+  location: LocationCity | undefined;
 }
 
 export const GridRoomSearch = ({ rooms, location }: Props) => {

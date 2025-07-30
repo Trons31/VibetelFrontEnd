@@ -6,7 +6,6 @@ import {
   RoomReviews,
   RoomReviewsMovil,
   SwiperMostReservationsRooms,
-  SwiperMostReservationsRoomsMovil,
 } from "@/components";
 import { MotelBySlugApi } from "@/interfaces";
 import { MdBed } from "react-icons/md";
@@ -32,7 +31,7 @@ export const InfoMotel = ({ motel }: Props) => {
         onClose={() => setModalAllRatings(false)}
       /> */}
 
-      <div className="px-2 md:col-span-7 mt-10 md:mt-0">
+      <div className="px-3 md:col-span-7 mt-10 md:mt-0">
         <div className="hidden md:block px-2">
           <p className="text-2xl font-semibold">Acerca de {motel.razonSocial}</p>
           <div className="mt-4">
@@ -94,11 +93,11 @@ export const InfoMotel = ({ motel }: Props) => {
           <div className="mt-4 flex justify-between items-center" >
             <div className="flex items-center gap-1" >
               <FaBuildingFlag />
-              <p className="text-sm font-extralight" >Motel {motel.razonSocial}</p>
+              <p className="text-xs md:text-sm font-extralight" >Motel {motel.razonSocial}</p>
             </div>
             <div className="flex items-center gap-1" >
               <IoLocationSharp />
-              <p className="text-sm font-extralight" >{motel.city.name}, {motel.address}</p>
+              <p className="text-xs md:text-sm font-extralight" >{motel.city.name}, {motel.address}</p>
             </div>
           </div>
           <div className="mt-2 w-full h-72 md:h-96 rounded-lg overflow-hidden shadow-lg">
@@ -122,17 +121,14 @@ export const InfoMotel = ({ motel }: Props) => {
             Habitaciones mas reservadas
           </p>
 
-          {/* {motel.topRooms.length > 0 ? (
+          {motel.rooms.length > 0 ? (
             <>
-              <p className="text-sm font-extralight text-gray-800">
+              <p className="text-xs md:text-sm font-extralight text-gray-800">
                 Aquí encontrarás una lista de las habitaciones que los usuarios
                 reservan con mayor frecuencia.
               </p>
-              <div className="hidden md:block mt-10">
-                <SwiperMostReservationsRooms rooms={motel.topRooms} />
-              </div>
-              <div className="md:hidden block mt-10">
-                <SwiperMostReservationsRoomsMovil rooms={motel.topRooms} />
+              <div className="mt-10">
+                <SwiperMostReservationsRooms rooms={motel.rooms} />
               </div>
             </>
           ) : (
@@ -151,7 +147,7 @@ export const InfoMotel = ({ motel }: Props) => {
                 </p>
               </div>
             </div>
-          )} */}
+          )}
         </div>
       </div>
     </>

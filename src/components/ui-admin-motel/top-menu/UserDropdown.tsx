@@ -2,14 +2,18 @@
 import { logout } from "@/actions";
 import { Dropdown } from "@/components/ui/dropdown/Dropdown";
 import { DropdownItem } from "@/components/ui/dropdown/DropdownItem";
+import { SubscriptionTier } from "@/interfaces";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { FaRegUserCircle } from "react-icons/fa";
 import { TbLogout2 } from "react-icons/tb";
 
-export const UserDropdown = () => {
+interface Props {
+  subscriptionTier: SubscriptionTier;
+}
+
+export const UserDropdown = ({ subscriptionTier }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const { data: session, status } = useSession();
@@ -52,15 +56,22 @@ export const UserDropdown = () => {
       <Dropdown
         isOpen={isOpen}
         onClose={closeDropdown}
-        className="absolute right-0 mt-[17px] flex w-[260px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg"
+        className="absolute right-0 mt-[17px] flex w-[280px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg"
       >
-        <div>
-          <span className="block font-medium text-gray-700 text-sm">
-            {session?.user.name} {session?.user.lastName}
-          </span>
-          <span className="mt-0.5 block text-xs text-gray-500 ">
-            {session?.user.email}
-          </span>
+        <div className="flex justify-between" >
+          <div>
+            <span className="block font-medium text-gray-700 text-sm">
+              {session?.user.name} {session?.user.lastName}
+            </span>
+            <span className="mt-0.5 block text-xs text-gray-500 ">
+              {session?.user.email}
+            </span>
+          </div>
+          <Link
+            href="/admin/dashboard-partner-motel/my-plan"
+            className="py-2 px-3 h-fit rounded-full bg-indigo-600 text-white text-xs" >
+            {subscriptionTier}
+          </Link>
         </div>
 
         <ul className="flex flex-col gap-1 pt-4 pb-3 border-b border-gray-200">

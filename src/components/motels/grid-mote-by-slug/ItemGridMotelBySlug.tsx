@@ -72,10 +72,9 @@ export const ItemGridMotelBySlug = ({ room }: Props) => {
             )} */}
               <FavoriteRoomCard
                 roomId={room.id}
-                inFavorites={false}
               />
             </div>
-            <div className="p-2 flex md:hidden md:group-hover:flex rounded-b-sm bg-red-600  justify-center  absolute right-0 bottom-0 w-full md:group-hover:bg-red-600 md:group-hover:transition-all md:group-hover:duration-300">
+            <div className="p-2 flex md:hidden md:group-hover:flex rounded-b-lg bg-red-600  justify-center  absolute right-0 bottom-0 w-full md:group-hover:bg-red-600 md:group-hover:transition-all md:group-hover:duration-300">
               <p className="text-white text-xs md:text-md md:text-red-600 md:group-hover:text-white font-normal">
                 Reservar ahora
               </p>

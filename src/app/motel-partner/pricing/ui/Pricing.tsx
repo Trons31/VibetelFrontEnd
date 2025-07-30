@@ -1,5 +1,6 @@
 "use client"
 import { BenefitItem, SelectOption } from '@/components';
+import { SubscriptionPeriod } from '@/interfaces';
 import { currencyFormat } from '@/utils';
 import clsx from 'clsx';
 import Link from 'next/link';
@@ -25,28 +26,18 @@ type Plan = {
 export const Pricing = () => {
 
     const billingOptions = [
-        { label: '1 Mes', value: 1 },
-        { label: '12 Meses (10% Desc.)', value: 12 },
-        { label: '24 Meses (15% Desc.)', value: 24 },
-        { label: '48 Meses (20% Desc.)', value: 48 },
+        { label: 'Mensual', value: 1, periodType: 'MONTHLY' as SubscriptionPeriod },
+        { label: 'Semestral', value: 5, periodType: 'SEMESTRAL' as SubscriptionPeriod }, // Ejemplo: 5 meses de pago por 6 meses de servicio
+        { label: 'Anual', value: 10, periodType: 'ANNUAL' as SubscriptionPeriod },   // Ejemplo: 10 meses de pago por 12 meses de servicio
     ];
 
-    const [billingPeriod, setBillingPeriod] = useState<number>(billingOptions[0].value);
+    const [selectedBillingOption, setSelectedBillingOption] = useState(billingOptions[0]);
 
-    const getPrice = (monthlyPrice: number) => {
-        let total = monthlyPrice * billingPeriod;
-        let discount = 0;
-
-        if (billingPeriod === 12) {
-            discount = 0.10; // 10% de descuento para 12 meses
-        } else if (billingPeriod === 24) {
-            discount = 0.15; // 15% de descuento para 24 meses
-        } else if (billingPeriod === 48) {
-            discount = 0.20; // 20% de descuento para 48 meses
-        }
-
-        return total * (1 - discount);
+    const getPrice = (basePrice: number) => {
+        return Number(basePrice) * selectedBillingOption.value;
     };
+
+
 
     const plans: Plan[] = [
         {
@@ -374,12 +365,17 @@ export const Pricing = () => {
                 <div>
                     <p className='text-md text-center text-gray-600' >Duración de la suscripción</p>
                     <SelectOption
-                    options={billingOptions}
-                    defaultOption={billingOptions[0]}
-                    onOptionSelect={(option) => setBillingPeriod(option.value)}
-                    className="w-[230px]"
-                    classNameSelect="ring-red-600 border-2 hover:border-red-600 text-gray-700"
-                />
+                        options={billingOptions.map(opt => ({ label: opt.label, value: opt.value }))}
+                        defaultOption={{ label: selectedBillingOption.label, value: selectedBillingOption.value }}
+                        onOptionSelect={(option) => {
+                            const fullOption = billingOptions.find(opt => opt.value === option.value);
+                            if (fullOption) {
+                                setSelectedBillingOption(fullOption);
+                            }
+                        }}
+                        className="w-[230px]"
+                        classNameSelect="ring-red-600 border-2 hover:border-red-600 text-gray-700"
+                    />
                 </div>
             </div>
 
@@ -405,7 +401,7 @@ export const Pricing = () => {
                                         {currencyFormat(getPrice(plan.monthlyPrice))}
                                     </p>
                                     <p className="text-sm md:text-md text-black mt-2">
-                                        /{billingPeriod === 1 ? 'Mes' : `${billingPeriod} Meses`}
+                                        {`/${selectedBillingOption.label.toLowerCase()}`}
                                     </p>
                                 </div>
                                 <p className="text-sm text-black">+ {plan.commission} comisión por reserva</p>

@@ -7,8 +7,20 @@ export interface Department {
     countryId: string;
 }
 
+export interface Country {
+  geonameId: string;
+  name: string;
+  isoCode: string;
+}
 
-export interface CoverageDepartment {
+export interface DepartmentApi {
+  geonameId: string;
+  name: string;
+  country: Country;
+}
+
+
+export interface CoverageDepartmentApi {
     departmentId: string;
     departmentName: string;
     totalApprovedMotelsInDepartment: number;

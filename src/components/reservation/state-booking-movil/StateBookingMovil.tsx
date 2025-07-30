@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useEffect, useState } from 'react'
-import { Reservation } from '@/interfaces/reservation.interface';
+import { Reservation, ReservationApi } from '@/interfaces/reservation.interface';
 import { motion } from 'framer-motion';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { IoCheckmark } from 'react-icons/io5';
 
 interface Props {
-  reservation: Reservation;
+  reservation: ReservationApi;
 }
 
 export const StateBookingMovil = ({ reservation }: Props) => {

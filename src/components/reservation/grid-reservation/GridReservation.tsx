@@ -1,8 +1,8 @@
 import { ItemReservation } from "@/components";
-import { ReservationByUser } from "@/interfaces/reservation.interface";
+import {  ReservationByUserApi } from "@/interfaces/reservation.interface";
 
 interface Props {
-  reservation: ReservationByUser[];
+  reservation: ReservationByUserApi[];
 }
 
 export const GridReservation = ({ reservation }: Props) => {

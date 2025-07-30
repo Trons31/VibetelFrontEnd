@@ -1,12 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
-import { SkeletonRooms, SwiperBedrooms } from "@/components";
-import { SwiperMobileBedrooms } from "../../bedrooms/swiper/SwiperMobileBedrooms";
-import { getBedroomByMotel } from "@/actions/rooms/get-bedroom-by-motel";
-import { BedRooms } from "@/interfaces";
+
+import {  SwiperBedrooms } from "@/components";
+import {  RoomOfMotel } from "@/interfaces";
 
 interface Props {
-  rooms: [];
+  rooms: RoomOfMotel[];
 }
 
 export const ItemMotel = ({ rooms }: Props) => {
@@ -14,9 +12,7 @@ export const ItemMotel = ({ rooms }: Props) => {
 
   return (
     <>
-      {/* <SwiperBedrooms rooms={rooms} className="hidden md:block" />
-
-      <SwiperMobileBedrooms rooms={rooms} className="block md:hidden" /> */}
+      <SwiperBedrooms rooms={rooms}  />
     </>
   );
 };

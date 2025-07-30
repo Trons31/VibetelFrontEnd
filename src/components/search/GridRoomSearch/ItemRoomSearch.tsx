@@ -5,15 +5,14 @@ import { currencyFormat } from "@/utils/currencyFormat";
 import { BiSolidDiscount } from "react-icons/bi";
 import { RoomImage } from "../../bedrooms/room-image/RoomImage";
 import { useSuggestedRoomStore } from "@/store";
-import { BedRooms } from "@/interfaces/bedrooms.interface";
-import { searchCity } from "@/interfaces";
+import { LocationCity, RoomAllApi } from "@/interfaces";
 import { FavoriteRoomCard, RatingRoomCard } from "@/components";
 import { TbPointFilled } from "react-icons/tb";
 import { useState } from "react";
 
 interface Props {
-  room: BedRooms;
-  location: searchCity | undefined;
+  room: RoomAllApi;
+  location: LocationCity | undefined;
 }
 
 export const ItemRoomSearch = ({ room, location }: Props) => {
@@ -43,7 +42,9 @@ export const ItemRoomSearch = ({ room, location }: Props) => {
             <div>
               <RoomImage
                 className="rounded-lg"
-                src={room.images[0]}
+                src={room.images.length > 0
+                  ? room.images[0].url
+                  : ""}
                 width={600}
                 height={500}
                 alt={room.title}
@@ -64,11 +65,10 @@ export const ItemRoomSearch = ({ room, location }: Props) => {
               )} */}
               <FavoriteRoomCard
                 roomId={room.id}
-                inFavorites={room.isFavorite!}
               />
             </div>
 
-            <div className="p-2 flex md:hidden rounded-b-sm md:group-hover:flex bg-red-600  justify-center  absolute right-0 bottom-0 w-full md:group-hover:bg-red-600 md:group-hover:transition-all md:group-hover:duration-300">
+            <div className="p-2 flex md:hidden rounded-b-lg md:rounded-b-sm md:group-hover:flex bg-red-600  justify-center  absolute right-0 bottom-0 w-full md:group-hover:bg-red-600 md:group-hover:transition-all md:group-hover:duration-300">
               <p className="text-white md:text-red-600 md:group-hover:text-white text-xs md:text-sm font-normal">
                 Reservar ahora
               </p>
@@ -82,18 +82,18 @@ export const ItemRoomSearch = ({ room, location }: Props) => {
                   {" "}
                   {room.title}{" "}
                 </h2>
-                {room.ratings.length > 0 && (
+                {/* {room.ratings.length > 0 && (
                   <RatingRoomCard ratings={room.ratings} />
-                )}
+                )} */}
               </div>
               <p className="text-sm text-gray-700 -mt-1">
                 Motel{" "}
                 <button
                   onClick={() => setOpenModalLocationMotel(true)}
                   className="underline inline-block max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis align-bottom"
-                  title={room.motel.title} // Opcional: muestra el nombre completo al pasar el mouse
+                  title={room.motel.razonSocial} // Opcional: muestra el nombre completo al pasar el mouse
                 >
-                  {room.motel.title}
+                  {room.motel.razonSocial}
                 </button>
               </p>
               <div className="flex justify-start gap-1 items-center" >

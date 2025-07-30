@@ -7,7 +7,6 @@ interface Props{
 export const NoFoundSearch = ( {query}:Props ) => {
     return (
         <div className='flex justify-center px-2 mt-44' >
-
             <div className='block md:flex justify-between items-center gap-10 bg-white shadow-md border border-gray-200 rounded-md p-2 md:p-12' >
                 <div className='flex justify-center' >
                 <MdOutlineSearchOff
@@ -24,7 +23,6 @@ export const NoFoundSearch = ( {query}:Props ) => {
                     </ul> 
                 </div>
             </div>
-
         </div>
     )
 }

@@ -1,6 +1,6 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
-import { AmenitiesByRoom, BedroomBooking, BedRooms, motelConfig, RoomApi } from "@/interfaces";
+import { BedroomBooking, motelConfig, RoomApi } from "@/interfaces";
 import { useSession } from "next-auth/react";
 import { motion } from "framer-motion";
 import { MdOutlineClose } from "react-icons/md";
@@ -8,12 +8,16 @@ import clsx from "clsx";
 import { IoArrowForwardOutline } from "react-icons/io5";
 import { useBookingStore } from "@/store";
 import toast, { Toaster } from "react-hot-toast";
-import { getTransactionIdReservation, validateDateReservation } from "@/actions";
 import { useRouter } from "next/navigation";
 import { CustomDatePicker, ModalLoadingReservation, TimeSelector } from "@/components";
 import { currencyFormat, formatDate, formatTimeWithAmPm } from "@/utils";
 import { FaRegEdit } from "react-icons/fa";
 import { TbClockExclamation } from "react-icons/tb";
+import { TimeUsageSelector } from "./TimeUsageSelector";
+import axios from "axios";
+import { useReservationStatusStore } from "@/store/reservation/reservation-status";
+import { CreateReservationResponseApi } from "@/interfaces/reservation.interface";
+import { notifyTokenChange } from "@/utils/reservation-events";
 
 interface Props {
     room: RoomApi;
@@ -29,7 +33,7 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
     const [isLoading, setIsLoading] = useState(true);
     const [showLoading, setshowLoading] = useState(false);
     const [showLoadingLogin, setshowLoadingLogin] = useState(false);
-    const [showModalLoading, setshowModalLoading] = useState(false);
+    const [showModalLoadingReservation, setShowModalLoadingReservation] = useState(false);
     const [showErrorBooking, setShowErrorBooking] = useState(false);
 
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -40,8 +44,17 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
 
     const [showModalReservationProcessing, setShowModalReservationProcessing] = useState(false);
 
-    const AddBedroomToBooking = useBookingStore((state) => state.addBedroomToBooking);
-    const [transactionId, setTransactionId] = useState<string | null>(null);
+    const [modalReservationInProcessing, setModalReservationInProcessing] = useState(false);
+
+
+    const reservationStatus = useReservationStatusStore(state => state.reservationStatus);
+    const [tokenTransaction, setTokenTransaction] = useState<string | null>(null);
+
+
+    const [serviceUsageTime, setServiceUsageTime] = useState(room.timeLimit);
+    const addBedroomToBooking = useBookingStore((state) => state.addBedroomToBooking);
+    const removeBooking = useBookingStore((state) => state.removeBooking);
+
 
     const router = useRouter();
 
@@ -50,6 +63,25 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
             setIsLoading(false);
         }
     }, [session, status]);
+
+    const encodeToken = (token: string): string => {
+        try {
+            return btoa(token); // Codifica a Base64
+        } catch (e) {
+            console.error("Error al codificar el token:", e);
+            return token; // Retorna sin codificar si hay un error
+        }
+    };
+
+    const decodeToken = (encodedToken: string): string => {
+        try {
+            return atob(encodedToken); // Decodifica de Base64
+        } catch (e) {
+            console.error("Error al decodificar el token:", e);
+            return encodedToken; // Retorna sin decodificar si hay un error
+        }
+    };
+
 
 
     useEffect(() => {
@@ -92,61 +124,28 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
         closeDateTimeModal();
     }, [selectedDate, selectedTime, closeDateTimeModal]);
 
-    const addToReservationAnonymous = async () => {
-        if (transactionId) {
-            setShowModalReservationProcessing(true);
-            return;
-        }
-
-        if (!selectedDate) {
-            toast.error("Por favor selecciona una fecha antes de continuar.");
-            return;
-        }
-
-        if (selectedTime === "") {
-            toast.error("Por favor selecciona una hora antes de continuar.");
-            return;
-        }
-
-        setshowModalLoading(true);
-        setshowLoading(true);
-
-        const validationResult = await validateDateReservation(
-            selectedDate,
-            departureDate!,
-            room.id,
-            room.motel.id
-        );
-        if (!validationResult.isValid) {
-            toast.error(validationResult.message, {
-                duration: 7000,
-            });
-            setshowModalLoading(false);
-            setshowLoading(false);
-            setShowErrorBooking(true);
-            return;
-        }
-
-        const bookingBedroom: BedroomBooking = {
+    const createBookingBedroom = useCallback((): BedroomBooking => {
+        return {
             id: room.id,
             title: room.title,
             description: room.description,
             category: room.category.name,
             garage: room.garage.title,
-            image: room.images[0].url,
+            image: room.images.length > 0 ? room.images[0].url : "",
             slug: room.slug,
             price: room.price,
             promoActive: room.promoActive,
             promoprice: room.promoPrice,
             timeLimit: room.timeLimit,
-            amenitiesRoom: room.amenities.map((amenitie) => amenitie.amenities.id),
-            arrivalDate: selectedDate,
+            amenitiesRoom: room.amenities.map((amenitie) => amenitie.amenities.name),
+            arrivalDate: selectedDate!,
             departureDate: departureDate!,
             extraServicesActive: room.extraServicesActive,
             surcharge: room.surcharge,
-            extraServices: room.extraServices,
+            extraServices: room.extraServicesActive ? room.extraServices : null,
             roomNumber: room.roomNumber,
             createdAt: new Date(),
+            timeAwait: MotelConfig.timeAwaitTakeReservation,
             motel: {
                 title: room.motel.razonSocial,
                 location: `${room.motel.city.name}, ${room.motel.city.department.name}`,
@@ -155,101 +154,138 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
                 neighborhood: room.motel.neighborhood,
                 slug: room.motel.slug,
             },
-            timeAwait: MotelConfig.timeAwaitTakeReservation,
         };
+    }, [room, selectedDate, departureDate, MotelConfig]);
 
-        AddBedroomToBooking(bookingBedroom);
-        localStorage.setItem("redirectUrl", window.location.pathname);
-        router.push("/payment-processing/guest");
-    };
-
-    const AddToReservation = async () => {
-        if (transactionId) {
+    const handleReservation = async (isAnonymous: boolean) => {
+        if (tokenTransaction) {
             setShowModalReservationProcessing(true);
             return;
         }
 
-        if (!selectedDate) {
-            toast.error("Por favor selecciona una fecha antes de continuar.");
+        if (!selectedDate || !selectedTime) {
+            toast.error("Por favor, selecciona una fecha y una hora antes de continuar.");
             return;
         }
 
-        if (selectedTime === "") {
-            toast.error("Por favor selecciona una hora antes de continuar.");
-            return;
-        }
-
-        setshowModalLoading(true);
-        setShowErrorBooking(false);
+        setShowModalLoadingReservation(true);
         setshowLoading(true);
 
-        const validationResult = await validateDateReservation(
-            selectedDate,
-            departureDate!,
-            room.id,
-            room.motel.id
-        );
-        if (!validationResult.isValid) {
-            setshowModalLoading(false);
-            toast.error(validationResult.message, {
-                duration: 7000,
-            });
-            setshowLoading(false);
-            setShowErrorBooking(true);
-            return;
-        }
-
-        const bookingBedroom: BedroomBooking = {
-            id: room.id,
-            title: room.title,
-            description: room.description,
-            category: room.category.name,
-            garage: room.garage.title,
-            image: room.images[0].url,
-            slug: room.slug,
-            price: room.price,
-            promoActive: room.promoActive,
-            promoprice: room.promoPrice,
-            timeLimit: room.timeLimit,
-            amenitiesRoom: room.amenities.map((amenitie) => amenitie.amenities.id),
+        const validateDataForReservation = {
             arrivalDate: selectedDate,
-            departureDate: departureDate!,
-            extraServicesActive: room.extraServicesActive,
-            surcharge: room.surcharge,
-            extraServices: room.extraServices,
-            roomNumber: room.roomNumber,
-            createdAt: new Date(),
-            motel: {
-                title: room.motel.razonSocial,
-                location: `${room.motel.city.name}, ${room.motel.city.department.name}`,
-                contactPhone: room.motel.contactPhone,
-                address: room.motel.address,
-                neighborhood: room.motel.neighborhood,
-                slug: room.motel.slug,
-            },
-            timeAwait: MotelConfig.timeAwaitTakeReservation,
-        };
-
-        AddBedroomToBooking(bookingBedroom);
-        setshowLoading(true);
-        localStorage.setItem("redirectUrl", window.location.pathname);
-        router.push("/payment-processing/user");
-    };
-
-    useEffect(() => {
-        async function fetchTransactionId() {
-            const transactionId = await getTransactionIdReservation();
-            setTransactionId(transactionId);
+            departureDate: departureDate,
+            roomId: room.id
         }
 
-        fetchTransactionId();
-    }, []);
+        try {
+            await axios.post(`${process.env.NEXT_PUBLIC_API_ROUTE}service/validate-reservation`, validateDataForReservation);
+        } catch (error: any) {
+            console.log(error);
+            toast.error("Error ya existen reservas en este horario. selecciona otro", { duration: 7000 });
+            setShowModalLoadingReservation(false);
+            setshowLoading(false);
+            return;
+        }
+
+        const reservation = {
+            roomId: room.id,
+            arrivalDate: selectedDate,
+            departureDate: departureDate,
+            userId: isAuthenticated ? session.user.id : null
+        }
+
+        try {
+            const response = await axios.post<CreateReservationResponseApi>(
+                `${process.env.NEXT_PUBLIC_API_ROUTE}service/reservation`, reservation
+            );
+
+            if (response.data.reservationToken) {
+                const encodedToken = encodeToken(response.data.reservationToken);
+                localStorage.setItem("persist-token-reservation", encodedToken);
+                notifyTokenChange(response.data.reservationToken);
+            }
+
+            setShowModalLoadingReservation(true);
+
+        } catch (error: any) {
+            console.error("Error en la reserva:", error);
+        }
+    };
 
     const ridirectLogin = () => {
         localStorage.setItem("redirectUrl", window.location.pathname);
         setshowLoadingLogin(true);
         router.push("/auth/login");
     };
+
+    useEffect(() => {
+        if (reservationStatus) {
+            console.log("Manejando actualización de reserva en useEffect:", reservationStatus); // Este log ahora debería aparecer
+
+            if (reservationStatus.isConfirmed) {
+                const bookingBedroom = createBookingBedroom();
+                addBedroomToBooking(bookingBedroom);
+                localStorage.setItem("redirectUrl", window.location.pathname);
+                router.push(isAuthenticated ? "/payment-processing/user" : "/payment-processing/guest");
+
+            } else {
+                toast.error("Error: Ya existen reservas en este horario. Por favor, selecciona otro.", { duration: 7000 });
+                setShowModalLoadingReservation(false);
+                setshowLoading(false);
+
+                if (typeof window !== 'undefined') {
+                    localStorage.removeItem("persist-token-reservation");
+                    useReservationStatusStore.getState().setToken(null);
+                }
+            }
+        }
+    }, [reservationStatus, router, createBookingBedroom, addBedroomToBooking, isAuthenticated]);
+
+    useEffect(() => {
+        async function fetchTokenTransaction() {
+            if (typeof window !== 'undefined') {
+                const storedEncodedToken = localStorage.getItem("persist-token-reservation");
+                if (storedEncodedToken) {
+                    const decodedToken = decodeToken(storedEncodedToken);
+                    setTokenTransaction(decodedToken);
+                } else {
+                    removeBooking();
+                }
+            }
+        }
+        fetchTokenTransaction();
+    }, []);
+
+
+    useEffect(() => {
+        async function fetchTransaction() {
+            if (tokenTransaction) {
+                try {
+                    const response = await axios.get(
+                        `${process.env.NEXT_PUBLIC_API_ROUTE}service/by-reservation-token/${tokenTransaction}`
+                    );
+                    if (response.data.isConfirmed === true) {
+                        setModalReservationInProcessing(true);
+                        return;
+                    } else {
+                        if (response.data.isConfirmed === false) {
+                            setTokenTransaction(null);
+                            localStorage.removeItem("persist-token-reservation");
+                            return;
+                        }
+                    }
+                    setShowModalLoadingReservation(true);
+                } catch (error: any) {
+                    setTokenTransaction(null);
+                    localStorage.removeItem("persist-token-reservation");
+                }
+            }
+
+
+        }
+
+        fetchTransaction();
+    }, [tokenTransaction]);
 
     useEffect(() => {
         if (isExpanded) {
@@ -265,13 +301,10 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
 
     return (
         <>
-            <Toaster
-                position="top-right"
-                reverseOrder={false}
-            />
+
             <ModalLoadingReservation
-                isOpen={showModalLoading}
-                onClose={() => setshowModalLoading(false)}
+                isOpen={showModalLoadingReservation}
+                onClose={() => setShowModalLoadingReservation(false)}
             />
 
             {isDateTimeModalOpen && (
@@ -382,7 +415,7 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
             )}
 
             <div
-                className="fixed fade-in bottom-0 w-full bg-white z-30 md:hidden px-2 shadow-2xl shadow-black rounded-t-2xl border border-t-gray-300"
+                className="fixed fade-in bottom-0 w-full bg-white z-30 px-2 shadow-2xl shadow-black rounded-t-2xl border border-t-gray-300"
             >
                 {
                     isExpanded && (
@@ -395,7 +428,7 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
                         </div>
                     )
                 }
-                <div className="flex justify-between items-center p-3 cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
+                <div className="flex justify-between items-center p-3 cursor-pointer">
                     <div>
                         <p className="text-md font-extralight capitalize">{room.title}</p>
                         {
@@ -459,6 +492,13 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
                             </button>
                         )}
 
+                        <TimeUsageSelector
+                            currentTimeLimit={serviceUsageTime}
+                            onTimeLimitChange={(hours) => {
+                                setServiceUsageTime(hours)
+                            }}
+                        />
+
                         <div className="mt-3">
                             {isLoading ? (
                                 <div className="">
@@ -470,7 +510,7 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
                                     <button
                                         type="submit"
                                         disabled={showLoading || !selectedDate}
-                                        onClick={AddToReservation}
+                                        onClick={() => handleReservation(false)}
                                         className={clsx({
                                             "flex items-center gap-x-4 w-full mt-2 justify-center rounded-lg bg-red-600 hover:bg-red-700 px-7 py-2 font-medium text-white":
                                                 !showLoading,
@@ -585,7 +625,7 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
                                                                 </div>
                                                             )}
 
-                                                            <button onClick={addToReservationAnonymous}>
+                                                            <button onClick={() => handleReservation(true)}>
                                                                 <label className="inline-flex items-center md:gap-2 justify-between w-full p-3 md:p-5 text-gray-900 bg-white border border-gray-500 rounded-lg cursor-pointer hover:border-red-500 hover:text-red-500 text-start">
                                                                     <div className="block">
                                                                         <div className="w-full text-md font-semibold">

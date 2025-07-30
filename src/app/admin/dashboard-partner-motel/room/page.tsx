@@ -1,6 +1,4 @@
 import Link from "next/link";
-
-import { getAllRoomByMotel } from "@/actions";
 import { auth } from "@/auth.config";
 import { BreadCrumb } from "@/components";
 import { TableRoom } from "./ui/TableRoom";
@@ -37,7 +35,6 @@ export default async function RoomAllPage({ searchParams }: Props) {
         redirect("/auth/new-account-motel/register");
     }
 
-    const totalRoom = await getAllRoomByMotel(motelExist.id);
 
     let category: CategoryRoomApi[];
     try {

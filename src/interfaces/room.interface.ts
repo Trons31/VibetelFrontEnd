@@ -14,7 +14,7 @@ export interface RoomApi {
   promotionPercentage: number;
   slug: string;
   tags: string[];
-  inAvaible: boolean;
+  inAvailable: boolean;
   status: statusRoom; // Asumiendo posibles estados
   timeLimit: number;
   roomNumber: string;
@@ -29,6 +29,8 @@ export interface RoomApi {
   amenities: RoomAmenity[];
   motel: Motel;
 }
+
+
 
 interface Motel {
   id: string;
@@ -81,7 +83,7 @@ export interface RoomAllApi {
   promotionPercentage: number | null;
   slug: string;
   tags: string[];
-  inAvaible: boolean;
+  inAvailable: boolean;
   status: statusRoom;
   timeLimit: number;
   roomNumber: string;

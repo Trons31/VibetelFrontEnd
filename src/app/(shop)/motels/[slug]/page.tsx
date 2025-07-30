@@ -89,7 +89,6 @@ export default async function MotelBySlugPage({ params }: Props) {
         garageRoom={garage}
         amenitiesRoom={amenities}
         motelConfig={motel!.motelConfig!}
-        slugMotel={motel!.slug}
       />
     </>
   );

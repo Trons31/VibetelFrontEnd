@@ -1,63 +1,83 @@
 'use client';
-import { useCallback, useEffect, useState } from 'react';
-import { getFavoriteRoomByUser } from '@/actions';
+import { useEffect, useState } from 'react';
 import { SideMenu, Pagination, GridFavoritesRoom, SkeletonFavoritesRoom } from '@/components';
 import { FilterFavoriteRoom } from './FilterFavoriteRoom';
-import { FavoriteRoom } from '@/interfaces/favoriteRoom.interface';
-import { CategoryRoom, GarageRoom } from '@/interfaces';
+import { FavoriteRoomApi } from '@/interfaces/favoriteRoom.interface';
+import { CategoryRoomApi, GarageRoomApi } from '@/interfaces';
 import { TbBedOff } from 'react-icons/tb';
 import Link from 'next/link';
 import { UserApi } from '@/interfaces/user.interface';
 
 interface Props {
   user: UserApi;
-  garage: GarageRoom[];
-  category: CategoryRoom[];
+  rooms: FavoriteRoomApi[];
+  garage: GarageRoomApi[];
+  category: CategoryRoomApi[];
 }
 
-export const FavoritePage = ({ user, category, garage }: Props) => {
-  const [favorites, setFavorites] = useState<FavoriteRoom[]>([]);
+export const FavoritePage = ({ user, category, garage, rooms }: Props) => {
+  const [favorites, setFavorites] = useState<FavoriteRoomApi[]>(rooms);
   const [isLoading, setIsLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [dateRange, setDateRange] = useState('');
   const [garageFilter, setGarageFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
-  const itemsPerPage = 5;
-
-  const fetchFavoritesRoom = useCallback(async () => {
-    setIsLoading(true);
-    const data = await getFavoriteRoomByUser({
-      userId: user.id,
-      page: currentPage,
-      titleFilter: searchQuery,
-      filterType: filter,
-      garageFilter: garageFilter,
-      categoryFilter
-    });
-    if (data.ok && data.totalCount !== undefined) {
-      const { favorites, totalCount } = data;
-      setFavorites(favorites);
-      const totalPagesCount = Math.ceil(totalCount / itemsPerPage);
-      setTotalPages(totalPagesCount);
-    }
-    setIsLoading(false);
-  }, [currentPage, filter, searchQuery, garageFilter, categoryFilter, dateRange]);
-
+  const itemsPerPage = 10;
 
   useEffect(() => {
-    fetchFavoritesRoom();
-  }, [fetchFavoritesRoom]);
+    const applyFilters = () => {
+      setIsLoading(true);
+
+      let filtered = [...rooms];
+
+      // Filtro por texto
+      if (searchQuery.trim() !== '') {
+        filtered = filtered.filter(fav =>
+          fav.title.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }
+
+      // Filtro por categoría
+      if (categoryFilter) {
+        filtered = filtered.filter(fav =>
+          fav.category?.id === categoryFilter
+        );
+      }
+
+      // Filtro por garaje
+      if (garageFilter) {
+        filtered = filtered.filter(fav =>
+          fav.garage?.id === garageFilter
+        );
+      }
+
+      // Filtro adicional si lo usas
+      if (filter === 'promo') {
+        filtered = filtered.filter(fav => fav.promoActive === true);
+      }
+
+      const totalPagesCount = Math.ceil(filtered.length / itemsPerPage);
+      setTotalPages(totalPagesCount);
+
+      const start = (currentPage - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+
+      setFavorites(filtered.slice(start, end));
+      setIsLoading(false);
+    };
+
+    applyFilters();
+  }, [currentPage, searchQuery, categoryFilter, garageFilter, filter, rooms]);
 
 
-  const handleFilterChange = (newFilter: string, newSearchQuery: string, newGarageFilter: string, newCategoryFilter: string, newDateRange: string) => {
+
+  const handleFilterChange = (newFilter: string, newSearchQuery: string, newGarageFilter: string, newCategoryFilter: string) => {
     setFilter(newFilter);
     setSearchQuery(newSearchQuery);
     setGarageFilter(newGarageFilter);
     setCategoryFilter(newCategoryFilter);
-    setDateRange(newDateRange);
     setCurrentPage(1); // Reiniciar a la primera página al cambiar los filtros
   };
 
@@ -103,7 +123,7 @@ export const FavoritePage = ({ user, category, garage }: Props) => {
                   ) : (
                     <>
                       {
-                        searchQuery !== "" || dateRange !== "" || garageFilter !== "" || categoryFilter !== "" || filter !== ""
+                        searchQuery !== "" || garageFilter !== "" || categoryFilter !== "" || filter !== ""
                           ? (
                             <div className='flex justify-center px-5 items-center mt-16 mb-32'>
                               <div className="no-file-found w-full md:w-1/2 flex flex-col items-center justify-center py-8 px-4 text-center bg-white  rounded-lg shadow-md">

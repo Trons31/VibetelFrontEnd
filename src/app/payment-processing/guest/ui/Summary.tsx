@@ -30,6 +30,8 @@ export const Summary = () => {
         setLoading(false);
     }, [roomInBooking?.id])
 
+    if (!roomInBooking) return null;
+
     return (
         <>
 

@@ -6,14 +6,19 @@ import clsx from "clsx";
 import toast, { Toaster } from "react-hot-toast";
 import { useBookingStore } from "@/store";
 import { useRouter } from "next/navigation";
-import { getTransactionIdReservation, validateDateReservation } from "@/actions";
 import { useSession } from "next-auth/react";
 import { currencyFormat, formatDate, formatTimeWithAmPm } from "@/utils";
 import { TbPointFilled, TbClockExclamation } from "react-icons/tb";
 import { MdOutlineSecurity } from "react-icons/md";
 import { IoArrowForwardOutline } from "react-icons/io5";
 import { FaRegEdit } from "react-icons/fa";
-import { ModalLoadingReservation, CustomDatePicker, TimeSelector } from "@/components";
+import { ModalLoadingReservation, CustomDatePicker, TimeSelector, SelectOption, ModalReservationInProcessing } from "@/components";
+import { TimeUsageSelector } from "./TimeUsageSelector";
+import axios from "axios";
+import { CreateReservationResponseApi } from "@/interfaces/reservation.interface";
+import Link from "next/link";
+import { notifyTokenChange } from "@/utils/reservation-events";
+import { useReservationStatusStore } from "@/store/reservation/reservation-status";
 
 interface Props {
   room: RoomApi;
@@ -24,15 +29,21 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
   const [isLoadingSession, setIsLoadingSession] = useState(true);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedTime, setSelectedTime] = useState<string>("");
+  const [serviceUsageTime, setServiceUsageTime] = useState(room.timeLimit);
   const [departureDate, setDepartureDate] = useState<Date | null>(null);
   const [showLoading, setShowLoading] = useState(false);
   const [showLoadingLogin, setShowLoadingLogin] = useState(false);
-  const [transactionId, setTransactionId] = useState<string | null>(null);
   const [showModalLoadingReservation, setShowModalLoadingReservation] = useState(false);
   const [isDateTimeModalOpen, setIsDateTimeModalOpen] = useState(false);
   const [dateTimeStep, setDateTimeStep] = useState<"date" | "time">("date");
+  const [modalReservationInProcessing, setModalReservationInProcessing] = useState(false);
+
+  const reservationStatus = useReservationStatusStore(state => state.reservationStatus);
+  const [tokenTransaction, setTokenTransaction] = useState<string | null>(null);
 
   const addBedroomToBooking = useBookingStore((state) => state.addBedroomToBooking);
+  const removeBooking = useBookingStore((state) => state.removeBooking);
+
   const router = useRouter();
   const { data: session, status } = useSession();
   const isAuthenticated = !!session?.user;
@@ -41,18 +52,29 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
     ? ((room.price - room.promoPrice!) * 100) / room.price
     : 0;
 
+  const encodeToken = (token: string): string => {
+    try {
+      return btoa(token); // Codifica a Base64
+    } catch (e) {
+      console.error("Error al codificar el token:", e);
+      return token; // Retorna sin codificar si hay un error
+    }
+  };
+
+  const decodeToken = (encodedToken: string): string => {
+    try {
+      return atob(encodedToken); // Decodifica de Base64
+    } catch (e) {
+      console.error("Error al decodificar el token:", e);
+      return encodedToken; // Retorna sin decodificar si hay un error
+    }
+  };
+
 
   useEffect(() => {
     setIsLoadingSession(status === "loading");
   }, [status]);
 
-  useEffect(() => {
-    async function fetchTransactionId() {
-      const id = await getTransactionIdReservation();
-      setTransactionId(id);
-    }
-    fetchTransactionId();
-  }, []);
 
   useEffect(() => {
     if (selectedDate && selectedTime) {
@@ -101,7 +123,7 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
       description: room.description,
       category: room.category.name,
       garage: room.garage.title,
-      image: room.images[0].url,
+      image: room.images.length > 0 ? room.images[0].url : "",
       slug: room.slug,
       price: room.price,
       promoActive: room.promoActive,
@@ -127,8 +149,8 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
     };
   }, [room, selectedDate, departureDate, MotelConfig]);
 
-  const handleReservation = async (isAnonymous: boolean) => {
-    if (transactionId) {
+  const handleReservation = async () => {
+    if (tokenTransaction) {
       setShowModalLoadingReservation(true);
       return;
     }
@@ -141,28 +163,47 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
     setShowModalLoadingReservation(true);
     setShowLoading(true);
 
-    const validationResult = await validateDateReservation(
-      selectedDate,
-      departureDate!,
-      room.id,
-      room.motel.id
-    );
+    const validateDataForReservation = {
+      arrivalDate: selectedDate,
+      departureDate: departureDate,
+      roomId: room.id
+    }
 
-    if (!validationResult.isValid) {
-      toast.error(validationResult.message, { duration: 7000 });
+    try {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_ROUTE}service/validate-reservation`, validateDataForReservation);
+    } catch (error: any) {
+      console.log(error);
+      toast.error("Error ya existen reservas en este horario. selecciona otro", { duration: 7000 });
       setShowModalLoadingReservation(false);
       setShowLoading(false);
       return;
     }
 
-    const bookingBedroom = createBookingBedroom();
-    addBedroomToBooking(bookingBedroom);
-    localStorage.setItem("redirectUrl", window.location.pathname);
-    router.push(isAnonymous ? "/payment-processing/guest" : "/payment-processing/user");
+    const reservation = {
+      roomId: room.id,
+      arrivalDate: selectedDate,
+      departureDate: departureDate,
+      userId: isAuthenticated ? session.user.id : null
+    }
 
-    setShowLoading(false);
-    setShowModalLoadingReservation(false);
+    try {
+      const response = await axios.post<CreateReservationResponseApi>(
+        `${process.env.NEXT_PUBLIC_API_ROUTE}service/reservation`, reservation
+      );
+
+      if (response.data.reservationToken) {
+        const encodedToken = encodeToken(response.data.reservationToken);
+        localStorage.setItem("persist-token-reservation", encodedToken);
+        notifyTokenChange(response.data.reservationToken);
+      }
+
+      setShowModalLoadingReservation(true);
+
+    } catch (error: any) {
+      console.error("Error en la reserva:", error);
+    }
   };
+
 
   const redirectToLogin = useCallback(() => {
     localStorage.setItem("redirectUrl", window.location.pathname);
@@ -176,11 +217,89 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
     }
   };
 
+  useEffect(() => {
+    if (reservationStatus) {
+      console.log("Manejando actualización de reserva en useEffect:", reservationStatus); // Este log ahora debería aparecer
+
+      if (reservationStatus.isConfirmed) {
+        const bookingBedroom = createBookingBedroom();
+        addBedroomToBooking(bookingBedroom);
+        localStorage.setItem("redirectUrl", window.location.pathname);
+        router.push(isAuthenticated ? "/payment-processing/user" : "/payment-processing/guest");
+
+      } else {
+        toast.error("Error: Ya existen reservas en este horario. Por favor, selecciona otro.", { duration: 7000 });
+        setShowModalLoadingReservation(false);
+        setShowLoading(false);
+
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem("persist-token-reservation");
+          useReservationStatusStore.getState().setToken(null);
+        }
+        return;
+      }
+    }
+  }, [reservationStatus, router, createBookingBedroom, addBedroomToBooking, isAuthenticated]);
+
   const isReservationButtonDisabled = showLoading || !selectedDate || !selectedTime;
+
+  const OptionsTime = [
+    { label: '1 hora', value: 1, },
+    { label: '2 horas', value: 2, },
+    { label: '3 horas', value: 3, },
+  ];
+
+  useEffect(() => {
+    async function fetchTokenTransaction() {
+      if (typeof window !== 'undefined') {
+        const storedEncodedToken = localStorage.getItem("persist-token-reservation");
+        if (storedEncodedToken) {
+          const decodedToken = decodeToken(storedEncodedToken);
+          setTokenTransaction(decodedToken);
+        } else {
+          removeBooking();
+        }
+      }
+    }
+    fetchTokenTransaction();
+  }, []);
+
+  useEffect(() => {
+
+    async function fetchTransaction() {
+      if (tokenTransaction) {
+        try {
+          const response = await axios.get(
+            `${process.env.NEXT_PUBLIC_API_ROUTE}service/by-reservation-token/${tokenTransaction}`
+          );
+          if (response.data.isConfirmed === true) {
+            setModalReservationInProcessing(true);
+            return;
+          } else {
+            if (response.data.isConfirmed === false) {
+              setTokenTransaction(null);
+              localStorage.removeItem("persist-token-reservation");
+              return;
+            }
+          }
+          setShowModalLoadingReservation(true);
+        } catch (error: any) {
+          setTokenTransaction(null);
+          localStorage.removeItem("persist-token-reservation");
+        }
+      }
+    }
+
+    fetchTransaction();
+  }, [tokenTransaction]);
+
 
   return (
     <>
-      
+      <ModalReservationInProcessing
+        isOpen={modalReservationInProcessing}
+        onClose={() => setModalReservationInProcessing(false)}
+      />
 
       <ModalLoadingReservation
         isOpen={showModalLoadingReservation}
@@ -189,7 +308,7 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
 
       {isDateTimeModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
-        onClick={handleBackdropClick}
+          onClick={handleBackdropClick}
         >
           <div className="bg-white md:rounded-lg shadow-lg w-full md:w-1/2 lg:w-1/3 p-6 items-center">
             <h2 className="text-lg font-semibold mb-4">
@@ -289,7 +408,7 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
       {/* Fin Selector de Fecha y Hora Integrado */}
 
 
-      <div className="sticky top-24">
+      <div className="sticky fade-in top-24">
         <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-xl w-full">
           <div className="flex gap-2 items-center justify-end mb-5">
             <p className="text-xs font-extralight">Reserva protegida</p>
@@ -367,6 +486,13 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
             </button>
           )}
 
+          <TimeUsageSelector
+            currentTimeLimit={serviceUsageTime}
+            onTimeLimitChange={(hours) => {
+              setServiceUsageTime(hours)
+            }}
+          />
+
           <div className="mt-3">
             {isLoadingSession ? (
               <div className="">
@@ -375,10 +501,11 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
               </div>
             ) : isAuthenticated ? (
               <>
+
                 <button
                   type="submit"
                   disabled={isReservationButtonDisabled}
-                  onClick={() => handleReservation(false)}
+                  onClick={() => handleReservation()}
                   className={clsx(
                     "flex items-center gap-x-4 w-full mt-2 justify-center rounded-lg px-7 py-2 font-medium text-white",
                     {
@@ -415,6 +542,8 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
                     <span>Seleccionar fecha y hora de entrada</span>
                   )}
                 </button>
+
+
               </>
             ) : (
               <>
@@ -485,7 +614,7 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
                             </div>
                           </div>
                         )}
-                        <button onClick={() => handleReservation(true)} disabled={isReservationButtonDisabled}>
+                        <button onClick={() => handleReservation()} disabled={isReservationButtonDisabled}>
                           <label
                             className={clsx(
                               "inline-flex items-center md:gap-2 justify-between w-full p-3 md:p-5 text-gray-900 bg-white border border-gray-500 rounded-lg cursor-pointer text-start",
@@ -510,7 +639,8 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
                       </div>
                     </li>
                   </ul>
-                )}
+                )
+                }
               </>
             )}
           </div>

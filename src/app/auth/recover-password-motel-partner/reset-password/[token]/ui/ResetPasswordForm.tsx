@@ -1,6 +1,7 @@
 'use client';
-import { login, updatePasswordByUser, validateTokenResertPassword } from "@/actions";
+import { login } from "@/actions";
 import { ModalInvalidToken } from "@/components";
+import axios from "axios";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -41,13 +42,12 @@ export const ResetPasswordForm = ({ token }: Props) => {
         const { password } = data;
 
         try {
-            const UpdatePassword = await updatePasswordByUser(password, user?.id!);
-            if (!UpdatePassword.ok) return;
+            await axios.post(
+                `${process.env.NEXT_PUBLIC_API_ROUTE}user/reset-password`, { token: token, password: data.password }
+            );
             setShowLoading(false);
             await login(user!.email!.toLowerCase(), password);
-            if (user?.role === "motelPartner") {
-                window.location.replace('/admin/dashboard-partner-motel');
-            }
+            window.location.replace('/admin/dashboard-partner-motel');
         } catch (error) {
             toast.error('No se pudo actualizar la contraseña');
         } finally {
@@ -57,16 +57,17 @@ export const ResetPasswordForm = ({ token }: Props) => {
 
     useEffect(() => {
         async function fetchToken() {
-            const { ok, user } = await validateTokenResertPassword(token);
-            if (ok) {
-                setCodeValidate(ok);
-                setUser(user);
-                setIsLoading(false);
-            } else {
-                setIsLoading(false);
+            try {
+                const response = await axios.get<user>(
+                    `${process.env.NEXT_PUBLIC_API_ROUTE}user/validate-token/${token}`
+                );
+                setCodeValidate(true);
+                setUser(response.data);
+            } catch (error: any) {
+                console.log(error)
+                setCodeValidate(true);
             }
-
-
+            setIsLoading(false);
         }
         fetchToken();
     }, [])

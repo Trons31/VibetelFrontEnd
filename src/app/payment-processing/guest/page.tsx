@@ -1,4 +1,4 @@
-import { ReservationExpiryTimer, StatusCheckOut } from "@/components";
+import { StatusCheckOut } from "@/components";
 import { UiPage } from "./ui/UiPage";
 
 export async function generateMetadata() {
@@ -18,8 +18,7 @@ export default function CheckOutInAnonymousPage() {
           title="Reserva anonima en proceso"
         />
       </div>
-      <ReservationExpiryTimer />
-      <UiPage />
+      <UiPage /> 
     </div>
   );
 }

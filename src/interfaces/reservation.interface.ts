@@ -3,14 +3,30 @@ import { statusRoom } from "./room.interface";
 
 export type StatusReservation = 'cancelado' | 'en_espera' | 'iniciado' | 'en_servicio' | 'completado' | 'no_iniciado';
 
+export type serviceStatus = 'en_espera' | "iniciado" | "completado" | "cancelado" | "no_iniciado"
+
+export type PaymentStatus = 'accepted' | 'rejected' | 'pending' | 'failed';
+
+export type TypeService = "reservation" | "no-reservation";
+
+export interface MotelConfig {
+  id: string;
+  timeMinutesCleanRoom: number;
+  inService: boolean;
+  outOfServiceStart: Date | null;
+  outOfServiceEnd: Date | null;
+  locationLatitude: number | null;
+  locationLongitude: number | null;
+  defaultReservationAddTime: number | null;
+  timeAwaitTakeReservation: number;
+}
+
 export interface Motel {
   title: string;
-  address: string,
-  neighborhood: string,
-  contactPhone: string,
-  MotelConfig: {
-    defaultReservationAddTime: number | null;
-  } | null
+  address: string;
+  neighborhood: string;
+  contactPhone: string;
+  MotelConfig: MotelConfig;
 }
 
 export interface RoomImage {
@@ -20,37 +36,81 @@ export interface RoomImage {
 export interface Room {
   slug: string;
   priceAddTime: number;
-  motel: Motel;
   roomImage: RoomImage[];
+  motel: Motel;
 }
 
 export interface ServiceItem {
   id: string;
   updatedAt: Date;
   title: string;
-  promoPrice?: number | null;
+  promoPrice: number | null;
   price: number;
   arrivalDate: Date;
   departureDate: Date;
-  timeLimit: number;
+  timeUsage: number;
   roomNumber: string;
-  extraServices?: number | null;
-  accessCode?: string | null;
-  status: StatusReservation;
+  extraServices: string | null;
+  accessCode: string;
+  status: string;
   serviceTaken: boolean;
-  dateTaken?: Date | null;
+  dateTaken: Date | null;
   serviceCompleted: boolean;
   userConfirmServiceCompleted: boolean;
-  dateComplete?: Date | null;
-  dateUserConfirmServiceCompleted?: Date | null;
+  dateComplete: Date | null;
+  dateUserConfirmServiceCompleted: Date | null;
   canceledReservation: boolean;
-  dateCanceledReservation?: Date | null;
+  dateCanceledReservation: Date | null;
   surchargeActive: boolean;
-  surchargeAmount: number;
+  surchargeAmount: number | null;
   surchargePaid: boolean;
-  serviceId: string;
-  roomId: string;
   room: Room;
+}
+
+export interface ReservationApi {
+  id: string;
+  type: string;
+  total: number;
+  paidAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: string;
+  transactionId: string;
+  ServiceItem: ServiceItem;
+}
+
+
+
+export interface CreateReservationResponseApi {
+  transactionId: string;
+  total: number;
+  isConfirmed: boolean,
+  reservationToken: string;
+}
+
+
+export interface ReservationPendingByMotelApi {
+  id: string;
+  createdAt: Date;
+  serviceItem: {
+    id: string;
+    title: string;
+    roomNumber: number | string;
+    arrivalDate: Date;
+    departureDate: Date;
+  };
+}
+
+export interface NewReservationNotification {
+  id: string;
+  createdAt: string;
+  serviceItem: {
+    id: string;
+    title: string;
+    roomNumber: string;
+    arrivalDate: string;
+    departureDate: string;
+  };
 }
 
 
@@ -71,6 +131,22 @@ export interface Reservation {
     rating: number;
   } | null
 
+}
+
+
+export interface ReservationByUserApi {
+  id: string;
+  total: number;
+  createdAt: Date;
+  roomId?: string;
+  roomSlug?: string;
+  motelRazonSocial?: string;
+  motelSlug?: string;
+  roomImages?: string[];
+  serviceItem?: {
+    status?: StatusReservation;
+    room: string;
+  };
 }
 
 export interface ReservationByUser {

@@ -57,7 +57,10 @@ export default async function MotelCoverPage() {
                 </p>
               )
           }
-          <ImageMotel motelId={motelExist.id} motelImage="" imageId={123} />
+          <ImageMotel
+            accessToken={session.accessToken}
+            motelImage={motelExist.images.length > 0 ? motelExist.images[0].url : ""}
+            imageId={motelExist.images.length > 0 ? motelExist.images[0].id : ""} />
         </div>
 
       </div>

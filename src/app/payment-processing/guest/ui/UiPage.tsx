@@ -1,28 +1,38 @@
 'use client';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { RoomInBooking } from './RoomInBooking'
 import { Summary } from './Summary'
 import { useBookingStore } from '@/store';
-import { SkeletonPaymentProcessing } from '@/components';
-import { useRouter } from 'next/navigation';
+import { ModalTokenExpireOrReservationNoExists, ReservationExpiryTimer, SkeletonPaymentProcessing } from '@/components';
+import { redirect} from 'next/navigation';
 
 export const UiPage = () => {
 
-    const router = useRouter();
-    const { Booking, isLoading, finishLoading } = useBookingStore();
+
+    const [existRerservation, setExisitReservation] = useState(false);
+    const { Booking, tokenExpire, isLoading, finishLoading } = useBookingStore();
+
+    
+    useEffect(() => {
+        const storedEncodedToken = localStorage.getItem("persist-token-reservation");
+        if (storedEncodedToken) {
+            setExisitReservation(true);
+        }
+
+        finishLoading();
+    }, []);
 
 
     useEffect(() => {
-        finishLoading();
-
-        if (!isLoading && !Booking) {
-            router.push('/empty');
+        if (!isLoading) {
+            if (!Booking) {
+                redirect("/empty");
+            }
         }
-    }, [isLoading, Booking?.id, router, finishLoading]);
+    }, [isLoading])
 
     return (
         <>
-
             {
                 isLoading
                     ? (
@@ -30,21 +40,32 @@ export const UiPage = () => {
                             <SkeletonPaymentProcessing />
                         </>
                     ) : (
-                        <div className="grid grid-cols-2 md:grid-cols-12 md:px-10 md:gap-2 pt-5 md:pt-0 pb-32 md:pb-0 md:mt-10 space-y-4 md:space-y-0 ">
+                        existRerservation
+                            ? (
+                                <>
 
-                            <div className="col-span-2 md:col-span-8 w-full" >
-                                <RoomInBooking />
-                            </div >
+                                    <ReservationExpiryTimer />
 
-                            <div className="col-span-2 md:col-span-4 w-full " >
-                                <Summary />
-                            </div>
+                                    <div className="grid grid-cols-2 md:grid-cols-12 md:px-10 md:gap-2 pt-5 md:pt-0 pb-32 md:pb-0 md:mt-10 space-y-4 md:space-y-0 ">
 
-                        </div >
+                                        <div className="col-span-2 md:col-span-8 w-full" >
+                                            <RoomInBooking />
+                                        </div >
+
+                                        <div className="col-span-2 md:col-span-4 w-full " >
+                                            <Summary />
+                                        </div>
+
+                                    </div >
+                                </>
+
+                            ) :
+                            (
+                                <ModalTokenExpireOrReservationNoExists />
+                            )
+
                     )
             }
-
-
         </>
     )
 }

@@ -1,21 +1,25 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
-import { deleteTransactionIdReservation } from "@/actions";
 import { useBookingStore } from "@/store";
 import { MdTimer } from "react-icons/md";
 
 export const ReservationExpiryTimer: React.FC = () => {
+
+  if (localStorage.getItem("persist-token-reservation") === null) return;
+
   const roomInBooking = useBookingStore((state) => state.Booking);
   const removeBooking = useBookingStore((state) => state.removeBooking);
+  const setTokenExpire = useBookingStore((state) => state.setTokenExpire);
   const [isLoading, setIsLoading] = useState(true);
   const [timeLeft, setTimeLeft] = useState<number>(0); // Tiempo restante en segundos
-  const expiryTime = 15 * 60;
+  const expiryTime = 10 * 60;
   const [hasExpired, setHasExpired] = useState(false);
+
+
 
   useEffect(() => {
     if (!roomInBooking) return;
-
     const createdAt = new Date(roomInBooking.createdAt).getTime(); // Hora de creación de la reserva
     const currentTime = Date.now(); // Hora actual
     const elapsedTime = Math.floor((currentTime - createdAt) / 1000); // Tiempo transcurrido en segundos
@@ -50,12 +54,14 @@ export const ReservationExpiryTimer: React.FC = () => {
   useEffect(() => {
     if (hasExpired) {
       const handleExpiry = async () => {
-        await deleteTransactionIdReservation();
-        window.location.replace("/empty");
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem("persist-token-reservation");
+          window.location.reload();
+        }
       };
       handleExpiry();
     }
-  }, [hasExpired, removeBooking]);
+  }, [hasExpired, removeBooking, setTokenExpire]);
 
   // Formato del tiempo restante
   const formatTime = (seconds: number) => {
@@ -94,8 +100,8 @@ export const ReservationExpiryTimer: React.FC = () => {
             <div className="bg-red-600 p-4 grid grid-cols-10 rounded-lg">
               <p className="col-span-8 text-white">
                 Las reservas tienen un tiempo de expiración por privacidad y
-                protección de 15 minutos. Debes completar el proceso de pago
-                antes de que transcurran esos 15 minutos; de lo contrario, la
+                protección de 10 minutos. Debes completar el proceso de pago
+                antes de que transcurran esos 10 minutos; de lo contrario, la
                 reserva se anulará automáticamente.
               </p>
               <div className="col-span-2 flex text-lg justify-center items-center gap-5 bg-white rounded-lg  text-red-600 font-bold mt-2">
@@ -104,7 +110,7 @@ export const ReservationExpiryTimer: React.FC = () => {
                   <div className="w-16 text-center whitespace-nowrap">
                     {" "}
                     {/* Ancho fijo y no se rompe el texto */}
-                    {timeLeft > 0 ? formatTime(timeLeft) : ""}
+                    {timeLeft > 0 ? formatTime(timeLeft) : "Tiempo agotado"}
                   </div>
                 </div>
               </div>

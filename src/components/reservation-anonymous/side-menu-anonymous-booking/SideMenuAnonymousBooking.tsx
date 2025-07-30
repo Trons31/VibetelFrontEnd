@@ -1,12 +1,11 @@
 'use client';
-import { deleteCookieCodeBookingAnonymous } from '@/actions';
 import { BsIncognito } from 'react-icons/bs';
 
 export const SideMenuAnonymousBooking = () => {
 
     const handleLogout = () => {
-        deleteCookieCodeBookingAnonymous();
-        window.location.replace("/searchBooking");
+        localStorage.removeItem("persist-reservation-anonymous");
+        window.location.reload();
     };
 
     return (

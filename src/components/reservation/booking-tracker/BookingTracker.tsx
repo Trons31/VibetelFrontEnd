@@ -1,12 +1,12 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { DetailBooking, GuideSteps, UserReservationTracker } from '@/components';
-import { Reservation } from '@/interfaces/reservation.interface';
+import { ReservationApi } from '@/interfaces/reservation.interface';
 import clsx from 'clsx';
 import { motion } from 'framer-motion';
 
 interface Props {
-    reservation: Reservation;
+    reservation: ReservationApi;
 }
 
 const fadeVariants = {

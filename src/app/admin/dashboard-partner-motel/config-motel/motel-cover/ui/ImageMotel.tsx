@@ -4,21 +4,21 @@
 import { useState } from "react";
 import Image from 'next/image';
 import toast, { Toaster } from "react-hot-toast";
-import { registerImageMotel } from "@/actions";
 import clsx from "clsx";
 import { sleep } from "@/utils";
+import axios from "axios";
 
 interface Props {
-  motelId: string;
+  accessToken: string;
   motelImage?: string | undefined;
-  imageId?: number | undefined;
+  imageId?: string | undefined;
 }
 
 interface FormInputs {
   images?: FileList,
 }
 
-export const ImageMotel = ({ motelId, motelImage, imageId }: Props) => {
+export const ImageMotel = ({ accessToken, motelImage, imageId }: Props) => {
 
   const [showLoadingButton, setShowLoadingButton] = useState(false);
 
@@ -33,45 +33,32 @@ export const ImageMotel = ({ motelId, motelImage, imageId }: Props) => {
     }
   };
 
-  const updateImage = async () => {
-    setShowLoadingButton(true);
-    await sleep(3);
-    if (selectedFile) {
-      const formData = new FormData();
-      formData.append("images", selectedFile);
-
-      const { ok } = await registerImageMotel(formData, motelId, imageId, motelImage);
-      if (!ok) {
-        toast.error("No se pudo actualizar la imagen!")
-        setShowLoadingButton(false);
-        return;
-      }
-      setSelectedFile(null);
-      setShowLoadingButton(false);
-      toast.success("Imagen actualizada!")
-
-    } else {
-      console.error("No se ha seleccionado ningún archivo.");
-    }
-  }
 
   const handleSave = async () => {
     setShowLoadingButton(true);
     await sleep(3);
     if (selectedFile) {
       const formData = new FormData();
-      formData.append("images", selectedFile);
+      formData.append("image", selectedFile);
 
-      const { ok } = await registerImageMotel(formData, motelId);
-      if (!ok) {
+      try {
+        await axios.post(`${process.env.NEXT_PUBLIC_API_ROUTE}motel/image`, formData, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        toast.success("Imagen guardada!")
+        setSelectedFile(null);
+        window.location.replace('/admin/dashboard-partner-motel/config-motel/motel-cover');
+      } catch (error: any) {
+        console.error("Error al cargar habitaciones:", error);
         toast.error("No se pudo guardar la imagen!")
         setShowLoadingButton(false);
         return;
+      } finally {
+        setShowLoadingButton(false); // Desactivar carga de habitaciones
       }
-      toast.success("Imagen guardada!")
-      setSelectedFile(null);
-      window.location.replace('/admin/dashboard-partner-motel/config-motel/motel-cover');
-
     } else {
       setShowLoadingButton(false);
     }
@@ -107,7 +94,7 @@ export const ImageMotel = ({ motelId, motelImage, imageId }: Props) => {
                     selectedFile &&
                     (
                       <button
-                        onClick={updateImage}
+                        onClick={handleSave}
                         type='submit'
                         disabled={showLoadingButton}
                         className={

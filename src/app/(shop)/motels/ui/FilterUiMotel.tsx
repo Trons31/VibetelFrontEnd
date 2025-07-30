@@ -1,6 +1,6 @@
 'use client';
-import { getSuggestedMotels } from '@/actions';
-import { suggestedMotel } from '@/interfaces';
+import { suggestedMotelApi } from '@/interfaces';
+import axios from 'axios';
 import debounce from 'lodash.debounce';
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { IoMdClose } from 'react-icons/io';
@@ -18,7 +18,7 @@ export const FilterUiMotel = ({ onSearch, location }: Props) => {
   const [isSearching, setIsSearching] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showHelpSearch, setShowHelpSearch] = useState(false);
-  const [suggestedMotels, setSuggestedMotels] = useState<suggestedMotel[]>([]);
+  const [suggestedMotels, setSuggestedMotels] = useState<suggestedMotelApi[]>([]);
 
   const searchRef = useRef<HTMLDivElement>(null);
 
@@ -43,8 +43,8 @@ export const FilterUiMotel = ({ onSearch, location }: Props) => {
         }
         setLoading(true);
         try {
-          const { suggestedMotels } = await getSuggestedMotels({ query, city: location });
-          setSuggestedMotels(suggestedMotels);
+          const response = await axios.get<suggestedMotelApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}motel/search?query=${query}&cityId=${location}`);
+          setSuggestedMotels(response.data);
         } catch (err) {
           setSuggestedMotels([]);
         } finally {
@@ -164,16 +164,16 @@ export const FilterUiMotel = ({ onSearch, location }: Props) => {
                                 {
                                   suggestedMotels.map((motel) => (
                                     <li
-                                      onClick={() => search(motel.title)}
+                                      onClick={() => search(motel.razonSocial)}
                                       key={motel.id}
                                       className='hover:bg-gray-100 cursor-pointer py-2 border-b border-solid border-b-gray-300'>
                                       <div className='py-3 w-full px-5 animate-fadeIn'>
                                         <div className='block justify-start ' >
                                           <p className='text-md font-medium capitalize' >
-                                            {motel.title}
+                                            {motel.razonSocial}
                                           </p>
                                           <p className='text-sm text-gray-500 flex gap-2' >
-                                            {motel.city}, {motel.department}
+                                            {motel.address}, {motel.neighborhood}
                                           </p>
                                         </div>
                                       </div>

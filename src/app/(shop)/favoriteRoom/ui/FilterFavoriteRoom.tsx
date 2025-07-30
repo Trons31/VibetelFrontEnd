@@ -1,27 +1,25 @@
-import { CategoryRoom, GarageRoom } from '@/interfaces';
+import { CategoryRoomApi, GarageRoomApi } from '@/interfaces';
 import clsx from 'clsx';
 import { useState } from 'react';
 import { IoCloseOutline, IoSearchOutline } from 'react-icons/io5';
 
 interface Props {
-    garage: GarageRoom[];
-    category: CategoryRoom[];
-    onFilterChange: (filter: string, searchQuery: string, garageFilter: string, categoryFilter: string, dateRange: string) => void;
+    garage: GarageRoomApi[];
+    category: CategoryRoomApi[];
+    onFilterChange: (filter: string, searchQuery: string, garageFilter: string, categoryFilter: string) => void;
 }
 
 export const FilterFavoriteRoom = ({ garage, category, onFilterChange }: Props) => {
     const [searchQuery, setSearchQuery] = useState('');
-    const [dateRange, setDateRange] = useState('');
     const [filterType, setFilterType] = useState('');
     const [garageFilter, setGarageFilter] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('');
-    const [showAccordion, setShowAccordion] = useState(true);
     const [isSearching, setIsSearching] = useState(false)
 
 
     const handleFilter = (filter: string) => {
         setFilterType(filter); // Actualizar tipo de filtro activo
-        onFilterChange(filter, searchQuery, garageFilter, categoryFilter, dateRange);
+        onFilterChange(filter, searchQuery, garageFilter, categoryFilter);
     };
 
     const handleSearch = () => {
@@ -31,27 +29,22 @@ export const FilterFavoriteRoom = ({ garage, category, onFilterChange }: Props) 
             setIsSearching(false)
         }
 
-        onFilterChange('', searchQuery, garageFilter, categoryFilter, dateRange); // Limpiar filtro al realizar búsqueda
-    };
-
-    const handleDateRange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setDateRange(e.target.value);
-        onFilterChange(filterType, searchQuery, garageFilter, categoryFilter, e.target.value); // Mantener filtro actual al cambiar rango de fechas
+        onFilterChange('', searchQuery, garageFilter, categoryFilter); // Limpiar filtro al realizar búsqueda
     };
 
     const handleGarage = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setGarageFilter(e.target.value); // Actualizar tipo de filtro activo
-        onFilterChange(filterType, searchQuery, e.target.value, categoryFilter, dateRange);
+        onFilterChange(filterType, searchQuery, e.target.value, categoryFilter);
     }
 
     const handleCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setCategoryFilter(e.target.value);
-        onFilterChange(filterType, searchQuery, garageFilter, e.target.value, dateRange);
+        onFilterChange(filterType, searchQuery, garageFilter, e.target.value);
     }
 
     const cleanInputSearch = () => {
         setSearchQuery("");
-        onFilterChange(filterType, "", garageFilter, categoryFilter, dateRange);
+        onFilterChange(filterType, "", garageFilter, categoryFilter);
         setIsSearching(false);
     }
 
@@ -109,7 +102,7 @@ export const FilterFavoriteRoom = ({ garage, category, onFilterChange }: Props) 
                                     key={garage.id}
                                     value={garage.id}
                                 >
-                                    {garage.name}
+                                    {garage.title}
                                 </option>
                             ))}
                         </select>
@@ -126,7 +119,7 @@ export const FilterFavoriteRoom = ({ garage, category, onFilterChange }: Props) 
                                     name="search"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="h-14 text-sm md:text-md w-full rounded-md py-4 pr-12 pl-12 outline-none focus:ring-2"
+                                    className="h-14 text-xs md:text-sm w-full rounded-md py-4 pr-12 pl-12 outline-none focus:ring-2"
                                     placeholder="Habitacion, codigo de acceso, numero de habitacion:"
                                 />
 
@@ -145,7 +138,7 @@ export const FilterFavoriteRoom = ({ garage, category, onFilterChange }: Props) 
                                     <button
                                         type="button"
                                         onClick={handleSearch}
-                                        className="inline-flex h-8 items-center justify-center rounded-lg bg-orange-500 px-4 font-medium text-white hover:bg-orange-600"
+                                        className="inline-flex text-xs md:text-sm h-8 items-center justify-center rounded-lg bg-orange-500 px-4 font-medium text-white hover:bg-orange-600"
                                     >
                                         Buscar
                                     </button>
@@ -154,18 +147,6 @@ export const FilterFavoriteRoom = ({ garage, category, onFilterChange }: Props) 
                             </div>
 
 
-                        </div>
-                        <div className='hidden md:flex col-span-3 justify-end'>
-                            <select
-                                name='dateRange'
-                                value={dateRange}
-                                onChange={handleDateRange}
-                                className='sm:mr-4 block w-fit whitespace-pre rounded-lg border p-1 pr-10 text-base outline-none focus:shadow sm:text-sm'
-                            >
-                                <option value=''>Cualquier momento</option>
-                                <option value='last_week'>Hace una semana</option>
-                                <option value='last_month'>Hace un mes</option>
-                            </select>
                         </div>
                     </div>
                 </div>

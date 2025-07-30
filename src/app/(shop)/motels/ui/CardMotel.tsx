@@ -2,13 +2,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { FilterUiMotel } from './FilterUiMotel'
 import { InputSearchMotelMovil, SkeletonMotels, GridAllMotel, Pagination } from '@/components';
-import { MotelApi, searchCity } from '@/interfaces';
+import { LocationCity, MotelApi } from '@/interfaces';
 import { VscSearchStop } from 'react-icons/vsc';
 import { MdOutlineDoNotDisturbAlt } from 'react-icons/md';
 import axios from 'axios';
 
 interface Props {
-    location: searchCity | undefined;
+    location: LocationCity | undefined;
 }
 
 export const CardMotel = ({ location }: Props) => {
@@ -23,11 +23,11 @@ export const CardMotel = ({ location }: Props) => {
     const fetchRooms = useCallback(async () => {
         setIsLoading(true);
         try {
-            const response = await axios.get<{ motels: MotelApi[], total: number }>(`${process.env.NEXT_PUBLIC_API_ROUTE}motel`);
+            const response = await axios.get<{ motels: MotelApi[], total: number }>(`${process.env.NEXT_PUBLIC_API_ROUTE}motel?cityId=${location?.id}`);
             setMotelsInLocation(response.data.motels);
         } catch (error: any) {
             setMotelsInLocation([]);
-            console.error("Error al cargar habitaciones:", error);
+            console.error("Error al cargar los  moteles:", error);
         } finally {
             setIsLoading(false);
         }
@@ -78,13 +78,13 @@ export const CardMotel = ({ location }: Props) => {
 
             <FilterUiMotel
                 onSearch={(searchTerm) => handleSearch(searchTerm)}
-                location={location?.city}
+                location={location?.id}
             />
 
             <div className='px-2'>
                 <InputSearchMotelMovil
                     onSearchTerm={(searchTerm) => handleSearch(searchTerm)}
-                    location={location?.city}
+                    location={location?.id}
                 />
             </div>
 

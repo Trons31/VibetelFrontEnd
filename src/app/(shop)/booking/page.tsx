@@ -21,11 +21,19 @@ export default async function BookingPage() {
   }
 
   let user: UserApi;
+
   try {
-    const response = await axios.get<UserApi>(`${process.env.NEXT_PUBLIC_API_ROUTE}user/${session.user.id}`)
+    const response = await axios.get<UserApi>(
+      `${process.env.NEXT_PUBLIC_API_ROUTE}user/profile`,
+      {
+        headers: {
+          Authorization: `Bearer ${session?.accessToken}`,
+        },
+      }
+    );
     user = response.data;
   } catch (error: any) {
-    redirect("/");
+     redirect("/");
   }
 
 

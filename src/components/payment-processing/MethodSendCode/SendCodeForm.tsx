@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react'
 import Script from 'next/script';
-import { getReservationByTransactionId, getTransactionIdReservation, placeReservation } from '@/actions';
 import { useBookingStore } from '@/store';
 import clsx from 'clsx';
 import { useForm } from 'react-hook-form';
@@ -9,6 +8,12 @@ import { BiSolidMessageSquareDetail } from 'react-icons/bi';
 import { IoMdArrowRoundBack, IoMdMail } from 'react-icons/io';
 import { IoBagCheck } from 'react-icons/io5';
 import { MdOutlinePayment } from 'react-icons/md';
+import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
+import { CreateReservationResponseApi } from '@/interfaces/reservation.interface';
+import { redirect, usePathname, useRouter } from 'next/navigation';
+import { ModalTokenExpireOrReservationNoExists } from '@/components';
+import { useSession } from 'next-auth/react';
 
 type MethodSend = "sms" | "mail" | "";
 
@@ -20,8 +25,11 @@ type FormInput = {
 }
 
 type transactionData = {
+    id: string;
     transactionId: string;
     total: number;
+    mail?: string;
+    phoneNumber?: string;
 }
 
 export const SendCodeForm = () => {
@@ -31,36 +39,71 @@ export const SendCodeForm = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<FormInput>();
     const [loadingExistTransactionId, setLoadingExistTransactionId] = useState(true);
 
-
     const [statusTransaction, setStatusTransaction] = useState<StatusTransaction>("PENDING")
-    const [transactionId, setTransactionId] = useState<string | null>(null);
+    const [tokenTransaction, setTokenTransaction] = useState<string | null>(null);
 
 
-    const { Booking } = useBookingStore(state => ({
+    const { Booking, } = useBookingStore(state => ({
         Booking: state.Booking,
     }));
+
+    const pathName = usePathname();
+    const [redirectUrl, setRedirectUrl] = useState("/home");
+
+    useEffect(() => {
+        const storedRedirectUrl = localStorage.getItem("redirectUrl");
+        if (storedRedirectUrl) {
+            setRedirectUrl(storedRedirectUrl);
+        }
+    }, [pathName]);
+
+    const router = useRouter();
+    const { data: session, status } = useSession();
+    const isAuthenticated = !!session?.user;
 
 
     const [transactionData, setTransactionData] = useState<transactionData | undefined>(undefined);
 
+    console.log(transactionData);
 
-    const OnPaidAndPlaceReservation = async (data: FormInput) => {
+    const decodeToken = (encodedToken: string): string => {
+        try {
+            return atob(encodedToken); // Decodifica de Base64
+        } catch (e) {
+            console.error("Error al decodificar el token:", e);
+            return encodedToken; // Retorna sin decodificar si hay un error
+        }
+    };
+
+
+    const OnPaidAndUpdateReservation = async (data: FormInput) => {
+
         setLoading(true);
         const reservation = {
-            roomId: Booking!.id,
-            arrivalDate: Booking!.arrivalDate,
-            departureDate: Booking!.departureDate,
             mail: data.mail ? data.mail : undefined,
             phoneNumber: data.phoneNumber ? data.phoneNumber : undefined
         }
-        const response = await placeReservation(reservation);
-        if (response.ok) {
-            setTransactionData({
-                transactionId: response.transactionId,
-                total: response.total
+
+        try {
+            await axios.patch(
+                `${process.env.NEXT_PUBLIC_API_ROUTE}service/reservation/${transactionData?.id}/contact`, reservation
+            );
+
+            setTransactionData(prev => {
+                if (!prev) return prev;
+                return {
+                    ...prev,
+                    mail: data.mail || reservation.mail,
+                    phoneNumber: data.phoneNumber || reservation.phoneNumber
+                };
             });
-        } else {
-            console.error("Error en la reserva:", response.message);
+
+            toast.success("Realiza el pago para completar la reserva");
+            setLoading(false);
+        } catch (error: any) {
+            console.error("Error en la reserva:", error);
+            toast.error("Error realiaron una reserva en este horario antes que tu.");
+            setLoading(false);
         }
 
     }
@@ -72,39 +115,55 @@ export const SendCodeForm = () => {
 
 
     useEffect(() => {
-        async function fetchTransactionId() {
-            const cookieTransactionId = await getTransactionIdReservation();
-            setTransactionId(cookieTransactionId);
-            if (!cookieTransactionId) {
-                setLoadingExistTransactionId(false)
+        async function fetchTokenTransaction() {
+            setLoadingExistTransactionId(true);
+            if (typeof window !== 'undefined') {
+                const storedEncodedToken = localStorage.getItem("persist-token-reservation");
+                if (storedEncodedToken) {
+                    const decodedToken = decodeToken(storedEncodedToken);
+                    setTokenTransaction(decodedToken);
+                }
             }
+            setLoadingExistTransactionId(false);
         }
-
-        fetchTransactionId();
+        fetchTokenTransaction();
     }, []);
 
 
     useEffect(() => {
-        if (transactionId) {
-            // Llama a la función para obtener los datos de la transacción
-            getReservationByTransactionId(transactionId)
-                .then((res) => {
-                    if (res.reservation.transactionId) {
+
+        async function fetchTransaction() {
+            if (tokenTransaction) {
+                try {
+                    const response = await axios.get(
+                        `${process.env.NEXT_PUBLIC_API_ROUTE}service/by-reservation-token/${tokenTransaction}`
+                    );
+
+                    if (response.data.isConfirmed === true) {
                         setTransactionData({
-                            transactionId: res.reservation.transactionId,
-                            total: res.reservation.total
+                            id: response.data.id,
+                            transactionId: response.data.transactionId,
+                            total: response.data.total,
+                            mail: response.data.mail,
+                            phoneNumber: response.data.phoneNumber,
                         });
-                        setStatusTransaction(res.reservation.status!)
+                        setStatusTransaction(response.data.paymentStatus)
                     } else {
-                        console.error("No se encontró la transacción.");
+                        router.push(redirectUrl);
                     }
-                })
-                .catch((error) => {
-                    console.error("Error al obtener la transacción:", error);
-                })
-                .finally(() => setLoadingExistTransactionId(false));
+
+                } catch (error: any) {
+                    localStorage.removeItem("persist-token-reservation");
+                } finally {
+                    setLoadingExistTransactionId(false)
+                }
+            }
+
+
         }
-    }, [transactionId]);
+
+        fetchTransaction();
+    }, [tokenTransaction]);
 
 
 
@@ -117,8 +176,13 @@ export const SendCodeForm = () => {
         }, 1000);
     }, [transactionData]);
 
+
     return (
         <>
+            <Toaster
+                position="top-right"
+                reverseOrder={false}
+            />
 
             {
                 loadingExistTransactionId
@@ -141,7 +205,7 @@ export const SendCodeForm = () => {
                         <>
 
                             {
-                                !transactionData && (
+                                (!transactionData?.mail && !transactionData?.phoneNumber) && (
                                     <>
                                         <div className='fade-in mt-2 space-y-2' >
                                             {
@@ -165,7 +229,7 @@ export const SendCodeForm = () => {
                                             }
                                         </div>
 
-                                        <form onSubmit={handleSubmit(OnPaidAndPlaceReservation)}  >
+                                        <form onSubmit={handleSubmit(OnPaidAndUpdateReservation)}  >
                                             {
                                                 selectedMethodSend === "mail" && (
                                                     <div >
@@ -293,7 +357,7 @@ export const SendCodeForm = () => {
 
 
                             {
-                                transactionData && (
+                                (transactionData?.mail || transactionData?.phoneNumber) && (
                                     statusTransaction === "ACCEPTED"
                                         ? (
                                             <div className='flex w-full py-4' >

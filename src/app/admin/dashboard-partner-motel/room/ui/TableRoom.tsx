@@ -80,8 +80,8 @@ export const TableRoom = ({ accessToken, garageRoom, categoryRoom }: Props) => {
         if (onSale === 'asc') result.sort((a, b) => Number(b.promoActive) - Number(a.promoActive));
         if (onSale === 'desc') result.sort((a, b) => Number(a.promoActive) - Number(b.promoActive));
 
-        if (inAvailable === 'asc') result.sort((a, b) => Number(b.inAvaible) - Number(a.inAvaible));
-        if (inAvailable === 'desc') result.sort((a, b) => Number(a.inAvaible) - Number(b.inAvaible));
+        if (inAvailable === 'asc') result.sort((a, b) => Number(b.inAvailable) - Number(a.inAvailable));
+        if (inAvailable === 'desc') result.sort((a, b) => Number(a.inAvailable) - Number(b.inAvailable));
 
         // if (orderMostReserved === 'asc') result.sort((a, b) => (a.reservationsCount || 0) - (b.reservationsCount || 0));
         // if (orderMostReserved === 'desc') result.sort((a, b) => (b.reservationsCount || 0) - (a.reservationsCount || 0));
@@ -287,7 +287,7 @@ export const TableRoom = ({ accessToken, garageRoom, categoryRoom }: Props) => {
                                         </Link>
                                     </td>
                                     <td className="text-sm text-center text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                        {room.inAvaible ? (
+                                        {room.inAvailable ? (
                                             <div className="flex justify-center items-center gap-2">
                                                 <FaCheckCircle className='h-4 w-4 text-green-700' />
                                                 <span className='mx-2 text-green-700'>Disponible</span>

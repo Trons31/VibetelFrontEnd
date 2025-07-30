@@ -3,15 +3,13 @@
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import clsx from "clsx";
-
-import { updateStatusMotel } from "@/actions";
 import { isApprovedStatus } from "@/interfaces";
 import axios from "axios";
 
 interface ModalProps {
     isOpen: boolean;
-    mail: string;
     motelId: string;
+    accessToken: string;
     motel: string;
     currentState: isApprovedStatus;
     onClose: () => void;
@@ -19,8 +17,8 @@ interface ModalProps {
 
 export const ModalStatusMotel = ({
     currentState,
-    mail,
     motelId,
+    accessToken,
     motel,
     isOpen,
     onClose,
@@ -61,36 +59,31 @@ export const ModalStatusMotel = ({
             setIsLoading(false);
             return;
         }
+
+        const payload: { status: isApprovedStatus; message?: string } = {
+            status: selectedState,
+        };
+
         try {
-            const response = await updateStatusMotel(motelId, selectedState);
-            if (!response.ok) {
-                toast.error("Ups! No se pudo actualizar el estado.");
-                setIsLoading(false);
-                return;
-            }
-
-            if (selectedState === "DATA_CORRECTION") {
-                const message = messageDataCorrection;
-                await axios.post('/api/mailer/motel/dataCorrectionMotel', { mail, message });
-            }
-
-            if (selectedState === "APPROVED") {
-                await axios.post('/api/mailer/motel/approvedMotel', { mail });
-            }
-
-            if (selectedState === "DISABLED") {
-                await axios.post('/api/mailer/motel/disabledMotel', { mail });
-            }
-
+            await axios.patch(
+                `${process.env.NEXT_PUBLIC_API_ROUTE}motel/${motelId}/status`,
+                payload,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
             toast.success("Estado actualizado correctamente.");
             setIsLoading(false);
             window.location.replace("/admin/dashboard-super-admin/motel");
-
-        } catch (error) {
+        } catch (error: any) {
+            console.log(error)
+            toast.error("Ups! No se pudo actualizar el estado.");
             setIsLoading(false);
-            console.error("Error en la solicitud:", error);
-            toast.error("Ocurrió un error al actualizar el estado.");
+            return;
         }
+
     };
 
     return (

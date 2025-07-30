@@ -1,9 +1,12 @@
 import { Lobster } from "@/config/fonts";
 import Link from "next/link";
 import { RegisterForm } from "./ui/RegisterForm";
-import { GetCountries, GetDepartment, getAmenitiesMotel, getCitiesByDepartment } from "@/actions";
+import {  getAmenitiesMotel } from "@/actions";
 import { auth } from "@/auth.config";
 import { IoArrowBackOutline } from "react-icons/io5";
+import { CityApi, CountryApi, DepartmentApi } from "@/interfaces";
+import axios from "axios";
+import { redirect } from "next/navigation";
 
 
 export async function generateMetadata() {
@@ -16,9 +19,31 @@ export async function generateMetadata() {
 
 export default async function NamePage() {
 
-  const countries = await GetCountries();
-  const deparment = await GetDepartment();
-  const cities = await getCitiesByDepartment();
+  let countries: CountryApi[];
+  try {
+    const response = await axios.get<CountryApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}locations/countries`);
+    countries = response.data;
+  } catch (error: any) {
+    redirect("/");
+  }
+
+
+  let deparment: DepartmentApi[];
+  try {
+    const response = await axios.get<DepartmentApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}locations/departments`);
+    deparment = response.data;
+  } catch (error: any) {
+    redirect("/");
+  }
+
+  let cities: CityApi[];
+  try {
+    const response = await axios.get<CityApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}locations/cities`);
+    cities = response.data;
+  } catch (error: any) {
+    redirect("/");
+  }
+
   const amenitiesMotel = await getAmenitiesMotel();
 
   const session = await auth();
@@ -42,7 +67,12 @@ export default async function NamePage() {
             </div>
           </div>
         </div>
-        <RegisterForm motelPartner={motelPartner} countries={countries} departments={deparment} cities={cities} amenitiesMotel={amenitiesMotel} />
+        <RegisterForm
+          motelPartner={motelPartner}
+          countries={countries}
+          departments={deparment}
+          cities={cities}
+          amenitiesMotel={amenitiesMotel} />
       </div>
     </>
   );

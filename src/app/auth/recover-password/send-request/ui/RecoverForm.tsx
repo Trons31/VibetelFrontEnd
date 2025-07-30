@@ -25,7 +25,9 @@ export const RecoverForm = () => {
         setShowErrorMessage(false);
 
         try {
-            await axios.post('/api/mailer/user/recoverPasswordUser', { email: data.email });
+            await axios.post(
+                `${process.env.NEXT_PUBLIC_API_ROUTE}user/forgot-password`, { email: data.email }
+            );
             toast(
                 (t) => (
                     <div>
@@ -41,7 +43,7 @@ export const RecoverForm = () => {
                         color: '#f44336',
                     },
                     icon: <FaCheckCircle
-                        className='text-green-600 h-6 w-6'
+                        className='text-green-600 h-4 w-4'
                     />,
                     ariaProps: {
                         role: 'alert',
@@ -49,7 +51,8 @@ export const RecoverForm = () => {
                     },
                 }
             );
-        } catch (error) {
+        } catch (error: any) {
+            console.log(error)
             setShowErrorMessage(true);
             toast(
                 (t) => (
@@ -63,15 +66,15 @@ export const RecoverForm = () => {
                 ),
                 {
                     duration: 6000,
-                    position: 'top-right',
+                    position: window.innerWidth <= 768 ? 'top-center' : 'top-right',
                     style: {
                         padding: '16px',
                         color: '#f44336',
-                        maxWidth: '350px',
+                        maxWidth: '400px',
                         width: '100%',
                     },
                     icon: <AiFillCloseCircle
-                        className='text-red-600 h-6 w-6'
+                        className='text-red-600 h-4 w-4'
                     />,
                     ariaProps: {
                         role: 'alert',

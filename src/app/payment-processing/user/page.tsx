@@ -18,7 +18,6 @@ export default function CheckOutInUserPage() {
           title="Reserva en proceso"
         />
       </div>
-      <ReservationExpiryTimer />
       <UiPage />
     </div>
   );

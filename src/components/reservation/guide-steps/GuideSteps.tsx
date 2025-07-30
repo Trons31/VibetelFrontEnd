@@ -5,7 +5,7 @@ export const GuideSteps = () => {
     return (
         <>
 
-            <div className='grid grid-cols md:grid-cols-2 gap-5' >
+            <div className='grid grid-cols md:grid-cols-2 gap-5 mb-10' >
                 <div className="border border-gray-300 p-2 rounded-lg divide-y divide-dashed mt-4 h-full space-y-3">
                     {/* Paso 1: Encuentra tu código de acceso */}
                     <div className="p-3 rounded-lg">

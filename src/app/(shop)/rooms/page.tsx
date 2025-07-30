@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-import { getRoomWithBestPromotion } from "@/actions";
 import { FilterRooms } from "./ui/FilterRooms";
 import { AmenitiesRoomApi, CategoryRoomApi, GarageRoomApi, RoomAllApi } from "@/interfaces";
 import axios from "axios";

@@ -2,24 +2,46 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { addOrDeleteFavoriteRoom } from '@/actions';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { BiHeart, BiSolidHeart } from 'react-icons/bi';
+import axios from 'axios';
 
 interface Props {
   roomId: string;
-  inFavorites: boolean | undefined;
 }
 
-export const FavoriteRoom = ({ roomId, inFavorites }: Props) => {
+export const FavoriteRoom = ({ roomId }: Props) => {
 
   const router = useRouter();
 
-  const [like, setLike] = useState(inFavorites);
-  const { data: session } = useSession();
+  const [like, setLike] = useState(false);
+  const { data: session, status } = useSession();
   const [isLoading, setIsLoading] = useState(false);
 
   const isAuthenticated = !!session?.user;
+
+  useEffect(() => {
+    if (status === "loading") return;
+    if (status === "unauthenticated") return;
+    const InFavoritesByRoom = async () => {
+      try {
+        await axios.get(
+          `${process.env.NEXT_PUBLIC_API_ROUTE}room/favorite/${roomId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.accessToken}`,
+            },
+          }
+        );
+        setLike(true);
+      } catch (error: any) {
+      }
+    }
+
+
+    InFavoritesByRoom();
+  }, [status]);
 
 
   const onClickedLike = async () => {
@@ -31,25 +53,45 @@ export const FavoriteRoom = ({ roomId, inFavorites }: Props) => {
 
     setIsLoading(true);
     if (like) {
-      const addOrDeleteToFavorites = await addOrDeleteFavoriteRoom(roomId, session.user.id!)
-      setLike(false);
+      try {
+        await axios.delete(
+          `${process.env.NEXT_PUBLIC_API_ROUTE}room/favorite/${roomId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.accessToken}`,
+            },
+          }
+        );
+        setLike(false);
+        toast.success("Habitacion eliminada de favoritos");
+      } catch (error: any) {
+        setLike(false);
+        toast.error("No se pudo eliminar de favoritos");
+      }
       setIsLoading(false);
-      toast.success(addOrDeleteToFavorites.message);
     } else {
-      const addOrDeleteToFavorites = await addOrDeleteFavoriteRoom(roomId, session.user.id!)
-      setLike(true);
+      try {
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_API_ROUTE}room/favorite/${roomId}`, {},
+          {
+            headers: {
+              Authorization: `Bearer ${session?.accessToken}`,
+            },
+          }
+        );
+        toast.success("Habitacion guardada en favoritos");
+        setLike(true);
+      } catch (error: any) {
+        console.log(error);
+        setLike(true);
+        toast.error("No se pudo agregar a favoritos");
+      }
       setIsLoading(false);
-      toast.success(addOrDeleteToFavorites.message)
     }
   }
 
   return (
     <>
-
-      <Toaster
-        position="top-right"
-        reverseOrder={false}
-      />
 
       <button
         onClick={onClickedLike}

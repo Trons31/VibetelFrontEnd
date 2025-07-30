@@ -1,12 +1,12 @@
 'use client';
 import React, { useEffect, useState } from 'react'
-import { Reservation, StatusReservation } from '@/interfaces/reservation.interface'
+import { Reservation, ReservationApi, StatusReservation } from '@/interfaces/reservation.interface'
 import { formatDateWithHours } from '@/utils';
 import { motion } from 'framer-motion';
 import { FaCheck, FaChevronDown, FaChevronUp } from 'react-icons/fa6';
 
 interface Props {
-    reservation: Reservation;
+    reservation: ReservationApi;
 }
 
 export const BookingDetail = ({ reservation }: Props) => {
@@ -132,7 +132,7 @@ export const BookingDetail = ({ reservation }: Props) => {
                         <div className='mt-2 justify-between items-center'>
                             <p className='font-bold text-md'>Salida</p>
 
-                            <p className='text-md'>{formatDateWithHours(reservation.departureDate)}</p>
+                            <p className='text-md'>{formatDateWithHours(reservation.ServiceItem.departureDate)}</p>
 
                         </div>
                     </motion.div>

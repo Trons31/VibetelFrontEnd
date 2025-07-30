@@ -190,7 +190,7 @@ export const StatusCheckOut = ({ title, Success, error }: Props) => {
                         pathName === "/payment-processing/guest" && (
                             <>
                                 <p className='text-sm'>
-                                    Las reservas anónimas ofrecen una forma segura de proteger la integridad de los datos de nuestros usuarios. A través de este método, es posible realizar una reserva sin necesidad de almacenar información personal, garantizando así la privacidad y confidencialidad de nuestros clientes.
+                                    Las reservas anónimas ofrecen una forma segura de proteger la integridad de los datos de nuestros usuarios. A través de este método, es posible realizar una reserva sin necesidad de almacenar información personal, garantizando así la privacidad y confidencialidad de nuestros usuarios.
                                 </p>
                             </>
                         )

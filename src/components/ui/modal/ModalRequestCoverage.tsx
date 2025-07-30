@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 import { TiWarning } from 'react-icons/ti';
 import Link from 'next/link';
 import clsx from 'clsx';
-import { createRequestCoverage } from '@/actions';
+import axios from 'axios';
 
 interface ModalProps {
     department: string;
@@ -18,7 +18,7 @@ interface ModalProps {
 
 export const ModalRequestCoverage = ({ isOpen, onClose, department, city, cityId }: ModalProps) => {
     const [loadingRequest, setLoadingRequest] = useState(false);
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
 
     useEffect(() => {
         if (isOpen) {
@@ -44,15 +44,24 @@ export const ModalRequestCoverage = ({ isOpen, onClose, department, city, cityId
 
     const requestCoverage = async () => {
         setLoadingRequest(true);
+        if (status === "loading") return;
+        if (status === "unauthenticated") return;
 
-        const request = await createRequestCoverage(cityId);
-        if (!request.ok) {
+        try {
+            await axios.post(
+                `${process.env.NEXT_PUBLIC_API_ROUTE}user/request-city-service`, { cityId },
+                {
+                    headers: {
+                        Authorization: `Bearer ${session?.accessToken}`,
+                    },
+                }
+            );
+            toast.success("Solicitud enviada!");
+            setLoadingRequest(false);
+            onClose();
+        } catch (error: any) {
             toast.success("Error al enviar la solicitud!");
             setLoadingRequest(false)
-        } else {
-            toast.success("Solicitud enviada!");
-            setLoadingRequest(false)
-            onClose();
         }
     }
 
@@ -78,10 +87,7 @@ export const ModalRequestCoverage = ({ isOpen, onClose, department, city, cityId
 
                     <div className="mt-4 text-center text-gray-700">
                         <p style={{ textAlign: 'justify' }}>
-                            Esta es la ubicacion donde deseas solicitar la cobertura de nuestra plataforma: <strong>{department}, {city}</strong>
-                        </p>
-                        <p className="mt-4" style={{ textAlign: 'justify' }}>
-                            Esta solicitud nos ayuda a expandir nuestra cobertura y llegar hasta tu ubicación.
+                            Esta es la ubicacion donde deseas solicitar la cobertura de nuestra plataforma: <strong>{department}, {city}</strong>,  Esta solicitud nos ayuda a expandir nuestra cobertura y llegar hasta tu ubicación.
                         </p>
                     </div>
 

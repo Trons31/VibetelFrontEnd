@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import { BreadCrumb, ModalCompleteSettings } from "@/components";
 import { RoomForm } from "./ui/RoomForm";
-import { getBedroomBySlugByMotel, getConfigAdditionalSettingsMotel } from "@/actions";
 import { auth } from "@/auth.config";
 import { StatusRoom } from "./ui/StatusRoom";
 import { FaCircleCheck } from "react-icons/fa6";
@@ -39,8 +38,6 @@ export default async function BedroomPage({ params }: Props) {
   } catch (error: any) {
     redirect("/auth/new-account-motel/register");
   }
-
-  const motelConfig = await getConfigAdditionalSettingsMotel(motelExist.id);
 
   let category: CategoryRoomApi[];
   try {
@@ -99,11 +96,11 @@ export default async function BedroomPage({ params }: Props) {
   //   amenitiesRoom = await GetAmenitiesByRoom(room?.room.id);
   // }
 
-  // if (!motelConfig) {
-  //   return (
-  //     <ModalCompleteSettings />
-  //   )
-  // }
+  if (motelExist.subscriptionTier !== "FREE" && motelExist.motelConfig) {
+    return (
+      <ModalCompleteSettings />
+    )
+  }
 
   return (
     <div className="bg-white rounded-xl pb-20 mb-20" >
@@ -163,7 +160,8 @@ export default async function BedroomPage({ params }: Props) {
         </div>
 
         <RoomForm
-          priceAddTime={20000}
+          priceAddTime={motelExist.motelConfig?.defaultReservationAddTime!}
+          subscriptionTier={motelExist.subscriptionTier}
           category={category}
           garage={garage}
           amenities={amenities}

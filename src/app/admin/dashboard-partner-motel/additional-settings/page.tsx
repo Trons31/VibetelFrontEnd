@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth.config";
 import { AdditionalSettingsForm } from "./ui/AdditionalSettingsForm";
-import { getConfigAdditionalSettingsMotel } from "@/actions";
 import { MotelApi } from "@/interfaces";
 import axios from "axios";
 import { BreadCrumb } from "@/components";

@@ -29,7 +29,9 @@ export const RecoverMotelPartnerForm = () => {
         setShowErrorMessage(false);
 
         try {
-            await axios.post('/api/mailer/motel/recoverPasswordMotel', { email: data.email });
+            await axios.post(
+                `${process.env.NEXT_PUBLIC_API_ROUTE}user/forgot-password`, { email: data.email }
+            );
             toast(
                 (t) => (
                     <div>

@@ -69,10 +69,9 @@ export const ItemGridMotelFilter = ({ room }: Props) => {
             )} */}
               <FavoriteRoomCard
                 roomId={room.id}
-                inFavorites={false}
               />
             </div>
-            <div className="p-2 flex md:hidden md:group-hover:flex rounded-b-sm bg-red-600  justify-center  absolute right-0 bottom-0 w-full md:group-hover:bg-red-600 transition-all duration-300">
+            <div className="p-2 rounded-b-lg md:rounded-b-sm flex md:hidden md:group-hover:flex bg-red-600  justify-center  absolute right-0 bottom-0 w-full md:group-hover:bg-red-600 transition-all duration-300">
               <p className="text-white text-xs md:text-md md:text-red-600 md:group-hover:text-white font-normal">
                 Reservar ahora
               </p>
@@ -82,7 +81,7 @@ export const ItemGridMotelFilter = ({ room }: Props) => {
           <div className="p-2">
             <div className="mt-1">
               <div className="flex justify-between items-center" >
-                <h2 className="text-gray-900 title-font capitalize text-lg font-medium">
+                <h2 className="text-gray-900 title-font capitalize text-md md:text-lg font-medium">
                   {" "}
                   {room.title}{" "}
                 </h2>
@@ -90,7 +89,7 @@ export const ItemGridMotelFilter = ({ room }: Props) => {
                 <RatingRoomCard ratings={room.ratings} />
               )} */}
               </div>
-              <p className="text-sm text-gray-700 -mt-1">
+              <p className="text-xs md:text-sm text-gray-700 -mt-1">
                 Motel{" "}
                 <button
                   onClick={() => setOpenModalLocationMotel(true)}
@@ -119,10 +118,10 @@ export const ItemGridMotelFilter = ({ room }: Props) => {
                 {room.promoActive ? (
                   <>
                     <div className="flex">
-                      <p className="text-lg font-bold text-gray-900">
+                      <p className="text-md md:text-lg font-bold text-gray-900">
                         {currencyFormat(promotionPrice)}
                       </p>
-                      <del className="ml-1 align-super text-sm font-bold text-gray-600">
+                      <del className="ml-1 align-super text-xs md:text-sm font-bold text-gray-600">
                         {" "}
                         {currencyFormat(room.price)}{" "}
                       </del>
@@ -130,7 +129,7 @@ export const ItemGridMotelFilter = ({ room }: Props) => {
                   </>
                 ) : (
                   <>
-                    <p className="text-lg font-bold text-gray-900">
+                    <p className="text-md md:text-lg font-bold text-gray-900">
                       {currencyFormat(room.price)}
                     </p>
                   </>

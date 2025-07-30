@@ -7,6 +7,7 @@ import { persist } from "zustand/middleware";
 interface State {
     Booking: BedroomBooking | null;
     isLoading: boolean,
+    tokenExpire: boolean,
     getInformationSummary: () => {
         price: number;
         promPrice?: number;
@@ -19,6 +20,7 @@ interface State {
     addBedroomToBooking: (bedroom: BedroomBooking) => void;
     removeBooking: () => void;
     updateDate: (bedroom: BedroomBooking, date: Date) => void;
+    setTokenExpire: (value: boolean) => void;
     finishLoading: () => void;
 }
 
@@ -27,7 +29,7 @@ export const useBookingStore = create<State>()(
         (set, get) => ({
             Booking: null,
             isLoading: true,
-
+            tokenExpire: false,
             // Methods
 
             getInformationSummary: () => {
@@ -78,6 +80,8 @@ export const useBookingStore = create<State>()(
                 set({ Booking: null });
             },
 
+            setTokenExpire: (value) => set({ tokenExpire: value }),
+
             updateDate: (bedroom: BedroomBooking, date: Date) => {
                 const { Booking } = get();
 
@@ -101,30 +105,10 @@ export const useBookingStore = create<State>()(
             finishLoading: () => {
                 set({ isLoading: false });
             },
-
         }),
         {
             name: 'booking-bedroom',
 
-            // Verificaciones al rehidratar el estado
-            onRehydrateStorage: () => (state) => {
-                if (!state) return; // Verificar que el estado no sea undefined
-
-                const { Booking } = state;
-                const now = new Date();
-
-                if (Booking) {
-                    const createdAt = new Date(Booking.createdAt);
-                    const elapsedTime = now.getTime() - createdAt.getTime();
-                    const minutesPassed = elapsedTime / (1000 * 60); // Convertir a horas
-
-                    if (minutesPassed >= 15 || now > new Date(Booking.arrivalDate)) {
-                        state.removeBooking();
-                        axios.post("/api/cookies/deleteTransactionIdReservation");
-                    }
-
-                }
-            },
         }
     )
 );

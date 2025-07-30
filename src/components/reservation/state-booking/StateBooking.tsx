@@ -1,9 +1,9 @@
-import { Reservation } from '@/interfaces/reservation.interface'
+import { ReservationApi } from '@/interfaces/reservation.interface'
 import { IoIosArrowForward } from 'react-icons/io'
 import { IoCheckmark } from 'react-icons/io5'
 
 interface StateBookingProps {
-  reservation: Reservation;
+  reservation: ReservationApi;
 }
 
 export const StateBooking = ({ reservation }: StateBookingProps) => {

@@ -1,9 +1,9 @@
 import { BreadCrumb } from "@/components";
 import { BankAccountForm } from "./ui/BankAccountForm";
-import { getAccountType, getAllBanks, getBankAccountByMotel, getMotelByMotelPartner } from "@/actions";
+import { getBankAccountByMotel } from "@/actions";
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
-import { MotelApi } from "@/interfaces";
+import { AccountTypeApi, BankAccountApi, BankApi, MotelApi } from "@/interfaces";
 import axios from "axios";
 
 export default async function BanckAccountPage() {
@@ -28,10 +28,59 @@ export default async function BanckAccountPage() {
     } catch (error: any) {
         redirect("/auth/new-account-motel/register");
     }
-    const banks = await getAllBanks();
-    const accountType = await getAccountType();
 
-    const bankAccount = await getBankAccountByMotel(motelExist?.id!);
+    let banks: BankApi[] | null = null;
+
+    try {
+        const response = await axios.get<BankApi[]>(
+            `${process.env.NEXT_PUBLIC_API_ROUTE}banks`,
+            {
+                headers: {
+                    Authorization: `Bearer ${session.accessToken}`,
+                },
+            }
+        );
+
+        banks = response.data;
+    } catch (error: any) {
+        redirect("/admin/dashboard-partner-motel/");
+    }
+
+    let accountType: AccountTypeApi[] | null = null;
+
+    try {
+        const response = await axios.get<AccountTypeApi[]>(
+            `${process.env.NEXT_PUBLIC_API_ROUTE}account-type`,
+            {
+                headers: {
+                    Authorization: `Bearer ${session.accessToken}`,
+                },
+            }
+        );
+
+        accountType = response.data;
+    } catch (error: any) {
+        redirect("/admin/dashboard-partner-motel/");
+    }
+
+
+    let bankAccount: BankAccountApi | null = null;
+
+    try {
+        const response = await axios.get<BankAccountApi>(
+            `${process.env.NEXT_PUBLIC_API_ROUTE}bank-accounts/by-motel`,
+            {
+                headers: {
+                    Authorization: `Bearer ${session.accessToken}`,
+                },
+            }
+        );
+
+        bankAccount = response.data;
+    } catch (error: any) {
+        bankAccount = null;
+    }
+
 
     return (
         <>
@@ -47,7 +96,7 @@ export default async function BanckAccountPage() {
                             urlStart="/admin/dashboard-partner-motel"
                         />
                         {
-                            bankAccount.bankAccount
+                            bankAccount
                                 ? (
                                     <p className="text-xs md:text-sm mt-2">
                                         Ya has registrado tu cuenta bancaria, pero es crucial mantenerla actualizada para recibir los pagos directos a través de nuestra plataforma sin inconvenientes. Verifica que la información proporcionada sea correcta y esté al día para evitar posibles retrasos en el procesamiento de los pagos de tus reservas.
@@ -63,10 +112,10 @@ export default async function BanckAccountPage() {
                     </div>
 
                     <BankAccountForm
-                        bank={banks.banks}
-                        accountType={accountType.accountType}
-                        bankAccount={bankAccount.bankAccount}
-                        motelId={motelExist?.id!}
+                        bank={banks}
+                        accountType={accountType}
+                        bankAccount={bankAccount}
+                        accessToken={session.accessToken}
                     />
 
                 </div>

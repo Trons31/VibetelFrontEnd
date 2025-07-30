@@ -1,23 +1,22 @@
-export interface Bank {
+export interface BankApi {
     id: string;
     name: string;
 }
 
 
-export interface AccountType {
+export interface AccountTypeApi {
     id: string;
-    typeName: string;
+    name: string;
 }
 
 
-export interface BankAccount {
+export interface BankAccountApi {
     id: string;
     accountHolderName: string;
     accountHolderId: string;
     accountNumber: string;
     createdAt: Date;
     updatedAt: Date;
-    motelId: string;
-    bankId: string;
     accountTypeId: string;
+    bankId: string;
 }

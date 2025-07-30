@@ -13,7 +13,7 @@ export default function NotFound() {
             ERROR
           </h2>
           <p className="mt-2 mb-3 text-gray-700 text-sm sm:text-lg">
-            ¡Parece que no podemos encontrar la habitación que estás buscando!
+            ¡Parece que no podemos encontrar la pagina que estás buscando!
           </p>
           <Link
             href="/"

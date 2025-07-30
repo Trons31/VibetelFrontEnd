@@ -4,19 +4,20 @@ import debounce from 'lodash.debounce';
 import { IoSearchOutline } from 'react-icons/io5'
 import { useRouter } from 'next/navigation';
 import { IoIosSearch } from 'react-icons/io';
-import { getSuggestedRoomsAndMotels } from '@/actions';
+import axios from 'axios';
 
 interface Props {
     location: string;
 }
 
 
-interface results {
-    id: string,
-    title: string,
-    type: string,
-    slug: string
+export interface SuggestedResult {
+    id: string;
+    title: string;
+    slug: string;
+    type: 'motel' | 'room';
 }
+
 
 export const InputSearchRooms = ({ location }: Props) => {
 
@@ -27,24 +28,22 @@ export const InputSearchRooms = ({ location }: Props) => {
     const router = useRouter();
 
 
-    const [suggestedResults, setSuggestedResults] = useState<results[]>([]);
+    const [suggestedResults, setSuggestedResults] = useState<SuggestedResult[]>([]);
 
     const debouncedSearch = useMemo(() =>
         debounce(async (query: string) => {
-
             if (query.length === 0) {
                 setSuggestedResults([]);
                 setLoading(false);
                 setHasSearched(false);
                 return;
             }
-
             setLoading(true);
             setHasSearched(true);
             try {
-                const { suggestedResults } = await getSuggestedRoomsAndMotels({ query, city: location });
-                setSuggestedResults(suggestedResults);
-            } catch (err) {
+                const response = await axios.get<{ suggestedResults: SuggestedResult[] }>(`${process.env.NEXT_PUBLIC_API_ROUTE}motel/suggestions?query=${query}&cityId=${location}`);
+                setSuggestedResults(response.data.suggestedResults);
+            } catch (error: any) {
                 setSuggestedResults([]);
             } finally {
                 setLoading(false);
@@ -62,7 +61,7 @@ export const InputSearchRooms = ({ location }: Props) => {
         }
     };
 
-    const redirectToResult = (result: results) => {
+    const redirectToResult = (result: SuggestedResult) => {
         if (result.type === "motel") {
             router.push(`/motels/${result.slug}`)
         } else {

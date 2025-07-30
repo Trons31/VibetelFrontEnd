@@ -1,10 +1,10 @@
-import { RoomAllApi, searchCity } from "@/interfaces";
+import { LocationCity, RoomAllApi } from "@/interfaces";
 import React from "react";
 import { ItemRoom } from "./ItemRoom";
 
 interface Props {
   rooms: RoomAllApi[];
-  location: searchCity | undefined;
+  location: LocationCity | undefined;
 }
 
 export const GridRoom = ({ rooms, location }: Props) => {

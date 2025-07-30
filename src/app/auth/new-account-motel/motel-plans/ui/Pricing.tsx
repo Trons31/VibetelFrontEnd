@@ -1,14 +1,13 @@
 'use client';
 import { currencyFormat, sleep } from '@/utils';
 import clsx from 'clsx';
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { FaCalendarAlt, FaCalendarCheck } from 'react-icons/fa';
 import { TiArrowDownThick } from 'react-icons/ti';
-import { Benefit, Plan } from '@/interfaces';
+import { Benefit, Plan, SubscriptionPeriod } from '@/interfaces'; // Asume que 'Plan' tiene 'basePrice'
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
-import { BenefitItem } from '@/components';
-
+import { BenefitItem, SelectOption } from '@/components';
 
 const ALL_BENEFITS = [
     {
@@ -89,32 +88,44 @@ interface Props {
 }
 
 export const Pricing = ({ plans, tokenSession }: Props) => {
-    const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
-    const [loadingPlanId, setLoadingPlanId] = useState<string | null>(null);
+    // Definimos los períodos de facturación. Los valores representan el factor de multiplicación del precio mensual.
+    const billingOptions = [
+        { label: 'Mensual', value: 1, periodType: 'MONTHLY' as SubscriptionPeriod },
+        { label: 'Semestral', value: 5, periodType: 'SEMESTRAL' as SubscriptionPeriod }, // Ejemplo: 5 meses de pago por 6 meses de servicio
+        { label: 'Anual', value: 10, periodType: 'ANNUAL' as SubscriptionPeriod },   // Ejemplo: 10 meses de pago por 12 meses de servicio
+    ];
 
+    const [loadingPlanId, setLoadingPlanId] = useState<string | null>(null);
+    // Estado para el período de facturación seleccionado, inicializado con la primera opción (Mensual)
+    const [selectedBillingOption, setSelectedBillingOption] = useState(billingOptions[0]);
 
     const hasBenefit = (planBenefits: Benefit[], benefitId: string) => {
         return planBenefits.some(b => b.id === benefitId);
     };
 
-    const getPrice = (price: number) => {
-        if (billingCycle === 'monthly') {
-            return Number(price);
-        } else {
-            return Number(price) * 10;
-        }
+    // La función getPrice ahora usa el basePrice del plan y el valor del período de facturación
+    const getPrice = (basePrice: number) => {
+        return Number(basePrice) * selectedBillingOption.value;
     };
 
     const formatCommission = (commission: string | number) => {
         return Math.round(Number(commission));
     };
 
-    const calculateEndDate = (startDate: Date, isYearly: boolean) => {
+    const calculateEndDate = (startDate: Date, periodType: SubscriptionPeriod) => {
         const endDate = new Date(startDate);
-        if (isYearly) {
-            endDate.setMonth(endDate.getMonth() + 10);
-        } else {
-            endDate.setMonth(endDate.getMonth() + 1);
+        switch (periodType) {
+            case 'MONTHLY':
+                endDate.setMonth(endDate.getMonth() + 1);
+                break;
+            case 'SEMESTRAL':
+                endDate.setMonth(endDate.getMonth() + 6);
+                break;
+            case 'ANNUAL':
+                endDate.setMonth(endDate.getMonth() + 12);
+                break;
+            default:
+                endDate.setMonth(endDate.getMonth() + 1); // Por defecto, mensual
         }
         return endDate;
     };
@@ -123,17 +134,20 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
         return date.toISOString().split('T')[0];
     };
 
-    const handlePlanSelect = async (planId: string, planName: string) => {
-        setLoadingPlanId(planId);
+    const handlePlanSelect = async (plan: Plan) => {
+        setLoadingPlanId(plan.id);
         const startDate = new Date();
-        const endDate = calculateEndDate(startDate, billingCycle === 'yearly');
+        const endDate = calculateEndDate(startDate, selectedBillingOption.periodType);
 
         const data = {
-            subscriptionDetailId: planId,
+            subscriptionDetailId: plan.id,
             startDate: formatDate(startDate),
             endDate: formatDate(endDate),
-            isActive: true
+            isActive: true,
+            period: selectedBillingOption.periodType,
+            actualPrice: getPrice(plan.price)
         };
+
         try {
             await axios.post(
                 `${process.env.NEXT_PUBLIC_API_ROUTE}subscription`,
@@ -144,26 +158,27 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                     },
                 }
             );
-            toast.success(`Te has afilidao al ${planName}`,
+            toast.success(`Te has afiliado al plan ${plan.tier} (${selectedBillingOption.label})`,
                 {
                     duration: 4000
                 }
-            )
+            );
             await sleep(4);
             setLoadingPlanId(null);
             window.location.replace('/admin/dashboard-partner-motel');
 
         } catch (error) {
-            toast.error(`Error al afiliarze al ${planName}`,
+            console.error(error);
+            toast.error(`Error al afiliarte al plan ${plan.tier}`,
                 {
                     duration: 4000
                 }
-            )
+            );
             setLoadingPlanId(null);
         }
     };
 
-    const freePlan = plans.find(plan => plan.tier === "FREE")
+    const freePlan = plans.find(plan => plan.tier === "FREE");
     const basicPlan = plans.find(plan => plan.tier === 'BASIC');
     const premiumPlan = plans.find(plan => plan.tier === 'PREMIUM');
     const enterprisePlan = plans.find(plan => plan.tier === 'ENTERPRISE');
@@ -205,43 +220,27 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
             <div className="relative isolate bg-white px-4 md:px-6 py-24 mt-5 md:mt-20 sm:py-8 lg:px-8">
                 <div className="px-2">
                     <p className="text-xl md:text-3xl font-semibold">¡Estás a un paso de finalizar!</p>
-                    <p className="text-sm mt-1 md:mt-0 text-gray-600">Completa este último paso para terminar el registro de tu motel. <strong className='text-red-600' >Afíliese al plan</strong>  que mejor se adapte a su motel y aproveche herramientas diseñadas para optimizar sus reservas, atraer más clientes y aumentar su rentabilidad.</p>
+                    <p className="text-sm mt-1 md:mt-0 text-gray-600">Completa este último paso para terminar el registro de tu motel. <strong className='text-red-600' >Afíliese al plan</strong>  que mejor se adapte a su motel y aproveche herramientas diseñadas para optimizar sus reservas, atraer más clientes y aumentar su rentabilidad.</p>
                 </div>
 
-                <div className="flex justify-center mt-10">
-                    <div className="inline-flex rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                        <button
-                            onClick={() => setBillingCycle('monthly')}
-                            className={`px-4 md:px-6 py-3 text-xs md:text-sm font-medium flex items-center ${billingCycle === 'monthly'
-                                ? 'bg-red-600 text-white'
-                                : 'bg-white text-gray-700 hover:bg-gray-50'
-                                }`}
-                        >
-                            <FaCalendarAlt className="mr-2" />
-                            Mensualidad
-                        </button>
-                        <button
-                            onClick={() => setBillingCycle('yearly')}
-                            className={`px-4 md:px-6 py-3 text-xs md:text-sm font-medium flex items-center ${billingCycle === 'yearly'
-                                ? 'bg-red-600 text-white'
-                                : 'bg-white text-gray-700 hover:bg-gray-50'
-                                }`}
-                        >
-                            <FaCalendarCheck className="mr-2" />
-                            Anualidad
-                            <span className={
-                                clsx(
-                                    {
-                                        "ml-2 text-xs md:text-xs bg-white text-black px-2 py-0.5 rounded-full": billingCycle === 'yearly',
-                                        "ml-2 text-xs md:text-xs bg-black text-white px-2 py-0.5 rounded-full": billingCycle !== 'yearly'
-                                    }
-                                )
-                            } >
-                                <TiArrowDownThick />
-                            </span>
-                        </button>
+                <div className="flex justify-center mt-5">
+                    <div>
+                        <p className='text-md text-center text-gray-600' >Duración de la suscripción</p>
+                        <SelectOption
+                            options={billingOptions.map(opt => ({ label: opt.label, value: opt.value }))}
+                            defaultOption={{ label: selectedBillingOption.label, value: selectedBillingOption.value }}
+                            onOptionSelect={(option) => {
+                                const fullOption = billingOptions.find(opt => opt.value === option.value);
+                                if (fullOption) {
+                                    setSelectedBillingOption(fullOption);
+                                }
+                            }}
+                            className="w-[230px]"
+                            classNameSelect="ring-red-600 border-2 hover:border-red-600 text-gray-700"
+                        />
                     </div>
                 </div>
+
                 <div className="mt-10 md:mt-10 grid w-full grid-cols-1 items-stretch gap-7 sm:mt-10 sm:gap-y-0 lg:grid-cols-4">
 
                     {freePlan && (
@@ -250,7 +249,7 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                             <div className="mb-3 py-4 px-1">
                                 <div className="flex">
                                     <p className="text-2xl font-extrabold text-red-600">{currencyFormat(getPrice(freePlan.price))}</p>
-                                    <p className="text-sm text-red-600  mt-1">{billingCycle === 'monthly' ? '/Mes' : '/Año'}</p>
+                                    <p className="text-sm text-red-600 mt-1">{`/${selectedBillingOption.label.toLowerCase()}`}</p>
                                 </div>
                                 <p className="text-sm text-red-600">+ {formatCommission(freePlan.commissionPercentage)}% comisión por reserva</p>
                             </div>
@@ -260,7 +259,7 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                             </p>
 
                             <button
-                                onClick={() => handlePlanSelect(freePlan.id, "plan free")}
+                                onClick={() => handlePlanSelect(freePlan)}
                                 disabled={loadingPlanId !== null}
                                 className={
                                     clsx(
@@ -281,7 +280,6 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                                         </div>
                                     )
                                 }
-
                                 {
                                     loadingPlanId === freePlan.id
                                         ? (
@@ -303,7 +301,7 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                             <div className="mb-3 py-4 px-1">
                                 <div className="flex">
                                     <p className="text-2xl font-extrabold text-red-600">{currencyFormat(getPrice(basicPlan.price))}</p>
-                                    <p className="text-sm text-red-600  mt-1">{billingCycle === 'monthly' ? '/Mes' : '/Año'}</p>
+                                    <p className="text-sm text-red-600 mt-1">{`/${selectedBillingOption.label.toLowerCase()}`}</p>
                                 </div>
                                 <p className="text-sm text-red-600">+ {formatCommission(basicPlan.commissionPercentage)}% comisión por reserva</p>
                             </div>
@@ -313,7 +311,7 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                             </p>
 
                             <button
-                                onClick={() => handlePlanSelect(basicPlan.id, "plan start")}
+                                onClick={() => handlePlanSelect(basicPlan)}
                                 disabled={loadingPlanId !== null}
                                 className={
                                     clsx(
@@ -334,7 +332,6 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                                         </div>
                                     )
                                 }
-
                                 {
                                     loadingPlanId === basicPlan.id
                                         ? (
@@ -359,7 +356,7 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                             <div className="mb-3 py-4 px-1">
                                 <div className="flex">
                                     <p className="text-2xl font-extrabold text-red-600">{currencyFormat(getPrice(premiumPlan.price))}</p>
-                                    <p className="text-sm text-red-600 mt-1">{billingCycle === 'monthly' ? '/Mes' : '/Año'}</p>
+                                    <p className="text-sm text-red-600 mt-1">{`/${selectedBillingOption.label.toLowerCase()}`}</p>
                                 </div>
                                 <p className="text-sm text-red-600">+ {formatCommission(premiumPlan.commissionPercentage)}% comisión por reserva</p>
                             </div>
@@ -368,7 +365,7 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                             </p>
                             <button
                                 disabled={loadingPlanId !== null}
-                                onClick={() => handlePlanSelect(premiumPlan.id, "plan plus")}
+                                onClick={() => handlePlanSelect(premiumPlan)}
                                 className={
                                     clsx(
                                         {
@@ -388,7 +385,6 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                                         </div>
                                     )
                                 }
-
                                 {
                                     loadingPlanId === premiumPlan.id
                                         ? (
@@ -410,7 +406,7 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                             <div className="mb-3 py-4 px-1">
                                 <div className="flex">
                                     <p className="text-2xl font-extrabold text-red-600">{currencyFormat(getPrice(enterprisePlan.price))}</p>
-                                    <p className="text-sm mt-1 text-red-600">{billingCycle === 'monthly' ? '/Mes' : '/Año'}</p>
+                                    <p className="text-sm mt-1 text-red-600">{`/${selectedBillingOption.label.toLowerCase()}`}</p>
                                 </div>
                                 <p className="text-sm text-red-600">+ {formatCommission(enterprisePlan.commissionPercentage)}% comisión por reserva</p>
                             </div>
@@ -418,7 +414,7 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                                 {enterprisePlan.description}
                             </p>
                             <button
-                                onClick={() => handlePlanSelect(enterprisePlan.id, "plan elite")}
+                                onClick={() => handlePlanSelect(enterprisePlan)}
                                 disabled={loadingPlanId !== null}
                                 className={
                                     clsx(
@@ -439,7 +435,6 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                                         </div>
                                     )
                                 }
-
                                 {
                                     loadingPlanId === enterprisePlan.id
                                         ? (
@@ -457,6 +452,5 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                 </div>
             </div>
         </>
-    )
-}
-
+    );
+};

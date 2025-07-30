@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation';
 import { auth } from '@/auth.config';
-import { getRoomInAviableByMotel, getTotalReservationTodayByMotel } from '@/actions';
 import axios from 'axios';
 import { MotelApi } from '@/interfaces';
 import ClientAdminLayout from '@/components/ui-admin-motel/layout/ClientAdminLayout';
@@ -39,9 +38,6 @@ export default async function DashboardLayout({
     redirect("/auth/new-account-motel/motel-plans");
   }
 
-
-  const rooms = await getRoomInAviableByMotel(motelExist.id);
-  const { totalReservation } = await getTotalReservationTodayByMotel(motelExist.id);
 
 
   return (

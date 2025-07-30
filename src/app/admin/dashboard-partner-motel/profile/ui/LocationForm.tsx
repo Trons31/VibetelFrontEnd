@@ -1,16 +1,16 @@
 'use client';
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import { updateLocationMotel } from '@/actions';
-import { City, Country, Department, MotelAdmin, MotelApi } from '@/interfaces';
+import { CityApi, CountryApi, DepartmentApi, MotelApi } from '@/interfaces';
 import clsx from 'clsx'
 import { useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
 
 interface Props {
     motel: MotelApi
-    countries: Country[]
-    departments: Department[]
-    cities: City[]
+    countries: CountryApi[]
+    departments: DepartmentApi[]
+    cities: CityApi[]
 }
 
 type FormInputs = {
@@ -29,8 +29,8 @@ export const LocationForm = ({ motel, countries, departments, cities }: Props) =
 
     const [selectedCountry, setSelectedCountry] = useState<string>('');
     const [selectedDepartment, setSelectedDepartment] = useState<string>('');
-    const [filteredDepartments, setFilteredDepartments] = useState<Department[]>([]);
-    const [filteredCities, setFilteredCities] = useState<City[]>([]);
+    const [filteredDepartments, setFilteredDepartments] = useState<DepartmentApi[]>([]);
+    const [filteredCities, setFilteredCities] = useState<CityApi[]>([]);
 
 
     const { register, handleSubmit, formState: { errors }, setValue, trigger } = useForm<FormInputs>();
@@ -60,7 +60,7 @@ export const LocationForm = ({ motel, countries, departments, cities }: Props) =
         setValue('country', selectedCountryId);
         trigger('country');
 
-        const countryDepartments: Department[] = departments.filter(department => department.countryId === selectedCountryId);
+        const countryDepartments: DepartmentApi[] = departments.filter(department => department.country.geonameId === selectedCountryId);
         setFilteredDepartments(countryDepartments);
 
         setFilteredCities([]);
@@ -73,7 +73,7 @@ export const LocationForm = ({ motel, countries, departments, cities }: Props) =
         setValue('department', selectedDepartmentId);
         trigger('department');
 
-        const departmentCities: City[] = cities.filter(city => city.departmentId === selectedDepartmentId);
+        const departmentCities: CityApi[] = cities.filter(city => city.department.geonameId === selectedDepartmentId);
         setFilteredCities(departmentCities);
     };
 
@@ -165,7 +165,7 @@ export const LocationForm = ({ motel, countries, departments, cities }: Props) =
                                     >
                                         <option value=""> [ Seleccione país]</option>
                                         {countries.map(country => (
-                                            <option key={country.id} value={country.id}>{country.name}</option>
+                                            <option key={country.geonameId} value={country.geonameId}>{country.name}</option>
                                         ))}
                                     </select>
                                     <label
@@ -191,7 +191,7 @@ export const LocationForm = ({ motel, countries, departments, cities }: Props) =
                                     >
                                         <option value=""> [ Seleccione departamento ]</option>
                                         {filteredDepartments.map(department => (
-                                            <option key={department.id} value={department.id}>{department.name}</option>
+                                            <option key={department.geonameId} value={department.geonameId}>{department.name}</option>
                                         ))}
                                     </select>
                                     <label

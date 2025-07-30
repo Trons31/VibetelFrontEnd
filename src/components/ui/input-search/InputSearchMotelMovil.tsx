@@ -1,6 +1,6 @@
 'use client';
-import { getSuggestedMotels } from '@/actions';
-import { suggestedMotel } from '@/interfaces';
+import { suggestedMotelApi } from '@/interfaces';
+import axios from 'axios';
 import { AnimatePresence, motion } from 'framer-motion'
 import debounce from 'lodash.debounce';
 import React, { useEffect, useMemo, useState } from 'react'
@@ -21,7 +21,7 @@ export const InputSearchMotelMovil = ({ onSearchTerm, location }: Props) => {
     const [hasSearched, setHasSearched] = useState(false);
     const [loading, setLoading] = useState(false);
     const [query, setQuery] = useState('');
-    const [suggestedMotels, setSuggestedMotels] = useState<suggestedMotel[]>([]);
+    const [suggestedMotels, setSuggestedMotels] = useState<suggestedMotelApi[]>([]);
 
 
     const debouncedSearch = useMemo(
@@ -36,8 +36,8 @@ export const InputSearchMotelMovil = ({ onSearchTerm, location }: Props) => {
                 setLoading(true);
                 setHasSearched(true);
                 try {
-                    const { suggestedMotels } = await getSuggestedMotels({ query, city: location });
-                    setSuggestedMotels(suggestedMotels);
+                    const response = await axios.get<suggestedMotelApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}motel/search?query=${query}&cityId=${location}`);
+                    setSuggestedMotels(response.data);
                 } catch (err) {
                     setSuggestedMotels([]);
                 } finally {
@@ -182,15 +182,15 @@ export const InputSearchMotelMovil = ({ onSearchTerm, location }: Props) => {
                                                         suggestedMotels.map((motel) => (
                                                             <li
                                                                 key={motel.id}
-                                                                onClick={() => search(motel.title)}
+                                                                onClick={() => search(motel.razonSocial)}
                                                                 className='hover:bg-gray-100 cursor-pointer py-2 border-b border-solid border-b-gray-300'>
                                                                 <div className='py-3 w-full px-5 animate-fadeIn'>
                                                                     <div className='block justify-start ' >
                                                                         <p className='text-md font-medium capitalize' >
-                                                                            {motel.title}
+                                                                            {motel.razonSocial}
                                                                         </p>
                                                                         <p className='text-sm text-gray-500 flex gap-2' >
-                                                                            {motel.city}, {motel.department}
+                                                                            {motel.address}, {motel.neighborhood}
                                                                         </p>
                                                                     </div>
                                                                 </div>

@@ -1,10 +1,10 @@
 'use client';
 import React, { useEffect } from 'react'
-import { Reservation } from '@/interfaces/reservation.interface';
+import { ReservationApi } from '@/interfaces/reservation.interface';
 import { AnimatePresence, motion } from 'framer-motion'
 
 interface Props {
-    reservation: Reservation;
+    reservation: ReservationApi;
     isOpen: boolean;
     onClose: () => void;
 }

@@ -1,10 +1,11 @@
-import { Tier } from "./plans.interface";
 import { BedRooms } from "./bedrooms.interface";
-import { statusRoom } from "./room.interface";
+import { SubscriptionTier } from "./plans.interface";
+import { CategoryRoomApi, GarageRoomApi, RoomAmenity, statusRoom, Image } from "./room.interface";
 
 export type amenities = 'Servicio Restaurante-Bar' | 'Sex-Shop' | 'Zona de Spa';
 
 export type isApprovedStatus = "PENDING" | "APPROVED" | "DATA_CORRECTION" | "DISABLED";
+
 
 export interface MotelImage {
     id: string;
@@ -29,16 +30,15 @@ export interface MotelApi {
     createdAt: string;
     updatedAt: string;
     freeService: boolean;
-    images: string[];
-    rooms: [];
+    images: Image[];
+    rooms: RoomOfMotel[];
     motelConfig: motelConfig | null;
     city: City;
     totalRooms: number;
-    subscriptionTier: 'FREE' | 'BASIC' | 'PREMIUM';
+    subscriptionTier: SubscriptionTier;
 }
 
-
-export interface RoomByMotelApi {
+export interface RoomOfMotel {
     id: string;
     title: string;
     description: string;
@@ -49,7 +49,7 @@ export interface RoomByMotelApi {
     promotionPercentage: number;
     slug: string;
     tags: string[];
-    inAvaible: boolean;
+    inAvailable: boolean;
     status: statusRoom;
     timeLimit: number;
     roomNumber: string;
@@ -58,7 +58,12 @@ export interface RoomByMotelApi {
     surcharge: number;
     createdAt: string;
     updatedAt: string;
+    category: CategoryRoomApi;
+    garage: GarageRoomApi;
+    amenities: RoomAmenity[];
+    images: Image[];
 }
+
 
 export interface MotelBySlugApi {
     id: string;
@@ -79,7 +84,7 @@ export interface MotelBySlugApi {
     updatedAt: string;
     freeService: boolean;
     images: string[]; // si luego cambia a objeto, se actualiza
-    rooms: RoomByMotelApi[];
+    rooms: RoomOfMotel[];
     motelConfig: motelConfig;
     city: City;
     totalRooms: number;
@@ -186,11 +191,12 @@ export interface motelConfig {
 }
 
 
-export interface suggestedMotel {
+export interface suggestedMotelApi {
     id: string;
-    title: string;
-    department: string;
-    city: string
+    razonSocial: string;
+    slug:string;
+    address: string;
+    neighborhood: string
 }
 
 

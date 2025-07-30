@@ -18,7 +18,7 @@ export const TotalReservationRequests = () => {
             <AnimatePresence>
                 {
                     isOpen && (
-                        <div className="fixed z-10 right-0 top-32 transform -translate-y-1/2">
+                        <div className="fixed z-10 right-0 top-60 transform -translate-y-1/2">
                             <motion.div
                                 className={`bg-white shadow-lg rounded-l-lg overflow-hidden w-64}`}
                                 initial={{ opacity: 0, x: 100 }}
@@ -43,7 +43,7 @@ export const TotalReservationRequests = () => {
 
             <AnimatePresence>
                 {!isOpen && (
-                    <div className="fixed z-10 right-0 top-32 transform -translate-y-1/2">
+                    <div className="fixed z-10 right-0 top-60 transform -translate-y-1/2">
                         <motion.div
                             className={`bg-white shadow-lg rounded-l-lg overflow-hidden w-16}`}
                             initial={{ opacity: 0, x: 100 }}

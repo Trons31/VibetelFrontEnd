@@ -11,13 +11,13 @@ import {
   StateBookingMovil,
   TimerBooking,
 } from "@/components";
-import { Reservation } from "@/interfaces/reservation.interface";
+import { ReservationApi } from "@/interfaces/reservation.interface";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { IoIosCloseCircle } from "react-icons/io";
 
 interface Props {
-  reservation: Reservation;
+  reservation: ReservationApi;
 }
 
 export const AnonymousBooking = ({ reservation }: Props) => {
@@ -29,7 +29,7 @@ export const AnonymousBooking = ({ reservation }: Props) => {
     <>
       {reservation.ServiceItem?.serviceTaken &&
         reservation.ServiceItem.serviceCompleted === false && (
-          <TimerBooking departureDate={reservation.departureDate} />
+          <TimerBooking departureDate={reservation.ServiceItem.departureDate} />
         )}
 
       {reservation.ServiceItem?.dateUserConfirmServiceCompleted &&
@@ -92,7 +92,7 @@ export const AnonymousBooking = ({ reservation }: Props) => {
 
       <ActionsBooking reservation={reservation} />
 
-      {reservation.ServiceItem?.serviceCompleted &&
+      {/* {reservation.serviceItem?.serviceCompleted &&
         reservation.RoomRating?.rating === undefined && (
           <MoldaRating
             isOpen={modalRating}
@@ -100,7 +100,7 @@ export const AnonymousBooking = ({ reservation }: Props) => {
             roomId={reservation.ServiceItem?.roomId!}
             onClose={() => setModalRating(false)}
           />
-        )}
+        )} */}
     </>
   );
 };

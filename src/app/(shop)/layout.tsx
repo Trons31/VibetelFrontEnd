@@ -1,4 +1,4 @@
-import { Footer, SideBar, ToastSuccessLocationUser, TopMenu } from "@/components";
+import { Footer, ResponseReservationSocketListener, SideBar, ToastSuccessLocationUser, TopMenu } from "@/components";
 
 export default function ShopLayout({ children }: {
   children: React.ReactNode;
@@ -8,6 +8,8 @@ export default function ShopLayout({ children }: {
       <ToastSuccessLocationUser />
       <TopMenu />
       <SideBar />
+
+      <ResponseReservationSocketListener/>
 
       <div className="" >
         {children}

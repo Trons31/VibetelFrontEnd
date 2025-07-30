@@ -2,12 +2,12 @@
 
 import React, { useState } from 'react'
 import { ModalPopup, RoomImage } from '@/components';
-import { Reservation } from '@/interfaces/reservation.interface';
+import { ReservationApi } from '@/interfaces/reservation.interface';
 import { currencyFormat, formatDateWithHours } from '@/utils';
 import { FaQuestionCircle } from 'react-icons/fa';
 
 interface Props {
-  reservation: Reservation;
+  reservation: ReservationApi;
 }
 
 
@@ -43,7 +43,7 @@ export const DetailBooking = ({ reservation }: Props) => {
           <div className='grid grid-cols md:grid-cols-2 space-y-2 md:space-y-0 mt-4' >
             <div>
               <p className='font-semibold text-md' >Tiempo de servicio</p>
-              <p>{reservation.ServiceItem?.timeLimit} horas</p>
+              <p>{reservation.ServiceItem?.timeUsage} horas</p>
             </div>
             <div>
 

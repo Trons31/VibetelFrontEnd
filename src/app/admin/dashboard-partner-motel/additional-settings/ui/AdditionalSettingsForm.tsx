@@ -48,19 +48,19 @@ interface Props {
 export const AdditionalSettingsForm = ({ motelConfig, accessToken }: Props) => {
 
     const [isLoading, setIsLoading] = useState(false);
-    const [modalUpdateInService, setModalUpdateInService] = useState(false);
     const [optionTimeLimitAwait, setoptionTimeLimitAwait] = useState(motelConfig?.timeAwaitTakeReservation || 10);
     const [optionTimeCleanRoom, setoptionTimeCleanRoom] = useState(motelConfig?.timeMinutesCleanRoom || 10);
     const [optionTimeAddReservation, setoptionTimeAddReservation] = useState(motelConfig?.defaultReservationAddTime || 30)
 
     const onCreateSettingsMotel = async () => {
         setIsLoading(true);
-        
+
         const motelConfigData = {
             timeMinutesCleanRoom: optionTimeCleanRoom,
+            defaultReservationAddTime: optionTimeAddReservation,
             inService: true,
             outOfServiceStart: null,
-            outOdServiceEnd: null,
+            outOfServiceEnd: null,
             locationLatitude: 9.2923331,
             locationLongitude: -75.4131098,
             timeAwaitTakeReservation: optionTimeLimitAwait
@@ -94,7 +94,6 @@ export const AdditionalSettingsForm = ({ motelConfig, accessToken }: Props) => {
                 toast.success("Informacion guardada correctamente!")
                 setIsLoading(false);
             } catch (error: any) {
-                console.log(error);
                 toast.error("No se pudo guardar la informacion");
                 setIsLoading(false);
             }

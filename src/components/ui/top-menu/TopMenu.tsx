@@ -12,7 +12,7 @@ import { MdEditLocationAlt, MdNotListedLocation, MdOutlineMenu } from "react-ico
 import { BsCalendarEvent } from "react-icons/bs";
 import { InputSearch, InputSearchMovil, ModalLocationUser, ModalLocationUserMovil } from "@/components";
 import { TiArrowSortedDown } from "react-icons/ti";
-import { searchCity } from "@/interfaces";
+import { LocationCity } from "@/interfaces";
 
 
 export const TopMenu = () => {
@@ -24,7 +24,7 @@ export const TopMenu = () => {
   const [modalLocationUser, setModalLocationUser] = useState(false);
   const [searchInputMovil, setSearchInputMovil] = useState(false);
   const [isLoadingLocationUser, setIsLoadingLocationUser] = useState(true);
-  const [detectedLocation, setDetectedLocation] = useState<searchCity | undefined>(undefined);
+  const [detectedLocation, setDetectedLocation] = useState<LocationCity | undefined>(undefined);
 
   const isAuthenticated = !!session?.user;
 
@@ -56,7 +56,7 @@ export const TopMenu = () => {
       />
 
       <InputSearchMovil
-        location={detectedLocation?.city}
+        location={detectedLocation?.id}
         isOpen={searchInputMovil}
         onClose={() => setSearchInputMovil(false)}
       />
@@ -89,7 +89,7 @@ export const TopMenu = () => {
 
           <button
             onClick={() => setModalLocationUser(true)}
-            className="hidden md:flex ml-3 gap-1 items-center py-1 px-3 hover:underline hover:decoration-red-600 border-r border-r-gray-200 border-l border-l-gray-200" >
+            className="hidden lg:flex ml-3 gap-1 items-center py-1 px-3 hover:underline hover:decoration-red-600 border-r border-r-gray-200 border-l border-l-gray-200" >
             {
               !detectedLocation
                 ? (
@@ -123,7 +123,7 @@ export const TopMenu = () => {
                         detectedLocation
                           ? (
                             <>
-                              {detectedLocation.city}, {detectedLocation.department}, {detectedLocation.country}
+                              {detectedLocation.name}, {detectedLocation.department.name}, {detectedLocation.department.country.name}
                             </>
                           ) : (
                             <>
@@ -192,13 +192,13 @@ export const TopMenu = () => {
 
           <Link
             href="/motel-partner"
-            className="hidden md:block text-sm py-2 px-3 hover:bg-gray-200 rounded-full"
+            className="hidden lg:block text-sm py-2 px-3 hover:bg-gray-200 rounded-full"
           >
             Registra tu motel en VibeTel
           </Link>
 
           <InputSearch
-            location={detectedLocation?.city}
+            location={detectedLocation?.id}
             openSearch={() => setShowSearch(true)}
             closeSearch={() => setShowSearch(false)}
           />
@@ -247,62 +247,66 @@ export const TopMenu = () => {
 
       </nav>
 
-      <button
-        onClick={() => setModalLocationUser(true)}
-        className="md:hidden fixed border-b top-12 border-t border-t-gray-200 z-20 w-full bg-white border-gray-200 flex justify-center py-2 gap-3 items-center shadow-sm"
-      >
+      {
+        !showSearch && (
+          <button
+            onClick={() => setModalLocationUser(true)}
+            className="lg:hidden fade-in fixed border-b top-12 border-t border-t-gray-200 z-20 w-full bg-white border-gray-200 flex justify-center py-2 gap-3 items-center shadow-sm"
+          >
 
-        {
-          !detectedLocation
-            ? (
-              <MdNotListedLocation
-                className="w-5 h-5 text-red-600"
-              />
-            ) : (
-              <MdEditLocationAlt
-                className="w-5 h-5 text-red-600"
-              />
-            )
-        }
-        {
-          isLoadingLocationUser
-            ? (
-              <>
-                <div className="px-5" >
-                  <div className='flex space-x-1 justify-center items-center bg-white '>
-                    <span className='sr-only'>Loading...</span>
-                    <div className='h-1 w-1 bg-red-500 rounded-full animate-bounce [animation-delay:-0.3s]'></div>
-                    <div className='h-1 w-1 bg-red-500 rounded-full animate-bounce [animation-delay:-0.15s]'></div>
-                    <div className='h-1 w-1 bg-red-500 rounded-full animate-bounce'></div>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <span className="text-red-600 text-sm"  >
-                  {
-                    detectedLocation
-                      ? (
-                        <>
-                          {detectedLocation.city}, {detectedLocation.department}, {detectedLocation.country}
-                        </>
-                      ) : (
-                        <>
-                          Mi ubicacion
-                        </>
-                      )
+            {
+              !detectedLocation
+                ? (
+                  <MdNotListedLocation
+                    className="w-5 h-5 text-red-600"
+                  />
+                ) : (
+                  <MdEditLocationAlt
+                    className="w-5 h-5 text-red-600"
+                  />
+                )
+            }
+            {
+              isLoadingLocationUser
+                ? (
+                  <>
+                    <div className="px-5" >
+                      <div className='flex space-x-1 justify-center items-center bg-white '>
+                        <span className='sr-only'>Loading...</span>
+                        <div className='h-1 w-1 bg-red-500 rounded-full animate-bounce [animation-delay:-0.3s]'></div>
+                        <div className='h-1 w-1 bg-red-500 rounded-full animate-bounce [animation-delay:-0.15s]'></div>
+                        <div className='h-1 w-1 bg-red-500 rounded-full animate-bounce'></div>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <span className="text-red-600 text-sm"  >
+                      {
+                        detectedLocation
+                          ? (
+                            <>
+                              {detectedLocation.name}, {detectedLocation.department.name}, {detectedLocation.department.country.name}
+                            </>
+                          ) : (
+                            <>
+                              Mi ubicacion
+                            </>
+                          )
 
-                  }
-                </span>
-              </>
-            )
+                      }
+                    </span>
+                  </>
+                )
 
-        }
+            }
 
-        <TiArrowSortedDown
-          className="w-3 h-3 ml-2 text-red-600"
-        />
-      </button>
+            <TiArrowSortedDown
+              className="w-3 h-3 ml-2 text-red-600"
+            />
+          </button>
+        )
+      }
 
     </>
   )

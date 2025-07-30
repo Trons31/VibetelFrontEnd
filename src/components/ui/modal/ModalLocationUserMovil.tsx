@@ -1,7 +1,7 @@
 'use client';
-import { getLocationByUser, validateExistsMotelLocationUser } from '@/actions';
-import { searchCity } from '@/interfaces';
+import { LocationCity } from '@/interfaces';
 import { useLocationStore, useUIStore } from '@/store';
+import axios from 'axios';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import debounce from 'lodash.debounce';
@@ -9,6 +9,7 @@ import { usePathname } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 import { AiFillCloseCircle } from 'react-icons/ai';
+import { FaCheckCircle } from 'react-icons/fa';
 import { FaArrowLeft, FaLocationDot, FaMagnifyingGlassLocation } from 'react-icons/fa6';
 import { IoMdCloseCircle } from 'react-icons/io';
 import { MdEditLocationAlt, MdOutlineMyLocation } from 'react-icons/md';
@@ -34,8 +35,8 @@ export const ModalLocationUserMovil = ({ isOpen, onClose }: ModalProps) => {
     const openToastSuccessLocationUserOpen = useUIStore(state => state.openToastSuccessLocationUserOpen);
 
 
-    const [citys, setCitys] = useState<searchCity[]>([]);
-    const [selectedCity, setSelectedCity] = useState<searchCity | undefined>(undefined);
+    const [citys, setCitys] = useState<LocationCity[]>([]);
+    const [selectedCity, setSelectedCity] = useState<LocationCity | undefined>(undefined);
 
     const pathName = usePathname();
 
@@ -54,8 +55,8 @@ export const ModalLocationUserMovil = ({ isOpen, onClose }: ModalProps) => {
             setError('');
             setHasSearched(true);
             try {
-                const { city } = await getLocationByUser(query);
-                setCitys(city);
+                const response = await axios.get<LocationCity[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}locations/cities/search?name=${query}`);
+                setCitys(response.data);
             } catch (err) {
                 setError('No se pudieron obtener las ciudades');
             } finally {
@@ -98,32 +99,62 @@ export const ModalLocationUserMovil = ({ isOpen, onClose }: ModalProps) => {
         setIsExpanded(false); // Contrae el modal cuando vuelvas
     };
 
-    const onValidateCity = async (city: searchCity) => {
+    const onValidateCity = async (city: LocationCity) => {
         setLoading(true);
-        const { validateExist } = await validateExistsMotelLocationUser(city.city);
-        if (validateExist) {
+        try {
+            await axios.get<LocationCity[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}motel/check-approved-in-city/${city.id}`);
             setSelectedCity(city);
-            //setSearchTerm(`${city.city}, ${city.department}, ${city.country}`);
-            setHasSearched(false); // Detener nuevas búsquedas
+            setHasSearched(false);
             setLoading(false);
-
-        } else {
             toast(
                 (t) => (
                     <div>
-                        <h3 className="text-red-600 text-sm md:text-lg font-semibold">Ubicación No Disponible</h3>
-                        <p className="text-xs md:text-sm text-gray-800">Actualmente, no ofrecemos cobertura en esta ubicación.</p>
+                        <h3 className="text-green-600 font-semibold">Ubicación verificada</h3>
+                        <p className="text-sm text-gray-800">Actualmente, ofrecemos cobertura en esta ubicación.</p>
                         <p className="text-xs font-medium text-gray-500">
-                            {city.city}, {city.department}, {city.country}
+                            {city.name}, {city.department.name}, {city.department.country.name}
                         </p>
                     </div>
+
                 ),
                 {
-                    duration: 5000,
-                    position: 'bottom-center',
+                    duration: 7000,
+                    position: 'top-right',
                     style: {
                         padding: '16px',
                         color: '#f44336',
+                        maxWidth: '500px',
+                        width: '100%',
+                    },
+                    icon: <FaCheckCircle
+                        className='text-green-600 h-6 w-6'
+                    />,
+                    ariaProps: {
+                        role: 'alert',
+                        'aria-live': 'assertive',
+                    },
+                }
+            );
+        } catch (err) {
+            toast(
+                (t) => (
+                    <div>
+                        <h3 className="text-red-600 font-semibold">Ubicación No Disponible</h3>
+                        <p className="text-sm text-gray-800">Actualmente, no ofrecemos cobertura en esta ubicación.</p>
+                        <p className="text-xs font-medium text-gray-500">
+                            {city.name}, {city.department.name}, {city.department.country.name}
+                        </p>
+                    </div>
+
+                ),
+                {
+                    duration: 7000,
+                    position: 'top-right',
+                    style: {
+                        padding: '16px',
+                        color: '#f44336',
+                        maxWidth: '500px',
+                        width: '100%',
                     },
                     icon: <AiFillCloseCircle
                         className='text-red-600 h-6 w-6'
@@ -134,6 +165,7 @@ export const ModalLocationUserMovil = ({ isOpen, onClose }: ModalProps) => {
                     },
                 }
             );
+        } finally {
             setLoading(false);
         }
     }
@@ -166,12 +198,12 @@ export const ModalLocationUserMovil = ({ isOpen, onClose }: ModalProps) => {
                         .then((response) => response.json())
                         .then((data) => {
                             if (data && data.address) {
-                                const cityData: searchCity = {
+                                const cityData = {
                                     country: data.address.country || '',
                                     department: data.address.state || '',
                                     city: data.address.city || data.address.town || data.address.village || '',
                                 };
-                                onValidateCity(cityData);
+                                //onValidateCity(cityData);
                                 setLoading(false);
                             } else {
                                 setError("No se pudo obtener la información de la ciudad.");
@@ -198,12 +230,12 @@ export const ModalLocationUserMovil = ({ isOpen, onClose }: ModalProps) => {
                         .then((response) => response.json())
                         .then((data) => {
                             if (data && data.address) {
-                                const cityData: searchCity = {
+                                const cityData = {
                                     country: data.address.country || '',
                                     department: data.address.state || '',
                                     city: data.address.city || data.address.town || data.address.village || '',
                                 };
-                                onValidateCity(cityData);
+                                //onValidateCity(cityData);
                                 setLoading(false);
                             } else {
                                 setError("No se pudo obtener la información de la ciudad.");
@@ -247,7 +279,7 @@ export const ModalLocationUserMovil = ({ isOpen, onClose }: ModalProps) => {
         if (locationUser) {
             setIsExpanded(true);
             setSelectedCity(locationUser);
-            setSearchTerm(locationUser.city);
+            setSearchTerm(locationUser.name);
         }
     }
 
@@ -363,10 +395,10 @@ export const ModalLocationUserMovil = ({ isOpen, onClose }: ModalProps) => {
                                                     />
                                                     <div>
                                                         <p className='text-sm font-semibold' >
-                                                            {locationUser.city}
+                                                            {locationUser.name}
                                                         </p>
                                                         <p className='text-xs text-gray-500' >
-                                                            {locationUser.department}, {locationUser.country}
+                                                            {locationUser.department.name}, {locationUser.department.country.name}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -401,22 +433,22 @@ export const ModalLocationUserMovil = ({ isOpen, onClose }: ModalProps) => {
                                                     citys.map((city) => (
                                                         <li
                                                             onClick={() => onValidateCity(city)}
-                                                            key={city.cityId}
+                                                            key={city.id}
                                                             className={
                                                                 clsx(
                                                                     'hover:bg-gray-100 cursor-pointer py-2 border-b border-solid border-b-gray-300',
                                                                     {
-                                                                        "bg-gray-100": selectedCity?.city === city.city,
+                                                                        "bg-gray-100": selectedCity?.id === city.id,
                                                                     }
                                                                 )
                                                             }>
                                                             <div className='py-3 w-full px-8 animate-fadeIn'>
                                                                 <div className='block justify-start'>
                                                                     <p className='text-sm font-medium capitalize'>
-                                                                        {city.city}
+                                                                        {city.name}
                                                                     </p>
                                                                     <p className='text-xs text-gray-500 flex gap-2'>
-                                                                        {city.department}, {city.country}
+                                                                        {city.department.name}, {city.department.country.name}
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -434,7 +466,7 @@ export const ModalLocationUserMovil = ({ isOpen, onClose }: ModalProps) => {
                                                     <div>
                                                         <p className='text-xs font-medium text-gray-700'>Ubicación seleccionada:</p>
                                                         <p className='text-xs font-medium text-gray-500'>
-                                                            {selectedCity?.city}, {selectedCity?.department}, {selectedCity?.country}
+                                                            {selectedCity?.name}, {selectedCity?.department.name}, {selectedCity?.department.country.name}
                                                         </p>
                                                     </div>
                                                     <div className='p-2 hover:bg-gray-200 cursor-pointer rounded-md'>
@@ -455,7 +487,7 @@ export const ModalLocationUserMovil = ({ isOpen, onClose }: ModalProps) => {
                                                     <div>
                                                         <p className='text-xs font-medium text-gray-700'>Ubicación seleccionada:</p>
                                                         <p className='text-xs font-medium text-gray-500'>
-                                                            {selectedCity?.city}, {selectedCity?.department}, {selectedCity?.country}
+                                                            {selectedCity?.name}, {selectedCity?.department.name}, {selectedCity?.department.country.name}
                                                         </p>
                                                     </div>
                                                     <div className='p-2 hover:bg-gray-200 cursor-pointer rounded-md'>

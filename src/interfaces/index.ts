@@ -17,3 +17,5 @@ export * from './service.interface';
 export * from './plans.interface'
 
 export * from './room.interface'
+
+export * from './motel-subscription';

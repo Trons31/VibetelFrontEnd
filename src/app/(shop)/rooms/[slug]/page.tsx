@@ -12,7 +12,6 @@ import {
   NoService,
   RatingRoom,
   RelatedRooms,
-  RelatedRoomsMovil,
   SharedLinkRoom,
 } from "@/components";
 import { RoomNotAvailable } from "./ui/RoomNotAvailable";
@@ -21,13 +20,14 @@ import { FaStar, FaCheckCircle } from "react-icons/fa";
 import { MdBedroomChild, MdTimer } from "react-icons/md";
 import { TbPointFilled } from "react-icons/tb";
 import { AddToReservationDeskTop } from "./ui/AddToReservationDeskTop";
-import { AddToReservationMovil } from "./ui/AddToReservationMovil";
 import { FaBuildingFlag } from "react-icons/fa6";
 import { IoLocationSharp } from "react-icons/io5";
 import { Lobster } from "@/config/fonts";
 import { MethodsPayds } from "./ui/MethodsPayds";
 import axios from "axios";
 import { RoomApi } from "@/interfaces";
+import { ConditionalMobileAddToReservation } from "./ui/ConditionalMobileAddToReservation";
+import { ConditionalDesktopAddToReservation } from "./ui/ConditionalDesktopAddToReservation";
 
 interface Props {
   params: {
@@ -65,8 +65,6 @@ export async function generateMetadata(
 }
 
 export default async function BedRoomPage({ params }: Props) {
-  const session = await auth();
-  let inFavoritesValidate;
 
   const { slug } = params;
   let room: RoomApi;
@@ -91,9 +89,14 @@ export default async function BedRoomPage({ params }: Props) {
   //     ).toFixed(1)
   //     : "0.0";
 
+
   return (
     <>
       {/* <TopMenuRoom room={room.room} /> */}
+
+      {
+
+      }
 
       {room.status !== "AVAILABLE" && <RoomNotAvailable />}
 
@@ -105,12 +108,9 @@ export default async function BedRoomPage({ params }: Props) {
           />
         )}
 
-      <AddToReservationMovil
-        room={room}
-        MotelConfig={room.motel.motelConfig}
-      />
+      <ConditionalMobileAddToReservation room={room} MotelConfig={room.motel.motelConfig} />
 
-      <div className="mt-12 md:mt-8 md:px-24 2xl:px-64 md:py-14 mb-24 md:mb-16">
+      <div className="mt-12 md:mt-8 sm:px-5 lg:px-10 xl:px-24 2xl:px-52 md:py-14 mb-24 md:mb-16">
 
         <div className="hidden md:flex justify-between items-end">
           <div>
@@ -129,12 +129,9 @@ export default async function BedRoomPage({ params }: Props) {
           <div className="flex gap-2 items-center">
             <SharedLinkRoom room={room} />
 
-            {/* <FavoriteRoom
-              roomId={room.room.id}
-              inFavorites={
-                session ? inFavoritesValidate?.ok : false
-              }
-            /> */}
+            <FavoriteRoom
+              roomId={room.id}
+            />
           </div>
         </div>
 
@@ -181,19 +178,19 @@ export default async function BedRoomPage({ params }: Props) {
                   )
                 } */}
               </div>
-              <div className="flex mt-1 items-center gap-4">
+              <div className="block space-y-2 xl:space-y-0 xl:flex mt-1 items-center gap-4">
                 <div className="flex gap-1 items-center">
                   <MdBedroomChild className="h-5 w-5 text-gray-600" />
                   <p className="text-sm font-extralight">
                     Habitacion numero {room.roomNumber}
                   </p>
                 </div>
-                <TbPointFilled className="w-2 h-2 flex-shrink-0" />
+                <TbPointFilled className="w-2 h-2 flex-shrink-0 hidden xl:block" />
                 <div className="flex gap-1 items-center">
                   <BiSolidCarGarage className="h-5 w-5 text-gray-600" />
                   <p className="text-sm font-extralight">{room.garage.title}</p>
                 </div>
-                <TbPointFilled className="w-2 h-2 flex-shrink-0" />
+                <TbPointFilled className="w-2 h-2 flex-shrink-0 hidden xl:block" />
                 <div className="flex gap-1 items-center">
                   <MdTimer className="h-5 w-5 text-gray-600" />
                   <p className="text-sm font-extralight">
@@ -328,7 +325,7 @@ export default async function BedRoomPage({ params }: Props) {
             </div>
           </div>
           <div className="col-span-5 w-full">
-            <AddToReservationDeskTop
+            <ConditionalDesktopAddToReservation
               room={room}
               MotelConfig={room.motel.motelConfig}
             />
@@ -534,13 +531,8 @@ export default async function BedRoomPage({ params }: Props) {
             </div>
           )
         } */}
-        <div className="hidden md:block" >
-          <RelatedRooms category={room.category.name} />
-        </div>
-        <div className="block md:hidden px-4 " >
-          <RelatedRoomsMovil
-            category={room.category.name}
-          />
+        <div className="px-4" >
+          <RelatedRooms category={room.category.id} />
         </div>
       </div>
     </>

@@ -1,29 +1,29 @@
 "use client";
 
 import React, { useState } from 'react'
-import { createUpdateBankMotel } from '@/actions';
-import { AccountType, Bank, BankAccount } from '@/interfaces';
+import { AccountTypeApi, BankAccountApi, BankApi } from '@/interfaces';
 import clsx from 'clsx';
 import { useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
+import axios from 'axios';
 
 
 type FormInputs = {
-  bankName: string;
-  accountType: string;
+  bankId: string;
+  accountTypeId: string;
   accountHolderName: string;
   accountHolderId: string;
   accountNumber: string;
 }
 
 interface Props {
-  bank: Bank[];
-  accountType: AccountType[];
-  bankAccount?: BankAccount;
-  motelId: string;
+  bank: BankApi[];
+  accountType: AccountTypeApi[];
+  bankAccount: BankAccountApi | null;
+  accessToken: string;
 }
 
-export const BankAccountForm = ({ accountType, bank, bankAccount, motelId }: Props) => {
+export const BankAccountForm = ({ accountType, bank, bankAccount, accessToken }: Props) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -36,34 +36,48 @@ export const BankAccountForm = ({ accountType, bank, bankAccount, motelId }: Pro
       accountHolderId: bankAccount?.accountHolderId,
       accountHolderName: bankAccount?.accountHolderName,
       accountNumber: bankAccount?.accountNumber,
-      accountType: bankAccount?.accountTypeId,
-      bankName: bankAccount?.bankId
+      accountTypeId: bankAccount?.accountTypeId,
+      bankId: bankAccount?.bankId
     }
   });
 
   const OnSubmit = async (data: FormInputs) => {
     setIsLoading(true);
-    const { accountHolderId, accountHolderName, accountNumber, accountType, bankName } = data;
-
-    let id: string = "";
-    if (bankAccount) {
-      id = bankAccount.id;
-    }
-
-    const response = await createUpdateBankMotel(id, accountHolderId, accountHolderName, accountNumber, accountType, bankName, motelId);
-    if (!response.ok) {
-      toast.error("No se pudo actualizar la informacion")
-      setIsLoading(false);
-      return;
-    }
 
     if (bankAccount) {
-      toast.success("Actualizacion correcta!");
-      setIsLoading(false);
+      try {
+        await axios.patch(`${process.env.NEXT_PUBLIC_API_ROUTE}bank-accounts`, data,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        toast.success("Actualizacion correcta!");
+        setIsLoading(false);
+      } catch (error: any) {
+        toast.error("No se pudo actualizar la informacion")
+        setIsLoading(false);
+        return;
+      }
     } else {
-      toast.success("Cuenta bancaria registrada correctamente!");
-      setIsLoading(false);
+      try {
+        await axios.post(`${process.env.NEXT_PUBLIC_API_ROUTE}bank-accounts`, data,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        toast.success("Cuenta bancaria registrada correctamente!");
+        setIsLoading(false);
+      } catch (error: any) {
+        toast.error("No se pudo guardar la informacion")
+        setIsLoading(false);
+        return;
+      }
     }
+
   }
 
   return (
@@ -83,7 +97,7 @@ export const BankAccountForm = ({ accountType, bank, bankAccount, motelId }: Pro
                 clsx(
                   "block  text-sm text-black font-semibold ",
                   {
-                    "text-red-500": errors.bankName
+                    "text-red-500": errors.bankId
                   }
                 )
               }>Banco</label>
@@ -92,11 +106,11 @@ export const BankAccountForm = ({ accountType, bank, bankAccount, motelId }: Pro
               clsx(
                 "bg-gray-50  border-gray-300 text-black text-sm rounded-lg appearance-none focus:outline-none focus:ring-0 border-2 focus:border-blue-600 block w-full p-2.5 placeholder-black",
                 {
-                  'focus:border-red-600 border-red-500': errors.bankName
+                  'focus:border-red-600 border-red-500': errors.bankId
                 }
               )
             }
-              {...register('bankName', { required: true })}
+              {...register('bankId', { required: true })}
             >
               <option value="">[Seleccione]</option>
               {
@@ -106,7 +120,7 @@ export const BankAccountForm = ({ accountType, bank, bankAccount, motelId }: Pro
               }
             </select>
             {
-              errors.bankName?.type === 'required' && (
+              errors.bankId?.type === 'required' && (
                 <span className="text-red-500 text-xs">* Seleccione un banco</span>
               )
             }
@@ -121,7 +135,7 @@ export const BankAccountForm = ({ accountType, bank, bankAccount, motelId }: Pro
                 clsx(
                   "block  text-sm text-black font-semibold ",
                   {
-                    "text-red-500": errors.accountType
+                    "text-red-500": errors.accountTypeId
                   }
                 )
               }>Tipo de cuenta</label>
@@ -130,21 +144,21 @@ export const BankAccountForm = ({ accountType, bank, bankAccount, motelId }: Pro
               clsx(
                 "bg-gray-50  border-gray-300 text-black text-sm rounded-lg appearance-none focus:outline-none focus:ring-0 border-2 focus:border-blue-600 block w-full p-2.5 placeholder-black",
                 {
-                  'focus:border-red-600 border-red-500': errors.accountType
+                  'focus:border-red-600 border-red-500': errors.accountTypeId
                 }
               )
             }
-              {...register('accountType', { required: true })}
+              {...register('accountTypeId', { required: true })}
             >
               <option value="">[Seleccione]</option>
               {
                 accountType.map(accountTypeMap => (
-                  <option key={accountTypeMap.id} value={accountTypeMap.id}> {accountTypeMap.typeName} </option>
+                  <option key={accountTypeMap.id} value={accountTypeMap.id}> {accountTypeMap.name} </option>
                 ))
               }
             </select>
             {
-              errors.accountType?.type === 'required' && (
+              errors.accountTypeId?.type === 'required' && (
                 <span className="text-red-500 text-xs">* Seleccione un tipo de cuenta</span>
               )
             }

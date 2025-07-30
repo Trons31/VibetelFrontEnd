@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import { UserDropdown } from "../top-menu/UserDropdown";
-import { isApprovedStatus, motelConfig } from "@/interfaces";
+import { isApprovedStatus, motelConfig, SubscriptionTier } from "@/interfaces";
 import { IoIosArrowDown } from "react-icons/io";
 import { formatDate } from "@/utils";
 import { ModalUpdateInServiceMotel } from "@/components";
@@ -14,9 +14,10 @@ interface Props {
   accessToken: string;
   motelConfig: motelConfig | null;
   motelStatus: isApprovedStatus;
+  subscriptionTier:SubscriptionTier;
 }
 
-export const AppHeader = ({ accessToken, motelConfig, motelStatus }: Props) => {
+export const AppHeader = ({ accessToken, motelConfig, motelStatus,subscriptionTier }: Props) => {
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } =
     useSidebarStore();
   const [modalUpdateInService, setModalUpdateInService] = useState(false);
@@ -57,7 +58,7 @@ export const AppHeader = ({ accessToken, motelConfig, motelStatus }: Props) => {
       />
 
       <header className="sticky top-0 flex w-full bg-white border-gray-200 z-40 lg:border-b">
-        <div className="flex  items-center justify-between w-full gap-2 px-3 py-3 border-b border-gray-200 sm:gap-4  lg:border-b-0 lg:px-5 lg:py-4">
+        <div className="flex  items-center justify-between w-full gap-2 px-2 py-3 border-b border-gray-200 sm:gap-4  lg:border-b-0 lg:px-5 lg:py-4">
           {/* Botón de alternar Sidebar (Visible en todas las pantallas, oculto en lg si el sidebar está siempre visible) */}
 
           <div className="flex items-center gap-2" >
@@ -104,23 +105,26 @@ export const AppHeader = ({ accessToken, motelConfig, motelStatus }: Props) => {
             <div className="">
               {
                 motelStatus === "APPROVED" && (
-                  <div className='flex justify-start items-center gap-3' >
+                  <div className='flex justify-start items-center' >
                     {
                       motelConfig?.inService
                         ? (
                           <button
                             onClick={() => setModalUpdateInService(true)}
-                            className="flex bg-blue-600 rounded-md px-2 py-1">
-                            <p className="text-white text-xs" >En servicio</p>
+                            className="flex items-center gap-2 bg-blue-600 rounded-md px-2 py-1 md:py-2">
+                            <p className="text-white text-xs md:text-sm" >En servicio</p>
                             <IoIosArrowDown className='text-white group-hover:text-black' />
                           </button>
                         )
                         : (
                           <button
                             onClick={() => setModalUpdateInService(true)}
-                            className="group flex gap-2 items-center bg-black hover:bg-white border border-black rounded px-2 py-1">
-                            <p className="text-white text-xs group-hover:text-black">
+                            className="group flex gap-2 items-center bg-black hover:bg-white border border-black rounded px-2 py-1 md:py-2">
+                            <p className="hidden md:block text-white text-xs md:text-sm group-hover:text-black">
                               Fuera de servicio desde {motelConfig?.outOfServiceStart ? formatDate(motelConfig.outOfServiceStart) : "desconocido"} hasta {motelConfig?.outOfServiceEnd ? formatDate(motelConfig.outOfServiceEnd) : "desconocido"}
+                            </p>
+                            <p className="block md:hidden text-white text-xs md:text-sm group-hover:text-black">
+                              Fuera de servicio
                             </p>
                             <IoIosArrowDown className='text-white group-hover:text-black' />
                           </button>
@@ -132,7 +136,7 @@ export const AppHeader = ({ accessToken, motelConfig, motelStatus }: Props) => {
             </div>
           </div>
 
-          {!isMobileOpen &&  <UserDropdown /> } 
+          {!isMobileOpen && <UserDropdown subscriptionTier={subscriptionTier} />}
         </div>
       </header>
     </>

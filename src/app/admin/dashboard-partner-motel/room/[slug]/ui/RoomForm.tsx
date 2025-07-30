@@ -1,26 +1,25 @@
 "use client";
 
-import { AmenitiesByRoom, AmenitiesRoom, BedRooms, CategoryRoom, CategoryRoomApi, GarageRoom, GarageRoomApi, RoomImage as ProductWithImage, RoomApi } from "@/interfaces";
+import { AmenitiesByRoom, AmenitiesRoom, CategoryRoomApi, GarageRoomApi, RoomImage as ProductWithImage, RoomApi, SubscriptionTier } from "@/interfaces";
 import clsx from "clsx";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Image from 'next/image';
 import { FaDotCircle, FaQuestionCircle } from "react-icons/fa";
 import { ModalPopup, RoomImage } from "@/components";
 import { useRouter } from "next/navigation";
-import { deleteRoomImage } from "@/actions/rooms/delete-room-image";
 import { formatTime } from "@/utils";
 import { IoInformationOutline } from "react-icons/io5";
 import toast, { Toaster } from "react-hot-toast";
 import Link from "next/link";
 import axios from "axios";
-import { amenities } from '../../../../../../interfaces/motels.interface';
 
 
 
 
 interface Props {
     accessToken: string;
+    subscriptionTier: SubscriptionTier;
     room: Partial<RoomApi>;
     garage: GarageRoomApi[];
     category: CategoryRoomApi[];
@@ -55,7 +54,7 @@ interface FormInputs {
 
 }
 
-export const RoomForm = ({ accessToken, category, garage, amenities, room, amenitiesByRoom, isNew, priceAddTime }: Props) => {
+export const RoomForm = ({ accessToken, category, garage, amenities, room, isNew, priceAddTime, subscriptionTier }: Props) => {
 
     const AmenitiesRoom = room.amenities?.map(amenitie => amenitie.amenities.id);
 
@@ -78,6 +77,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
     const [isModalSurchargeOpen, setIsModalSurchargeOpen] = useState(false);
     const [isModalCategpryOpen, setIsModalCategpryOpen] = useState(false);
     const [isModalSlugyOpen, setIsModalSlugyOpen] = useState(false);
+    const [isFreePlanModalOpen, setIsFreePlanModalOpen] = useState(false);
     const [isModalAddTime, setIsModalAddTime] = useState(false);
 
 
@@ -87,10 +87,8 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
     const [showMessageErrorServer, setshowMessageErrorServer] = useState(false);
     const [messageErrorServer, setmessageErrorServer] = useState<string | undefined>("");
 
-
-    const [showPromoPrice, setShowPromoPrice] = useState(room.promoActive ?? false);
+    const [showPromoPrice, setShowPromoPrice] = useState(room.promoActive);
     const [showExtraServices, setShowExtraServices] = useState(room.extraServicesActive ?? false);
-    const [inAviabled, setInAviabled] = useState(room.inAvaible ?? true)
     const [inputsAmenities, setInputs] = useState<string[]>([]);
     const [showMessageErrorAmenities, setShowMessageErrorAmenities] = useState(false);
 
@@ -105,14 +103,14 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
         defaultValues: {
             ...room,
             // tags: room.tags.join(', '),
-            promotionPercentage: room.promoActive ? ((room.price! - room.promoPrice!) * 100) / room.price! : 1,
+            promotionPercentage: room.promoActive ? ((room.price! - room.promoPrice!) * 100) / room.price! : undefined,
             extraServicesActive: room.extraServicesActive ? room.extraServicesActive : false,
             extraServices: room.extraServicesActive ? room.extraServices : 2000,
             categoryId: room.category?.id,
             garageId: room.garage?.id,
             // otherAmenities: room.amenities,
             slug: room.slug ? room.slug.replace(/[-_]/g, ' ') : '',
-            inAvailable: room.inAvaible ? true : true,
+            inAvailable: room.inAvailable ? true : false,
             promoActive: room.promoActive ? room.promoActive : false,
             amenities: room.amenities?.map(amenitie => amenitie.amenities),
             images: undefined
@@ -138,6 +136,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
         }
 
         const formData = new FormData();
+
         const { images, ...roomToSave } = data;
         const {
             title,
@@ -157,6 +156,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
             categoryId,
             garageId,
         } = roomToSave;
+
 
         const promoPrice = promoActive
             ? price - (price * promotionPercentage!) / 100
@@ -178,7 +178,9 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
         formData.append('timeLimit', timeLimit.toString());
         formData.append('roomNumber', roomNumber.toString());
         formData.append('extraServicesActive', extraServicesActive.toString());
-        formData.append('extraServices', extraServices?.toString() ?? '0');
+        if (extraServicesActive) {
+            formData.append('extraServices', extraServices?.toString() ?? '0');
+        }
         formData.append('surcharge', surcharge.toString());
         formData.append('categoryId', categoryId);
         formData.append('garageId', garageId);
@@ -191,24 +193,48 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
             formData.append('images', file);
         });
 
-        console.log(formData);
-
         try {
-            const response = await axios.post<RoomApi>(
-                `${process.env.NEXT_PUBLIC_API_ROUTE}room`,
-                formData,
-                {
+            let response;
+            let url = `${process.env.NEXT_PUBLIC_API_ROUTE}room`; // URL base para crear
+            let method = 'post'; // Método por defecto para crear
+
+            if (!isNew) {
+
+                const roomIdToUpdate = room.id;
+
+                if (!roomIdToUpdate) {
+                    // Manejar el caso donde no hay ID para actualizar
+                    toast.error("Error: No se encontró el ID de la habitación para actualizar.");
+                    setShowLoadingButton(false);
+                    return;
+                }
+
+                url = `${process.env.NEXT_PUBLIC_API_ROUTE}room/${roomIdToUpdate}`; // URL para actualizar
+                method = 'patch'; // Método PATCH para actualización parcial
+            }
+
+            // Realiza la solicitud HTTP
+            if (method === 'post') {
+                response = await axios.post<RoomApi>(url, formData, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
+                        'Content-Type': 'multipart/form-data',
                     },
-                }
-            );
+                });
+            } else { // 'patch'
+                response = await axios.patch<RoomApi>(url, formData, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+            }
 
-            const CreateRoom = response.data;
+            const roomResult = response.data;
 
             isNew
                 ? toast.success('Información guardada correctamente')
-                : toast.success('Información actualizada')
+                : toast.success('Información actualizada');
 
             setShowLoadingButton(false);
             setShowMessageError(false);
@@ -217,7 +243,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
             setmessageErrorServer(undefined);
             setImageUrls([""]);
             setSelectedFiles([]);
-            router.replace(`/admin/dashboard-partner-motel/room/${CreateRoom?.slug}`);
+            router.replace(`/admin/dashboard-partner-motel/room/${roomResult?.slug}`);
         } catch (error: any) {
             console.log(error);
             isNew
@@ -226,6 +252,16 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
             setShowLoadingButton(false);
         }
     };
+
+    useEffect(() => {
+        setShowPromoPrice(room.promoActive ?? false);
+    }, [room.promoActive]);
+
+
+    useEffect(() => {
+        setShowExtraServices(room.extraServicesActive ?? false);
+    }, [room.extraServicesActive]);
+
 
 
     const tooglePromoActive = () => {
@@ -252,12 +288,9 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
     }
 
     const toogleInAviabled = () => {
-        setInAviabled(prevState => {
-            const newInAviabled = !prevState;
-            setValue('inAvailable', newInAviabled);
-            return newInAviabled;
-        });
-    }
+        const currentValue = getValues('inAvailable');
+        setValue('inAvailable', !currentValue, { shouldValidate: true, shouldDirty: true });
+    };
 
     const onAmenitieChanged = (amenityId: string) => {
         setSelectedAmenities(prevSelected => {
@@ -290,20 +323,25 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
     };
 
 
-    const OndeleteRoomImage = async (ImageId: string, imageUrl: string) => {
+    const OndeleteRoomImage = async (ImageId: string) => {
         setShowLoadingDeleteImage(true);
-        // const { ok } = await deleteRoomImage(ImageId, imageUrl);
-        // if (ok) {
-        //     setShowLoadingDeleteImage(false);
-        //     setValue('images', undefined)
-        //     toast.success("Imagen eliminada correctamente")
-        // } else {
-        //     setShowLoadingDeleteImage(false);
-        //     toast.error("No se pudo eliminar la imagen")
-
-        //}
-
+        try {
+            await axios.delete(`${process.env.NEXT_PUBLIC_API_ROUTE}room/image/${ImageId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+            setValue('images', undefined)
+            toast.success("Imagen eliminada correctamente")
+        } catch (error: any) {
+            toast.error("No se pudo eliminar la imagen")
+        } finally {
+            setShowLoadingDeleteImage(false); // Desactivar carga de habitaciones
+        }
     }
+
+    const isFreePlan = subscriptionTier === 'FREE';
 
     return (
 
@@ -547,86 +585,139 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
                     }
 
                     <div className="mb-4">
-                        <div className="flex items-center mb-2 gap-4" >
+                        <div className="flex items-center mb-2 gap-4">
                             <label className={
                                 clsx(
-                                    "block  text-sm text-black font-semibold ",
+                                    "block text-sm text-black font-semibold",
                                     {
                                         "text-red-500": errors.priceAddTime
                                     }
                                 )
-                            }>Precio por adicion de tiempo</label>
+                            }>
+                                Precio por adición de tiempo
+                            </label>
                             <button
                                 type="button"
-                                onClick={() => setIsModalAddTime(true)}
+                                onClick={() => {
+                                    if (isFreePlan) {
+                                        setIsFreePlanModalOpen(true); // Abrir el modal de plan gratuito
+                                    } else {
+                                        setIsModalAddTime(true); // Abrir el modal de información normal
+                                    }
+                                }}
                             >
                                 <FaQuestionCircle />
                             </button>
 
+                            {/* Modal para la información del "Precio por adición de tiempo" */}
+                            {!isFreePlan && (
+                                <ModalPopup
+                                    title="¿Qué es el precio por adición de tiempo?"
+                                    isOpen={isModalAddTime}
+                                    onClose={() => setIsModalAddTime(false)}
+                                >
+                                    <div>
+                                        <p className="font-bold">Estimado equipo de administración</p>
+                                        <p className="py-2">
+                                            El <span className="font-extrabold">precio por adición de tiempo</span> es el monto que el motel estableció para cobrar a los usuarios por cualquier tiempo adicional que deseen agregar a una reserva ya hecha.
+                                        </p>
+                                        <p>
+                                            Este precio se fijará por cada <strong>{formatTime(priceAddTime)}</strong> adicional establecido por el motel <Link href="/admin/dashboard-partner-motel/additional-settings" className="underline text-blue-600" target="_blank" rel="noopener noreferrer">configuración adicional</Link> que el usuario desee agregar. Es decir, el monto especificado corresponderá únicamente a <strong>{formatTime(priceAddTime)}</strong> de tiempo adicional.
+                                        </p>
+                                        <p className="mt-2 font-bold">¿Cómo se calcula?</p>
+                                        <p>
+                                            Cada vez que un usuario solicite extender su tiempo de reserva, se aplicará el precio establecido para cada segmento de <strong>{formatTime(priceAddTime)}</strong> adicional.
+                                        </p>
+                                        <p className="mt-2 font-bold">Ejemplo:</p>
+                                        <p>
+                                            Si el precio por cada <strong>{formatTime(priceAddTime)}</strong> adicional es de $10, y un usuario desea agregar un tiempo N extra, el costo total será de (N x $10).
+                                        </p>
+                                        <p className="mt-2 font-bold">Importancia de un precio razonable</p>
+                                        <p>
+                                            Es importante que el precio sea razonable para atraer a más usuarios. Un precio accesible incentivará a los clientes a prolongar su estancia, lo que puede resultar en mayores ingresos para el motel.
+                                        </p>
+                                    </div>
+                                </ModalPopup>
+                            )}
+
+                            {/* Modal para el plan gratuito */}
                             <ModalPopup
-                                title="¿Qué es el precio por adición de tiempo?"
-                                isOpen={isModalAddTime}
-                                onClose={() => setIsModalAddTime(false)}
+                                title="Función no disponible en tu plan actual"
+                                isOpen={isFreePlanModalOpen}
+                                onClose={() => setIsFreePlanModalOpen(false)}
                             >
                                 <div>
-                                    <p className="font-bold">Estimado equipo de administración </p>
-                                    <p className="py-2">
-                                        El <span className="font-extrabold">precio por adición de tiempo</span> es el monto que el motel establecio para cobrar a los usuarios por cualquier tiempo adicional que deseen agregar a una reserva ya hecha.
-                                    </p>
+                                    <p className="font-bold mb-2">¡Desbloquea más oportunidades con un plan superior!</p>
+                                    <p className="mb-2">La función de <span className="font-extrabold">Precio por adición de tiempo</span> no está disponible en tu plan <span className="font-extrabold">FREE</span>.</p>
+                                    <p className="mb-2">Esta opción permite a tus usuarios extender sus reservas fácilmente, lo que se traduce en:</p>
+                                    <ul className="list-disc list-inside ml-4 mb-4">
+                                        <li><span className="font-semibold">Mayores ingresos:</span> Genera ganancias adicionales por cada extensión de tiempo.</li>
+                                        <li><span className="font-semibold">Mayor satisfacción del cliente:</span> Ofrece flexibilidad y comodidad a tus usuarios.</li>
+                                        <li><span className="font-semibold">Optimización de ocupación:</span> Maximiza el uso de tus habitaciones.</li>
+                                    </ul>
+                                    <p className="mb-4">¡No pierdas la oportunidad de incrementar tus ganancias y mejorar la experiencia de tus clientes!</p>
                                     <p>
-                                        Este precio se fijará por cada <strong>{formatTime(priceAddTime)}</strong> adicional establecido por el motel <Link href="/admin/dashboard-partner-motel/additional-settings" className="underline text-blue-600" target="_blank" rel="noopener noreferrer" >configuracion adicional </Link> que el usuario desee agregar. Es decir, el monto especificado corresponderá únicamente a <strong>{formatTime(priceAddTime)}</strong>  de tiempo adicional.
-                                    </p>
-                                    <p className="mt-2 font-bold">¿Cómo se calcula?</p>
-                                    <p>
-                                        Cada vez que un usuario solicite extender su tiempo de reserva, se aplicará el precio establecido para cada segmento de <strong>{formatTime(priceAddTime)}</strong> adicional.
-                                    </p>
-                                    <p className="mt-2 font-bold">Ejemplo:</p>
-                                    <p>
-                                        Si el precio por cada <strong>{formatTime(priceAddTime)}</strong> adicional es de $10, y un usuario desea agregar un tiempo N extra, el costo total será de (N x $10).
-                                    </p>
-                                    <p className="mt-2 font-bold">Importancia de un precio razonable</p>
-                                    <p>
-                                        Es importante que el precio sea razonable para atraer a más usuarios. Un precio accesible incentivará a los clientes a prolongar su estancia, lo que puede resultar en mayores ingresos para el motel.
+                                        Para habilitar esta y otras funciones avanzadas, considera actualizar a un plan <span className="font-semibold">BASIC</span> o <span className="font-semibold">PREMIUM</span>.
+                                        <br />
+                                        <Link href="/admin/dashboard-partner-motel/subscription" className="underline text-blue-600 font-semibold" target="_blank" rel="noopener noreferrer">Explora nuestros planes aquí.</Link>
                                     </p>
                                 </div>
                             </ModalPopup>
 
-
                         </div>
                         <div className="flex">
                             <div className="relative w-full">
-                                <input type="text" className={
-                                    clsx(
-                                        "bg-gray-300 border-2 border-gray-300 text-black text-sm rounded-lg appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 block w-full p-2.5 placeholder-black",
-                                        {
-                                            'focus:border-red-600 border-red-500': errors.priceAddTime
-                                        }
+                                <input
+                                    type="text"
+                                    className={
+                                        clsx(
+                                            "bg-gray-300 border-2 text-black text-sm rounded-lg appearance-none focus:outline-none focus:ring-0 block w-full p-2.5 placeholder-black",
+                                            {
+                                                'focus:border-red-600 border-red-500': errors.priceAddTime,
+                                                'border-gray-300 focus:border-blue-600': !errors.priceAddTime && !isFreePlan, // Clases normales para cuando no hay error y no es free
+                                                'cursor-not-allowed': isFreePlan, // Cursor de "no permitido"
+                                                'bg-red-600 text-white border-red-500': isFreePlan // Fondo ligeramente diferente para deshabilitado
+                                            }
+                                        )
+                                    }
+                                    {...register('priceAddTime', { required: true, min: 1, pattern: /^[0-9]*$/ })}
+                                    disabled={isFreePlan} // Deshabilita el input si es plan FREE
+                                    value={isFreePlan ? 'No disponible en Plan FREE' : undefined} // Muestra el mensaje o el valor
+                                    placeholder={isFreePlan ? '' : 'Ingrese el precio'} // Puedes ajustar el placeholder
+                                />
+                                {
+                                    !isFreePlan && (
+                                        <div
+                                            className={clsx(
+                                                "absolute top-0 end-0 p-2.5 text-sm font-medium h-full rounded-e-lg border",
+                                                {
+                                                    "text-white bg-blue-700 border-blue-700": !isFreePlan,
+                                                    "text-gray-500 bg-gray-300 border-gray-300 cursor-not-allowed": isFreePlan // Estilo para deshabilitado
+                                                }
+                                            )}
+                                        >
+                                            por {formatTime(priceAddTime)}
+                                        </div>
                                     )
                                 }
-                                    {...register('priceAddTime', { required: true, min: 1, pattern: /^[0-9]*$/ })}
-                                />
-                                <div
-                                    className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-e-lg border border-blue-700 ">
-                                    por {formatTime(priceAddTime)}
-                                </div>
+
                             </div>
                         </div>
-                        {
-                            errors.priceAddTime?.type === 'required' && (
-                                <span className="text-red-500 text-xs" >* El precio por adicion de tiempo es obligatorio</span>
-                            )
-                        }
-                        {
-                            errors.priceAddTime?.type === 'min' && (
-                                <span className="text-red-500 text-xs" >* El precio por adicion de tiempo no puede ser cero ni menor a cero</span>
-                            )
-                        }
-                        {
-                            errors.priceAddTime?.type === 'pattern' && (
-                                <span className="text-red-500 text-xs" >* Por favor, no incluya letras, puntos, simbolos, comas en el precio por adicion de tiempo</span>
-                            )
-                        }
-                        <span className="text-xs text-gray-500 block">Por favor, no incluya puntos ni comas en el precio por adicion de tiempo</span>
+                        {isFreePlan && (
+                            <span className="text-orange-600 text-xs block mt-1">
+                                Esta función no está disponible en tu plan actual. <button type="button" onClick={() => setIsFreePlanModalOpen(true)} className="underline font-semibold">Más información</button>.
+                            </span>
+                        )}
+                        {!isFreePlan && errors.priceAddTime?.type === 'required' && (
+                            <span className="text-red-500 text-xs" >* El precio por adición de tiempo es obligatorio</span>
+                        )}
+                        {!isFreePlan && errors.priceAddTime?.type === 'min' && (
+                            <span className="text-red-500 text-xs" >* El precio por adición de tiempo no puede ser cero ni menor a cero</span>
+                        )}
+                        {!isFreePlan && errors.priceAddTime?.type === 'pattern' && (
+                            <span className="text-red-500 text-xs" >* Por favor, no incluya letras, puntos, símbolos, comas en el precio por adición de tiempo</span>
+                        )}
+                        {!isFreePlan && <span className="text-xs text-gray-500 block">Por favor, no incluya puntos ni comas en el precio por adición de tiempo</span>}
                     </div>
 
 
@@ -667,7 +758,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
                     <div className="mb-4">
                         <div className="py-2 flex items-center justify-between">
                             {
-                                inAviabled
+                                watch('inAvailable')
                                     ? (
                                         <label className="block text-sm text-blue font-semibold">Disponible</label>
                                     )
@@ -678,8 +769,9 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
                             <label className="inline-flex items-center cursor-pointer">
                                 <input
                                     type="checkbox"
+                                    {...register('inAvailable')}
                                     onChange={toogleInAviabled}
-                                    checked={inAviabled}
+                                    checked={watch('inAvailable')}
                                     className="sr-only peer"
                                 />
                                 <div className="relative w-11 h-6 bg-red-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-500 peer:not(:checked):bg-red-600"></div>
@@ -1190,7 +1282,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
                         <button
                             type="button"
                             onClick={handleAddInput}
-                            className="bg-blue-600 text-sm md:text-lg w-fit text-white px-2 py-1 rounded-md"
+                            className="bg-blue-600 text-xs md:text-sm w-fit text-white px-2 py-1 rounded-md"
                         >
                             Agregar comodida
                         </button>
@@ -1200,12 +1292,12 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
                         <label className="block mb-2 text-sm text-black font-semibold ">Habitacion</label>
                         <label htmlFor="fileInput" className={
                             clsx(
-                                " bg-gray-300 inline-block text-sm md:text-lg py-2 px-4 rounded-lg cursor-pointer", {
+                                " bg-gray-300 inline-block text-xs md:text-sm py-2 px-4 rounded-lg cursor-pointer", {
                                 "border-red-500": errors.images
                             }
                             )
                         }>
-                            Cargar imagen de la habitacion
+                            Cargar imagenes de la habitacion
                             <input
                                 id="fileInput"
                                 {...register('images')}
@@ -1217,7 +1309,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
                             />
                         </label>
 
-                        <span className="text-xs text-gray-500 block">Se recomienda cargar tres imágenes de alta calidad de la habitación, destacando sus mejores características.</span>
+                        <span className="text-xs text-gray-500 block">Se recomienda cargar 5 imágenes de alta calidad de la habitación, destacando sus mejores características.</span>
 
                         <div className="grid grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 mt-4 gap-2">
                             {
@@ -1249,7 +1341,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, ameni
                                     <button
                                         type='submit'
                                         disabled={showLoadingDeleteImage || showLoadingButton}
-                                        onClick={() => OndeleteRoomImage(image.id, image.url)}
+                                        onClick={() => OndeleteRoomImage(image.id)}
                                         className={
                                             clsx(
 
