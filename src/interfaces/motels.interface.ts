@@ -1,5 +1,6 @@
 import { BedRooms } from "./bedrooms.interface";
 import { SubscriptionTier } from "./plans.interface";
+import { RoomRating } from "./reservation.interface";
 import { CategoryRoomApi, GarageRoomApi, RoomAmenity, statusRoom, Image } from "./room.interface";
 
 export type amenities = 'Servicio Restaurante-Bar' | 'Sex-Shop' | 'Zona de Spa';
@@ -62,6 +63,7 @@ export interface RoomOfMotel {
     garage: GarageRoomApi;
     amenities: RoomAmenity[];
     images: Image[];
+    ratings: RoomRating[];
 }
 
 
@@ -194,7 +196,7 @@ export interface motelConfig {
 export interface suggestedMotelApi {
     id: string;
     razonSocial: string;
-    slug:string;
+    slug: string;
     address: string;
     neighborhood: string
 }

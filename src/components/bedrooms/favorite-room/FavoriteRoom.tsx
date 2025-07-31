@@ -1,7 +1,6 @@
 'use client';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { addOrDeleteFavoriteRoom } from '@/actions';
 import { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { BiHeart, BiSolidHeart } from 'react-icons/bi';

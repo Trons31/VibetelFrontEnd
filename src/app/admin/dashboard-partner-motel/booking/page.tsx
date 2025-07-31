@@ -1,4 +1,4 @@
-import { getMotelByMotelPartner, getTotalReservationByMotel } from "@/actions";
+import { getTotalReservationByMotel } from "@/actions";
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
 import { BookingPage } from './ui/BookingPage';

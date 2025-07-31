@@ -1,13 +1,10 @@
 "use client";
 
+import { RoomRating } from "@/interfaces/reservation.interface";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 
-interface Rating {
-  rating: number;
-}
-
 interface Props {
-  ratings: Rating[];
+  ratings: RoomRating[];
 }
 
 export const RatingRoomCard = ({ ratings }: Props) => {

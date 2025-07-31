@@ -1,5 +1,4 @@
 'use client';
-import { getTopReservedRooms } from '@/actions';
 import { RoomApi } from '@/interfaces';
 import { useSearchStore, useUIStore } from '@/store';
 import axios from 'axios';
@@ -90,18 +89,18 @@ export const InputSearch = ({ openSearch, closeSearch, location }: Props) => {
         }
     };
 
-    const onLoadTopReservedRooms = async () => {
-        const resp = await getTopReservedRooms();
-        if (resp.ok) {
-            setTopRooms(resp.topRooms);
-        } else {
-            setTopRooms([]);
-        }
-    }
+    // const onLoadTopReservedRooms = async () => {
+    //     const resp = await getTopReservedRooms();
+    //     if (resp.ok) {
+    //         setTopRooms(resp.topRooms);
+    //     } else {
+    //         setTopRooms([]);
+    //     }
+    // }
 
-    useEffect(() => {
-        onLoadTopReservedRooms();
-    }, [])
+    // useEffect(() => {
+    //     onLoadTopReservedRooms();
+    // }, [])
 
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);

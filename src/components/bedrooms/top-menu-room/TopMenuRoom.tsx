@@ -4,8 +4,7 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link'
 import { FavoriteRoom, SharedLinkRoom } from '@/components';
-import { BedRooms, RoomApi } from '@/interfaces';
-import { inFavorites } from '@/actions';
+import { RoomApi } from '@/interfaces';
 import { IoIosArrowBack } from 'react-icons/io'
 import { useRouter } from 'next/navigation';
 
@@ -19,16 +18,6 @@ export const TopMenuRoom = ({ room }: Props) => {
 
     const { data: session } = useSession();
 
-    let inFavoritesValidate: { ok: boolean } | undefined;
-    const fetchRoom = useCallback(async () => {
-        if (session?.user.roles.includes("user")) {
-            inFavoritesValidate = await inFavorites(room.id, session.user.id);
-        }
-    }, [])
-
-    useEffect(() => {
-        fetchRoom();
-    }, [])
 
 
 
@@ -52,7 +41,6 @@ export const TopMenuRoom = ({ room }: Props) => {
 
                     <FavoriteRoom
                         roomId={room.id}
-                        inFavorites={session?.user.roles.includes("user") ? inFavoritesValidate?.ok : false}
                     />
 
                     <Link href="/" target="_blank" className="hidden md:flex space-x-1 items-center" rel="noopener noreferrer" >

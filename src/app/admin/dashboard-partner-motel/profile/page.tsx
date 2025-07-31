@@ -3,10 +3,9 @@ import { redirect } from "next/navigation";
 import { ConfigMotel } from "./ui/ConfigMotel";
 
 import { BreadCrumb } from "@/components";
-import { getAmenitiesMotel } from "@/actions";
 import { UserApi } from "@/interfaces/user.interface";
 import axios from "axios";
-import { CityApi, CountryApi, DepartmentApi, MotelApi } from "@/interfaces";
+import { AmenitiesMotelInfoApi, CityApi, CountryApi, DepartmentApi, MotelApi } from "@/interfaces";
 
 export default async function ProfileMotelPartnerPage() {
 
@@ -47,32 +46,39 @@ export default async function ProfileMotelPartnerPage() {
     redirect("/auth/new-account-motel/register");
   }
 
-  const amenitiesMotel = await getAmenitiesMotel();
-  
- let countries: CountryApi[];
-   try {
-     const response = await axios.get<CountryApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}locations/countries`);
-     countries = response.data;
-   } catch (error: any) {
-     redirect("/");
-   }
- 
- 
-   let deparment: DepartmentApi[];
-   try {
-     const response = await axios.get<DepartmentApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}locations/departments`);
-     deparment = response.data;
-   } catch (error: any) {
-     redirect("/");
-   }
- 
-   let cities: CityApi[];
-   try {
-     const response = await axios.get<CityApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}locations/cities`);
-     cities = response.data;
-   } catch (error: any) {
-     redirect("/");
-   }
+  let amenitiesMotel: AmenitiesMotelInfoApi[];
+
+  try {
+    const response = await axios.get<AmenitiesMotelInfoApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}motel/amenities`);
+    amenitiesMotel = response.data;
+  } catch (error: any) {
+    redirect("/");
+  }
+
+  let countries: CountryApi[];
+  try {
+    const response = await axios.get<CountryApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}locations/countries`);
+    countries = response.data;
+  } catch (error: any) {
+    redirect("/");
+  }
+
+
+  let deparment: DepartmentApi[];
+  try {
+    const response = await axios.get<DepartmentApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}locations/departments`);
+    deparment = response.data;
+  } catch (error: any) {
+    redirect("/");
+  }
+
+  let cities: CityApi[];
+  try {
+    const response = await axios.get<CityApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}locations/cities`);
+    cities = response.data;
+  } catch (error: any) {
+    redirect("/");
+  }
 
   return (
     <div className='bg-white p-3 md:p-10 mb-10 rounded-xl' >

@@ -1,6 +1,7 @@
 'use client';
 
 import { ModalRatingRoomInfo } from "@/components";
+import { RoomRating } from "@/interfaces/reservation.interface";
 import { useState } from "react";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 
@@ -10,8 +11,9 @@ interface Rating {
     comment: string | null;
 }
 
+
 interface Props {
-    ratings: Rating[];
+    ratings: RoomRating[];
 }
 
 export const RatingRoom = ({ ratings }: Props) => {

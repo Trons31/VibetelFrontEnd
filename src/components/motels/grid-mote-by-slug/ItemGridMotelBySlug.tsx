@@ -85,12 +85,11 @@ export const ItemGridMotelBySlug = ({ room }: Props) => {
             <div className="mt-1">
               <div className="flex justify-between items-center" >
                 <h2 className="text-gray-900 title-font capitalize text-lg font-medium">
-                  {" "}
-                  {room.title}{" "}
+                  {room.title}
                 </h2>
-                {/* {room.ratings.length > 0 && (
-                <RatingRoomCard ratings={room.ratings} />
-              )} */}
+                {room.ratings.length > 0 && (
+                  <RatingRoomCard ratings={room.ratings} />
+                )}
               </div>
               <div className="flex justify-start gap-1 items-center" >
                 <span

@@ -59,22 +59,18 @@ export const ItemReservation = ({ reservation }: Props) => {
     return (
         <>
 
-            {/* <MoldaRating
+            <MoldaRating
                 isOpen={modalRating}
                 serviceId={reservation.id}
-
-                ratingRoomId={reservation.ratings?.id}
-                ratingServiceId={reservation.serviceRating?.id}
-
-                roomId={reservation.roomId!}
+                ratingRoom={reservation.roomRating}
                 onClose={() => setModalRating(false)}
-            /> */}
+            />
 
             <div className="bg-white rounded-none md:rounded-md shadow-lg border border-gray-200 p-4 mb-5" >
 
-                {/*     <div className='flex justify-end w-full px-1 mb-2' >
+                <div className='flex justify-end w-full px-1 mb-2' >
                     {
-                        reservation.ratings?.rating! > 0
+                        reservation.roomRating
                             ? (
                                 <div className='flex gap-1 items-center' >
                                     <button
@@ -84,7 +80,7 @@ export const ItemReservation = ({ reservation }: Props) => {
                                             {[...Array(5)].map((_, index) => (
                                                 <svg
                                                     key={index}
-                                                    className={`w-4 h-4 ms-1 ${index < Math.round(Number(reservation.ratings?.rating)) ? 'text-blue-500' : 'text-gray-300'
+                                                    className={`w-4 h-4 ms-1 ${index < Math.round(Number(reservation.roomRating?.rating)) ? 'text-blue-500' : 'text-gray-300'
                                                         }`}
                                                     aria-hidden="true"
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -98,7 +94,7 @@ export const ItemReservation = ({ reservation }: Props) => {
                                     </button>
                                 </div>
                             ) : (
-                                reservation.status === "completado" && (
+                                reservation.serviceItem?.status === "completado" && (
                                     <button
                                         onClick={() => setModalRating(true)}
                                         className='flex gap-1 items-center text-xs bg-blue-600 hover:bg-blue-700 py-1 px-2 rounded-md text-white' >
@@ -108,7 +104,7 @@ export const ItemReservation = ({ reservation }: Props) => {
                                 )
                             )
                     }
-                </div> */}
+                </div>
 
                 <div className="flex justify-between  items-center" >
                     <div>

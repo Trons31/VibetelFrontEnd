@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth.config";
-import { getMotelByMotelPartner, getTotalReservationTodayByMotel } from "@/actions";
+import { getTotalReservationTodayByMotel } from "@/actions";
 import { TableCheckIn } from "./ui/TableCheckIn";
 import { AccessCodeCheckIn } from "@/components";
 import { MotelApi } from "@/interfaces";

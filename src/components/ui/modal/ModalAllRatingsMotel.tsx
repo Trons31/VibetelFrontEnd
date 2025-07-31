@@ -1,8 +1,16 @@
 'use client';
 import { useEffect } from "react";
 import { formatDate } from "@/utils";
-import { MdClose, MdCloseFullscreen } from "react-icons/md";
-import { Rating } from "@/interfaces";
+import { MdClose } from "react-icons/md";
+
+export interface Rating {
+    id: string;
+    roomTitle: string;
+    roomNumber: string;
+    rating: number;
+    comment?: string;
+    createdAt: Date;
+}
 
 
 interface ModalProps {
@@ -54,7 +62,7 @@ export const ModalAllRatingsMotel = ({ isOpen, onClose, ratings }: ModalProps) =
                     {
                         ratings.map((rating) => (
                             <div key={rating.id} className="mb-5" >
-                                <p>{rating.room.title} Nro {rating.room.roomNumber}</p>
+                                <p>{rating.roomTitle} Nro {rating.roomNumber}</p>
 
                                 <div className="mt-4" >
                                     <p className="text-sm text-gray-700 mt-5">

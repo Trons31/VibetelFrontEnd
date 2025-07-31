@@ -1,6 +1,5 @@
 'use client';
 import React, { useState } from 'react'
-import { Rating } from '@/interfaces/bedrooms.interface';
 import { Swiper, SwiperSlide } from 'swiper/react'
 import styles from './swiper.module.css';
 
@@ -14,7 +13,14 @@ import { FreeMode, Pagination } from 'swiper/modules';
 import { formatDate } from '@/utils';
 import { ModalDetailReview } from '@/components';
 
-
+export interface Rating {
+    id: string;
+    roomTitle: string;
+    roomNumber: string;
+    rating: number;
+    comment?: string;
+    createdAt: Date;
+}
 
 
 interface Props {
@@ -61,18 +67,18 @@ export const RoomReviewsMovil = ({ ratings }: Props) => {
 
                     <SwiperSlide key={rating.id} className='p-3' >
                         <div className="relative mb-10">
-                            {/* Sombra azul desplazada */}
-                            <div className="absolute top-2 left-2 w-full h-full bg-gray-300 rounded-xl"></div>
-
-                            {/* Contenido principal */}
-                            <div className='relative z-10 border bg-white shadow-md border-black rounded-xl p-6'>
+                            <div className='relative z-10 border bg-white border-gray-400 rounded-2xl p-6'>
                                 <div className='flex justify-between items-center'>
-                                    <p className='font-medium text-lg'>{rating.room.title}</p>
-                                    <p className='text-md font-semibold'>Nro {rating.room.roomNumber}</p>
+                                    <p className='font-medium text-lg'>{rating.roomTitle}</p>
+                                    <p className='text-md font-semibold'>Nro {rating.roomNumber}</p>
                                 </div>
 
                                 <p className="text-sm text-gray-700 mt-5">
-                                    {truncateComment(rating.comment, 15) || "Esta calificación no tiene comentarios."}
+                                    {
+                                        rating.comment
+                                            ? truncateComment(rating.comment, 15)
+                                            : "Esta calificación no tiene comentarios."
+                                    }
                                 </p>
 
                                 <button

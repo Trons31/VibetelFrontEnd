@@ -7,11 +7,11 @@ import { BsStarFill } from "react-icons/bs";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { SwiperRoomCommentMovil } from "./SwiperRoomCommentMovil";
 import { TbPointFilled } from "react-icons/tb";
-import { Rating } from "@/interfaces";
+import { RoomRating } from "@/interfaces/reservation.interface";
 
 
 interface Props {
-  ratings: Rating[];
+  ratings: RoomRating[];
 }
 
 export const CommentRoom = ({ ratings }: Props) => {
@@ -19,7 +19,7 @@ export const CommentRoom = ({ ratings }: Props) => {
   const [visibleComments, setVisibleComments] = useState(5);
 
   const [deatilComment, setDeatilComment] = useState(false);
-  const [detailReview, setDetailReview] = useState<Rating>();
+  const [detailReview, setDetailReview] = useState<RoomRating>();
 
   const truncateComment = (comment: string | null, wordLimit: number): string => {
     if (!comment) return "Esta calificación no tiene comentarios.";
@@ -32,7 +32,7 @@ export const CommentRoom = ({ ratings }: Props) => {
       : comment;
   };
 
-  const calculateAverageRating = (ratings: Rating[]) => {
+  const calculateAverageRating = (ratings: RoomRating[]) => {
     if (ratings.length === 0) return 0;
     const total = ratings.reduce((sum, { rating }) => sum + rating, 0);
     return total / ratings.length === 5
@@ -40,7 +40,7 @@ export const CommentRoom = ({ ratings }: Props) => {
       : (total / ratings.length).toFixed(2);
   };
 
-  const getRatingDistribution = (ratings: Rating[]) => {
+  const getRatingDistribution = (ratings: RoomRating[]) => {
     const distribution = Array(5).fill(0); // Inicializamos un array con 5 ceros
 
     // Contamos la cantidad de calificaciones por número de estrellas
@@ -121,14 +121,11 @@ export const CommentRoom = ({ ratings }: Props) => {
         onClose={() => setDeatilComment(false)}
       />
 
-      <div className="py-4 mb-10 mt-7">
+      <div className="py-4 mb-0 mt-7">
         <div className="hidden px-4 md:px-0 md:block">
           <div className="relative">
-            {/* Fondo azul desplazado */}
-            <div className="absolute top-2 left-2 w-full h-full bg-blue-600 rounded-lg"></div>
 
-            {/* Tarjeta principal */}
-            <div className="border border-black relative p-6 rounded-lg bg-white z-10 shadow-sm">
+            <div className="border border-gray-300 relative p-6 rounded-xl bg-white z-10 shadow-sm">
               <div className="flex justify-between items-center mb-6" >
                 <h2 className="text-xl font-bold">Calificacion</h2>
                 <div className="w-fit flex " >
@@ -229,15 +226,11 @@ export const CommentRoom = ({ ratings }: Props) => {
         </div>
 
         <div className="hidden w-full md:block">
-          <div className="mt-24 space-y-4 grid grid-cols-3">
+          <div className="mt-10 space-y-4 grid grid-cols-3">
             {ratings.slice(0, visibleComments).map((rating, index) => (
               <div key={index} className="relative mb-6"> {/* Contenedor padre para la sombra */}
 
-                {/* Fondo azul desplazado */}
-                <div className="absolute top-2 left-2 w-full h-full bg-gray-300 rounded-lg"></div>
-
-                {/* Card principal */}
-                <div className="relative pb-4 border border-black rounded-lg p-4 bg-white z-10">
+                <div className="relative pb-4 bg-gray-100 rounded-xl p-4 z-10">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <BsStarFill className="text-blue-600 w-4 h-4" />
@@ -250,7 +243,11 @@ export const CommentRoom = ({ ratings }: Props) => {
                     </p>
                   </div>
                   <p className="text-sm text-black mt-4">
-                    {truncateComment(rating.comment, 25) || "Esta calificación no tiene comentarios."}
+                    {
+                      rating.comment
+                        ? truncateComment(rating.comment, 25)
+                        : "Esta calificación no tiene comentarios."
+                    }
                   </p>
                   <button
                     onClick={() => { setDeatilComment(true), setDetailReview(rating) }}

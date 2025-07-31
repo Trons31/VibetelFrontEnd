@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ModalAllRatingsMotel,
   RoomReviews,
@@ -10,9 +10,20 @@ import {
 import { MotelBySlugApi } from "@/interfaces";
 import { MdBed } from "react-icons/md";
 import { TbNotesOff } from "react-icons/tb";
-import { usePathname } from "next/navigation";
 import { FaBuildingFlag } from "react-icons/fa6";
 import { IoLocationSharp } from "react-icons/io5";
+import axios from "axios";
+
+export interface Rating {
+  id: string;
+  roomTitle: string;
+  roomNumber: string;
+  rating: number;
+  comment?: string;
+  createdAt: Date;
+}
+
+
 
 interface Props {
   motel: MotelBySlugApi;
@@ -21,15 +32,35 @@ interface Props {
 export const InfoMotel = ({ motel }: Props) => {
   const [modalAllRatings, setModalAllRatings] = useState(false);
 
-  const pathname = usePathname();
+  const [ratings, setRatings] = useState<Rating[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const getAllratingsByRoom = async () => {
+      try {
+        const response = await axios.get<Rating[]>(
+          `${process.env.NEXT_PUBLIC_API_ROUTE}room-rating/ratings/motel/${motel.slug}`
+        );
+        setRatings(response.data);
+      } catch (error: any) {
+        setRatings([]);
+        console.error("Error al cargar las calificaciones de las habitaciones del motel:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    getAllratingsByRoom();
+  }, [])
+
+
 
   return (
     <>
-      {/* <ModalAllRatingsMotel
+      <ModalAllRatingsMotel
         isOpen={modalAllRatings}
-        ratings={motel.allRatings}
+        ratings={ratings}
         onClose={() => setModalAllRatings(false)}
-      /> */}
+      />
 
       <div className="px-3 md:col-span-7 mt-10 md:mt-0">
         <div className="hidden md:block px-2">
@@ -46,44 +77,61 @@ export const InfoMotel = ({ motel }: Props) => {
         <div className="mt-5">
           <div className="flex justify-between items-center">
             <p className="text-lg md:text-xl font-light">Reseñas</p>
-            {/* {motel.allRatings.length > 1 && (
+            {ratings.length > 0 && (
               <button
                 onClick={() => setModalAllRatings(true)}
-                className="underline"
+                className="underline text-sm"
               >
-                Ver mas
+                ver mas
               </button>
-            )} */}
+            )}
           </div>
 
-          {/* {motel.allRatings.length > 0 ? (
-            <>
-              <div className="mt-10 ">
-                <div className="hidden md:block">
-                  <RoomReviews ratings={motel.allRatings.slice(0, 5)} />
-                </div>
-                <div className="block md:hidden">
-                  <RoomReviewsMovil ratings={motel.allRatings.slice(0, 5)} />
-                </div>
-              </div>
+          {
+            isLoading
+              ? (
+                <>
+                  <div className="col-span-2 md:col-span-8 w-full" >
+                    <div className='block space-y-5'>
+                      <div className="w-full h-44  bg-gray-400  md:rounded-md animate-pulse"></div>
+                      <div className="w-full h-80  bg-gray-400 md:rounded-md animate-pulse"></div>
+                      <div className="w-full h-44  bg-gray-400 md:rounded-md animate-pulse"></div>
+                    </div>
+                  </div >
+                </>
+              ) : (
+                ratings.length > 0
+                  ? (
+                    <>
+                      <div className="mt-10 ">
+                        <div className="hidden md:block fade-in">
+                          <RoomReviews ratings={ratings} />
+                        </div>
+                        <div className="block md:hidden fade-in">
+                          <RoomReviewsMovil ratings={ratings} />
+                        </div>
+                      </div>
 
-              <p className="text-sm font-extralight text-gray-800 mt-5">
-                Aquí podrás ver todas las opiniones y calificaciones que los
-                usuarios han dejado sobre las habitaciones de este motel.
-              </p>
-            </>
-          ) : (
-            <div className="flex justify-center mt-10">
-              <div className="flex gap-1 items-center border border-gray-300 rounded-3xl p-8">
-                <TbNotesOff className="h-5 w-5 text-gray-700 flex-shrink-0" />
-                <p className="text-center text-sm text-gray-800">
-                  Aún no existen reseñas para esta habitación. Sé el primero en
-                  compartir tu experiencia y ayuda a otros usuarios a tomar una
-                  decisión informada.
-                </p>
-              </div>
-            </div>
-          )} */}
+                      <p className="text-sm font-extralight text-gray-800 mt-5">
+                        Aquí podrás ver todas las opiniones y calificaciones que los
+                        usuarios han dejado sobre las habitaciones de este motel.
+                      </p>
+                    </>
+
+                  ) : (
+                    <div className="flex justify-center mt-10">
+                      <div className="flex gap-1 items-center border border-gray-300 rounded-3xl p-8">
+                        <TbNotesOff className="h-5 w-5 text-gray-700 flex-shrink-0" />
+                        <p className="text-center text-sm text-gray-800">
+                          Aún no existen reseñas. Sé el primero en
+                          compartir tu experiencia y ayuda a otros usuarios a tomar una
+                          decisión informada.
+                        </p>
+                      </div>
+                    </div>
+                  )
+              )
+          }
         </div>
 
         <div className="border-t border-gray-300 mt-16 mb-10"></div>

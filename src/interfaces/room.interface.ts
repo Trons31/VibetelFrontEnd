@@ -1,4 +1,5 @@
 import { isApprovedStatus, motelConfig } from "./motels.interface";
+import { RoomRating } from "./reservation.interface";
 
 export type statusRoom = "AVAILABLE" | "IN_SERVICE" | "CLEANING" | "DISABLED" | "SERVICE_COMPLETED";
 
@@ -28,6 +29,7 @@ export interface RoomApi {
   images: Image[];
   amenities: RoomAmenity[];
   motel: Motel;
+  ratings: RoomRating[]
 }
 
 
@@ -90,12 +92,13 @@ export interface RoomAllApi {
   extraServicesActive: boolean;
   extraServices: number;
   surcharge: number;
-  createdAt: string; 
-  updatedAt: string; 
+  createdAt: string;
+  updatedAt: string;
   category: CategoryRoomApi;
   garage: GarageRoomApi;
-  images: Image[]; 
+  images: Image[];
   amenities: RoomAmenity[];
+  ratings: RoomRating[];
   motel: {
     id: string;
     razonSocial: string;

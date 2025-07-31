@@ -10,10 +10,18 @@ import 'swiper/css/pagination';
 
 import { FreeMode, Pagination } from 'swiper/modules';
 import { formatDate } from '@/utils';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ModalDetailReview } from '@/components';
-import { Rating } from '@/interfaces';
+import axios from 'axios';
 
+export interface Rating {
+    id: string;
+    roomTitle: string;
+    roomNumber: string;
+    rating: number;
+    comment?: string;
+    createdAt: Date;
+}
 
 
 interface Props {
@@ -62,25 +70,26 @@ export const RoomReviews = ({ ratings }: Props) => {
                         key={rating.id}
                     >
                         <div className="relative mr-5 mb-10 h-[230px]">
-                            {/* Fondo azul desplazado */}
-                            <div className="absolute top-2 left-2 w-full h-full bg-gray-300 rounded-xl"></div>
-
-                            {/* Contenido del card */}
                             <div
                                 onClick={() => {
                                     setDeatilComment(true);
                                     setDetailReview(rating);
                                 }}
-                                className={`${styles['card-content']} relative z-10 border bg-white shadow-md border-black rounded-xl p-6 h-full flex flex-col justify-between cursor-pointer`}
+                                className={`${styles['card-content']} relative z-10 border bg-white border-gray-300 rounded-2xl p-6 h-full flex flex-col justify-between cursor-pointer`}
                             >
                                 <div>
                                     <div className="flex justify-between items-center">
-                                        <p className="font-medium text-lg">{rating.room.title}</p>
-                                        <p className="text-md font-semibold">Nro {rating.room.roomNumber}</p>
+                                        <p className="font-medium text-lg">{rating.roomTitle}</p>
+                                        <p className="text-md font-semibold">Nro {rating.roomNumber}</p>
                                     </div>
 
                                     <p className="text-sm text-gray-700 mt-5">
-                                        {truncateComment(rating.comment, 25) || "Esta calificación no tiene comentarios."}
+
+                                        {
+                                            rating.comment
+                                                ? truncateComment(rating.comment, 25)
+                                                : "Esta calificación no tiene comentarios."
+                                        }
                                     </p>
                                 </div>
 

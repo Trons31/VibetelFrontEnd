@@ -1,7 +1,6 @@
 'use client';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { addOrDeleteFavoriteRoom } from '@/actions';
 import { useEffect, useState } from 'react';
 import { PiHeartStraightDuotone, PiHeartStraightFill } from 'react-icons/pi';
 import axios from 'axios';

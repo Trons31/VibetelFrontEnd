@@ -1,4 +1,4 @@
-import { BedRooms, LocationCity, RoomAllApi } from "@/interfaces";
+import {  LocationCity, RoomAllApi } from "@/interfaces";
 import { ItemRoomSearch } from "./ItemRoomSearch";
 
 interface Props {

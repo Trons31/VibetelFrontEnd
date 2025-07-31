@@ -4,16 +4,13 @@ import { formatDate } from "@/utils";
 import { BsStarFill } from "react-icons/bs";
 import { MdClose } from "react-icons/md";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
+import { RoomRating } from "@/interfaces/reservation.interface";
 
-interface Rating {
-    createdAt: Date;
-    rating: number;
-    comment: string | null;
-}
+
 
 interface ModalProps {
     isOpen: boolean;
-    ratings: Rating[];
+    ratings: RoomRating[];
     onClose: () => void;
 }
 
@@ -38,13 +35,13 @@ export const ModalRatingRoomInfo = ({ isOpen, onClose, ratings }: ModalProps) =>
         }
     };
 
-    const calculateAverageRating = (ratings: Rating[]) => {
+    const calculateAverageRating = (ratings: RoomRating[]) => {
         if (ratings.length === 0) return 0;
         const total = ratings.reduce((sum, { rating }) => sum + rating, 0);
         return (total / ratings.length) === 5 ? (total / ratings.length).toFixed(0) : (total / ratings.length).toFixed(2);
     };
 
-    const getRatingDistribution = (ratings: Rating[]) => {
+    const getRatingDistribution = (ratings: RoomRating[]) => {
         const distribution = Array(5).fill(0); // Inicializamos un array con 5 ceros
 
         // Contamos la cantidad de calificaciones por número de estrellas

@@ -1,8 +1,6 @@
 import { Metadata, ResolvingMetadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
-import { auth } from "@/auth.config";
-import { inFavorites, } from "@/actions";
 import {
   Amenities,
   BedroomSlideShow,
@@ -19,7 +17,6 @@ import { BiSolidCarGarage } from "react-icons/bi";
 import { FaStar, FaCheckCircle } from "react-icons/fa";
 import { MdBedroomChild, MdTimer } from "react-icons/md";
 import { TbPointFilled } from "react-icons/tb";
-import { AddToReservationDeskTop } from "./ui/AddToReservationDeskTop";
 import { FaBuildingFlag } from "react-icons/fa6";
 import { IoLocationSharp } from "react-icons/io5";
 import { Lobster } from "@/config/fonts";
@@ -76,18 +73,13 @@ export default async function BedRoomPage({ params }: Props) {
     notFound();
   }
 
-
-  // if (session) {
-  //   inFavoritesValidate = await inFavorites(room.room.id, session.user.id);
-  // }
-
-  // const averageRating =
-  //   room.ratings.length > 0
-  //     ? (
-  //       room.room.ratings.reduce((acc, curr) => acc + curr.rating, 0) /
-  //       room.room.ratings.length
-  //     ).toFixed(1)
-  //     : "0.0";
+  const averageRating =
+    room.ratings.length > 0
+      ? (
+        room.ratings.reduce((acc, curr) => acc + curr.rating, 0) /
+        room.ratings.length
+      ).toFixed(1)
+      : "0.0";
 
 
   return (
@@ -115,16 +107,16 @@ export default async function BedRoomPage({ params }: Props) {
         <div className="hidden md:flex justify-between items-end">
           <div>
             <p className="capitalize text-2xl font-medium">{room.title}</p>
-            {/* {room.room.ratings.length > 0 && (
+            {room.ratings.length > 0 && (
               <div className="flex justify-start gap-2 items-center">
                 <FaStar className="text-blue-500 w-4 h-4 mb-0.5" />
                 <p>{averageRating}</p>
                 <p>
-                  {room.room.ratings.length}{" "}
-                  {room.room.ratings.length > 1 ? "calificaciones" : "calificacion"}
+                  {room.ratings.length}{" "}
+                  {room.ratings.length > 1 ? "calificaciones" : "calificacion"}
                 </p>
               </div>
-            )} */}
+            )}
           </div>
           <div className="flex gap-2 items-center">
             <SharedLinkRoom room={room} />
@@ -170,13 +162,13 @@ export default async function BedRoomPage({ params }: Props) {
               </div>
               <div className="flex justify-between items-center" >
                 <p className="capitalize text-xl">Habitacion: {room.title}</p>
-                {/* {
-                  room.room.ratings.length > 0 && (
+                {
+                  room.ratings.length > 0 && (
                     <RatingRoom
-                      ratings={room.room.ratings}
+                      ratings={room.ratings}
                     />
                   )
-                } */}
+                }
               </div>
               <div className="block space-y-2 xl:space-y-0 xl:flex mt-1 items-center gap-4">
                 <div className="flex gap-1 items-center">
@@ -336,12 +328,9 @@ export default async function BedRoomPage({ params }: Props) {
           <div className="flex justify-end gap-2 items-center">
             <SharedLinkRoom room={room} />
 
-            {/* <FavoriteRoom
-              roomId={room.room.id}
-              inFavorites={
-                session ? inFavoritesValidate?.ok : false
-              }
-            /> */}
+            <FavoriteRoom
+              roomId={room.id}
+            />
           </div>
           <div className="mt-2">
             <div className="flex justify-start items-center gap-2 mb-2" >
@@ -367,13 +356,13 @@ export default async function BedRoomPage({ params }: Props) {
                 </p>
               </div>
             </div>
-            {/* {
-              room.room.ratings.length > 0 && (
+            {
+              room.ratings.length > 0 && (
                 <RatingRoom
-                  ratings={room.room.ratings}
+                  ratings={room.ratings}
                 />
               )
-            } */}
+            }
           </div>
           <div>
 
@@ -444,8 +433,8 @@ export default async function BedRoomPage({ params }: Props) {
           <div className="mt-12 mb-8 border border-gray-200 border-dashed" />
         </div>
         <div className="block md:hidden px-4">
-          <h2 className="text-2xl font-light text-gray-800">Métodos de pago</h2>
-          <p className="text-gray-600 font-light text-sm mb-6">
+          <h2 className="text-xl font-light text-gray-800">Métodos de pago</h2>
+          <p className="text-gray-600 font-light text-xs mb-6">
             Nuestros métodos de pago más usados, con más de 10 opciones disponibles.
           </p>
           <div className="flex justify-end" >
@@ -517,20 +506,27 @@ export default async function BedRoomPage({ params }: Props) {
         <div className="px-4 md:px-0" >
           <div className="mt-12 mb-4 border border-gray-200 border-dashed" />
         </div>
-        {/* {
-          room.room.ratings.length > 0 && (
+
+        <div className="mt-10 px-4 md:px-0" >
+          <h2 className="text-xl md:text-2xl font-light text-gray-800">Calificación y reseñas</h2>
+          <p className="text-gray-600 font-light text-xs md:text-sm mb-6" style={{ textAlign: 'justify' }} >
+            Conoce las opiniones y calificaciones que otros usuarios han dejado sobre esta habitación. Lee sus comentarios y calificaciones para saber cómo fue su experiencia.
+          </p>
+        </div>
+        {
+          room.ratings.length > 0 && (
             <div>
-              <CommentRoom ratings={room.room.ratings} />
+              <CommentRoom ratings={room.ratings} />
             </div>
           )
         }
         {
-          room.room.ratings.length > 0 && (
+          room.ratings.length > 0 && (
             <div className="px-4 md:px-0" >
-              <div className="mt-2 mb-8 border border-gray-200 border-dashed" />
+              <div className="mt-2  border border-gray-200 border-dashed" />
             </div>
           )
-        } */}
+        }
         <div className="px-4" >
           <RelatedRooms category={room.category.id} />
         </div>

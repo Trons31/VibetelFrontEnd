@@ -77,6 +77,7 @@ export interface ReservationApi {
   userId: string;
   transactionId: string;
   ServiceItem: ServiceItem;
+  roomRating: RoomRating | null
 }
 
 
@@ -147,7 +148,15 @@ export interface ReservationByUserApi {
     status?: StatusReservation;
     room: string;
   };
+  roomRating: RoomRating | null
 }
+
+export interface RoomRating {
+  id: string;
+  rating: number;
+  comment?: string;
+  createdAt: Date;
+};
 
 export interface ReservationByUser {
   id: string;

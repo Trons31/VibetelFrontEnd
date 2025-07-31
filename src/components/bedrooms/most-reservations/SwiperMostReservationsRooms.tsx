@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import { BedRooms } from "@/interfaces/bedrooms.interface";
 import { Swiper, SwiperSlide } from "swiper/react";
 import styles from "./swiper.module.css";
 
@@ -113,9 +112,11 @@ export const SwiperMostReservationsRooms = ({ rooms, className }: Props) => {
                   <div className="mt-1">
                     <div className="flex justify-between items-center" >
                       <h2 className="text-gray-900 title-font capitalize text-sm md:text-lg font-medium">
-                        {" "}
-                        {room.title}{" "}
+                        {room.title}
                       </h2>
+                      {room.ratings.length > 0 && (
+                        <RatingRoomCard ratings={room.ratings} />
+                      )}
                     </div>
                     <div className="flex justify-start -mt-1 gap-1 items-center" >
                       <span

@@ -2,11 +2,11 @@
 import { formatDate } from "@/utils";
 import { useEffect } from "react";
 import { MdClose } from "react-icons/md";
-import { Rating } from "@/interfaces";
+import { RoomRating } from "@/interfaces/reservation.interface";
 
 
 interface ModalProps {
-    rating: Rating;
+    rating: RoomRating;
     isOpen: boolean;
     onClose: () => void;
 }
@@ -41,11 +41,13 @@ export const ModalDetailReview = ({ isOpen, onClose, rating }: ModalProps) => {
             <div className="bg-white md:rounded-lg shadow-lg w-full md:w-1/2 max-h-full overflow-y-auto custom-scrollbar">
                 {/* Header */}
                 <div className="py-3 px-4 shadow-md flex justify-between items-center border-b border-gray-200">
-                    <p className="text-lg font-semibold">Reseña de la habitación {rating.room.title} Nro {rating.room.roomNumber}</p>
+                    <p className="text-lg font-semibold">Reseña de la habitación
+                        {/* {rating.room.title} Nro {rating.room.roomNumber} */}
+                    </p>
                     <button onClick={onClose}
                         className="p-2 hover:bg-gray-200 rounded-full"
                     >
-                         <MdClose className="h-5 w-5" />
+                        <MdClose className="h-5 w-5" />
                     </button>
                 </div>
 

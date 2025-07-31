@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import { BedRooms } from "@/interfaces/bedrooms.interface"; // Puede que no necesites BedRooms si solo usas RoomOfMotel
+import Link from "next/link";// Puede que no necesites BedRooms si solo usas RoomOfMotel
 import { Swiper, SwiperSlide } from "swiper/react";
 import styles from "./swiper.module.css"; // Importa tus estilos CSS Modules
 
@@ -110,9 +109,11 @@ export const SwiperBedrooms = ({ rooms, className }: Props) => {
                   <div className="mt-1">
                     <div className="flex justify-between items-center" >
                       <h2 className="text-gray-900 title-font capitalize text-md md:text-lg font-medium">
-                        {" "}
-                        {room.title}{" "}
+                        {room.title}
                       </h2>
+                      {room.ratings.length > 0 && (
+                        <RatingRoomCard ratings={room.ratings} />
+                      )}
                     </div>
                     <div className="flex justify-start -mt-1 gap-1 items-center" >
                       <span

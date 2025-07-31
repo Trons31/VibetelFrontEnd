@@ -79,12 +79,11 @@ export const ItemRoomSearch = ({ room, location }: Props) => {
             <div className="mt-1">
               <div className="flex justify-between items-center" >
                 <h2 className="text-gray-900 title-font capitalize text-lg font-medium">
-                  {" "}
-                  {room.title}{" "}
+                  {room.title}
                 </h2>
-                {/* {room.ratings.length > 0 && (
+                {room.ratings.length > 0 && (
                   <RatingRoomCard ratings={room.ratings} />
-                )} */}
+                )}
               </div>
               <p className="text-sm text-gray-700 -mt-1">
                 Motel{" "}

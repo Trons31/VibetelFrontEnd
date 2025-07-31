@@ -1,4 +1,3 @@
-import { getMotelByMotelPartner } from "@/actions";
 import { auth } from "@/auth.config";
 import { MotelApi } from "@/interfaces";
 import axios from "axios";

@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import { BedRooms } from "@/interfaces/bedrooms.interface";
 import { Swiper, SwiperSlide } from "swiper/react";
 import styles from "./swiper.module.css";
 
@@ -52,28 +51,28 @@ export const SwiperRelatedRooms = ({ rooms, className }: Props) => {
           }}
           modules={[FreeMode, Pagination]}
           className="mySwiper"
-           breakpoints={{
-          // Cuando el ancho de la ventana sea >= 320px
-          320: {
-            slidesPerView: 2,
-            spaceBetween: 10,
-          },
-          // Cuando el ancho de la ventana sea >= 768px
-          768: {
-            slidesPerView: 2,
-            spaceBetween: 20,
-          },
-          // Cuando el ancho de la ventana sea >= 1024px
-          1024: {
-            slidesPerView: 3,
-            spaceBetween: 30,
-          },
-          // Cuando el ancho de la ventana sea >= 1280px (para 4 slides)
-          1280: {
-            slidesPerView: 4,
-            spaceBetween: 30,
-          },
-        }}
+          breakpoints={{
+            // Cuando el ancho de la ventana sea >= 320px
+            320: {
+              slidesPerView: 2,
+              spaceBetween: 10,
+            },
+            // Cuando el ancho de la ventana sea >= 768px
+            768: {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            // Cuando el ancho de la ventana sea >= 1024px
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 30,
+            },
+            // Cuando el ancho de la ventana sea >= 1280px (para 4 slides)
+            1280: {
+              slidesPerView: 4,
+              spaceBetween: 30,
+            },
+          }}
         >
           {rooms.map((room) => (
             <SwiperSlide key={room.slug}>
@@ -86,29 +85,29 @@ export const SwiperRelatedRooms = ({ rooms, className }: Props) => {
                hover:border-gray-300 transition-all duration-300 h-[390px] rounded-lg hover:shadow-lg shadow-gray-200 `}
                 >
                   <div className={`${styles["image-container"]}`}> {/* Aplica la clase image-container aquí */}
-                  {/* Aquí es donde la RoomImage debe llenar su contenedor */}
-                  <RoomImage
-                    className="w-full h-full object-cover rounded-lg" // Tus clases de Tailwind se combinan con object-fit: cover
-                    src={
-                      room.images.length > 0 ? room.images[0].url : ""
-                    }
-                    width={600} // Estas dimensiones son para optimización de la carga, no para el tamaño visual
-                    height={500}
-                    alt="img logo"
-                  />
-                  <div
-                    className={`${styles.absolute} flex justify-end w-full px-3 items-center`} // Aplica la clase 'absolute'
-                  >
-                    <FavoriteRoomCard
-                      roomId={room.id}
+                    {/* Aquí es donde la RoomImage debe llenar su contenedor */}
+                    <RoomImage
+                      className="w-full h-full object-cover rounded-lg" // Tus clases de Tailwind se combinan con object-fit: cover
+                      src={
+                        room.images.length > 0 ? room.images[0].url : ""
+                      }
+                      width={600} // Estas dimensiones son para optimización de la carga, no para el tamaño visual
+                      height={500}
+                      alt="img logo"
                     />
+                    <div
+                      className={`${styles.absolute} flex justify-end w-full px-3 items-center`} // Aplica la clase 'absolute'
+                    >
+                      <FavoriteRoomCard
+                        roomId={room.id}
+                      />
+                    </div>
+                    <div className="p-2 flex md:hidden md:group-hover:flex bg-red-600  rounded-b-lg md:rounded-b-sm justify-center  absolute right-0 bottom-0 w-full md:group-hover:bg-red-600 md:group-hover:transition-all md:group-hover:duration-300">
+                      <p className="text-white text-sm md:text-red-600 md:group-hover:text-white font-normal">
+                        Reservar ahora
+                      </p>
+                    </div>
                   </div>
-                  <div className="p-2 flex md:hidden md:group-hover:flex bg-red-600  rounded-b-lg md:rounded-b-sm justify-center  absolute right-0 bottom-0 w-full md:group-hover:bg-red-600 md:group-hover:transition-all md:group-hover:duration-300">
-                    <p className="text-white text-sm md:text-red-600 md:group-hover:text-white font-normal">
-                      Reservar ahora
-                    </p>
-                  </div>
-                </div>
 
                   <div className="p-2">
                     <div className="mt-1">
@@ -117,9 +116,9 @@ export const SwiperRelatedRooms = ({ rooms, className }: Props) => {
                           {" "}
                           {room.title}{" "}
                         </h2>
-                        {/* {room.ratings.length > 0 && (
+                        {room.ratings.length > 0 && (
                           <RatingRoomCard ratings={room.ratings} />
-                        )} */}
+                        )}
                       </div>
                       <p className="text-sm text-gray-700 -mt-1">
                         Motel{" "}

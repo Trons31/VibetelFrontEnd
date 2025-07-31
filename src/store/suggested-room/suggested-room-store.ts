@@ -1,4 +1,4 @@
-import { BedRooms, RoomAllApi } from "@/interfaces";
+import {  RoomAllApi } from "@/interfaces";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 

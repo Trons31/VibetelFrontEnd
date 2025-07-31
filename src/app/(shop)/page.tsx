@@ -1,4 +1,3 @@
-import { getDataForInformation } from "@/actions";
 import { UiPage } from "./ui/UiPage";
 
 

@@ -15,7 +15,6 @@ import {
   RoomImage,
 } from "@/components";
 import { BedRooms, LocationCity } from "@/interfaces";
-import { getMostFrecuentedMotels, getTopReservedRooms } from "@/actions";
 
 interface motels {
   id: string;

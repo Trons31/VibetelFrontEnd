@@ -1,6 +1,5 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
-import { getTopReservedRooms } from "@/actions";
 import { SkeletonRooms } from "@/components";
 import { LocationCity, RoomAllApi } from "@/interfaces";
 import { GridRoom } from "./GridRoom";

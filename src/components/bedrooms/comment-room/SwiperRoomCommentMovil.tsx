@@ -13,16 +13,17 @@ import { FreeMode, Pagination } from 'swiper/modules';
 import { formatDate } from '@/utils';
 import { ModalDetailReview } from '@/components';
 import { Rating } from '@/interfaces';
+import { RoomRating } from '@/interfaces/reservation.interface';
 
 
 interface Props {
-    ratings: Rating[];
+    ratings: RoomRating[];
 }
 
 export const SwiperRoomCommentMovil = ({ ratings }: Props) => {
 
     const [deatilComment, setDeatilComment] = useState(false);
-    const [detailReview, setDetailReview] = useState<Rating>();
+    const [detailReview, setDetailReview] = useState<RoomRating>();
 
 
     const truncateComment = (comment: string | null, wordLimit: number): string => {
@@ -59,13 +60,13 @@ export const SwiperRoomCommentMovil = ({ ratings }: Props) => {
 
                     <SwiperSlide key={rating.id} className='p-3' >
                         <div className="relative">
-                            {/* Fondo azul desplazado */}
-                            <div className="absolute top-2 left-2 w-full h-full bg-gray-300 rounded-xl"></div>
-
-                            {/* Contenedor de la card con borde negro */}
-                            <div className="relative border border-black bg-white rounded-xl p-6 mb-5">
+                            <div className="relative border border-gray-300 bg-white rounded-2xl p-6 mb-5">
                                 <p className="text-sm text-gray-700 mt-5">
-                                    {truncateComment(rating.comment, 15) || "Esta calificación no tiene comentarios."}
+                                    {
+                                        rating.comment
+                                            ? truncateComment(rating.comment, 25)
+                                            : "Esta calificación no tiene comentarios."
+                                    }
                                 </p>
                                 <button
                                     onClick={() => { setDeatilComment(true), setDetailReview(rating) }}

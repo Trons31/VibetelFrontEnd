@@ -1,7 +1,7 @@
 'use client';
 
 import { useForm } from "react-hook-form";
-import { AmenitiesMotelInfo, City, CityApi, CountryApi, DepartmentApi } from "@/interfaces";
+import { AmenitiesMotelInfoApi, CityApi, CountryApi, DepartmentApi } from "@/interfaces";
 import clsx from "clsx";
 import { IoAlertCircleOutline } from "react-icons/io5"
 import { ChangeEvent, useState } from "react";
@@ -61,7 +61,7 @@ interface Props {
     countries: CountryApi[]
     departments: DepartmentApi[]
     cities: CityApi[]
-    amenitiesMotel: AmenitiesMotelInfo[]
+    amenitiesMotel: AmenitiesMotelInfoApi[]
 }
 
 export const RegisterForm = ({ motelPartner, departments, countries, cities, amenitiesMotel }: Props) => {
@@ -86,6 +86,7 @@ export const RegisterForm = ({ motelPartner, departments, countries, cities, ame
     const [filteredCities, setFilteredCities] = useState<CityApi[]>([]);
     const [formattedPhoneNumber, setFormattedPhoneNumber] = useState("");
     const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
+
 
 
     const {
@@ -137,8 +138,6 @@ export const RegisterForm = ({ motelPartner, departments, countries, cities, ame
             .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
             .join('');
 
-        const amenities: string[] = inputsAmenities
-
 
         const motelData = {
             identificationRepresentante: motelRepresentative.idRepresent,
@@ -150,14 +149,9 @@ export const RegisterForm = ({ motelPartner, departments, countries, cities, ame
             contactPhone: dataMotel.contactPhone,
             whatsapp: dataMotel.whatsapp,
             nit: dataMotel.nit,
-            amenities: amenities,
             address: data.address,
             neighborhood: data.neighborhood,
-            // if (selectedAmenities.length > 0) {
-            //     for (let i = 0; i < selectedAmenities.length; i++) {
-            //         formData.append('amenitiesMotel', selectedAmenities[i]);
-            //     }
-            // }
+            amenities: selectedAmenities,
             cityId: data.city
         };
 
@@ -806,9 +800,9 @@ export const RegisterForm = ({ motelPartner, departments, countries, cities, ame
                                                 {...registerLocationAndAmenities('city', { required: true })}
                                                 disabled={!selectedDepartment}
                                             >
-                                                <option 
-                                                value=""
-                                                 disabled> [ Seleccione ciudad ]</option>
+                                                <option
+                                                    value=""
+                                                    disabled> [ Seleccione ciudad ]</option>
                                                 {filteredCities.map(city => (
                                                     <option key={city.id} value={city.id}>{city.name}</option>
                                                 ))}

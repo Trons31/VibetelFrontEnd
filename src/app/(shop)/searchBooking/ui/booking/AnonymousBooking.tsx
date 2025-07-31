@@ -92,15 +92,15 @@ export const AnonymousBooking = ({ reservation }: Props) => {
 
       <ActionsBooking reservation={reservation} />
 
-      {/* {reservation.serviceItem?.serviceCompleted &&
-        reservation.RoomRating?.rating === undefined && (
+      {reservation.ServiceItem.serviceCompleted &&
+        reservation.roomRating?.rating === undefined && (
           <MoldaRating
             isOpen={modalRating}
+            ratingRoom={reservation.roomRating}
             serviceId={reservation.id}
-            roomId={reservation.ServiceItem?.roomId!}
             onClose={() => setModalRating(false)}
           />
-        )} */}
+        )}
     </>
   );
 };

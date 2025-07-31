@@ -1,10 +1,9 @@
 import { Lobster } from "@/config/fonts";
 import Link from "next/link";
 import { RegisterForm } from "./ui/RegisterForm";
-import {  getAmenitiesMotel } from "@/actions";
 import { auth } from "@/auth.config";
 import { IoArrowBackOutline } from "react-icons/io5";
-import { CityApi, CountryApi, DepartmentApi } from "@/interfaces";
+import { AmenitiesMotelInfoApi, CityApi, CountryApi, DepartmentApi } from "@/interfaces";
 import axios from "axios";
 import { redirect } from "next/navigation";
 
@@ -44,7 +43,14 @@ export default async function NamePage() {
     redirect("/");
   }
 
-  const amenitiesMotel = await getAmenitiesMotel();
+  let amenitiesMotel: AmenitiesMotelInfoApi[];
+
+  try {
+    const response = await axios.get<AmenitiesMotelInfoApi[]>(`${process.env.NEXT_PUBLIC_API_ROUTE}motel/amenities`);
+    amenitiesMotel = response.data;
+  } catch (error: any) {
+    redirect("/");
+  }
 
   const session = await auth();
   const motelPartner = session?.user.id!;
