@@ -5,7 +5,6 @@ import { IoIosArrowForward } from 'react-icons/io';
 import { TbLogout, TbLogout2 } from 'react-icons/tb';
 import { currencyFormat, formatTimeWithAmPm, formatDate, sleep } from '@/utils';
 import { roomAddService } from '@/interfaces';
-import { serviceWalkIn } from '@/actions';
 import toast, { Toaster } from 'react-hot-toast';
 import clsx from 'clsx';
 
@@ -60,17 +59,17 @@ export const SheedWalkIn = ({ isOpen, onClose, room }: Props) => {
             arrivalDate: new Date(),
             departureDate: exitDateTime!,
         }
-        const resp = await serviceWalkIn(service);
+        // const resp = await serviceWalkIn(service);
 
-        if (resp.ok) {
-            toast.success("Servicio generado correctamente");
-            setShowLoading(false);
-            await sleep(1);
-            window.location.reload();
-        } else {
-            toast.error("No se pudo generar el servicio")
-            setShowLoading(false);
-        }
+        // if (resp.ok) {
+        //     toast.success("Servicio generado correctamente");
+        //     setShowLoading(false);
+        //     await sleep(1);
+        //     window.location.reload();
+        // } else {
+        //     toast.error("No se pudo generar el servicio")
+        //     setShowLoading(false);
+        // }
     }
 
     const onCloseSheed = () => {

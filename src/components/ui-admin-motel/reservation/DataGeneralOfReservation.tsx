@@ -1,9 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import Pusher from 'pusher-js';
 import { formatDate } from '@/utils';
 import { ReservationData } from '@/interfaces/reservation.interface';
-import { traficReservationToday } from '@/actions';
 
 interface Props {
   motelId: string;
@@ -20,43 +18,6 @@ export const DataGeneralOfReservation = ({ motelId }: Props) => {
     reservationsNoIniciadas: 0,
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await traficReservationToday(motelId);
-      setData(result);
-    };
-
-    fetchData();
-    setisLoading(false);
-    // Configura Pusher
-    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
-      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
-    });
-
-    const channel = pusher.subscribe('reservations');
-    channel.bind('new-reservation', async () => {
-      // Vuelve a obtener los datos cada vez que se emita un nuevo evento de reserva
-      const result = await traficReservationToday(motelId);
-      setData(result);
-    });
-
-    channel.bind('cancel-reservation', async () => {
-      // Vuelve a obtener los datos cada vez que se emita un nuevo evento de reserva
-      const result = await traficReservationToday(motelId);
-      setData(result);
-    });
-
-    channel.bind('confirm-reservation', async () => {
-      // Vuelve a obtener los datos cada vez que se emita un nuevo evento de reserva
-      const result = await traficReservationToday(motelId);
-      setData(result);
-    });
-
-
-    return () => {
-      pusher.unsubscribe('reservations');
-    };
-  }, [motelId]);
 
   const { totalReservations, reservationsEnEspera, reservationsIniciadas, reservationsCompletadas, reservationsCanceladas,reservationsNoIniciadas } = data;
 

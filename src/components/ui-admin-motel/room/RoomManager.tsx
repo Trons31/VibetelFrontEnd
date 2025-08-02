@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState, useCallback, useRef } from "react";
-import { getRoomsByMotelManager } from "@/actions";
 import { IoCloseOutline, IoSearchOutline } from "react-icons/io5";
 import {
   CleaningTimeDisplay,
@@ -50,20 +49,20 @@ export const RoomManager = ({ motelId }: Props) => {
 
   const fetchRooms = useCallback(async () => {
     setIsLoading(true);
-    const data = await getRoomsByMotelManager({
-      motelId,
-      searchFilter,
-      page: currentPage,
-      itemsPerPage,
-    });
-    if (data.ok && data.totalCount !== undefined) {
-      const { rooms, totalCount, timeMinutesCleanRoom } = data;
-      setRooms(rooms);
-      setTimeMinutesCleamRoom(timeMinutesCleanRoom!);
-      setTotalCountResultsFilter(totalCount);
-      const totalPagesCount = Math.ceil(totalCount / itemsPerPage);
-      setTotalPages(totalPagesCount);
-    }
+    // const data = await getRoomsByMotelManager({
+    //   motelId,
+    //   searchFilter,
+    //   page: currentPage,
+    //   itemsPerPage,
+    // });
+    // if (data.ok && data.totalCount !== undefined) {
+    //   const { rooms, totalCount, timeMinutesCleanRoom } = data;
+    //   setRooms(rooms);
+    //   setTimeMinutesCleamRoom(timeMinutesCleanRoom!);
+    //   setTotalCountResultsFilter(totalCount);
+    //   const totalPagesCount = Math.ceil(totalCount / itemsPerPage);
+    //   setTotalPages(totalPagesCount);
+    // }
     setIsLoading(false);
   }, [currentPage, itemsPerPage, searchFilter]);
 

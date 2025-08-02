@@ -1,13 +1,6 @@
 
 
-
-export interface Department {
-    id: string;
-    name: string;
-    countryId: string;
-}
-
-export interface Country {
+interface Country {
   geonameId: string;
   name: string;
   isoCode: string;

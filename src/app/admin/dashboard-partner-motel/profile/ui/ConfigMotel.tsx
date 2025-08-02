@@ -1,5 +1,5 @@
 'use client';
-import { AmenitiesMotelInfo, CityApi, CountryApi, DepartmentApi, MotelApi } from '@/interfaces'
+import { AmenitiesMotelInfoApi, CityApi, CountryApi, DepartmentApi, MotelApi } from '@/interfaces'
 import { DataBasicForm } from './DataBasicForm';
 import { LocationForm } from './LocationForm';
 import { Amenities } from './Amenities';
@@ -12,7 +12,7 @@ import { MotelPartnerForm } from './MotelPartnerForm';
 interface Props {
     motelPartner: UserApi;
     motel: MotelApi,
-    amenitiesMotel: AmenitiesMotelInfo[],
+    amenitiesMotel: AmenitiesMotelInfoApi[],
     countries: CountryApi[]
     departments: DepartmentApi[]
     cities: CityApi[]
@@ -108,8 +108,8 @@ export const ConfigMotel = ({ motel, amenitiesMotel, countries, cities, departme
                     </div>
 
                     <div className='md:col-span-2'>
-                        <MotelPartnerForm 
-                            motelPartner={motelPartner} 
+                        <MotelPartnerForm
+                            motelPartner={motelPartner}
                         />
                     </div>
                 </div>

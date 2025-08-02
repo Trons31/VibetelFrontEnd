@@ -4,7 +4,6 @@ import { MdDelete } from 'react-icons/md';
 import toast, { Toaster } from 'react-hot-toast';
 import clsx from 'clsx';
 import { IoAlertCircleSharp } from 'react-icons/io5';
-import { canceledReservationByUser } from '@/actions';
 
 
 interface ModalProps {
@@ -42,13 +41,13 @@ export const ModalCancelBooking = ({ isOpen, onClose, idReservation, isAviable }
 
     const OnCanceledReservation = async () => {
         setshowLoading(true);
-        const resp = await canceledReservationByUser(idReservation);
+        // const resp = await canceledReservationByUser(idReservation);
 
-        if (!resp.ok) {
-            toast.error("No se pudo cancelar la reserva");
-            setshowLoading(false);
-            return;
-        }
+        // if (!resp.ok) {
+        //     toast.error("No se pudo cancelar la reserva");
+        //     setshowLoading(false);
+        //     return;
+        // }
 
 
         toast.success("Reserva cancelada exitosamente")

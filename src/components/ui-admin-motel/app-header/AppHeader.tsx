@@ -1,7 +1,5 @@
 "use client";
 import { useSidebarStore } from "@/store";
-import Image from "next/image";
-import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import { UserDropdown } from "../top-menu/UserDropdown";
 import { isApprovedStatus, motelConfig, SubscriptionTier } from "@/interfaces";

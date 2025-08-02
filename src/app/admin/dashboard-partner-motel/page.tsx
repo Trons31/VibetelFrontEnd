@@ -44,7 +44,7 @@ export default async function HomePage() {
             <>
               <ActiveMotel
                 status={motelExist.isApproved}
-                motelImage={motelExist.images.length === 0 ? undefined : motelExist.images[0]}
+                motelImage={motelExist.images.length === 0 ? undefined : motelExist.images[0].url}
                 totalRoom={motelExist.totalRooms}
                 configMotel={motelExist.motelConfig ? true : false}
                 bankAccount={false}

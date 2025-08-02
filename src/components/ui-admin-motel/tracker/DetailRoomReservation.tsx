@@ -1,6 +1,5 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react'
-import { getReservationByRoomId } from '@/actions';
 import { ReservationDetailRoom, statusCounts } from '@/interfaces/reservation.interface';
 import { formatDateWithHours } from '@/utils';
 import { AnimatePresence, motion } from 'framer-motion'
@@ -29,13 +28,13 @@ export const DetailRoomReservation = ({ isOpen, onClose, roomId, nameRoom, openS
 
     const fetchReservations = useCallback(async () => {
         setisLoading(true);
-        const data = await getReservationByRoomId(roomId);
-        if (data.ok && data.totalCount !== undefined) {
-            const { reservations, statusCounts, totalCount } = data;
-            setStatus(statusCounts);
-            setReservations(reservations);
-            settotalCount(totalCount);
-        }
+        // const data = await getReservationByRoomId(roomId);
+        // if (data.ok && data.totalCount !== undefined) {
+        //     const { reservations, statusCounts, totalCount } = data;
+        //     setStatus(statusCounts);
+        //     setReservations(reservations);
+        //     settotalCount(totalCount);
+        // }
         setisLoading(false);
     }, [roomId]);
 

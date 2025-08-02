@@ -6,7 +6,6 @@ import clsx from 'clsx'
 import toast, { Toaster } from 'react-hot-toast';
 import { MotelAdmin, MotelApi } from '@/interfaces'
 import { AdminImage } from '@/components';
-import { updateDataBasicMotel } from '@/actions';
 
 interface Props {
     motel: MotelApi,
@@ -42,13 +41,13 @@ export const DataBasicForm = ({ motel }: Props) => {
 
     const onUpdate = async (data: FormInputs) => {
         setShowLoadingButton(true);
-        const { title, description, contactPhone, whatsapp } = data;
-        const response = await updateDataBasicMotel(title, description, contactPhone, whatsapp, motel.id);
-        if (!response.ok) {
-            toast.error("No se pudo actualizar la informacion")
-            setShowLoadingButton(false);
-            return;
-        }
+        // const { title, description, contactPhone, whatsapp } = data;
+        // const response = await updateDataBasicMotel(title, description, contactPhone, whatsapp, motel.id);
+        // if (!response.ok) {
+        //     toast.error("No se pudo actualizar la informacion")
+        //     setShowLoadingButton(false);
+        //     return;
+        // }
 
         toast.success("Actualizacion correcta!");
         setShowLoadingButton(false);
@@ -123,7 +122,7 @@ export const DataBasicForm = ({ motel }: Props) => {
                             <div className='mb-4 space-y-2' >
                                 <div className='flex justify-center'>
                                     <AdminImage
-                                        src={motelInfo?.images![0]}
+                                        src={motelInfo?.images![0].url}
                                         width={300}
                                         height={100}
                                         alt='administrador'

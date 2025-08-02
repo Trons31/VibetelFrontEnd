@@ -1,4 +1,3 @@
-import { getTotalReservationByMotel } from "@/actions";
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
 import { BookingPage } from './ui/BookingPage';
@@ -29,14 +28,14 @@ export default async function BookingAllPage() {
         redirect("/auth/new-account-motel/register");
     }
 
-    const reservationData = await getTotalReservationByMotel(motelExist.id);
+   
 
     return (
         <>
-            <BookingPage
+            {/* <BookingPage
                 motelId={motelExist.id}
                 reservationData={reservationData.reservations}
-            />
+            /> */}
         </>
     );
 }

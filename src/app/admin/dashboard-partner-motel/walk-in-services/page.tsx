@@ -1,7 +1,5 @@
 import { redirect } from "next/navigation";
-import { getDataServicesGeneral, traficServiceToday } from "@/actions";
 import { auth } from "@/auth.config";
-import { WalkInServices } from "./ui/WalkInServices";
 import { MotelApi } from "@/interfaces";
 import axios from "axios";
 
@@ -32,16 +30,14 @@ export default async function WalkInServicesPage() {
         redirect("/admin/dashboard-partner-motel")
     }
 
-    const servicesToday = await traficServiceToday(motelExist.id);
-    const services = await getDataServicesGeneral(motelExist.id);
 
     return (
         <>
-            <WalkInServices
+            {/* <WalkInServices
                 motelId={motelExist.id}
                 serviceDataToday={servicesToday}
                 serviceData={services}
-            />
+            /> */}
         </>
     );
 }

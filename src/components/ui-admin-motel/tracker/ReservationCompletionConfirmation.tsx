@@ -4,7 +4,6 @@ import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { motion } from 'framer-motion';
 import { formatTimeWithAmPm, sleep } from '@/utils';
 import { serviceCompleted } from '@/interfaces';
-import { getReservationConfirmCompleted } from '@/actions';
 import { CountdownTimer, ModalConfirmCompletedReservation, TimeSince } from '@/components';
 
 interface Props {
@@ -26,15 +25,15 @@ export const ReservationCompletionConfirmation = ({ motelId }: Props) => {
 
     const fetchReservations = useCallback(async () => {
         await sleep(1);
-        const data = await getReservationConfirmCompleted({ motelId, page, limit: 10 });
-        if (data.ok && data.totalCount !== undefined) {
-            setRooms((prev) => {
-                const existingReservations = new Set(prev.map((r) => r.id));
-                const newReservations = data.reservations.filter((r) => !existingReservations.has(r.id));
-                return [...prev, ...newReservations];
-            });
-            setHasMore(data.reservations.length === 10);
-        }
+        // const data = await getReservationConfirmCompleted({ motelId, page, limit: 10 });
+        // if (data.ok && data.totalCount !== undefined) {
+        //     setRooms((prev) => {
+        //         const existingReservations = new Set(prev.map((r) => r.id));
+        //         const newReservations = data.reservations.filter((r) => !existingReservations.has(r.id));
+        //         return [...prev, ...newReservations];
+        //     });
+        //     setHasMore(data.reservations.length === 10);
+        // }
         setLoadingScroll(false);
         setLoading(false)
     }, [motelId, page]);

@@ -2,7 +2,6 @@
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast';
-import {  enabledRoom } from '@/actions';
 import { FaRegCheckCircle } from 'react-icons/fa';
 
 interface ModalProps {
@@ -19,12 +18,12 @@ export const ModalEnabled = ({ isOpen, onClose, nameRoom, idRoom }: ModalProps) 
 
     const OnDisabledRoom = async () => {
         setshowLoading(true);
-        const resp = await enabledRoom(idRoom);
-        if (!resp?.ok) {
-            setshowLoading(false);
-            toast.error("No se pudo habilitar la activar")
-            return
-        }
+        // const resp = await enabledRoom(idRoom);
+        // if (!resp?.ok) {
+        //     setshowLoading(false);
+        //     toast.error("No se pudo habilitar la activar")
+        //     return
+        // }
         setshowLoading(false);
         window.location.reload();
     }

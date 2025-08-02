@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState, useCallback, useRef } from 'react';
-import {  getServiceByMotelToday } from '@/actions';
 import { serviceAdmin } from '@/interfaces/reservation.interface';
 import { formatDate, formatDateWithHours } from '@/utils';
 import { motion } from 'framer-motion';
@@ -45,15 +44,15 @@ export const TableWalkInToday = ({ motelId, serviceDataToday }: Props) => {
 
     const fetchReservations = useCallback(async () => {
         setIsFetching(true);
-        const data = await getServiceByMotelToday({ motelId, searchQuery, statusFilter, date, page, limit: 10 });
-        if (data.ok && data.totalCount !== undefined) {
-            setServices((prev) => {
-                const existingReservations = new Set(prev.map((r) => r.id));
-                const newReservations = data.services.filter((r) => !existingReservations.has(r.id));
-                return [...prev, ...newReservations];
-            });
-            setHasMore(data.services.length === 10);
-        }
+        // const data = await getServiceByMotelToday({ motelId, searchQuery, statusFilter, date, page, limit: 10 });
+        // if (data.ok && data.totalCount !== undefined) {
+        //     setServices((prev) => {
+        //         const existingReservations = new Set(prev.map((r) => r.id));
+        //         const newReservations = data.services.filter((r) => !existingReservations.has(r.id));
+        //         return [...prev, ...newReservations];
+        //     });
+        //     setHasMore(data.services.length === 10);
+        // }
         setIsFetching(false);
         setIsLoading(false);
     }, [motelId, searchQuery, statusFilter, date, page]);

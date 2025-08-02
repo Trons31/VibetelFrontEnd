@@ -29,7 +29,7 @@ import {
 import { TiHomeOutline } from "react-icons/ti";
 import { BsThreeDots } from "react-icons/bs";
 import clsx from "clsx";
-import { isApprovedStatus, Tier } from "@/interfaces";
+import { isApprovedStatus, SubscriptionTier } from "@/interfaces";
 import { AdminImage } from "@/components";
 import { fontPoppins, Lobster } from "@/config/fonts";
 import Image from "next/image";
@@ -94,7 +94,7 @@ interface Props {
   motelStatus: isApprovedStatus;
   motelName: string;
   motelImage?: string;
-  subscription: Tier;
+  subscription: SubscriptionTier;
 }
 
 export const AppSidebar = ({ motelName, motelStatus, subscription, motelImage }: Props) => {
@@ -168,8 +168,8 @@ export const AppSidebar = ({ motelName, motelStatus, subscription, motelImage }:
     </ul>
   );
 
-  const TIER_ORDER: Tier[] = ['FREE', 'BASIC', 'PREMIUM', 'ENTERPRISE'];
-  const getNextTier = (current: Tier): Tier | null => {
+  const TIER_ORDER: SubscriptionTier[] = ['FREE', 'BASIC', 'PREMIUM', 'ENTERPRISE'];
+  const getNextTier = (current: SubscriptionTier): SubscriptionTier | null => {
     const currentIndex = TIER_ORDER.indexOf(current);
     return currentIndex < TIER_ORDER.length - 1 ? TIER_ORDER[currentIndex + 1] : null;
   };

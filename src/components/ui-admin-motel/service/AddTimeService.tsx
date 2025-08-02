@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react'
-import { addTimeService } from '@/actions';
 import { SelectOption } from '@/components';
 import { Service } from '@/interfaces';
 import { currencyFormat, formatTimeWithAmPm, sleep } from '@/utils';
@@ -65,21 +64,21 @@ export const AddTimeService = ({ service, isTimeExtensionAvailable }: Props) => 
 
     const onAddTimeService = async () => {
         setButtonLoading(true);
-        const response = await addTimeService(addTime, departureDateNew, service.ServiceItem?.id!, service.ServiceItem?.roomId!);
-        if (response.ok) {
-            toast.success(`Reserva extendida ${addTime} minutos de forma correcta`, {
-                duration: 10000
-            });
-            setButtonLoading(false);
-            await sleep(1);
-            window.location.reload();
-        } else {
-            toast.error(`No puedes extender la reserva ${addTime} minutos. Intenta con menos tiempo.`, {
-                duration: 10000,
-            });
-            setButtonLoading(false);
-            return;
-        }
+        // const response = await addTimeService(addTime, departureDateNew, service.ServiceItem?.id!, service.ServiceItem?.roomId!);
+        // if (response.ok) {
+        //     toast.success(`Reserva extendida ${addTime} minutos de forma correcta`, {
+        //         duration: 10000
+        //     });
+        //     setButtonLoading(false);
+        //     await sleep(1);
+        //     window.location.reload();
+        // } else {
+        //     toast.error(`No puedes extender la reserva ${addTime} minutos. Intenta con menos tiempo.`, {
+        //         duration: 10000,
+        //     });
+        //     setButtonLoading(false);
+        //     return;
+        // }
     }
 
     return (

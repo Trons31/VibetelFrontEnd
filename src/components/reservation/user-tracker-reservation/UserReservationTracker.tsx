@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { getAddTimeReservationById } from '@/actions';
 import { ReservationApi } from '@/interfaces/reservation.interface';
 import { formatDateWithHours, formatTime } from '@/utils';
 
@@ -21,8 +20,8 @@ export const UserReservationTracker = ({ reservation }: Props) => {
     >([]);
 
     const getAddTimeReservation = async () => {
-        const { aditionalTime } = await getAddTimeReservationById(reservation.serviceItem?.id!);
-        setAddTimes(aditionalTime);
+        // const { aditionalTime } = await getAddTimeReservationById(reservation.serviceItem?.id!);
+        // setAddTimes(aditionalTime);
     };
 
     useEffect(() => {

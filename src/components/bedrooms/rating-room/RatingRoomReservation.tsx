@@ -24,13 +24,13 @@ export const RatingRoomReservation = ({ ratings, serviceId, roomId }: Props) => 
 
     return (
         <>
-
+{/* 
             <MoldaRating
                 isOpen={modalRating}
                 serviceId={serviceId!}
-                roomId={roomId!}
+                ratingRoom={}
                 onClose={() => setModalRating(false)}
-            />
+            /> */}
 
             <button
                 onClick={() => setModalRating(true)}

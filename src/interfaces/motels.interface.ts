@@ -66,12 +66,12 @@ export interface RoomOfMotel {
     ratings: RoomRating[];
 }
 
-export interface Amenities {
+interface Amenities {
   id: string;
   amenities: AmenityDetail;
 }
 
-export interface AmenityDetail {
+interface AmenityDetail {
   id: string;
   name: string;
   description: string;

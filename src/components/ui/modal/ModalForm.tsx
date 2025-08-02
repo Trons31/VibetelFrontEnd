@@ -1,6 +1,5 @@
 'use client';
 import React, {  useEffect, useState } from 'react'
-import { updateUser } from '@/actions';
 import clsx from 'clsx';
 import { useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
@@ -70,39 +69,39 @@ export const ModalForm = ({ isOpen, onClose, user }: ModalProps) => {
     const onSubmit = async (data: FormInputs) => {
         setIsLoading(true);
         const { name, lastName, email } = data;
-        const resp = await updateUser(user.id, name, lastName, email);
-        if (!resp.ok) {
-            setIsLoading(false);
-            toast(
-                (t) => (
-                    <div>
-                        <h3 className="text-red-600 text-sm md:text-lg font-semibold">Ups! Error</h3>
-                        <p className="text-xs md:text-sm font-medium text-gray-500">
-                            {resp.message}
-                        </p>
-                    </div>
+        // const resp = await updateUser(user.id, name, lastName, email);
+        // if (!resp.ok) {
+        //     setIsLoading(false);
+        //     toast(
+        //         (t) => (
+        //             <div>
+        //                 <h3 className="text-red-600 text-sm md:text-lg font-semibold">Ups! Error</h3>
+        //                 <p className="text-xs md:text-sm font-medium text-gray-500">
+        //                     {resp.message}
+        //                 </p>
+        //             </div>
 
-                ),
-                {
-                    duration: 6000,
-                    position: 'top-right',
-                    style: {
-                        padding: '16px',
-                        color: '#f44336',
-                        maxWidth: '350px',
-                        width: '100%',
-                    },
-                    icon: <AiFillCloseCircle
-                        className='text-red-600 h-6 w-6'
-                    />,
-                    ariaProps: {
-                        role: 'alert',
-                        'aria-live': 'assertive',
-                    },
-                }
-            );
-            return;
-        }
+        //         ),
+        //         {
+        //             duration: 6000,
+        //             position: 'top-right',
+        //             style: {
+        //                 padding: '16px',
+        //                 color: '#f44336',
+        //                 maxWidth: '350px',
+        //                 width: '100%',
+        //             },
+        //             icon: <AiFillCloseCircle
+        //                 className='text-red-600 h-6 w-6'
+        //             />,
+        //             ariaProps: {
+        //                 role: 'alert',
+        //                 'aria-live': 'assertive',
+        //             },
+        //         }
+        //     );
+        //     return;
+        // }
         toast.success("Informacion actualizada correctamente");
         setIsLoading(false);
     }

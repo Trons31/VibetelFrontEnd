@@ -1,6 +1,5 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react'
-import { getServiceById } from '@/actions';
 import { DetailAddTimeService } from '@/components';
 import { Service } from '@/interfaces';
 import { currencyFormat, formatDateWithHours } from '@/utils';
@@ -28,11 +27,11 @@ export const SheedDetailService = ({ isOpen, onClose, nameRoom, serviceId }: Pro
 
   const fetchReservations = useCallback(async () => {
     setisLoading(true);
-    const data = await getServiceById(serviceId);
-    if (data.ok) {
-      const { service } = data;
-      setService(service);
-    }
+    // const data = await getServiceById(serviceId);
+    // if (data.ok) {
+    //   const { service } = data;
+    //   setService(service);
+    // }
     setisLoading(false);
   }, [serviceId]);
 

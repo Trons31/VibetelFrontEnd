@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { CiLogin } from 'react-icons/ci';
 import { sleep } from '@/utils';
 import clsx from 'clsx';
-import { confirmTakeReservation } from '@/actions';
 import { FaCheckCircle } from 'react-icons/fa';
 
 interface ModalProps {
@@ -69,13 +68,13 @@ export const ModalTakeReservation = ({ isOpen, onClose, idReservation, accessCod
 
     const OnConfirmReservation = async () => {
         setShowLoading(true);
-        await sleep(3);
+        // await sleep(3);
 
-        const resp = await confirmTakeReservation(idReservation);
+        // const resp = await confirmTakeReservation(idReservation);
 
-        if (!resp.ok) {
-            return;
-        }
+        // if (!resp.ok) {
+        //     return;
+        // }
 
         setShowLoading(false);
         setSuccessConfirmTakeReservation(true)

@@ -113,7 +113,7 @@ export interface RoomAllApi {
   };
 }
 
-export interface AmenityDetail {
+interface AmenityDetail {
   id: string;
   name: string;
   description: string;

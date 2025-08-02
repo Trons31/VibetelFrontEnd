@@ -1,6 +1,5 @@
 'use client';
 import React, { ChangeEvent, useState } from 'react'
-import { updateLocationMotel } from '@/actions';
 import { CityApi, CountryApi, DepartmentApi, MotelApi } from '@/interfaces';
 import clsx from 'clsx'
 import { useForm } from 'react-hook-form';
@@ -38,15 +37,15 @@ export const LocationForm = ({ motel, countries, departments, cities }: Props) =
 
     const onUpdate = async (data: FormInputs) => {
         setShowLoadingButton(true);
-        const { country, department, city, address, neighborhood } = data;
+        // const { country, department, city, address, neighborhood } = data;
 
-        const response = await updateLocationMotel(country, department, city, address, neighborhood, motel.id);
+        // const response = await updateLocationMotel(country, department, city, address, neighborhood, motel.id);
 
-        if (!response.ok) {
-            toast.error("No se pudo actualizar la informacion")
-            setShowLoadingButton(false);
-            return
-        }
+        // if (!response.ok) {
+        //     toast.error("No se pudo actualizar la informacion")
+        //     setShowLoadingButton(false);
+        //     return
+        // }
 
         toast.success("Actualizacion correcta!");
         setShowLoadingButton(false);

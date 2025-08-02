@@ -1,11 +1,9 @@
 'use client';
 import React, { useState } from 'react'
 import clsx from 'clsx';
-import Link from 'next/link'
 import { useForm } from 'react-hook-form';
 import { IoInformationOutline } from 'react-icons/io5';
 import toast, { Toaster } from 'react-hot-toast';
-import { updatePasswordMotel } from '@/actions';
 
 
 interface Props {
@@ -28,13 +26,13 @@ export const UpdatePassword = ({ motelPartnerId }: Props) => {
         setShowLoadingUpdate(true)
         const { currentPassword, newPassword } = data;
 
-        const updatePassword = await updatePasswordMotel(currentPassword, newPassword, motelPartnerId);
-        if (!updatePassword?.ok) {
-            setShowErrorMessage(true);
-            setErrorMessage(updatePassword?.message!)
-            setShowLoadingUpdate(false)
-            return
-        }
+        // const updatePassword = await updatePasswordMotel(currentPassword, newPassword, motelPartnerId);
+        // if (!updatePassword?.ok) {
+        //     setShowErrorMessage(true);
+        //     setErrorMessage(updatePassword?.message!)
+        //     setShowLoadingUpdate(false)
+        //     return
+        // }
 
         setShowLoadingUpdate(false)
         toast.success("Contraseña actualizada correctamente")

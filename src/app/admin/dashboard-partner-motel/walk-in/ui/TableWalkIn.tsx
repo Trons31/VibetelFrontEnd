@@ -1,6 +1,5 @@
 'use client';
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { getRoomsInAvailableByMotel } from '@/actions';
 import { SheedWalkIn, SkeletonTableCheckIn } from '@/components';
 import { roomAddService } from '@/interfaces';
 import { currencyFormat, formatDate } from '@/utils';
@@ -35,15 +34,15 @@ export const TableWalkIn = ({ motelId, roomsInAviable }: Props) => {
 
     const fetchReservations = useCallback(async () => {
         setIsFetching(true);
-        const data = await getRoomsInAvailableByMotel({ motelId, searchFilter, page, limit: 10 });
-        if (data.ok && data.totalCount !== undefined) {
-            setRooms((prev) => {
-                const existingReservations = new Set(prev.map((r) => r.id));
-                const newReservations = data.rooms.filter((r) => !existingReservations.has(r.id));
-                return [...prev, ...newReservations];
-            });
-            setHasMore(data.rooms.length === 10);
-        }
+        // const data = await getRoomsInAvailableByMotel({ motelId, searchFilter, page, limit: 10 });
+        // if (data.ok && data.totalCount !== undefined) {
+        //     setRooms((prev) => {
+        //         const existingReservations = new Set(prev.map((r) => r.id));
+        //         const newReservations = data.rooms.filter((r) => !existingReservations.has(r.id));
+        //         return [...prev, ...newReservations];
+        //     });
+        //     setHasMore(data.rooms.length === 10);
+        // }
         setIsFetching(false);
         setIsLoading(false);
     }, [motelId, searchFilter, page]);

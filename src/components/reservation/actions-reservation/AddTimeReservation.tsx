@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { addTimeReservation, getAddTimeReservationByTransactionId, getTransactionIdAddTimeReservation } from '@/actions';
+import {   getTransactionIdAddTimeReservation } from '@/actions';
 import { SelectOption } from '@/components';
 import { Reservation } from '@/interfaces/reservation.interface';
 import { currencyFormat, formatTimeWithAmPm, sleep } from '@/utils';
@@ -62,21 +62,21 @@ export const AddTimeReservation = ({ reservation, isOpen, onClose, isAviable }: 
 
     const onUpdateDepartureDate = async () => {
         setShowLoading(true);
-        const response = await addTimeReservation(addTime, departureDateNew, reservation.ServiceItem?.id!, reservation.ServiceItem?.roomId!);
-        setShowLoading(false);
+        // const response = await addTimeReservation(addTime, departureDateNew, reservation.ServiceItem?.id!, reservation.ServiceItem?.roomId!);
+        // setShowLoading(false);
 
-        if (response.ok && response.data) {
-            setTransactionData({
-                transactionId: response.data?.transactionId,
-                total: response.data?.total,
-                idReservation: response.data.reservationId
-            });
-        } else {
-            toast.error(`No puedes extender la reserva ${addTime} minutos. Intenta con menos tiempo.`, {
-                duration: 10000,
-            });
-            return;
-        }
+        // if (response.ok && response.data) {
+        //     setTransactionData({
+        //         transactionId: response.data?.transactionId,
+        //         total: response.data?.total,
+        //         idReservation: response.data.reservationId
+        //     });
+        // } else {
+        //     toast.error(`No puedes extender la reserva ${addTime} minutos. Intenta con menos tiempo.`, {
+        //         duration: 10000,
+        //     });
+        //     return;
+        // }
 
         toast.success(`Reserva extendida ${addTime} minutos de forma correcta`, {
             duration: 10000
@@ -118,25 +118,25 @@ export const AddTimeReservation = ({ reservation, isOpen, onClose, isAviable }: 
     }, []);
 
     useEffect(() => {
-        if (transactionId) {
-            // Llama a la función para obtener los datos de la transacción
-            getAddTimeReservationByTransactionId(transactionId)
-                .then((res) => {
-                    if (res.reservation.transactionId) {
-                        setTransactionData({
-                            transactionId: res.reservation.transactionId,
-                            total: res.reservation.total
-                        });
-                        setStatusTransaction(res.reservation.status!)
-                    } else {
-                        console.error("No se encontró la transacción.");
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error al obtener la transacción:", error);
-                })
-                .finally(() => setLoadingExistTransactionId(false));
-        }
+        // if (transactionId) {
+        //     // Llama a la función para obtener los datos de la transacción
+        //     getAddTimeReservationByTransactionId(transactionId)
+        //         .then((res) => {
+        //             if (res.reservation.transactionId) {
+        //                 setTransactionData({
+        //                     transactionId: res.reservation.transactionId,
+        //                     total: res.reservation.total
+        //                 });
+        //                 setStatusTransaction(res.reservation.status!)
+        //             } else {
+        //                 console.error("No se encontró la transacción.");
+        //             }
+        //         })
+        //         .catch((error) => {
+        //             console.error("Error al obtener la transacción:", error);
+        //         })
+        //         .finally(() => setLoadingExistTransactionId(false));
+        // }
     }, [transactionId]);
 
 

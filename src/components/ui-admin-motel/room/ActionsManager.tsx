@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react'
-import { roomCleaning } from '@/actions';
 import { ModalActivePromotion, ModalUpdatePriceRoom, ModalUpdateStateRoom } from '@/components';
 import { RoomManagerProps } from '@/interfaces';
 import { sleep } from '@/utils';
@@ -28,12 +27,12 @@ export const ActionsManager = ({ selectedRooms, onRemoveRoom }: Props) => {
 
     const onRoomClean = async () => {
         setIsLoadingCleaning(true);
-        const resp = await roomCleaning(selectedRooms.map(room => room.id));
-        if (!resp.ok) {
-            toast.error(resp.message);
-            return;
-        }
-        toast.success(resp.message);
+        // const resp = await roomCleaning(selectedRooms.map(room => room.id));
+        // if (!resp.ok) {
+        //     toast.error(resp.message);
+        //     return;
+        // }
+        // toast.success(resp.message);
         setIsLoadingCleaning(false);
         await sleep(1);
         window.location.reload();

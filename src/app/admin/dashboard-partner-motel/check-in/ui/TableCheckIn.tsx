@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { reservationCheckIn } from '@/actions';
 import { reservationCheckInAdmin } from '@/interfaces/reservation.interface';
 import { formatDate, formatDateWithHours, sleep } from '@/utils';
 import { IoCloseOutline, IoSearchOutline } from 'react-icons/io5';
@@ -35,15 +34,15 @@ export const TableCheckIn = ({ motelId, totalReservation }: Props) => {
 
     const fetchReservations = useCallback(async () => {
         setIsFetching(true);
-        const data = await reservationCheckIn({ motelId, searchFilter, page, limit: 10 });
-        if (data.ok && data.totalCount !== undefined) {
-            setReservations((prev) => {
-                const existingReservations = new Set(prev.map((r) => r.id));
-                const newReservations = data.reservations.filter((r) => !existingReservations.has(r.id));
-                return [...prev, ...newReservations];
-            });
-            setHasMore(data.reservations.length === 10);
-        }
+        // const data = await reservationCheckIn({ motelId, searchFilter, page, limit: 10 });
+        // if (data.ok && data.totalCount !== undefined) {
+        //     setReservations((prev) => {
+        //         const existingReservations = new Set(prev.map((r) => r.id));
+        //         const newReservations = data.reservations.filter((r) => !existingReservations.has(r.id));
+        //         return [...prev, ...newReservations];
+        //     });
+        //     setHasMore(data.reservations.length === 10);
+        // }
         setIsFetching(false);
         setIsLoading(false);
     }, [motelId, searchFilter, page]);

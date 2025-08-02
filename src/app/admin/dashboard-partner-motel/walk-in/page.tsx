@@ -1,8 +1,6 @@
 import { redirect } from "next/navigation";
 import { BreadCrumb } from "@/components";
-import { getRoomInAviableByMotel } from "@/actions";
 import { auth } from "@/auth.config";
-import { TableWalkIn } from "./ui/TableWalkIn";
 import { MotelApi } from "@/interfaces";
 import axios from "axios";
 
@@ -29,7 +27,6 @@ export default async function WalkInPage() {
     redirect("/auth/new-account-motel/register");
   }
 
-  const rooms = await getRoomInAviableByMotel(motelExist.id);
 
   return (
     <div className="bg-white rounded-lg mb-10"  >
@@ -48,10 +45,10 @@ export default async function WalkInPage() {
           </p>
         </div>
 
-        <TableWalkIn
+        {/* <TableWalkIn
           motelId={motelExist.id}
           roomsInAviable={rooms}
-        />
+        /> */}
 
       </div>
     </div>

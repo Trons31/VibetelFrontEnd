@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { FaSignOutAlt } from 'react-icons/fa';
-import { confirmCompletedReservationByUser } from '@/actions';
 import clsx from 'clsx';
 import { IoAlertCircleSharp } from 'react-icons/io5';
 import { useSession } from 'next-auth/react';
@@ -46,13 +45,13 @@ export const ModalCompletedBooking = ({ isOpen, onClose, idReservation, isAviabl
 
     const OnConfirmServiceCompletionRequest = async () => {
         setshowLoading(true);
-        const resp = await confirmCompletedReservationByUser(idReservation);
+        // const resp = await confirmCompletedReservationByUser(idReservation);
 
-        if (!resp.ok) {
-            toast.error("No se pudo finalizar la reserva");
-            setshowLoading(false);
-            return;
-        }
+        // if (!resp.ok) {
+        //     toast.error("No se pudo finalizar la reserva");
+        //     setshowLoading(false);
+        //     return;
+        // }
 
         toast.success("Servicio finalizado exitosamente")
         if(session?.user.roles.includes("user")){

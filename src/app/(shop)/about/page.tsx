@@ -1,4 +1,3 @@
-import { getDataForInformation } from "@/actions";
 import { UiPageAbout } from "./ui/UiPageAbout";
 
 export async function generateMetadata() {
@@ -11,11 +10,9 @@ export async function generateMetadata() {
 
 export default async function AboutPage() {
 
-    const dataInformation = await getDataForInformation();
-
     return (
         <div className='mt-12' >
-            <UiPageAbout allRoom={dataInformation.allRoom} allUser={dataInformation.allUser} allMotel={dataInformation.allMotel} />
+            <UiPageAbout/>
         </div>
     );
 }

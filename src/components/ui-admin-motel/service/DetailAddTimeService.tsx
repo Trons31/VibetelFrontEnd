@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { getAddTimeReservationById } from "@/actions";
 import { formatDateWithHours, formatTime } from "@/utils";
 
 interface Props {
@@ -22,12 +21,12 @@ export const DetailAddTimeService = ({ serviceId }: Props) => {
     >([]);
 
     const getAddTimeReservation = async () => {
-        const { aditionalTime, ok } = await getAddTimeReservationById(serviceId);
-        if (ok && aditionalTime.length > 0) {
-            setAddTimes(aditionalTime);
-        } else {
-            setAddTimes([]);
-        }
+        // const { aditionalTime, ok } = await getAddTimeReservationById(serviceId);
+        // if (ok && aditionalTime.length > 0) {
+        //     setAddTimes(aditionalTime);
+        // } else {
+        //     setAddTimes([]);
+        // }
     };
 
     useEffect(() => {

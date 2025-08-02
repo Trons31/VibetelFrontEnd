@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { formatDate } from '@/utils';
-import { traficServiceToday } from '@/actions';
 import { ServiceData } from '@/interfaces';
 
 interface Props {
@@ -18,8 +17,8 @@ export const DataGeneralOfService = ({ motelId }: Props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await traficServiceToday(motelId);
-      setData(result);
+      // const result = await traficServiceToday(motelId);
+      // setData(result);
     };
 
     fetchData();

@@ -5,7 +5,6 @@ import debounce from 'lodash.debounce';
 import { MdError } from 'react-icons/md';
 import { formatDateWithHours } from '@/utils';
 import { IoCloseOutline } from 'react-icons/io5';
-import { searchAccessCode } from '@/actions';
 import { ModalTakeReservation } from '@/components';
 
 interface Props {
@@ -48,26 +47,26 @@ export const AccessCodeCheckIn = ({ motelId }: Props) => {
             setLoading(true);
             setError('');
             setHasSearched(true);
-            try {
-                const result = await searchAccessCode(query, motelId);
-                const formattedResult = result.map((res: {
-                    id: string;
-                    title: string;
-                    arrivalDate: Date;
-                    accessCode: string | null;
-                    room: {
-                        roomNumber: string;
-                    };
-                }) => ({
-                    ...res,
-                    accessCode: res.accessCode ?? '',
-                }));
-                setReservations(formattedResult);
-            } catch (err) {
-                setError('Error fetching reservations');
-            } finally {
-                setLoading(false);
-            }
+            // try {
+            //     const result = await searchAccessCode(query, motelId);
+            //     const formattedResult = result.map((res: {
+            //         id: string;
+            //         title: string;
+            //         arrivalDate: Date;
+            //         accessCode: string | null;
+            //         room: {
+            //             roomNumber: string;
+            //         };
+            //     }) => ({
+            //         ...res,
+            //         accessCode: res.accessCode ?? '',
+            //     }));
+            //     setReservations(formattedResult);
+            // } catch (err) {
+            //     setError('Error fetching reservations');
+            // } finally {
+            //     setLoading(false);
+            // }
         }, 300), [motelId]);
 
     useEffect(() => {

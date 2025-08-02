@@ -2,7 +2,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import Pusher from 'pusher-js';
 import { formatDateWithHours, sleep } from '@/utils';
-import { getReservationInRealTime } from '@/actions';
 import { SkeletonReservationRealTime } from '@/components';
 
 interface Reservation {
@@ -48,15 +47,15 @@ export const ReservationRealTime = ({ motelId }: ViewAndAccessReservationProps) 
 
   const fetchReservations = useCallback(async () => {
     await sleep(1);
-    const data = await getReservationInRealTime({ motelId, page, limit: 10 });
-    if (data.ok && data.totalCount !== undefined) {
-      setReservations((prev) => {
-        const existingReservations = new Set(prev.map((r) => r.id));
-        const newReservations = data.reservations.filter((r) => !existingReservations.has(r.id));
-        return [...prev, ...newReservations];
-      });
-      setHasMore(data.reservations.length === 10);
-    }
+    // const data = await getReservationInRealTime({ motelId, page, limit: 10 });
+    // if (data.ok && data.totalCount !== undefined) {
+    //   setReservations((prev) => {
+    //     const existingReservations = new Set(prev.map((r) => r.id));
+    //     const newReservations = data.reservations.filter((r) => !existingReservations.has(r.id));
+    //     return [...prev, ...newReservations];
+    //   });
+    //   setHasMore(data.reservations.length === 10);
+    // }
     setLoadingScroll(false);
     setLoading(false)
   }, [motelId, page]);

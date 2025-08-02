@@ -1,7 +1,5 @@
 'use client';
 
-
-import { detailRoomInService, endServiceByMotel, getServiceById } from '@/actions';
 import { roomInSerciceDetailAdmin, roomNextSerciceDetailAdmin, Service } from '@/interfaces';
 import { formatTime, formatTimeWithAmPm, sleep } from '@/utils';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -36,15 +34,15 @@ export const DetailRoom = ({ isOpen, onClose, serviceId }: Props) => {
     setisLoading(true);
     setNextReservation(null);
     const fetchReservationDetails = async () => {
-      try {
-        const { currentReservationReturn, nextReservationReturn } = await detailRoomInService(serviceId);
-        setCurrentService(currentReservationReturn);
-        setNextReservation(nextReservationReturn);
-        setisLoading(false);
-      } catch (error) {
-        toast.error("Ups! error al obtener la informacion del servicio");
-        setisLoading(false);
-      }
+      // try {
+      //   const { currentReservationReturn, nextReservationReturn } = await detailRoomInService(serviceId);
+      //   setCurrentService(currentReservationReturn);
+      //   setNextReservation(nextReservationReturn);
+      //   setisLoading(false);
+      // } catch (error) {
+      //   toast.error("Ups! error al obtener la informacion del servicio");
+      //   setisLoading(false);
+      // }
     };
 
 
@@ -58,15 +56,15 @@ export const DetailRoom = ({ isOpen, onClose, serviceId }: Props) => {
     setLoadingAddTime(true);
     if (!currentService) return;
     const fetchData = async () => {
-      try {
-        const { service } = await getServiceById(currentService?.id!);
-        setServiceAddTime(service);
-        setIsTimeExtensionAvailable(true);
-        setLoadingAddTime(false);
-      } catch (error) {
-        toast.error("Ups! no esta disponible la opcion para adicionar mas tiempo al servicio");
-        setLoadingAddTime(false);
-      }
+      // try {
+      //   const { service } = await getServiceById(currentService?.id!);
+      //   setServiceAddTime(service);
+      //   setIsTimeExtensionAvailable(true);
+      //   setLoadingAddTime(false);
+      // } catch (error) {
+      //   toast.error("Ups! no esta disponible la opcion para adicionar mas tiempo al servicio");
+      //   setLoadingAddTime(false);
+      // }
     };
 
     if (currentService) {
@@ -121,16 +119,16 @@ export const DetailRoom = ({ isOpen, onClose, serviceId }: Props) => {
   const endService = async () => {
     setButtonLoading(true);
 
-    const resp = await endServiceByMotel(currentService?.id!);
-    if (resp.ok) {
-      toast.success("Servicio finalizado correctamente");
-      setButtonLoading(false);
-      await sleep(1);
-      window.location.reload();
-    } else {
-      toast.success("Error al finalizar el servicio");
-      setButtonLoading(false);
-    }
+    // const resp = await endServiceByMotel(currentService?.id!);
+    // if (resp.ok) {
+    //   toast.success("Servicio finalizado correctamente");
+    //   setButtonLoading(false);
+    //   await sleep(1);
+    //   window.location.reload();
+    // } else {
+    //   toast.success("Error al finalizar el servicio");
+    //   setButtonLoading(false);
+    // }
   }
 
   return (

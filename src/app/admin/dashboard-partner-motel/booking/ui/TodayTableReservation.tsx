@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { getTodayReservationsByMotel, traficReservationToday } from '@/actions';
 import { reservationCheckInAdmin, ReservationData } from '@/interfaces/reservation.interface';
 import { formatDate, formatDateWithHours, sleep } from '@/utils';
 import { motion } from 'framer-motion';
@@ -52,15 +51,15 @@ export const TodayTableReservation = ({ motelId, totalReservation }: Props) => {
 
     const fetchReservations = useCallback(async () => {
         setIsFetching(true);
-        const data = await getTodayReservationsByMotel({ motelId, searchQuery, statusFilter, page, limit: 10 });
-        if (data.ok && data.totalCount !== undefined) {
-            setReservations((prev) => {
-                const existingReservations = new Set(prev.map((r) => r.id));
-                const newReservations = data.reservations.filter((r) => !existingReservations.has(r.id));
-                return [...prev, ...newReservations];
-            });
-            setHasMore(data.reservations.length === 10);
-        }
+        // const data = await getTodayReservationsByMotel({ motelId, searchQuery, statusFilter, page, limit: 10 });
+        // if (data.ok && data.totalCount !== undefined) {
+        //     setReservations((prev) => {
+        //         const existingReservations = new Set(prev.map((r) => r.id));
+        //         const newReservations = data.reservations.filter((r) => !existingReservations.has(r.id));
+        //         return [...prev, ...newReservations];
+        //     });
+        //     setHasMore(data.reservations.length === 10);
+        // }
         setIsFetching(false);
         setIsLoading(false);
     }, [motelId, searchQuery, statusFilter, date, page]);
@@ -71,15 +70,15 @@ export const TodayTableReservation = ({ motelId, totalReservation }: Props) => {
     }, [fetchReservations, searchQuery, date, statusFilter]);
 
     useEffect(() => {
-        const fetchData = async () => {
-            const result = await traficReservationToday(motelId);
-            setTotalBooking(result.totalReservations);
-            setBookingNoInciadas(result.reservationsNoIniciadas);
-            setBookingEnEspera(result.reservationsEnEspera);
-            setBookingCompleted(result.reservationsCompletadas);
-            setBookingCancel(result.reservationsCanceladas);
-        };
-        fetchData();
+        // const fetchData = async () => {
+        //     const result = await traficReservationToday(motelId);
+        //     setTotalBooking(result.totalReservations);
+        //     setBookingNoInciadas(result.reservationsNoIniciadas);
+        //     setBookingEnEspera(result.reservationsEnEspera);
+        //     setBookingCompleted(result.reservationsCompletadas);
+        //     setBookingCancel(result.reservationsCanceladas);
+        // };
+        // fetchData();
         setLoadingTotalBooking(false);
     }, [motelId])
 

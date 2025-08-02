@@ -1,6 +1,5 @@
 import { BreadCrumb } from "@/components";
 import { BankAccountForm } from "./ui/BankAccountForm";
-import { getBankAccountByMotel } from "@/actions";
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
 import { AccountTypeApi, BankAccountApi, BankApi, MotelApi } from "@/interfaces";

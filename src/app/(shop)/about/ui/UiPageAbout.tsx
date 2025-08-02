@@ -66,7 +66,7 @@ const items = [
 ];
 
 
-export const UiPageAbout = ({ allRoom, allMotel, allUser }: Props) => {
+export const UiPageAbout = () => {
   return (
     <>
       <div className="h-screen flex items-center justify-center">
@@ -90,7 +90,7 @@ export const UiPageAbout = ({ allRoom, allMotel, allUser }: Props) => {
         <div className="container px-5 mx-auto">
           <div className="flex flex-wrap -m-4 text-center">
             <div className="p-4 sm:w-1/4 w-1/2">
-              <h2 className="title-font font-medium sm:text-4xl text-3xl text-gray-900">{allUser} {allUser > 1000 ? "K" : ""} </h2>
+              <h2 className="title-font font-medium sm:text-4xl text-3xl text-gray-900">2</h2>
               <p className="leading-relaxed">Usuarios</p>
             </div>
             <div className="p-4 sm:w-1/4 w-1/2">
@@ -98,11 +98,11 @@ export const UiPageAbout = ({ allRoom, allMotel, allUser }: Props) => {
               <p className="leading-relaxed">Reservas diarias</p>
             </div>
             <div className="p-4 sm:w-1/4 w-1/2">
-              <h2 className="title-font font-medium sm:text-4xl text-3xl text-gray-900">{allRoom} {allRoom > 1000 ? "K" : ""} </h2>
+              <h2 className="title-font font-medium sm:text-4xl text-3xl text-gray-900">1 </h2>
               <p className="leading-relaxed">Habitaciones</p>
             </div>
             <div className="p-4 sm:w-1/4 w-1/2">
-              <h2 className="title-font font-medium sm:text-4xl text-3xl text-gray-900">{allMotel} {allMotel > 1000 ? "K" : ""} </h2>
+              <h2 className="title-font font-medium sm:text-4xl text-3xl text-gray-900">10</h2>
               <p className="leading-relaxed">Moteles</p>
             </div>
 

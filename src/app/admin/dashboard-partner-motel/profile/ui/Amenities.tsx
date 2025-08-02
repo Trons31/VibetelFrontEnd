@@ -1,13 +1,11 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { createOrDeleteAmenitiesMotel } from '@/actions';
-import { AmenitiesMotelInfo, MotelApi } from '@/interfaces';
+import {  AmenitiesMotelInfoApi, MotelApi } from '@/interfaces';
 import clsx from 'clsx';
 import toast, { Toaster } from 'react-hot-toast';
-import { UserApi } from '@/interfaces/user.interface';
 
 interface Props {
-  amenitiesMotel: AmenitiesMotelInfo[],
+  amenitiesMotel: AmenitiesMotelInfoApi[],
   motel: MotelApi
 }
 
@@ -25,10 +23,10 @@ export const Amenities = ({ amenitiesMotel, motel }: Props) => {
     if (selectedAmenities.includes(id)) {
       // Si el amenitie ya está seleccionado, lo deseleccionamos
    
-      const response = await createOrDeleteAmenitiesMotel(id, motelInfo.id);
-      if(!response.ok){
-          toast.error("No se pudo actualizar la informacion.")
-      }
+      // const response = await createOrDeleteAmenitiesMotel(id, motelInfo.id);
+      // if(!response.ok){
+      //     toast.error("No se pudo actualizar la informacion.")
+      // }
 
       toast.success("Comodidad eliminada correctamente")
      
@@ -36,10 +34,10 @@ export const Amenities = ({ amenitiesMotel, motel }: Props) => {
     } else {
       // Si no está seleccionado, lo agregamos a la lista de seleccionados
 
-      const response = await createOrDeleteAmenitiesMotel(id, motelInfo.id);
-      if(!response.ok){
-          toast.error("No se pudo actualizar la informacion.")
-      }
+      // const response = await createOrDeleteAmenitiesMotel(id, motelInfo.id);
+      // if(!response.ok){
+      //     toast.error("No se pudo actualizar la informacion.")
+      // }
 
       toast.success("Comodidad agregada correctamente")
 

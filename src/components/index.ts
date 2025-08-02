@@ -61,12 +61,8 @@ export * from "./ui/webSocket/ReservationSocketListener";
 
 export * from "./search/GridRoomSearch/GridRoomSearch";
 
-export * from "./ui-admin-motel/sidebar/SideBarAdminMotel";
 export * from "./ui-admin-motel/sidebar/AdminImage";
-export * from "./ui-admin-motel/top-menu/TopMenuAdminMotel";
 
-export * from "./ui-admin-motel/sidebar-movil/SideBarMovil";
-export * from "./ui-admin-motel/sidebar/SideBarAdminMotel";
 export * from "./ui-admin-motel/room/RoomManager";
 export * from "./ui-admin-motel/room/ActionsManager";
 export * from "./ui-admin-motel/room/CleaningTimeDisplay";
@@ -98,15 +94,12 @@ export * from "./ui-admin-motel/service/AddTimeService";
 export * from "./ui-admin-motel/service/AddTimeService";
 export * from "./ui-admin-motel/service/DetailAddTimeService";
 export * from "./ui-admin-motel/reservation-requests/TotalReservationRequests";
-export * from "./ui-admin-motel/content-wrapper/ContentWrapper";
 export * from "./ui-admin-motel/app-sidebar/AppSidebar";
 export * from "./ui-admin-motel/app-header/AppHeader";
 export * from "./ui-admin-motel/room/RoomImageAdmin";
 export * from "./ui-admin-motel/webSocket/ReservationSocketListener";
 
 
-
-export * from "./ui-super-admin/top-menu/TopMenuSuperAdmin";
 export * from "./ui-super-admin/sheed/SheedValidateDataMotel";
 export * from "./ui-super-admin/modal/ModalStatusMotel";
 export * from "./ui-super-admin/layout/ClientSuperAdminLayout";

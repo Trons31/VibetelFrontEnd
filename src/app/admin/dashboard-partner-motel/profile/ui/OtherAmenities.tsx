@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { MotelApi } from '@/interfaces';
 import toast, { Toaster } from 'react-hot-toast';
 import clsx from 'clsx';
-import { createOrDeleteOtherAmenities } from '@/actions';
 
 interface Props {
     motel: MotelApi;
@@ -27,12 +26,12 @@ export const OtherAmenities = ({ motel }: Props) => {
             return;
         }
 
-        const response = await createOrDeleteOtherAmenities(motel.id, inputsAmenities);
-        if (!response.ok) {
-            toast.error("No se pudo actualizar la informacion")
-            setShowLoadingButton(false);
-            return;
-        }
+        // const response = await createOrDeleteOtherAmenities(motel.id, inputsAmenities);
+        // if (!response.ok) {
+        //     toast.error("No se pudo actualizar la informacion")
+        //     setShowLoadingButton(false);
+        //     return;
+        // }
 
         toast.success("Actualizacion correcta!")
         setShowLoadingButton(false);

@@ -36,10 +36,10 @@ export const ItemAllMotel = ({ motel }: Props) => {
         </div>
         <div>
           <MotelImage
-            src={motel.images[0]}
+            src={motel.images.length > 0 ?  motel.images[0].url : ""}
             width={450}
             height={300}
-            alt={motel.images[0]}
+            alt={motel.images.length > 0 ?  motel.images[0].url : ""}
             className="object-cover rounded-t-lg h-[200px] "
           />
         </div>

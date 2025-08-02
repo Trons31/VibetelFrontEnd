@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import React, { useEffect, useState } from 'react'
 import { MdVisibilityOff } from 'react-icons/md';
 import toast, { Toaster } from 'react-hot-toast';
-import { disabledRoom } from '@/actions';
 
 interface ModalProps {
     isOpen: boolean;
@@ -19,12 +18,12 @@ export const ModalDisabled = ({ isOpen, onClose, nameRoom, idRoom }: ModalProps)
 
     const OnDisabledRoom = async () => {
         setshowLoading(true);
-        const resp = await disabledRoom(idRoom);
-        if (!resp?.ok) {
-            setshowLoading(false);
-            toast.error("No se pudo desabilitar la habitacion")
-            return
-        }
+        // const resp = await disabledRoom(idRoom);
+        // if (!resp?.ok) {
+        //     setshowLoading(false);
+        //     toast.error("No se pudo desabilitar la habitacion")
+        //     return
+        // }
         setshowLoading(false);
         window.location.reload();
     }

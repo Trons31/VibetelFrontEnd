@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth.config";
-import { getTotalReservationTodayByMotel } from "@/actions";
 import { TableCheckIn } from "./ui/TableCheckIn";
 import { AccessCodeCheckIn } from "@/components";
 import { MotelApi } from "@/interfaces";
@@ -30,13 +29,11 @@ export default async function CheckInPage() {
     redirect("/auth/new-account-motel/register");
   }
 
-  const { totalReservation } = await getTotalReservationTodayByMotel(motelExist.id);
-
   return (
     <>
       <AccessCodeCheckIn motelId={motelExist.id} />
       <div className="mb-10" >
-        <TableCheckIn motelId={motelExist.id} totalReservation={totalReservation} />
+        {/* <TableCheckIn motelId={motelExist.id} totalReservation={totalReservation} /> */}
       </div>
     </>
 

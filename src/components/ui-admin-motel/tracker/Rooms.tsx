@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { motion } from 'framer-motion';
 import { DetailRoomReservation } from './DetailRoomReservation';
-import { getReservationByRoom } from '@/actions';
 import { reservationsByRoom } from '@/interfaces/reservation.interface';
 import { LiaBroomSolid } from 'react-icons/lia';
 import { FaCheckCircle } from 'react-icons/fa';
@@ -31,15 +30,15 @@ export const Rooms = ({ motelId }: Props) => {
 
 
     const fetchReservationsByRoom = useCallback(async () => {
-        const data = await getReservationByRoom({ motelId, page, limit: 10 });
-        if (data.ok && data.totalCount !== undefined) {
-            setRooms((prev) => {
-                const existingReservations = new Set(prev.map((r) => r.id));
-                const newReservations = data.roomsWithReservations.filter((r) => !existingReservations.has(r.id));
-                return [...prev, ...newReservations];
-            });
-            setHasMore(data.roomsWithReservations.length === 10);
-        }
+        // const data = await getReservationByRoom({ motelId, page, limit: 10 });
+        // if (data.ok && data.totalCount !== undefined) {
+        //     setRooms((prev) => {
+        //         const existingReservations = new Set(prev.map((r) => r.id));
+        //         const newReservations = data.roomsWithReservations.filter((r) => !existingReservations.has(r.id));
+        //         return [...prev, ...newReservations];
+        //     });
+        //     setHasMore(data.roomsWithReservations.length === 10);
+        // }
         setLoadingScroll(false);
         setLoading(false)
     }, [motelId, page]);

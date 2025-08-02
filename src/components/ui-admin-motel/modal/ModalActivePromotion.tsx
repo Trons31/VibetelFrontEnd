@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState } from "react";
-import { updatePromotionByMotel } from "@/actions";
 import { RoomManagerProps } from "@/interfaces";
 import { currencyFormat, sleep } from "@/utils";
 import clsx from "clsx";
@@ -78,12 +77,12 @@ export const ModalActivePromotion = ({ isOpen, onClose, selectedRooms, onRemoveR
             return;
         }
 
-        const resp = await updatePromotionByMotel(selectedRooms.map(room => room.id), promotion);
-        if (!resp.ok) {
-            setIsLoadingUpdatePrice(false);
-            toast.error("Ups! no se puedo actualizar la promocion");
-            return;
-        }
+        // const resp = await updatePromotionByMotel(selectedRooms.map(room => room.id), promotion);
+        // if (!resp.ok) {
+        //     setIsLoadingUpdatePrice(false);
+        //     toast.error("Ups! no se puedo actualizar la promocion");
+        //     return;
+        // }
         setIsLoadingUpdatePrice(false);
         toast.success("Promocion actualizado correctamente");
         await sleep(1);

@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react';
 import { ModalDetailReview } from '@/components';
 import axios from 'axios';
 
-export interface Rating {
+interface Rating {
     id: string;
     roomTitle: string;
     roomNumber: string;

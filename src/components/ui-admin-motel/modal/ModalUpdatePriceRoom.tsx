@@ -1,5 +1,4 @@
 'use client';
-import { updatePriceRoomByMotel } from "@/actions";
 import { RoomManagerProps } from "@/interfaces";
 import { currencyFormat, sleep } from "@/utils";
 import clsx from "clsx";
@@ -77,12 +76,12 @@ export const ModalUpdatePriceRoom = ({ isOpen, onClose, selectedRooms, onRemoveR
             return;
         }
 
-        const resp = await updatePriceRoomByMotel(selectedRooms.map(room => room.id), newPrice);
-        if (!resp.ok) {
-            setIsLoadingUpdatePrice(false);
-            toast.error("Ups! no se puedo actualizar el precio");
-            return;
-        }
+        // const resp = await updatePriceRoomByMotel(selectedRooms.map(room => room.id), newPrice);
+        // if (!resp.ok) {
+        //     setIsLoadingUpdatePrice(false);
+        //     toast.error("Ups! no se puedo actualizar el precio");
+        //     return;
+        // }
         setIsLoadingUpdatePrice(false);
         toast.success("Precio actualizado correctamente");
         await sleep(1);

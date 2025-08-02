@@ -13,7 +13,7 @@ import { FreeMode, Pagination } from 'swiper/modules';
 import { formatDate } from '@/utils';
 import { ModalDetailReview } from '@/components';
 
-export interface Rating {
+interface Rating {
     id: string;
     roomTitle: string;
     roomNumber: string;

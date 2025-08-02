@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { CiLogin } from 'react-icons/ci';
 import { sleep } from '@/utils';
 import clsx from 'clsx';
-import { confirmCompletedReservationByMotel } from '@/actions';
 import { FaCheckCircle } from 'react-icons/fa';
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -48,12 +47,12 @@ export const ModalConfirmCompletedReservation = ({ isOpen, onClose, idReservatio
         setShowLoading(true);
         await sleep(3);
 
-        const resp = await confirmCompletedReservationByMotel(idReservation);
+        // const resp = await confirmCompletedReservationByMotel(idReservation);
 
-        if (!resp.ok) {
-            toast.error("Ups! no se pudo confirmar la finalizacion del servicio")
-            return;
-        }
+        // if (!resp.ok) {
+        //     toast.error("Ups! no se pudo confirmar la finalizacion del servicio")
+        //     return;
+        // }
 
         setShowLoading(false);
         setSuccessConfirmTakeReservation(true)
