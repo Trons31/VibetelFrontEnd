@@ -28,7 +28,7 @@ export const UiPage = () => {
   const isAuthenticated = !!session?.user;
   const [isLoading, setIsLoading] = useState(true);
   const [locationLoaded, setLocationLoaded] = useState(false);
-  const [detectedLocation, setDetectedLocation] = useState< LocationCity | undefined  >(undefined);
+  const [detectedLocation, setDetectedLocation] = useState<LocationCity | undefined>(undefined);
   const [searchInputMovil, setSearchInputMovil] = useState(false);
   const [loadingMotels, setLoadingMotels] = useState(true);
   const [modalLocationUser, setModalLocationUser] = useState(false);
@@ -158,15 +158,20 @@ export const UiPage = () => {
                 </>
               ))}
           </div>
-          <div className="block md:flex items-center justify-center md:space-x-4 text-sm">
-            <Link href="/home" className="text-white font-medium">
-              <span className="underline text-lg">Ver habitaciones. </span> 
-            </Link>
-          </div>
+          {
+            !isLoading && (
+              locationUser !== null && detectedLocation && (
+                <div className="block md:flex items-center justify-center md:space-x-4 text-sm">
+                  <Link href="/home" className="text-red-600 p-2 rounded-lg bg-white font-medium">
+                    <span className="text-sm">Ver habitaciones</span>
+                  </Link>
+                </div>
+              )
+            )
+          }
         </div>
       </div>
 
-      
 
       {mostFrequentedMotels.length > 0 && (
         <div className="p-3 md:px-24 py-5 mt-16 mb-10 ">
