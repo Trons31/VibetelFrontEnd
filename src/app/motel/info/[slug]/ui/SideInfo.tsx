@@ -3,7 +3,7 @@ import { MotelBySlugApi } from '@/interfaces';
 import React from 'react'
 import { BiWorld } from 'react-icons/bi';
 import { FaStar } from 'react-icons/fa';
-import { IoInformationCircleOutline, IoMailOutline } from 'react-icons/io5';
+import { IoCheckmarkCircleOutline, IoInformationCircleOutline, IoMailOutline } from 'react-icons/io5';
 import { MdOutlineLocalPhone, MdOutlineLocationOn, MdOutlineRestaurantMenu } from 'react-icons/md';
 import { RiShoppingBagFill } from 'react-icons/ri';
 
@@ -94,25 +94,18 @@ export const SideInfo = ({ motel }: Props) => {
                     <p className='font-medium text-lg'>Comodidades</p>
                 </div>
 
-                {/* {
-                    motel.amentiesMotelMap.length > 0 ? (
-                        motel.amentiesMotelMap.map((amenitieMotel, index) => {
-                            const amenityIcons: { [key: string]: JSX.Element } = {
-                                "Servicio SexShop": <RiShoppingBagFill className="h-5 w-5 text-gray-700 flex-shrink-0" />,
-                                "Servicio de Restaurante-Bar": <MdOutlineRestaurantMenu className="h-5 w-5 text-gray-700 flex-shrink-0" />,
-                            };
-
-                            return (
-                                <div key={index} >
-                                    <div className='flex gap-2 items-center mb-4'>
-                                        {amenityIcons[amenitieMotel] || <IoInformationCircleOutline className="h-5 w-5 text-gray-700 flex-shrink-0" />}
-                                        <p className='font-extralight text-sm break-words'>
-                                            {amenitieMotel}
-                                        </p>
+                {
+                    motel.amenities.length > 0 ? (
+                        <div className='space-y-3'>
+                            {motel.amenities.map((amenityWrapper) => (
+                                <div key={amenityWrapper.id} className='flex gap-2 items-start'>
+                                    <IoCheckmarkCircleOutline className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                                    <div>
+                                        <p className='font-light text-sm text-gray-800'>{amenityWrapper.amenities.name}</p>
                                     </div>
                                 </div>
-                            );
-                        })
+                            ))}
+                        </div>
                     ) : (
                         <>
 
@@ -133,11 +126,9 @@ export const SideInfo = ({ motel }: Props) => {
                             </div>
                         </>
                     )
-                } */}
+                }
 
             </div>
-
-
         </div>
     )
 }

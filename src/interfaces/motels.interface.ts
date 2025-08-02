@@ -66,6 +66,16 @@ export interface RoomOfMotel {
     ratings: RoomRating[];
 }
 
+export interface Amenities {
+  id: string;
+  amenities: AmenityDetail;
+}
+
+export interface AmenityDetail {
+  id: string;
+  name: string;
+  description: string;
+}
 
 export interface MotelBySlugApi {
     id: string;
@@ -79,7 +89,7 @@ export interface MotelBySlugApi {
     contactPhone: string;
     whatsapp: string;
     nit: string;
-    amenities: string[];
+    amenities: Amenities[];
     address: string;
     neighborhood: string;
     createdAt: string;
