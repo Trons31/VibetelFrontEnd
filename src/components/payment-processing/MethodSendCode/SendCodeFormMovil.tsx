@@ -1,6 +1,7 @@
 'use client';
 
 import { ModalPopup } from '@/components';
+import { PaymentStatus } from '@/interfaces/reservation.interface';
 import { useBookingStore } from '@/store';
 import { calculateTotalPrice, currencyFormat } from '@/utils';
 import axios from 'axios';
@@ -20,7 +21,6 @@ import { MdOutlinePayment } from 'react-icons/md';
 
 type viewControl = "methods" | "sms" | "mail" | "";
 
-type StatusTransaction = "ACCEPTED" | "REJECTED" | "PENDING" | "FAILED"
 
 type FormInput = {
     phoneNumber: string
@@ -47,7 +47,7 @@ export const SendCodeFormMovil = () => {
     const roomInBooking = useBookingStore(state => state.Booking);
     const summary = useBookingStore(state => state.getInformationSummary());
 
-    const [statusTransaction, setStatusTransaction] = useState<StatusTransaction>("PENDING")
+    const [statusTransaction, setStatusTransaction] = useState<PaymentStatus>("pending")
     const [tokenTransaction, setTokenTransaction] = useState<string | null>(null);
     const [transactionData, setTransactionData] = useState<transactionData | undefined>(undefined);
 
@@ -440,7 +440,7 @@ export const SendCodeFormMovil = () => {
 
                                 {
                                     (transactionData?.mail || transactionData?.phoneNumber) && (
-                                        statusTransaction === "ACCEPTED"
+                                        statusTransaction === "accepted"
                                             ? (
                                                 <>
                                                     <div className='bg-purple-600 fade-in flex w-full p-2 gap-2 rounded-lg justify-center items-center text-white' >

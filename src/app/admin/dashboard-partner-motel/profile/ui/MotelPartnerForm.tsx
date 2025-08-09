@@ -8,6 +8,7 @@ import axios from 'axios';
 
 interface Props {
     motelPartner: UserApi,
+    accessToken:string;
 }
 
 type FormInputs = {
@@ -18,7 +19,7 @@ type FormInputs = {
 
 }
 
-export const MotelPartnerForm = ({ motelPartner }: Props) => {
+export const MotelPartnerForm = ({ motelPartner,accessToken }: Props) => {
 
     const [motelPartnerInfo, setMotelPartnerInfo] = useState<UserApi>();
     const [loading, setLoading] = useState(true);
@@ -30,7 +31,7 @@ export const MotelPartnerForm = ({ motelPartner }: Props) => {
             defaultValues: {
                 name: motelPartner.name,
                 lastName: motelPartner.lastname,
-                email: motelPartner.email,
+                email:motelPartner.email,
                 contactPhone: motelPartner.contactPhone!
             }
         }
@@ -38,17 +39,22 @@ export const MotelPartnerForm = ({ motelPartner }: Props) => {
 
     const onUpdate = async (data: FormInputs) => {
         setShowLoadingButton(true);
-        const { name, lastName, email, contactPhone } = data;
+        const { name, lastName, contactPhone } = data;
 
         const user = {
-            name:name,
-            lastname:lastName,
-            email:email,
+            name: name,
+            lastname: lastName,
+            contactPhone: contactPhone,
         }
 
         try {
             await axios.patch(
-                `${process.env.NEXT_PUBLIC_API_ROUTE}user/${motelPartner.id}`, user
+                `${process.env.NEXT_PUBLIC_API_ROUTE}user/update-profile/motel-partner`, user,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
             );
             toast.success("Actualizacion correcta!")
             setShowLoadingButton(false);
@@ -170,35 +176,13 @@ export const MotelPartnerForm = ({ motelPartner }: Props) => {
 
                             <div className='grid grid-cols md:grid-cols-2 gap-4' >
                                 <div className="mb-4">
-                                    <label className={
-                                        clsx(
-                                            "block mb-2 text-sm text-black font-semibold ",
-                                            {
-                                                "text-red-500": errors.email
-                                            }
-                                        )
-                                    }>Correo electronico</label>
-                                    <input type="text" className={
-                                        clsx(
-                                            "bg-gray-300 border-2 border-gray-300 text-black text-sm rounded-lg appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 block w-full p-2.5 placeholder-black",
-                                            {
-                                                'focus:border-red-600 border-red-500': errors.email
-                                            }
-                                        )
-                                    } placeholder=""
-                                        {...register('email', { required: true, pattern: /^(?=.{1,254}$)(?:(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*)|(?:"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*"))@(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-zA-Z0-9-]*[a-zA-Z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/ })}
+                                    <label className="block mb-2 text-sm text-black font-semibold ">Correo electronico</label>
+                                    <input
+                                        type="text"
+                                        disabled
+                                        className="bg-gray-300 cursor-not-allowed border-2 border-gray-300 text-black text-sm rounded-lg appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 block w-full p-2.5 placeholder-black" placeholder=""
+                                        {...register('email')}
                                     />
-                                    {
-                                        errors.email?.type === 'required' && (
-                                            <span className="text-red-500 text-xs" >* El correo electronico obligatorio</span>
-                                        )
-                                    }
-                                    {
-                                        errors.email?.type === 'pattern' && (
-                                            <span className="text-red-500 text-xs" >* El correo electronico debe ser valido</span>
-                                        )
-                                    }
-                                    <span className="text-xs text-gray-500 block">Recuerda mantener el correo electronico actualizado</span>
                                 </div>
                                 <div className="mb-4">
                                     <label className={

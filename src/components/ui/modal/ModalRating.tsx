@@ -141,24 +141,42 @@ export const MoldaRating = ({ isOpen, serviceId, onClose, ratingRoom }: ModalPro
                 comment: roomComments,
             }
 
-            try {
-                await axios.post(
-                    `${process.env.NEXT_PUBLIC_API_ROUTE}room-rating`, data,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${session?.accessToken}`,
-                        },
-                    }
-                );
-                toast.success("Gracias por ayudarnos a mejorar");
-                await sleep(3);
-                setLoadingButton(false);
-                window.location.reload()
-            } catch (error: any) {
-                console.log(error);
-                toast.error("Ups! Hubo un error al guardar las calificaciones");
-                setLoadingButton(false);
+            if (session?.user) {
+                try {
+                    await axios.post(
+                        `${process.env.NEXT_PUBLIC_API_ROUTE}room-rating`, data,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${session?.accessToken}`,
+                            },
+                        }
+                    );
+                    toast.success("Gracias por ayudarnos a mejorar");
+                    await sleep(3);
+                    setLoadingButton(false);
+                    window.location.reload()
+                } catch (error: any) {
+                    console.log(error);
+                    toast.error("Ups! Hubo un error al guardar las calificaciones");
+                    setLoadingButton(false);
+                }
+            } else {
+                try {
+                    await axios.post(
+                        `${process.env.NEXT_PUBLIC_API_ROUTE}room-rating/anonymous`, data
+                    );
+                    toast.success("Gracias por ayudarnos a mejorar");
+                    await sleep(3);
+                    setLoadingButton(false);
+                    window.location.reload()
+                } catch (error: any) {
+                    console.log(error);
+                    toast.error("Ups! Hubo un error al guardar las calificaciones");
+                    setLoadingButton(false);
+                }
             }
+
+
         }
     }
 

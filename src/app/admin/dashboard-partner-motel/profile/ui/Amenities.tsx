@@ -1,16 +1,18 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import {  AmenitiesMotelInfoApi, MotelApi } from '@/interfaces';
+import { AmenitiesMotelInfoApi, MotelApi } from '@/interfaces';
 import clsx from 'clsx';
 import toast, { Toaster } from 'react-hot-toast';
+import axios from 'axios';
 
 interface Props {
   amenitiesMotel: AmenitiesMotelInfoApi[],
   motel: MotelApi
+  accessToken: string;
 }
 
-export const Amenities = ({ amenitiesMotel, motel }: Props) => {
-  const [selectedAmenities, setSelectedAmenities] = useState<string[]>(motel.amenities);
+export const Amenities = ({ amenitiesMotel, motel, accessToken }: Props) => {
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>(motel.amenities.map(amenitie => amenitie.amenities.id));
   const [loading, setLoading] = useState(true);
   const [motelInfo, setMotelInfo] = useState<MotelApi>(motel);
 
@@ -20,30 +22,31 @@ export const Amenities = ({ amenitiesMotel, motel }: Props) => {
       return;
     }
 
-    if (selectedAmenities.includes(id)) {
-      // Si el amenitie ya está seleccionado, lo deseleccionamos
-   
-      // const response = await createOrDeleteAmenitiesMotel(id, motelInfo.id);
-      // if(!response.ok){
-      //     toast.error("No se pudo actualizar la informacion.")
-      // }
+    try {
+      await axios.patch(
+        `${process.env.NEXT_PUBLIC_API_ROUTE}motel/toggle-amenity/${id}`,
+        {}, // body vacío
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
-      toast.success("Comodidad eliminada correctamente")
-     
-      setSelectedAmenities(selectedAmenities.filter(amenityId => amenityId !== id));
-    } else {
-      // Si no está seleccionado, lo agregamos a la lista de seleccionados
+      if (selectedAmenities.includes(id)) {
+        setSelectedAmenities(selectedAmenities.filter(amenityId => amenityId !== id));
+        toast.success("Comodidad eliminada correctamente");
+      } else {
+        setSelectedAmenities([...selectedAmenities, id]);
+        toast.success("Comodidad agregada correctamente");
+      }
 
-      // const response = await createOrDeleteAmenitiesMotel(id, motelInfo.id);
-      // if(!response.ok){
-      //     toast.error("No se pudo actualizar la informacion.")
-      // }
-
-      toast.success("Comodidad agregada correctamente")
-
-      setSelectedAmenities([...selectedAmenities, id]);
+    } catch (error) {
+      toast.error("No se pudo actualizar la información.");
+      console.error(error);
     }
   };
+
 
   useEffect(() => {
     if (motel) {
@@ -54,10 +57,10 @@ export const Amenities = ({ amenitiesMotel, motel }: Props) => {
 
   return (
     <>
-       <Toaster
-                position="top-right"
-                reverseOrder={false}
-            />
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+      />
       {loading ? (
         <div className='grid grid-cols md:grid-cols-2 gap-4'>
           <div className="mb-4 animate-pulse">
@@ -89,7 +92,7 @@ export const Amenities = ({ amenitiesMotel, motel }: Props) => {
                 <li key={amenityMotel.id}>
                   <label
                     className={clsx(
-                      "inline-flex items-center justify-between w-full p-5 text-gray-800 bg-white border-2 border-gray-200 rounded-lg cursor-pointer",
+                      "inline-flex h-full items-center justify-between w-full p-5 text-gray-800 bg-white border-2 border-gray-200 rounded-lg cursor-pointer",
                       {
                         'hover:border-blue-600 hover:text-blue-500': !selectedAmenities.includes(amenityMotel.id),
                         'border-red-600 text-red-600': selectedAmenities.includes(amenityMotel.id)

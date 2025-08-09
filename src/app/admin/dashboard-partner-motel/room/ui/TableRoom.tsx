@@ -39,13 +39,14 @@ export const TableRoom = ({ accessToken, garageRoom, categoryRoom }: Props) => {
         setIsLoading(true);
         try {
             const response = await axios.get<RoomApi[]>(
-                `${process.env.NEXT_PUBLIC_API_ROUTE}room`,
+                `${process.env.NEXT_PUBLIC_API_ROUTE}room/motel-admin`,
                 {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },
                 }
             );
+            console.log("respuesta de api", response.data)
             setAllRooms(response.data);
             setTotalCountResultsFilter(response.data.length);
             setTotalPages(Math.ceil(response.data.length / itemsPerPage));

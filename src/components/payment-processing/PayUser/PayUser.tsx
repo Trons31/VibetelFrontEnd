@@ -6,8 +6,8 @@ import { IoBagCheck } from 'react-icons/io5';
 import { MdOutlinePayment } from 'react-icons/md';
 import { redirect, usePathname } from 'next/navigation';
 import axios from 'axios';
+import { PaymentStatus } from '@/interfaces/reservation.interface';
 
-type StatusTransaction = "ACCEPTED" | "REJECTED" | "PENDING" | "FAILED"
 
 type transactionData = {
     id: string;
@@ -23,7 +23,7 @@ export const PayUser = () => {
     const [loadingExistTransactionId, setLoadingExistTransactionId] = useState(true);
 
 
-    const [statusTransaction, setStatusTransaction] = useState<StatusTransaction>("PENDING")
+    const [statusTransaction, setStatusTransaction] = useState<PaymentStatus>("accepted")
     const [tokenTransaction, setTokenTransaction] = useState<string | null>(null);
 
 
@@ -145,7 +145,7 @@ export const PayUser = () => {
                         <>
                             {
                                 transactionData && (
-                                    statusTransaction === "ACCEPTED"
+                                    statusTransaction === "accepted"
                                         ? (
                                             <div className='flex w-full py-4' >
                                                 <div className='bg-purple-600 p-2 flex w-full gap-2 rounded-lg justify-center items-center text-white' >

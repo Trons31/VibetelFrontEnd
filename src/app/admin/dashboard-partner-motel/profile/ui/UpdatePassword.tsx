@@ -4,10 +4,12 @@ import clsx from 'clsx';
 import { useForm } from 'react-hook-form';
 import { IoInformationOutline } from 'react-icons/io5';
 import toast, { Toaster } from 'react-hot-toast';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import axios from 'axios';
 
 
 interface Props {
-    motelPartnerId: string;
+    accessToken: string;
 }
 
 type FormInputs = {
@@ -15,24 +17,44 @@ type FormInputs = {
     newPassword: string;
 }
 
-export const UpdatePassword = ({ motelPartnerId }: Props) => {
+export const UpdatePassword = ({ accessToken }: Props) => {
 
     const { register, handleSubmit, formState: { errors }, setValue, trigger, getValues } = useForm<FormInputs>();
-    const [errorMessage, setErrorMessage] = useState('');
-    const [showErrorMessage, setShowErrorMessage] = useState(false);
     const [showLoadingUpdate, setShowLoadingUpdate] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
 
     const onUpdate = async (data: FormInputs) => {
         setShowLoadingUpdate(true)
-        const { currentPassword, newPassword } = data;
 
-        // const updatePassword = await updatePasswordMotel(currentPassword, newPassword, motelPartnerId);
-        // if (!updatePassword?.ok) {
-        //     setShowErrorMessage(true);
-        //     setErrorMessage(updatePassword?.message!)
-        //     setShowLoadingUpdate(false)
-        //     return
-        // }
+        const updatedPassword = {
+            currentPassword: data.currentPassword,
+            newPassword: data.newPassword
+        }
+
+        try {
+            await axios.patch(
+                `${process.env.NEXT_PUBLIC_API_ROUTE}user/update-password-motelpartner`, updatedPassword,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+            toast.success("Contraseña actualizada correctamente");
+            setShowLoadingUpdate(false)
+        } catch (error: any) {
+            console.log(error)
+            toast.error("La contraseña ingresada no corresponde a la contraseña actual.",
+                {
+                    className: " w-[600px]",
+                    duration: 5000
+                }
+            )
+            setShowLoadingUpdate(false)
+            return;
+        }
+
 
         setShowLoadingUpdate(false)
         toast.success("Contraseña actualizada correctamente")
@@ -66,17 +88,29 @@ export const UpdatePassword = ({ motelPartnerId }: Props) => {
                                     }
                                 )
                             }>
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    className={
+                                        clsx(
+                                            "w-full  border-gray-300 bg-white py-2 px-4 text-base text-gray-700 placeholder-gray-400 appearance-none  focus:outline-none focus:ring-0",
 
-                                <input type="password" id="login-password" className={
-                                    clsx(
-                                        "w-full  border-gray-300 bg-white py-2 px-4 text-base text-gray-700 placeholder-gray-400 appearance-none  focus:outline-none focus:ring-0",
-
-                                    )
-                                } placeholder="***********"
+                                        )
+                                    } placeholder="***********"
                                     {...register('currentPassword', { required: true })}
                                 />
-
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                                >
+                                    {showPassword ? (
+                                        <FaEyeSlash className="w-5 h-5" />
+                                    ) : (
+                                        <FaEye className="w-5 h-5" />
+                                    )}
+                                </button>
                             </div>
+
                             {
                                 errors.currentPassword?.type === 'required' && (
                                     <span className="text-red-500 text-sm" >* La contraseña actual es obligatoria</span>
@@ -100,14 +134,27 @@ export const UpdatePassword = ({ motelPartnerId }: Props) => {
                                     }
                                 )
                             }>
-                                <input type="password" id="login-password" className={
-                                    clsx(
-                                        "w-full  border-gray-300 bg-white py-2 px-4 text-base text-gray-700 placeholder-gray-400 appearance-none  focus:outline-none focus:ring-0",
-                                    )
-                                } placeholder="***********"
+                                <input
+                                    type={showNewPassword ? "text" : "password"}
+                                    className={
+                                        clsx(
+                                            "w-full  border-gray-300 bg-white py-2 px-4 text-base text-gray-700 placeholder-gray-400 appearance-none  focus:outline-none focus:ring-0",
+                                        )
+                                    } placeholder="***********"
                                     {...register('newPassword', { required: true, pattern: /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]{6,}$/ })}
 
                                 />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowNewPassword(!showNewPassword)}
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                                >
+                                    {showNewPassword ? (
+                                        <FaEyeSlash className="w-5 h-5" />
+                                    ) : (
+                                        <FaEye className="w-5 h-5" />
+                                    )}
+                                </button>
                             </div>
                             {
                                 errors.newPassword?.type === 'required' && (
@@ -138,21 +185,6 @@ export const UpdatePassword = ({ motelPartnerId }: Props) => {
 
 
                 <p className="text-xs md:text-sm mt-2">Recuerda que puedes recuperar tu contraseña si la has olvidado.</p>
-
-
-                <div className='w-fit' >
-                    {
-                        showErrorMessage &&
-                        (
-                            <>
-                                <div className="mt-4 flex justify-center items-center gap-2 w-full mb-2 select-none rounded-t-lg border-t-4 border-red-400 bg-red-100 py-3 px-2 font-medium ">
-                                    <IoInformationOutline size={30} className="text-red-600" />
-                                    {errorMessage}
-                                </div>
-                            </>
-                        )
-                    }
-                </div>
 
                 <div className='flex justify-start' >
                     <button

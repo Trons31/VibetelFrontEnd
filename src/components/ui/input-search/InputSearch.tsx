@@ -215,7 +215,7 @@ export const InputSearch = ({ openSearch, closeSearch, location }: Props) => {
                                     )
                                 }
 
-                                {
+                                {/* {
                                     searchTerm === "" && !hasSearched && (
                                         <>
                                             <h3 className={
@@ -243,7 +243,7 @@ export const InputSearch = ({ openSearch, closeSearch, location }: Props) => {
                                             </ul>
                                         </>
                                     )
-                                }
+                                } */}
                             </div>
                         </div>
 

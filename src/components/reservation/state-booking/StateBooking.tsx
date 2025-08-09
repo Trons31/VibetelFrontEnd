@@ -9,7 +9,7 @@ interface StateBookingProps {
 export const StateBooking = ({ reservation }: StateBookingProps) => {
 
   return (
-    <div className="hidden md:flex flex-col w-full items-center mt-6 md:mt-12 border-b bg-white py-4 rounded-lg sm:flex-row px-4 ">
+    <div className="hidden md:flex flex-col w-full items-center border-b bg-white py-4  rounded-lg sm:flex-row px-4 ">
       <p className="text-2xl font-bold text-gray-800">Estado actual</p>
       <div className="py-2 mt-4 md:mt-0 text-xs sm:ml-auto sm:text-base">
         <div className="flex md:relative">

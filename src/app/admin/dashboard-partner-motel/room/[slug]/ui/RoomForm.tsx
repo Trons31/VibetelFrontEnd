@@ -33,7 +33,7 @@ interface FormInputs {
     title: string;
     description: string;
     price: number;
-    priceAddTime: number;
+    priceAddTime?: number;
     timeLimit: number;
     promotionPercentage?: number | null;
     promoPrice?: number | null;
@@ -63,6 +63,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, isNew
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [imageUrls, setImageUrls] = useState<string[]>([]);
     const [selectedAmenities, setSelectedAmenities] = useState<string[]>(AmenitiesRoom || []);
+    const [inputsAmenities, setInputs] = useState<{ name: string; description: string }[]>([]);
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
@@ -87,9 +88,8 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, isNew
     const [showMessageErrorServer, setshowMessageErrorServer] = useState(false);
     const [messageErrorServer, setmessageErrorServer] = useState<string | undefined>("");
 
-    const [showPromoPrice, setShowPromoPrice] = useState(room.promoActive);
+    const [showPromoPrice, setShowPromoPrice] = useState(room.promoActive ?? false);
     const [showExtraServices, setShowExtraServices] = useState(room.extraServicesActive ?? false);
-    const [inputsAmenities, setInputs] = useState<string[]>([]);
     const [showMessageErrorAmenities, setShowMessageErrorAmenities] = useState(false);
 
     const {
@@ -110,7 +110,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, isNew
             garageId: room.garage?.id,
             // otherAmenities: room.amenities,
             slug: room.slug ? room.slug.replace(/[-_]/g, ' ') : '',
-            inAvailable: room.inAvailable ? true : false,
+            inAvailable: room.inAvailable ? true : true,
             promoActive: room.promoActive ? room.promoActive : false,
             amenities: room.amenities?.map(amenitie => amenitie.amenities),
             images: undefined
@@ -122,7 +122,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, isNew
     const OnSubmit = async (data: FormInputs) => {
         setShowLoadingButton(true);
 
-        const isEmpty = inputsAmenities.some(input => input.trim() === "");
+        const isEmpty = inputsAmenities.some(input => input.name.trim() === "" || input.description.trim() === "");
         if (isEmpty) {
             setShowMessageErrorAmenities(true);
             setShowLoadingButton(false);
@@ -162,11 +162,14 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, isNew
             ? price - (price * promotionPercentage!) / 100
             : 0;
 
+
         formData.append('title', title);
         formData.append('slug', slug);
         formData.append('description', description);
         formData.append('price', price.toString());
-        formData.append('priceAddTime', priceAddTime.toString());
+        if (priceAddTime) {
+            formData.append('priceAddTime', priceAddTime.toString());
+        }
         formData.append('promoActive', promoActive.toString());
         formData.append('promoPrice', promoPrice.toString());
         formData.append('promotionPercentage', promotionPercentage ? promotionPercentage.toString() : "");
@@ -187,6 +190,8 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, isNew
 
         // Amenities como JSON
         formData.append('amenitiesRoom', JSON.stringify(selectedAmenities));
+        // formData.append('newAmenitiesRoom', JSON.stringify(inputsAmenities));
+
 
         // Imágenes
         selectedFiles.forEach((file: File) => {
@@ -302,21 +307,22 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, isNew
         });
     };
 
-    const handleInputChange = (index: number, value: string) => {
+    const handleInputChange = (index: number, field: 'name' | 'description', value: string) => {
         const newInputs = [...inputsAmenities];
-        newInputs[index] = value;
+        newInputs[index][field] = value;
         setInputs(newInputs);
     };
 
+
     const handleAddInput = () => {
-        setInputs([...inputsAmenities, '']);
+        setInputs([...inputsAmenities, { name: '', description: '' }]);
     };
 
     const handleRemoveInput = (index: number) => {
         const newInputs = [...inputsAmenities];
         newInputs.splice(index, 1);
         setInputs(newInputs);
-        const isEmpty = inputsAmenities.some(input => input.trim() === "");
+        const isEmpty = inputsAmenities.some(input => input.name.trim() === "" || input.description.trim() === "");
         if (!isEmpty) {
             setShowMessageErrorAmenities(false);
         }
@@ -680,7 +686,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, isNew
                                             }
                                         )
                                     }
-                                    {...register('priceAddTime', { required: true, min: 1, pattern: /^[0-9]*$/ })}
+                                    {...register('priceAddTime', { required: isFreePlan ? false : true, min: 1, pattern: /^[0-9]*$/ })}
                                     disabled={isFreePlan} // Deshabilita el input si es plan FREE
                                     value={isFreePlan ? 'No disponible en Plan FREE' : undefined} // Muestra el mensaje o el valor
                                     placeholder={isFreePlan ? '' : 'Ingrese el precio'} // Puedes ajustar el placeholder
@@ -1250,24 +1256,38 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, isNew
 
                     </div>
 
-                    <div className="grid grid-cols mb-5">
+                    {/* <div className="grid grid-cols mb-5">
 
                         <label className="block  text-sm text-black font-semibold ">Otras comodidades</label>
                         <span className="text-xs mb-2 text-gray-500 block"> Si no encuentras una comodidad específica en la lista, ¡siéntete libre de agregarla tú mismo!</span>
 
                         {inputsAmenities.map((input, index) => (
-                            <div key={index} className="flex gap-2 items-center space-x-2 mb-2">
-                                <textarea
-                                    value={input}
-                                    onChange={(e) => handleInputChange(index, e.target.value)}
-                                    className="border text-sm rounded-md px-2 py-1 w-full border-gray-300 bg-gray-100"
-                                    placeholder="ej: Nombre de la comodidad"
-                                    rows={2}
-                                />
+                            <div key={index} className="flex gap-2 mt-2 items-start space-x-2 mb-2">
+                                <div className='w-full' >
+                                    <div className="mb-4 w-fit">
+                                        <label className="block mb-2 text-xs text-black font-light ">Nombre de la comodidad</label>
+                                        <input
+                                            value={input.name}
+                                            onChange={(e) => handleInputChange(index, 'name', e.target.value)}
+                                            type="text"
+                                            className="bg-gray-300 border-2 border-gray-300 text-black text-sm rounded-lg appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 block w-full p-2 placeholder-black" placeholder=""
+                                        />
+                                    </div>
+                                    <div className="mb-4 w-ful">
+                                        <label className="block mb-2 text-xs text-black font-light ">Descripcion de la comodidad</label>
+                                        <textarea
+                                            value={input.description}
+                                            onChange={(e) => handleInputChange(index, 'description', e.target.value)}
+                                            className="border text-xs md:text-sm rounded-md px-2 py-1 w-full border-gray-300 bg-gray-100"
+                                            placeholder="ej: Descripcion de la comodidad"
+                                            rows={2}
+                                        />
+                                    </div>
+                                </div>
                                 <button
                                     type="button"
                                     onClick={() => handleRemoveInput(index)}
-                                    className="bg-red-500  text-white px-2 py-1 rounded-md"
+                                    className="bg-red-500 text-xs text-white px-2 py-1 rounded-md"
                                 >
                                     Eliminar
                                 </button>
@@ -1286,7 +1306,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, isNew
                         >
                             Agregar comodida
                         </button>
-                    </div>
+                    </div> */}
 
                     <div className="flex flex-col mb-4">
                         <label className="block mb-2 text-sm text-black font-semibold ">Habitacion</label>

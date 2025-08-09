@@ -5,6 +5,7 @@ import { ModalPopup, RoomImage } from '@/components';
 import { ReservationApi } from '@/interfaces/reservation.interface';
 import { currencyFormat, formatDateWithHours } from '@/utils';
 import { FaQuestionCircle } from 'react-icons/fa';
+import { addMinutes, format } from 'date-fns';
 
 interface Props {
   reservation: ReservationApi;
@@ -14,10 +15,18 @@ interface Props {
 export const DetailBooking = ({ reservation }: Props) => {
   const [isModalOpenExtraservices, setIsModalOpenExtraservices] = useState(false);
 
+
+  const arrivalDate = new Date(reservation.ServiceItem?.arrivalDate!);
+  const minutesToWait = reservation.ServiceItem?.room.motel.MotelConfig.timeAwaitTakeReservation || 0;
+
+  // Calcula la hora máxima de espera
+  const maxWaitTime = addMinutes(arrivalDate, minutesToWait);
+  const formattedMaxWaitTime = format(maxWaitTime, 'h:mm a');
+
   return (
     <div >
 
-      <div className='md:rounded-lg border border-gray-200 px-4 py-6 mt-5' >
+      <div className='py-6 mt-5' >
 
         <div className='flex justify-between items-center' >
           <p className='font-bold text-lg' >Reservacion</p>
@@ -85,53 +94,9 @@ export const DetailBooking = ({ reservation }: Props) => {
 
         <div className='border-l-8 mt-4 border-purple-600 bg-purple-200 px-4 py-2 rounded-l-lg' >
           <p className='font-bold text-lg' >Importante</p>
-          <p className='mt-2 text-sm font-medium' >El motel <strong>{reservation.ServiceItem?.room.motel.title}</strong> tiene un plazo de espera despues de haber iniciado el serivicio de <strong>10 minutos</strong> es decir que si no tomas a tiempo tu servicio el motel te esperara hasta las <strong>3:10 pm</strong> despues de esta hora tu reserva sera cancelada automaticamente </p>
+          <p className='mt-2 text-sm font-medium' >El motel <strong>{reservation.ServiceItem?.room.motel.title}</strong> tiene un plazo de espera despues de haber iniciado el serivicio de <strong>{reservation.ServiceItem.room.motel.MotelConfig.timeAwaitTakeReservation} minutos</strong> es decir que si no tomas a tiempo tu servicio el motel te esperara hasta las <strong>{formattedMaxWaitTime}</strong> despues de esta hora tu reserva sera cancelada automaticamente </p>
         </div>
-
       </div>
-
-      <div className='md:rounded-lg border border-gray-200 px-4 py-6 mt-5' >
-
-        <div className='flex justify-between items-center' >
-          <p className='font-bold text-lg' >Habitacion</p>
-
-          <p className='font-bold text-gray-700 text-sm capitalize' >{reservation.ServiceItem?.room.motel.title}</p>
-
-
-        </div>
-
-        <div className='mt-3' >
-          <p className='font-bold text-md' >{reservation.ServiceItem?.title} - Nro {reservation.ServiceItem?.roomNumber}</p>
-          <div className='grid grid-cols md:grid-cols-2' >
-            <div>
-              <RoomImage
-                className="w-32 rounded-lg "
-                src={reservation.ServiceItem?.room.roomImage[0].url!}
-                alt={reservation.ServiceItem?.title!}
-                width={200}
-                height={200} />
-
-            </div>
-            <div className='grid grid-cols-2' >
-
-              <div>
-                <p className='font-bold text-md' >Precio</p>
-                <p className='' >{currencyFormat(reservation.ServiceItem?.price!)}</p>
-              </div>
-
-              <div>
-                <p className='font-bold text-md' >Garaje</p>
-                <p className='' >{ }</p>
-              </div>
-
-
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
     </div>
   )
 }

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import {   getTransactionIdAddTimeReservation } from '@/actions';
 import { SelectOption } from '@/components';
-import { Reservation } from '@/interfaces/reservation.interface';
+import { Reservation, ReservationApi } from '@/interfaces/reservation.interface';
 import { currencyFormat, formatTimeWithAmPm, sleep } from '@/utils';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useSession } from 'next-auth/react';
@@ -14,7 +14,7 @@ import { MdOutlinePayment } from 'react-icons/md';
 
 interface Props {
     isAviable: boolean;
-    reservation: Reservation;
+    reservation: ReservationApi;
     isOpen: boolean;
     onClose: () => void;
 }
@@ -33,11 +33,11 @@ export const AddTimeReservation = ({ reservation, isOpen, onClose, isAviable }: 
 
     const [showLoading, setShowLoading] = useState(false);
     const [priceAddTime, setPriceAddTime] = useState(0);
-    const [departureDateNew, setDepartureDateNew] = useState(new Date(reservation.departureDate));
+    const [departureDateNew, setDepartureDateNew] = useState(new Date(reservation.ServiceItem.departureDate));
     const [addTime, setAddTime] = useState(0);
     const [options, setOptions] = useState<{ label: string; value: number }[]>([]);
 
-    const actuallyDepartureDate = new Date(reservation.departureDate);
+    const actuallyDepartureDate = new Date(reservation.ServiceItem.departureDate);
     const defaultReservationAddTime = reservation.ServiceItem?.room.motel.MotelConfig?.defaultReservationAddTime || 30;
 
     const [transactionData, setTransactionData] = useState<transactionData | undefined>(undefined);

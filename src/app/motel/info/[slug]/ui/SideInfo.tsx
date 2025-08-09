@@ -37,10 +37,19 @@ export const SideInfo = ({ motel }: Props) => {
                         <p className='text-lg font-semibold' >{motel.totalRooms}</p>
                         <p className='text-sm' >Habitaciones</p>
                     </div>
-                    {/* <div className='pt-4 mt-4' >
-                        <p className='text-lg flex gap-1 font-semibold items-center' >{motel.motelAverageRating} <FaStar className='h-4 w-4' /></p>
-                        <p className='text-sm' >Calificacion</p>
-                    </div> */}
+                    <div className='pt-4 mt-4' >
+                        <p className='text-lg flex gap-1 font-semibold items-center' >
+                            {
+                                motel.averageRating > 0 &&
+                                motel.averageRating
+                            } <FaStar className='h-4 w-4' />
+                        </p>
+                        <p className='text-sm' > {
+                            motel.averageRating === 0
+                                ? "Sin calificacion"
+                                : "Calificacion"
+                        }</p>
+                    </div>
                 </div>
             </div>
 

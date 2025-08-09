@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { useReservationStore } from '@/store/reservation/reservation.store';
+import { useReservationStore } from '@/store/reservation/adminWebsocket.store';
 
 export const ReservationSocketListener = () => {
   const { data: session, status } = useSession();

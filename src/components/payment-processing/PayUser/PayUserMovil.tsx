@@ -1,4 +1,5 @@
 'use client';
+import { PaymentStatus } from '@/interfaces/reservation.interface';
 import { useBookingStore } from '@/store';
 import { calculateTotalPrice, currencyFormat } from '@/utils';
 import axios from 'axios';
@@ -8,8 +9,6 @@ import React, { useEffect, useState } from 'react'
 import { IoBagCheck } from 'react-icons/io5';
 import { MdOutlinePayment } from 'react-icons/md';
 
-
-type StatusTransaction = "ACCEPTED" | "REJECTED" | "PENDING" | "FAILED"
 
 type transactionData = {
     id: string;
@@ -29,7 +28,7 @@ export const PayUserMovil = () => {
     const roomInBooking = useBookingStore(state => state.Booking);
     const summary = useBookingStore(state => state.getInformationSummary());
 
-    const [statusTransaction, setStatusTransaction] = useState<StatusTransaction>("PENDING")
+    const [statusTransaction, setStatusTransaction] = useState<PaymentStatus>("pending")
     const [tokenTransaction, setTokenTransaction] = useState<string | null>(null);
 
 
@@ -160,7 +159,7 @@ export const PayUserMovil = () => {
                         <>
                             {
                                 transactionData && (
-                                    statusTransaction === "ACCEPTED"
+                                    statusTransaction === "accepted"
                                         ? (
                                             <>
                                                 <div className='bg-purple-600 fade-in flex w-full p-2 gap-2 rounded-lg justify-center items-center text-white' >

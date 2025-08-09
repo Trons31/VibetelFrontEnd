@@ -1,10 +1,10 @@
 "use client";
 
-import { AppHeader, AppSidebar, MenuOptions, ReservationSocketListener, TotalReservationRequests, Tracker } from "@/components";
+import { AppHeader, AppSidebar, MenuOptions, ReservationSocketListener, ToastRequestAccesAtMotel, TotalReservationRequests, Tracker } from "@/components";
 import Backdrop from "@/components/ui-admin-motel/back-drop/Backdrop";
 import { MotelApi } from "@/interfaces";
 import { useSidebarStore } from "@/store";
-import { useReservationStore } from "@/store/reservation/reservation.store";
+import { useReservationStore } from "@/store/reservation/adminWebsocket.store";
 import React, { useEffect } from "react";
 import ReservationToast from "../toast/ReservationToast";
 import { Toaster } from "react-hot-toast";
@@ -49,6 +49,9 @@ export default function ClientAdminLayout({
       />
       <ReservationSocketListener />
       <ReservationToast />
+      <ToastRequestAccesAtMotel
+        accessToken={accessToken}
+      />
 
       <div className="min-h-screen xl:flex">
         <AppSidebar

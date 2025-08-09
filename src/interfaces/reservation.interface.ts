@@ -76,6 +76,7 @@ export interface ReservationApi {
   updatedAt: Date;
   userId: string;
   transactionId: string;
+  reservationToken: string;
   ServiceItem: ServiceItem;
   roomRating: RoomRating | null
 }
@@ -93,6 +94,10 @@ export interface CreateReservationResponseApi {
 export interface ReservationPendingByMotelApi {
   id: string;
   createdAt: Date;
+  isConfirmed: boolean,
+  paymentStatus: PaymentStatus,
+  isPaymentVerifiedByMotel: boolean,
+  isConfirmedCreatedAt: Date,
   serviceItem: {
     id: string;
     title: string;

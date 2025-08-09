@@ -72,7 +72,7 @@ export const InfoMotel = ({ motel }: Props) => {
           </div>
         </div>
 
-        <div className="border-t border-gray-300 mt-16 mb-10"></div>
+        <div className="border-t border-gray-300 mt-5 md:mt-16 mb-10"></div>
 
         <div className="mt-5">
           <div className="flex justify-between items-center">
@@ -122,7 +122,7 @@ export const InfoMotel = ({ motel }: Props) => {
                     <div className="flex justify-center mt-10">
                       <div className="flex gap-1 items-center border border-gray-300 rounded-3xl p-8">
                         <TbNotesOff className="h-5 w-5 text-gray-700 flex-shrink-0" />
-                        <p className="text-center text-sm text-gray-800">
+                        <p className="text-center text-xs md:text-sm text-gray-800">
                           Aún no existen reseñas. Sé el primero en
                           compartir tu experiencia y ayuda a otros usuarios a tomar una
                           decisión informada.

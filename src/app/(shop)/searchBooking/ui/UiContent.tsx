@@ -7,6 +7,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { ReservationApi } from "@/interfaces/reservation.interface";
 import { AiFillCloseCircle } from "react-icons/ai";
 import axios from "axios";
+import { notifyTokenChange } from "@/utils/reservation-events";
+import { useBookingStore } from "@/store";
 
 interface Props {
     CodeBooking?: string
@@ -20,7 +22,7 @@ export const UiContent = ({ CodeBooking }: Props) => {
     const [isLoadingCookieCode, setIsLoadingCookieCode] = useState(false);
     const [isLoadingCodeUrl, setIsLoadingCodeUrl] = useState(false);
     const [booking, setBooking] = useState<ReservationApi | undefined>(undefined);
-
+    const removeBooking = useBookingStore((state) => state.removeBooking);
 
     const encodeToken = (token: string): string => {
         try {
@@ -48,12 +50,13 @@ export const UiContent = ({ CodeBooking }: Props) => {
 
             try {
                 const response = await axios.get<ReservationApi>(`${process.env.NEXT_PUBLIC_API_ROUTE}service/anonymous-reservation/${CodeBooking}`);
-                const encodedToken = encodeToken(response.data.id);
+                const encodedToken = encodeToken(response.data.reservationToken);
                 localStorage.setItem("persist-reservation-anonymous", encodedToken);
                 const url = new URL(window.location.href);
                 url.searchParams.delete('codeBooking');
                 window.history.replaceState({}, '', url.toString());
                 setBooking(response.data);
+                notifyTokenChange(response.data.reservationToken);
                 setgetBooking(true);
                 setIsLoadingCodeUrl(false);
             } catch (error: any) {
@@ -90,20 +93,24 @@ export const UiContent = ({ CodeBooking }: Props) => {
         if (!idBooking) return;
         try {
             const response = await axios.get<ReservationApi>(`${process.env.NEXT_PUBLIC_API_ROUTE}service/anonymous-reservation/${idBooking}`);
-            const encodedToken = encodeToken(response.data.id);
+            const encodedToken = encodeToken(response.data.reservationToken);
             localStorage.setItem("persist-reservation-anonymous", encodedToken);
             setBooking(response.data);
+            notifyTokenChange(response.data.reservationToken);
             setgetBooking(true);
             setIsLoadingCodeUrl(false)
+            localStorage.removeItem("persist-token-reservation");
+            removeBooking();
 
         } catch (error: any) {
+            console.log(error)
             setIsLoading(false);
             setIsLoadingCookieCode(false);
             toast(
                 (t) => (
                     <div>
                         <p className="text-red-600 font-semibold text-md md:text-xl">Código de Acceso No Existe</p>
-                        <p className=" text-sm md:text-md text-gray-800">El código de acceso a la reserva anónima que ingresaste no es válido o no existe.</p>
+                        <p className=" text-sm md:text-md text-gray-800">El código de acceso a la reserva anónima no es válido o no existe.</p>
                     </div>
 
 

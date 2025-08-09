@@ -39,8 +39,8 @@ export const BookingDetail = ({ reservation }: Props) => {
 
 
     return (
-        <div className='grid grid-cols md:grid-cols-2 mt-6 md:mt-5 md:gap-10 space-y-6 md:space-y-0' >
-            <div className='md:rounded-lg w-full bg-white shadow-md h-fit rounded-b-md'>
+        <div className='grid grid-cols md:grid-cols-2 mt-9 md:mt-5 md:gap-10 space-y-9 md:space-y-0' >
+            <div className='rounded-lg w-full bg-white shadow-sm md:shadow-md h-fit'>
 
                 {
                     reservation.ServiceItem?.status === "en_espera" &&
@@ -89,11 +89,11 @@ export const BookingDetail = ({ reservation }: Props) => {
 
                 <div className='mt-5 px-4 mb-5'>
                     <div className='block'>
-                        <p className='font-bold text-md'>N° de reserva:  </p>
+                        <p className='font-bold text-md'>Codigo de reserva:  </p>
                         <div className='flex gap-4' >
 
 
-                            <p className='text-md'> {reservation.id} </p>
+                            <p className='text-md'> {reservation.reservationToken} </p>
                             {copySuccess ? (
                                 <FaCheck size={16} color="green" className="transition duration-300 ease-in-out" />
                             ) : (
@@ -147,7 +147,7 @@ export const BookingDetail = ({ reservation }: Props) => {
 
 
 
-            <div className='md:rounded-lg w-full bg-white shadow-md h-fit rounded-b-md' >
+            <div className='rounded-lg w-full bg-white shadow-sm md:shadow-md h-fit' >
 
                 <div className="rounded-t-md md:rounded-t-md px-2 w-full h-10 bg-gray-300 " >
                     <p className='pt-2 text-center text-xl font-medium' >Motel</p>

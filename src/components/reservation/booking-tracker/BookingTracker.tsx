@@ -24,7 +24,7 @@ export const BookingTracker = ({ reservation }: Props) => {
     }, [])
 
     return (
-        <div className="mt-5 rounded-lg px-4 bg-white mb-10">
+        <div className="mt-9 rounded-lg px-4 bg-white shadow-sm md:shadow-md mb-10">
 
             <nav className="flex justify-between md:justify-start  md:gap-8">
                 <button
@@ -83,7 +83,7 @@ export const BookingTracker = ({ reservation }: Props) => {
                                 exit="exit"
                                 variants={fadeVariants}
                                 transition={{ duration: 0.5, ease: "easeInOut" }}
-                                className='py-5 md:py8 '
+                                className='py-5'
                             >
                                 {activeTab === 'seguimiento' && (
                                     <>
@@ -104,12 +104,7 @@ export const BookingTracker = ({ reservation }: Props) => {
                             </motion.div>
                         </>
                     )
-
             }
-
-
-
-
         </div >
     );
 }

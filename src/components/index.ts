@@ -27,6 +27,7 @@ export * from "./ui/modal/ModalValidTimeClient";
 export * from "./ui/modal/ModalDetailReview";
 export * from "./ui/modal/ModalAllRatingsMotel";
 export * from "./ui/modal/ModalTokenExpireOrReservationNoExists";
+export * from "./ui/modal/ModalRequestAccesMotel";
 export * from "./ui/Popover/OptionsPopover";
 export * from "./ui/slideShow/SlideShow";
 export * from "./ui/slideShow/SlideShowMobile";
@@ -98,6 +99,7 @@ export * from "./ui-admin-motel/app-sidebar/AppSidebar";
 export * from "./ui-admin-motel/app-header/AppHeader";
 export * from "./ui-admin-motel/room/RoomImageAdmin";
 export * from "./ui-admin-motel/webSocket/ReservationSocketListener";
+export * from "./ui-admin-motel/toast/ToastRequestAccesAtMotel";
 
 
 export * from "./ui-super-admin/sheed/SheedValidateDataMotel";

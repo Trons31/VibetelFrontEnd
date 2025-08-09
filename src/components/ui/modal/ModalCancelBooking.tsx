@@ -41,6 +41,7 @@ export const ModalCancelBooking = ({ isOpen, onClose, idReservation, isAviable }
 
     const OnCanceledReservation = async () => {
         setshowLoading(true);
+        
         // const resp = await canceledReservationByUser(idReservation);
 
         // if (!resp.ok) {
@@ -89,8 +90,8 @@ export const ModalCancelBooking = ({ isOpen, onClose, idReservation, isAviable }
                                                 clsx(
 
                                                     {
-                                                        "flex items-center gap-x-4 mb-2 w-fit  justify-center rounded-lg bg-red-600 px-3 py-2 hover:bg-red-700 text-lg font-bold text-white": !showLoading,
-                                                        "flex items-center gap-x-4 mb-2 w-fit  justify-center rounded-lg bg-red-600 px-3 py-2 text-lg font-bold text-white cursor-not-allowed": showLoading
+                                                        "flex items-center gap-x-4 mb-2 w-fit  justify-center rounded-lg bg-red-600 px-3 py-2 hover:bg-red-700 text-xs md:text-base font-bold text-white": !showLoading,
+                                                        "flex items-center gap-x-4 mb-2 w-fit  justify-center rounded-lg bg-red-600 px-3 py-2 text-xs md:text-base font-bold text-white cursor-not-allowed": showLoading
                                                     }
                                                 )
                                             }>
@@ -127,7 +128,7 @@ export const ModalCancelBooking = ({ isOpen, onClose, idReservation, isAviable }
                                             }
                                             <button
                                                 onClick={onClose}
-                                                className="whitespace-nowrap rounded-md bg-gray-200 px-4 py-3 font-medium">Cancelar</button>
+                                                className="whitespace-nowrap rounded-md bg-gray-200 px-4 text-xs md:text-base py-2 font-medium">Cancelar</button>
                                         </div>
                                     </div>
                                 </>

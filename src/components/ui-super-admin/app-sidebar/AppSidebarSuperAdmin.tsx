@@ -8,13 +8,16 @@ import {
   IoBedOutline
 } from "react-icons/io5";
 import { TiHomeOutline } from "react-icons/ti";
-import { BsThreeDots } from "react-icons/bs";
+import { BsBuildingGear, BsThreeDots } from "react-icons/bs";
 import clsx from "clsx";
 import Image from "next/image";
 import { LuUserCog } from "react-icons/lu";
 import { Lobster } from "@/config/fonts";
 import { useSession } from "next-auth/react";
 import { FaBuildingFlag } from "react-icons/fa6";
+import { FaRegCalendarAlt, FaUserCog } from "react-icons/fa";
+import { MdOutlineAddHome, MdOutlineAddHomeWork, MdOutlineAddLocationAlt, MdOutlineCategory } from "react-icons/md";
+import { BiSolidCarGarage } from "react-icons/bi";
 
 type NavItem = {
   name: string;
@@ -27,13 +30,72 @@ const navItems: NavItem[] = [
     icon: <TiHomeOutline />,
     name: "Dashboard",
     path: "/admin/dashboard-partner-motel",
-  },
-  {
-    icon: <FaBuildingFlag  />,
-    name: "Moteles",
-    path: "/admin/dashboard-super-admin/motel",
   }
 ];
+
+
+const configItems: NavItem[] = [
+  {
+    icon: <BsBuildingGear />,
+    name: "Moteles",
+    path: "/admin/dashboard-super-admin/motel",
+  },
+  {
+    icon: <FaRegCalendarAlt />,
+    name: "Reservas",
+    path: "/",
+  },
+  {
+    icon: <FaUserCog />,
+    name: "Usuarios",
+    path: "/",
+  }
+];
+
+const motels: NavItem[] = [
+  {
+    icon: <MdOutlineAddHomeWork />,
+    name: "Comodidades",
+    path: "/",
+  }
+];
+
+const rooms: NavItem[] = [
+  {
+    icon: <MdOutlineCategory />,
+    name: "Categorias",
+    path: "/",
+  },
+  {
+    icon: <BiSolidCarGarage />,
+    name: "Garages",
+    path: "/",
+  },
+  {
+    icon: <MdOutlineAddHome/>,
+    name: "Comodidades",
+    path: "/",
+  }
+];
+
+const locations: NavItem[] = [
+  {
+    icon: <MdOutlineAddLocationAlt />,
+    name: "Pais",
+    path: "/",
+  },
+  {
+    icon: <MdOutlineAddLocationAlt />,
+    name: "Departamento",
+    path: "/",
+  },
+  {
+    icon: <MdOutlineAddLocationAlt />,
+    name: "Ciudad",
+    path: "/",
+  }
+];
+
 
 
 export const AppSidebarSuperAdmin = () => {
@@ -166,6 +228,37 @@ export const AppSidebarSuperAdmin = () => {
               </h2>
               {renderMenuItems(navItems, "main")}
             </div>
+
+            <div>
+              <h2 className={`text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded ? "lg:justify-center mb-7" : "mb-4 justify-start"}`}>
+                {isExpanded || isMobileOpen ? "Configuracion" : <BsThreeDots className="text-xl" />}
+              </h2>
+              {renderMenuItems(configItems, "main")}
+            </div>
+
+
+            <div>
+              <h2 className={`text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded ? "lg:justify-center mb-7" : "mb-4 justify-start"}`}>
+                {isExpanded || isMobileOpen ? "Moteles" : <BsThreeDots className="text-xl" />}
+              </h2>
+              {renderMenuItems(motels, "main")}
+            </div>
+
+            <div>
+              <h2 className={`text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded ? "lg:justify-center mb-7" : "mb-4 justify-start"}`}>
+                {isExpanded || isMobileOpen ? "Habitaciones" : <BsThreeDots className="text-xl" />}
+              </h2>
+              {renderMenuItems(rooms, "main")}
+            </div>
+
+            <div>
+              <h2 className={`text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded ? "lg:justify-center mb-7" : "mb-4 justify-start"}`}>
+                {isExpanded || isMobileOpen ? "Ubicaciones" : <BsThreeDots className="text-xl" />}
+              </h2>
+              {renderMenuItems(locations, "main")}
+            </div>
+
+
           </div>
         </nav>
 

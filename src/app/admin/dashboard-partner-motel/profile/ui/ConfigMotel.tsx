@@ -16,9 +16,10 @@ interface Props {
     countries: CountryApi[]
     departments: DepartmentApi[]
     cities: CityApi[]
+    accessToken: string
 }
 
-export const ConfigMotel = ({ motel, amenitiesMotel, countries, cities, departments, motelPartner }: Props) => {
+export const ConfigMotel = ({ motel, amenitiesMotel, countries, cities, departments, motelPartner, accessToken }: Props) => {
 
     return (
         <div className="min-h-screen max-w-screen-xl sm:mx-4 xl:mx-auto">
@@ -38,6 +39,7 @@ export const ConfigMotel = ({ motel, amenitiesMotel, countries, cities, departme
                     <div className='md:col-span-2'>
                         <DataBasicForm
                             motel={motel}
+                            accessToken={accessToken}
                         />
                     </div>
                 </div>
@@ -53,6 +55,7 @@ export const ConfigMotel = ({ motel, amenitiesMotel, countries, cities, departme
 
                     <div className='md:col-span-2'>
                         <LocationForm
+                            accessToken={accessToken}
                             motel={motel}
                             countries={countries}
                             departments={departments}
@@ -74,6 +77,7 @@ export const ConfigMotel = ({ motel, amenitiesMotel, countries, cities, departme
                         <Amenities
                             amenitiesMotel={amenitiesMotel}
                             motel={motel}
+                            accessToken={accessToken}
                         />
                     </div>
                 </div>
@@ -90,7 +94,7 @@ export const ConfigMotel = ({ motel, amenitiesMotel, countries, cities, departme
 
                     <div className='md:col-span-2'>
                         <OtherAmenities
-                            motel={motel}
+                            accessToken={accessToken}
                         />
                     </div>
                 </div>
@@ -110,14 +114,17 @@ export const ConfigMotel = ({ motel, amenitiesMotel, countries, cities, departme
                     <div className='md:col-span-2'>
                         <MotelPartnerForm
                             motelPartner={motelPartner}
+                            accessToken={accessToken}
                         />
                     </div>
                 </div>
 
-                <hr className="mt-4 mb-8" />
+                {/* <hr className="mt-4 mb-8" /> */}
 
-                <UpdatePassword motelPartnerId="5b6806ff-a271-4441-88f2-544d8c0f56a1" />
-                <hr className="mt-4 mb-8" />
+                {/* <UpdatePassword
+                    accessToken={accessToken}
+                /> */}
+                {/* <hr className="mt-4 mb-8" /> */}
 
             </div>
         </div>

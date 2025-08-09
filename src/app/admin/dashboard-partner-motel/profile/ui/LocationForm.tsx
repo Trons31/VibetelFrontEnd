@@ -1,15 +1,17 @@
 'use client';
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { CityApi, CountryApi, DepartmentApi, MotelApi } from '@/interfaces';
 import clsx from 'clsx'
 import { useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
+import axios from 'axios';
 
 interface Props {
     motel: MotelApi
     countries: CountryApi[]
     departments: DepartmentApi[]
     cities: CityApi[]
+    accessToken: string;
 }
 
 type FormInputs = {
@@ -20,7 +22,7 @@ type FormInputs = {
     neighborhood: string;
 }
 
-export const LocationForm = ({ motel, countries, departments, cities }: Props) => {
+export const LocationForm = ({ motel, countries, departments, cities, accessToken }: Props) => {
 
     const [motelInfo, setMotelInfo] = useState<MotelApi | null>(null);
     const [loading, setLoading] = useState(true);
@@ -37,18 +39,30 @@ export const LocationForm = ({ motel, countries, departments, cities }: Props) =
 
     const onUpdate = async (data: FormInputs) => {
         setShowLoadingButton(true);
-        // const { country, department, city, address, neighborhood } = data;
 
-        // const response = await updateLocationMotel(country, department, city, address, neighborhood, motel.id);
+        const updateLocation = {
+            cityId: data.city,
+            address: data.address,
+            neighborhood: data.neighborhood
+        }
 
-        // if (!response.ok) {
-        //     toast.error("No se pudo actualizar la informacion")
-        //     setShowLoadingButton(false);
-        //     return
-        // }
-
-        toast.success("Actualizacion correcta!");
-        setShowLoadingButton(false);
+        try {
+            await axios.patch(
+                `${process.env.NEXT_PUBLIC_API_ROUTE}motel/location`, updateLocation,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+            toast.success("Actualizacion correcta!");
+            setShowLoadingButton(false);
+        } catch (error: any) {
+            console.log(error)
+            toast.error("No se pudo actualizar la informacion")
+            setShowLoadingButton(false);
+            return;
+        }
     }
 
 
@@ -76,29 +90,29 @@ export const LocationForm = ({ motel, countries, departments, cities }: Props) =
         setFilteredCities(departmentCities);
     };
 
-    // useEffect(() => {
-    //     if (motel) {
-    //         setMotelInfo(motel);
-    //         setValue('country', motel.country?.id || '');
-    //         setValue('department', motel.department?.id || '');
-    //         setValue('city', motel.city?.id || '');
-    //         setValue('neighborhood', motel.neighborhood || '');
-    //         setValue('address', motel.address || '');
+    useEffect(() => {
+        if (motel) {
+            setMotelInfo(motel);
+            setValue('country', motel.city.department.country.geonameId || '');
+            setValue('department', motel.city.department.geonameId || '');
+            setValue('city', motel.city?.id || '');
+            setValue('neighborhood', motel.neighborhood || '');
+            setValue('address', motel.address || '');
 
-    //         if (motel.country) {
-    //             const countryDepartments: Department[] = departments.filter(department => department.countryId === motel.country?.id);
-    //             setFilteredDepartments(countryDepartments);
-    //             setSelectedCountry(motel.country.id);
+            if (motel.city.department.country) {
+                const countryDepartments: DepartmentApi[] = departments.filter(department => department.country.geonameId === motel.city.department.country.geonameId);
+                setFilteredDepartments(countryDepartments);
+                setSelectedCountry(motel.city.department.country.geonameId);
 
-    //             if (motel.department) {
-    //                 const departmentCities: City[] = cities.filter(city => city.departmentId === motel.department?.id);
-    //                 setFilteredCities(departmentCities);
-    //                 setSelectedDepartment(motel.department.id);
-    //             }
-    //         }
-    //         setLoading(false);
-    //     }
-    // }, [motel, departments, cities, setValue]);
+                if (motel.city.department) {
+                    const departmentCities: CityApi[] = cities.filter(city => city.department.geonameId === motel.city.department.geonameId);
+                    setFilteredCities(departmentCities);
+                    setSelectedDepartment(motel.city.department.geonameId);
+                }
+            }
+            setLoading(false);
+        }
+    }, [motel, departments, cities, setValue]);
 
 
     return (
@@ -201,7 +215,7 @@ export const LocationForm = ({ motel, countries, departments, cities }: Props) =
                                         Departamento
                                     </label>
                                 </div>
-                                <div className="relative mt-7 w-full">
+                                <div className="relative  w-full">
                                     <select
                                         className={
                                             clsx(

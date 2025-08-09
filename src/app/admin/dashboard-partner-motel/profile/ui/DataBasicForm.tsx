@@ -4,23 +4,23 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import clsx from 'clsx'
 import toast, { Toaster } from 'react-hot-toast';
-import { MotelAdmin, MotelApi } from '@/interfaces'
+import { MotelApi } from '@/interfaces'
 import { AdminImage } from '@/components';
+import axios from 'axios';
 
 interface Props {
     motel: MotelApi,
+    accessToken: string;
 }
 
 type FormInputs = {
-    title: string;
+    razonSocial: string;
     description: string;
-    contactEmail: string;
     contactPhone: string;
     whatsapp: string;
-
 }
 
-export const DataBasicForm = ({ motel }: Props) => {
+export const DataBasicForm = ({ motel, accessToken }: Props) => {
 
     const [motelInfo, setMotelInfo] = useState<MotelApi>();
     const [loading, setLoading] = useState(true);
@@ -30,9 +30,8 @@ export const DataBasicForm = ({ motel }: Props) => {
     const { register, handleSubmit, formState: { errors } } = useForm<FormInputs>(
         {
             defaultValues: {
-                title: motel.razonSocial,
+                razonSocial: motel.razonSocial,
                 description: motel.description,
-                contactEmail: motel.contactEmail,
                 contactPhone: motel.contactPhone,
                 whatsapp: motel.whatsapp
             }
@@ -41,18 +40,24 @@ export const DataBasicForm = ({ motel }: Props) => {
 
     const onUpdate = async (data: FormInputs) => {
         setShowLoadingButton(true);
-        // const { title, description, contactPhone, whatsapp } = data;
-        // const response = await updateDataBasicMotel(title, description, contactPhone, whatsapp, motel.id);
-        // if (!response.ok) {
-        //     toast.error("No se pudo actualizar la informacion")
-        //     setShowLoadingButton(false);
-        //     return;
-        // }
-
-        toast.success("Actualizacion correcta!");
-        setShowLoadingButton(false);
+        try {
+            await axios.patch(
+                `${process.env.NEXT_PUBLIC_API_ROUTE}motel/info`, data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+            toast.success("Actualizacion correcta!");
+            setShowLoadingButton(false);
+        } catch (error: any) {
+            console.log(error)
+            toast.error("No se pudo actualizar la informacion")
+            setShowLoadingButton(false);
+            return;
+        }
     }
-
 
 
     useEffect(() => {
@@ -152,24 +157,24 @@ export const DataBasicForm = ({ motel }: Props) => {
                                         clsx(
                                             "block mb-2 text-sm text-black font-semibold ",
                                             {
-                                                "text-red-500": errors.title
+                                                "text-red-500": errors.razonSocial
                                             }
                                         )
-                                    }>Nombre</label>
+                                    }>Razon social</label>
                                     <input type="text" className={
                                         clsx(
                                             "bg-gray-300 border-2 border-gray-300 text-black text-sm rounded-lg appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 block w-full p-2.5 placeholder-black",
                                             {
-                                                'focus:border-red-600 border-red-500': errors.title
+                                                'focus:border-red-600 border-red-500': errors.razonSocial
                                             }
                                         )
                                     } placeholder=""
-                                        {...register('title', { required: true })}
+                                        {...register('razonSocial', { required: true })}
 
                                     />
 
                                     {
-                                        errors.title?.type === 'required' && (
+                                        errors.razonSocial?.type === 'required' && (
                                             <span className="text-red-500 text-xs" >* El nombre es obligatorio</span>
                                         )
                                     }
@@ -220,7 +225,7 @@ export const DataBasicForm = ({ motel }: Props) => {
                                         clsx(
                                             "bg-gray-300 border-2 border-gray-300 text-black text-sm rounded-lg appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 block w-full p-2.5 placeholder-black",
                                             {
-                                                'focus:border-red-600 border-red-500': errors.contactEmail
+                                                'focus:border-red-600 border-red-500': errors.contactPhone
                                             }
                                         )
                                     } placeholder=""

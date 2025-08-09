@@ -8,13 +8,15 @@ import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { SwiperRoomCommentMovil } from "./SwiperRoomCommentMovil";
 import { TbPointFilled } from "react-icons/tb";
 import { RoomRating } from "@/interfaces/reservation.interface";
+import { RoomApi } from "@/interfaces";
 
 
 interface Props {
   ratings: RoomRating[];
+  room:RoomApi;
 }
 
-export const CommentRoom = ({ ratings }: Props) => {
+export const CommentRoom = ({ ratings,room }: Props) => {
   const [modalRatingRoomInfo, setModalRatingRoomInfo] = useState(false);
   const [visibleComments, setVisibleComments] = useState(5);
 
@@ -166,20 +168,20 @@ export const CommentRoom = ({ ratings }: Props) => {
                     <div className="ml-3" >
                       <div className="flex justify-between" >
                         <div className="" >
-                          <p className="text-xl" >Carpe Diem</p>
-                          <div className="flex items-center gap-1" >
+                          <p className="text-xl" >{room.motel.razonSocial}</p>
+                          {/* <div className="flex items-center gap-1" >
                             <span className="text-gray-700 font-medium">4 de 5</span>
                             <TbPointFilled className="w-2 h-2 flex-shrink-0" />
                             <p className="font-medium text-gray-700">1,745 Calificaciones</p>
-                          </div>
+                          </div> */}
                         </div>
-                        <div className="flex space-x-1 text-yellow-400 text-2xl">
+                        {/* <div className="flex space-x-1 text-yellow-400 text-2xl">
                           <span>★</span>
                           <span>★</span>
                           <span>★</span>
                           <span>★</span>
                           <span className="text-gray-300">★</span>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>

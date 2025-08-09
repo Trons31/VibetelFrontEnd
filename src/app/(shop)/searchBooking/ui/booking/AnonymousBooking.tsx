@@ -12,6 +12,7 @@ import {
   TimerBooking,
 } from "@/components";
 import { ReservationApi } from "@/interfaces/reservation.interface";
+import clsx from "clsx";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { IoIosCloseCircle } from "react-icons/io";
@@ -24,6 +25,7 @@ export const AnonymousBooking = ({ reservation }: Props) => {
   const [isVisibleAlert, setIsVisibleAlert] = useState(true);
 
   const [modalRating, setModalRating] = useState(true);
+
 
   return (
     <>
@@ -40,11 +42,11 @@ export const AnonymousBooking = ({ reservation }: Props) => {
           <div className="col-span-2">
             <SideMenuAnonymousBooking />
           </div>
-          <div className="col-span-8 bg-gray-100 w-full py-5 px-0 md:px-2">
+          <div className="col-span-8 bg-gray-100 w-full py-5 px-0 md:px-5">
             {isVisibleAlert && (
               <motion.div
                 id="informational-banner"
-                className="flex mt-14 flex-col justify-between w-full p-4 border-b border-gray-200 md:flex-row bg-white "
+                className="flex mt-20 md:mt-14  rounded-lg flex-col justify-between w-full p-4 border-b border-gray-200 md:flex-row bg-white "
                 initial={{ opacity: 0, y: -20 }} // Estado inicial (oculto)
                 animate={{ opacity: 1, y: 0 }} // Animación de entrada
                 exit={{ opacity: 0, y: -20 }} // Animación de salida
@@ -64,7 +66,7 @@ export const AnonymousBooking = ({ reservation }: Props) => {
                   <h2 className="mb-1 text-base font-semibold text-gray-900 ">
                     Protección y privacidad
                   </h2>
-                  <p className="flex items-center text-sm font-normal text-gray-500 ">
+                  <p className="flex items-center text-xs md:text-sm font-normal text-gray-500 ">
                     Es importante que antes de salir de la página, para mayor
                     seguridad, haga clic en el botón Salir y proteger reserva.
                   </p>
@@ -82,8 +84,28 @@ export const AnonymousBooking = ({ reservation }: Props) => {
               </motion.div>
             )}
 
-            <StateBooking reservation={reservation} />
-            <StateBookingMovil reservation={reservation} />
+            <div className={
+              clsx(
+                {
+                  "mt-14": !isVisibleAlert,
+                  "mt-6": isVisibleAlert
+                }
+              )
+            } >
+              <StateBooking reservation={reservation} />
+            </div>
+
+            <div className={
+              clsx(
+                {
+                  "mt-24": !isVisibleAlert,
+                  "mt-6": isVisibleAlert
+                }
+              )
+            } >
+              <StateBookingMovil reservation={reservation} />
+            </div>
+
             <BookingDetail reservation={reservation} />
             <BookingTracker reservation={reservation} />
           </div>

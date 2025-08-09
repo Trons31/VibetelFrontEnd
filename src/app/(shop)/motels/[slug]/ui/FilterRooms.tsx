@@ -304,16 +304,21 @@ export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom, motel, mo
                     </p>
                     <TbPointFilled className="w-2 h-2 flex-shrink-0" />
                     <p className="flex items-center text-xs gap-2">
-                      <FaRegStar className="h-3.5 w-3.5" />5 calificacion
+                      <FaRegStar className="h-3.5 w-3.5" />
+                      {
+                        motel.averageRating === 0
+                          ? "Sin calificacion"
+                          : motel.averageRating
+                      }
                     </p>
                     <TbPointFilled className="w-2 h-2 flex-shrink-0" />
                     <p className="flex items-center text-xs gap-2">
-                      <MdOutlineLocationOn  className="h-3.5 w-3.5" />
+                      <MdOutlineLocationOn className="h-3.5 w-3.5" />
                       {motel.city.name}
                     </p>
                     <TbPointFilled className="w-2 h-2 flex-shrink-0" />
                     <button onClick={() => setOpenModalLocationMotel(true)} className="text-xs flex gap-1 items-center text-gray-800 underline">
-                      <TiLocationArrowOutline  className="h-3.5 w-3.5" />
+                      <TiLocationArrowOutline className="h-3.5 w-3.5" />
                       Ubicacion
                     </button>
                     <TbPointFilled className="w-2 h-2 flex-shrink-0" />

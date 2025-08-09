@@ -80,6 +80,7 @@ export default async function ProfileMotelPartnerPage() {
     redirect("/");
   }
 
+
   return (
     <div className='bg-white p-3 md:p-10 mb-10 rounded-xl' >
       <div className="md:mx-5" >
@@ -96,6 +97,7 @@ export default async function ProfileMotelPartnerPage() {
         </p>
       </div>
       <ConfigMotel
+      accessToken={session.accessToken}
         motelPartner={user}
         motel={motelExist}
         amenitiesMotel={amenitiesMotel}

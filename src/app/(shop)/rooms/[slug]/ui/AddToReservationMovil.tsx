@@ -15,9 +15,9 @@ import { FaRegEdit } from "react-icons/fa";
 import { TbClockExclamation } from "react-icons/tb";
 import { TimeUsageSelector } from "./TimeUsageSelector";
 import axios from "axios";
-import { useReservationStatusStore } from "@/store/reservation/reservation-status";
 import { CreateReservationResponseApi } from "@/interfaces/reservation.interface";
 import { notifyTokenChange } from "@/utils/reservation-events";
+import { useReservationClientStore } from "@/store/reservation/clientWebsocket";
 
 interface Props {
     room: RoomApi;
@@ -47,7 +47,7 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
     const [modalReservationInProcessing, setModalReservationInProcessing] = useState(false);
 
 
-    const reservationStatus = useReservationStatusStore(state => state.reservationStatus);
+    const reservationStatus = useReservationClientStore(state => state.reservationStatus);
     const [tokenTransaction, setTokenTransaction] = useState<string | null>(null);
 
 
@@ -235,7 +235,7 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
 
                 if (typeof window !== 'undefined') {
                     localStorage.removeItem("persist-token-reservation");
-                    useReservationStatusStore.getState().setToken(null);
+                    useReservationClientStore.getState().setToken(null);
                 }
             }
         }

@@ -20,10 +20,8 @@ export const StateBookingMovil = ({ reservation }: Props) => {
 
 
   return (
-    <div className='flex md:hidden mt-10 pt-10' >
-
-      <div className='md:rounded-lg w-full rounded-md bg-white shadow-md h-fit' >
-
+    <div className='flex md:hidden' >
+      <div className='rounded-lg w-full bg-white shadow-sm h-fit' >
         <div className="md:rounded-t-md px-2 w-full h-10 rounded-t-md bg-gray-300 " >
           <p className='pt-2 text-center text-xl font-medium' >Estado actual</p>
         </div>
@@ -35,7 +33,7 @@ export const StateBookingMovil = ({ reservation }: Props) => {
               >
                 <IoCheckmark className="h-4 w-4" />
               </div>
-              <span className="font-semibold text-xs text-gray-900">Habitación reservada</span>
+              <span className="font-semibold text-sm text-gray-900">Habitación reservada</span>
             </li>
             <motion.div
               initial={{ height: 0, opacity: 0 }}
@@ -48,7 +46,7 @@ export const StateBookingMovil = ({ reservation }: Props) => {
                 && (
                   <li className="flex items-center space-x-4  p-2 text-left ">
                     <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-600 text-xs font-semibold text-white ring ring-gray-600 ring-offset-2" >2</div>
-                    <span className="font-semibold text-xs  text-gray-900">En espera</span>
+                    <span className="font-semibold text-sm  text-gray-900">En espera</span>
                   </li>
                 )
               }
@@ -63,7 +61,7 @@ export const StateBookingMovil = ({ reservation }: Props) => {
                     >
                       <IoCheckmark className="h-4 w-4" />
                     </div>
-                    <span className="font-semibold text-xs text-gray-900">Servicio cancelado</span>
+                    <span className="font-semibold text-sm text-gray-900">Servicio cancelado</span>
 
                   </li>
                 )
@@ -79,7 +77,7 @@ export const StateBookingMovil = ({ reservation }: Props) => {
                     >
                       <IoCheckmark className="h-4 w-4" />
                     </div>
-                    <span className="font-semibold text-xs text-gray-900">Servicio cancelado automáticamente</span>
+                    <span className="font-semibold text-sm text-gray-900">Servicio cancelado automáticamente</span>
 
                   </li>
                 )
@@ -93,7 +91,7 @@ export const StateBookingMovil = ({ reservation }: Props) => {
                     >
                       <IoCheckmark className="h-4 w-4" />
                     </div>
-                    <span className="font-semibold text-xs text-gray-900">En espera</span>
+                    <span className="font-semibold text-sm text-gray-900">En espera</span>
 
                   </li>
                 )
@@ -107,7 +105,7 @@ export const StateBookingMovil = ({ reservation }: Props) => {
                   (
                     <li className="flex items-center  mt-2 md:mt-0  p-2 space-x-3  sm:space-x-4">
                       <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-400 text-xs font-semibold text-white" >3</div>
-                      <span className="font-semibold text-xs text-gray-500">Servicio iniciado</span>
+                      <span className="font-semibold text-sm text-gray-500">Servicio iniciado</span>
                     </li>
                   )
                 )
@@ -118,7 +116,7 @@ export const StateBookingMovil = ({ reservation }: Props) => {
                 && (
                   <li className="flex items-center space-x-4 p-2 text-left ">
                     <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-600 text-xs font-semibold text-white ring ring-gray-600 ring-offset-1" >3</div>
-                    <span className="font-semibold text-xs  text-gray-900">Servicio iniciado</span>
+                    <span className="font-semibold text-sm  text-gray-900">Servicio iniciado</span>
                   </li>
                 )
               }
@@ -130,7 +128,7 @@ export const StateBookingMovil = ({ reservation }: Props) => {
                 (
                   <li className="flex items-center  mt-2 md:mt-0 p-2  space-x-3  sm:space-x-4">
                     <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-400 text-xs font-semibold text-white" >4</div>
-                    <span className="font-semibold text-xs text-gray-500">Servicio finalizado</span>
+                    <span className="font-semibold text-sm text-gray-500">Servicio finalizado</span>
                   </li>
                 )
               }
@@ -143,7 +141,7 @@ export const StateBookingMovil = ({ reservation }: Props) => {
                   (
                     <li className="flex items-center  mt-2 md:mt-0 p-2  space-x-3  sm:space-x-4">
                       <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-400 text-xs font-semibold text-white" >4</div>
-                      <span className="font-semibold text-xs text-gray-500">Servicio finalizado</span>
+                      <span className="font-semibold text-sm text-gray-500">Servicio finalizado</span>
                     </li>
                   )
                 )
@@ -158,7 +156,7 @@ export const StateBookingMovil = ({ reservation }: Props) => {
                       >
                         <IoCheckmark className="h-4 w-4" />
                       </div>
-                      <span className="font-semibold text-xs text-gray-900">Servicio iniciado</span>
+                      <span className="font-semibold text-sm text-gray-900">Servicio iniciado</span>
 
                     </li>
                     <li className="flex items-center space-x-3 text-left p-2 sm:space-x-4">
@@ -166,7 +164,7 @@ export const StateBookingMovil = ({ reservation }: Props) => {
                       >
                         <IoCheckmark className="h-4 w-4" />
                       </div>
-                      <span className="font-semibold text-xs text-gray-900">Servicio finalizado</span>
+                      <span className="font-semibold text-sm text-gray-900">Servicio finalizado</span>
 
                     </li>
                   </>

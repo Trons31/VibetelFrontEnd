@@ -307,7 +307,7 @@ export const RegisterForm = ({ motelPartner, departments, countries, cities, ame
                                                         "peer-focus:text-red-500 text-red-500": errorsRepresentative.nameRepresent
                                                     }
                                                 )
-                                            }>Nombre</label>
+                                            }>Nombres y apellidos</label>
 
                                         </div>
 

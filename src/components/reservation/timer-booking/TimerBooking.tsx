@@ -7,6 +7,9 @@ interface Props {
 }
 
 export const TimerBooking = ({ departureDate }: Props) => {
+  
+    const targetDate = new Date(departureDate);
+
   return (
     <>
       <AnimatePresence>
@@ -21,7 +24,7 @@ export const TimerBooking = ({ departureDate }: Props) => {
             <p className="text-md text-white font-medium ">
               Tu tiempo finaliza en
             </p>
-            <CountdownTimer time={departureDate} className="text-white" />
+            <CountdownTimer time={targetDate} className="text-white" />
           </div>
         </motion.div>
       </AnimatePresence>

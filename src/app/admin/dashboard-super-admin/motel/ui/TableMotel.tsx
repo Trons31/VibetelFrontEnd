@@ -1,7 +1,7 @@
 'use client';
 import React, { useCallback, useEffect, useState, useMemo } from 'react'
 import { ModalStatusMotel, PaginationTable, SheedValidateDataMotel, SkeletonTableRoom, } from '@/components';
-import { isApprovedStatus, MotelApi } from '@/interfaces'
+import { isApprovedStatus, MotelAllApi, MotelApi } from '@/interfaces'
 import Link from 'next/link';
 import { formatDateWithHours } from '@/utils';
 import toast, { Toaster } from 'react-hot-toast';
@@ -22,7 +22,7 @@ export const TableMotel = ({ accessToken }: Props) => {
     const [motelId, setMotelId] = useState("");
     const [motelName, setMotelName] = useState("");
 
-    const [allMotels, setAllMotels] = useState<MotelApi[]>([]); // Almacenará todos los moteles
+    const [allMotels, setAllMotels] = useState<MotelAllApi[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -33,17 +33,20 @@ export const TableMotel = ({ accessToken }: Props) => {
     // Estados para los filtros
     const [searchTerm, setSearchTerm] = useState(''); // Para búsqueda por nombre
     const [isApproved, setIsApproved] = useState(''); // Para filtro por estado de aprobación
-    const [query, setQuery] = useState(''); // Esto parece ser el input de búsqueda, se usará para actualizar searchTerm
+    const [query, setQuery] = useState('');
 
-    // 1. fetchMotels: Ahora obtiene *todos* los moteles
     const fetchMotels = useCallback(async () => {
         setIsLoading(true);
         try {
-            const response = await axios.get<{ motels: MotelApi[]; total: number }>(
-                `${process.env.NEXT_PUBLIC_API_ROUTE}motel`
+            const response = await axios.get<MotelAllApi[]>(
+                `${process.env.NEXT_PUBLIC_API_ROUTE}motel/super-admin/all-complete`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
             );
-            setAllMotels(response.data.motels); // Guarda todos los moteles
-            // console.log(response.data); // Para depuración
+            setAllMotels(response.data);
         } catch (error: any) {
             setAllMotels([]);
             console.error("Error al cargar moteles:", error);

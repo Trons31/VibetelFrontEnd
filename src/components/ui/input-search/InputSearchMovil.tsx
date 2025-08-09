@@ -232,7 +232,7 @@ export const InputSearchMovil = ({ isOpen, onClose, location }: Props) => {
                                 }
 
 
-                                {
+                                {/* {
                                     searchTerm === "" && !hasSearched && (
                                         <div className='flex-1 overflow-y-auto'>
                                             <h3 className='text-sm text-gray-900 font-bold px-4 py-2 border-b'>Las más reservadas</h3>
@@ -253,7 +253,7 @@ export const InputSearchMovil = ({ isOpen, onClose, location }: Props) => {
                                             </ul>
                                         </div>
                                     )
-                                }
+                                } */}
                             </div>
                         </motion.div>
                     </motion.div>

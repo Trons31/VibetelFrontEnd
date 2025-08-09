@@ -9,16 +9,19 @@ interface ReservationStatusState {
   isConnected: boolean;
   reservationStatus: any;
   currentToken: string | null;
+  accessConfirmed: boolean;
   connectSocket: (reservationToken: string) => void;
   disconnectSocket: () => void;
   setToken: (token: string | null) => void;
+  resetAccessConfirmed: () => void;
 }
 
-export const useReservationStatusStore = create<ReservationStatusState>((set, get) => ({
+export const useReservationClientStore = create<ReservationStatusState>((set, get) => ({
   socket: null,
   isConnected: false,
   reservationStatus: null,
   currentToken: null,
+  accessConfirmed: false,
 
   connectSocket: (reservationToken: string) => {
 
@@ -39,14 +42,17 @@ export const useReservationStatusStore = create<ReservationStatusState>((set, ge
       // Si no es el mismo token, la lógica de 'currentToken !== reservationToken' ya lo manejaría.
     }
 
-    const newSocket = io(`${process.env.NEXT_PUBLIC_WEBSOCKET_ROUTE}reservation-status`, {
+    const newSocket = io(`${process.env.NEXT_PUBLIC_WEBSOCKET_ROUTE}reservation-client`, {
       transports: ['websocket'],
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 2000,
       // autoConnect se maneja con la llamada explícita a .connect()
     });
 
     newSocket.on('connect', () => {
       set({ isConnected: true });
-      console.log('✅ Reservation Status WebSocket connected');
+      console.log('✅ Reservation client WebSocket connected');
       newSocket.emit('joinReservationRoom', reservationToken);
     });
 
@@ -58,6 +64,13 @@ export const useReservationStatusStore = create<ReservationStatusState>((set, ge
     newSocket.on('reservationUpdate', (data: any) => {
       set({ reservationStatus: data });
       console.log('📢 Received reservation update:', data);
+    });
+
+    newSocket.on('accessConfirmed', (data: { token: string }) => {
+      console.log('📢 Received access confirmed:', data);
+      if (data.token === get().currentToken) {
+        set({ accessConfirmed: true });
+      }
     });
 
     newSocket.on('error', (error: any) => {
@@ -79,7 +92,8 @@ export const useReservationStatusStore = create<ReservationStatusState>((set, ge
       socket: null,
       isConnected: false,
       reservationStatus: null,
-      currentToken: null
+      currentToken: null,
+      accessConfirmed: false
     });
   },
 
@@ -95,5 +109,6 @@ export const useReservationStatusStore = create<ReservationStatusState>((set, ge
     } else {
       get().disconnectSocket();
     }
-  }
+  },
+  resetAccessConfirmed: () => set({ accessConfirmed: false })
 }));

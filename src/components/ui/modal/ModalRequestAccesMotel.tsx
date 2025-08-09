@@ -1,12 +1,13 @@
 'use client';
 import React, { useEffect, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
 import { FaSignOutAlt } from 'react-icons/fa';
 import clsx from 'clsx';
 import { IoAlertCircleSharp } from 'react-icons/io5';
 import { useSession } from 'next-auth/react';
 import axios from 'axios';
+import { sleep } from '@/utils';
+import { useReservationClientStore } from '@/store/reservation/clientWebsocket';
 
 
 interface ModalProps {
@@ -16,10 +17,10 @@ interface ModalProps {
     onClose: () => void;
 }
 
-export const ModalCompletedBooking = ({ isOpen, onClose, idReservation, isAviable }: ModalProps) => {
+export const ModalRequestAccesMotel = ({ isOpen, onClose, idReservation, isAviable }: ModalProps) => {
     const [showLoading, setshowLoading] = useState(false);
     const { data: session } = useSession();
-    const router = useRouter();
+    const { socket, accessConfirmed, resetAccessConfirmed } = useReservationClientStore();
 
     useEffect(() => {
         if (isOpen) {
@@ -33,7 +34,6 @@ export const ModalCompletedBooking = ({ isOpen, onClose, idReservation, isAviabl
         };
     }, [isOpen]);
 
-    if (!isOpen) return null;
 
     const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
         if (!showLoading) {
@@ -44,25 +44,36 @@ export const ModalCompletedBooking = ({ isOpen, onClose, idReservation, isAviabl
 
     };
 
-    const OnConfirmServiceCompletionRequest = async () => {
+    useEffect(() => {
+        if (accessConfirmed) {
+            setshowLoading(false);
+            toast.success('¡Acceso confirmado! Recargando...');
+
+            const reloadTimer = setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+
+
+            return () => {
+                clearTimeout(reloadTimer);
+                resetAccessConfirmed();
+            };
+        }
+    }, [accessConfirmed, resetAccessConfirmed]);
+
+    const OnRequestAccessMotel = async () => {
         setshowLoading(true);
 
         try {
-            await axios.patch(`${process.env.NEXT_PUBLIC_API_ROUTE}service/reservation/${idReservation}/complete-service`);
-            toast.success("Servicio finalizado exitosamente")
+            await axios.patch(`${process.env.NEXT_PUBLIC_API_ROUTE}service/reservation/${idReservation}/request-access`);
+            toast.success("Acceso solicitado correctamente");
         } catch (error: any) {
-            toast.error("No se pudo finalizar la reserva");
-            setshowLoading(false);
-            return;
+            toast.error("Error del sistema no se pudo solicitar el acceso");
         }
-
-        if (session?.user.roles.includes("user")) {
-            window.location.replace(`/booking/${idReservation}`)
-        } else {
-            window.location.replace(`/searchBooking`);
-        }
-
     }
+
+    if (!isOpen) return null;
+
 
     return (
         <>
@@ -86,23 +97,25 @@ export const ModalCompletedBooking = ({ isOpen, onClose, idReservation, isAviabl
                                         </div>
                                     </div>
 
-                                    <p className="mt-4 text-center text-md md:text-xl font-bold">¿Deseas confirmar tu salida?</p>
+                                    <p className="mt-4 text-center text-md md:text-xl font-bold">
+                                        ¿Estás en la recepción del motel?
+                                    </p>
                                     <p className="mt-2 text-center text-sm md:text-lg">
-                                        Una vez confirmada la finalización del servicio, se notificará al motel para que proceda a gestionar tu salida y se finalice correctamente el servicio
+                                        Si ya estás en la recepción, solicita acceso para que el motel te permita ingresar.
                                     </p>
 
                                     <div className="mt-8 flex justify-center gap-2 md:gap-0  sm:flex-row sm:space-x-3 sm:space-y-0">
 
                                         <button
-                                            onClick={OnConfirmServiceCompletionRequest}
+                                            onClick={OnRequestAccessMotel}
                                             type='submit'
                                             disabled={showLoading}
                                             className={
                                                 clsx(
 
                                                     {
-                                                        "flex items-center gap-x-4 mb-2 w-fit  justify-center rounded-lg bg-red-600 px-3 py-2 hover:bg-red-700 text-lg font-bold text-white": !showLoading,
-                                                        "flex items-center gap-x-4 mb-2 w-fit  justify-center rounded-lg bg-red-600 px-3 py-2 text-lg font-bold text-white cursor-not-allowed": showLoading
+                                                        "flex items-center gap-x-4 mb-2 w-fit  justify-center rounded-lg bg-red-600 px-3 py-2 hover:bg-red-700 text-xs md:text-base font-bold text-white": !showLoading,
+                                                        "flex items-center gap-x-4 mb-2 w-fit  justify-center rounded-lg bg-red-600 px-3 py-2 text-xs md:text-base font-bold text-white cursor-not-allowed": showLoading
                                                     }
                                                 )
                                             }>
@@ -117,9 +130,9 @@ export const ModalCompletedBooking = ({ isOpen, onClose, idReservation, isAviabl
                                             {
                                                 showLoading
                                                     ? (
-                                                        <span>Cargando...</span>
+                                                        <span>Esperando...</span>
                                                     ) : (
-                                                        <span>Confirmar</span>
+                                                        <span>Solicitar acceso</span>
                                                     )
                                             }
 
@@ -139,7 +152,7 @@ export const ModalCompletedBooking = ({ isOpen, onClose, idReservation, isAviabl
                                             }
                                             <button
                                                 onClick={onClose}
-                                                className="whitespace-nowrap rounded-md bg-gray-200 px-4 py-3 font-medium">Cancelar</button>
+                                                className="whitespace-nowrap rounded-md bg-gray-200 px-4 py-2 text-xs md:text-base font-medium">Cancelar</button>
                                         </div>
                                     </div>
                                 </>
@@ -155,9 +168,8 @@ export const ModalCompletedBooking = ({ isOpen, onClose, idReservation, isAviabl
                                         Esta opción no está disponible
                                     </p>
                                     <p className="mt-1 text-center text-gray-600 text-xs md:text-sm">
-                                        La opción estará disponible únicamente mientras la reserva esté activa, es decir, después de que haya comenzado.
+                                        Solo podrás solicitar acceso desde 10 minutos antes hasta el tiempo maximo que el motel espera que accedas a tu servicio
                                     </p>
-
                                     <div className="mt-8 flex justify-end gap-2 md:gap-0 sm:flex-row sm:space-x-3 sm:space-y-0">
                                         <button
                                             onClick={onClose}

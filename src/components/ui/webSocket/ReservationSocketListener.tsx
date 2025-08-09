@@ -1,25 +1,41 @@
 "use client"
 import { useEffect } from 'react';
-import { useReservationStatusStore } from '@/store/reservation/reservation-status';
 import { subscribeToTokenChanges } from '@/utils/reservation-events';
-
+import { useReservationClientStore } from '@/store/reservation/clientWebsocket';
 
 export const ResponseReservationSocketListener = () => {
-  const { setToken } = useReservationStatusStore();
+  const { setToken } = useReservationClientStore();
 
   useEffect(() => {
     const getReservationToken = () => {
       if (typeof window !== 'undefined') {
-        const encodedToken = localStorage.getItem('persist-token-reservation');
-        if (encodedToken) {
+        // 1. Intentamos obtener el token de la reserva en curso (prioridad)
+        const encodedCurrentToken = localStorage.getItem('persist-token-reservation');
+        if (encodedCurrentToken) {
           try {
-            return atob(encodedToken);
+            const decodedToken = atob(encodedCurrentToken);
+            console.log("✅ Token de reserva en curso encontrado y decodificado.");
+            return decodedToken;
           } catch (e) {
-            console.error('Error decoding token:', e); // Mensaje más descriptivo
-            return encodedToken;
+            console.error('❌ Error decodificando token de reserva en curso:', e);
+            return encodedCurrentToken;
+          }
+        }
+
+        // 2. Si no hay token de reserva en curso, buscamos el de la reserva anónima
+        const encodedAnonymousToken = localStorage.getItem('persist-reservation-anonymous');
+        if (encodedAnonymousToken) {
+          try {
+            const decodedToken = atob(encodedAnonymousToken);
+            console.log("✅ Token de reserva anónima encontrado y decodificado.");
+            return decodedToken;
+          } catch (e) {
+            console.error('❌ Error decodificando token de reserva anónima:', e);
+            return encodedAnonymousToken;
           }
         }
       }
+      // 3. Si no se encuentra ninguno, retornamos null
       return null;
     };
 
@@ -29,13 +45,14 @@ export const ResponseReservationSocketListener = () => {
     }
 
     const unsubscribe = subscribeToTokenChanges((token) => {
-      // setToken ya maneja la conexión/desconexión y evita conexiones duplicadas para el mismo token
+      // Este callback se activará si el token cambia en localStorage
       setToken(token);
     });
 
     return () => {
       unsubscribe();
     };
-  }, [setToken]); // setToken es una dependencia del useEffect
+  }, [setToken]);
+  
   return null;
 };

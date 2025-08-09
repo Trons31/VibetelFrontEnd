@@ -18,7 +18,7 @@ import axios from "axios";
 import { CreateReservationResponseApi } from "@/interfaces/reservation.interface";
 import Link from "next/link";
 import { notifyTokenChange } from "@/utils/reservation-events";
-import { useReservationStatusStore } from "@/store/reservation/reservation-status";
+import { useReservationClientStore } from "@/store/reservation/clientWebsocket";
 
 interface Props {
   room: RoomApi;
@@ -38,7 +38,7 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
   const [dateTimeStep, setDateTimeStep] = useState<"date" | "time">("date");
   const [modalReservationInProcessing, setModalReservationInProcessing] = useState(false);
 
-  const reservationStatus = useReservationStatusStore(state => state.reservationStatus);
+  const reservationStatus = useReservationClientStore(state => state.reservationStatus);
   const [tokenTransaction, setTokenTransaction] = useState<string | null>(null);
 
   const addBedroomToBooking = useBookingStore((state) => state.addBedroomToBooking);
@@ -234,7 +234,7 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
 
         if (typeof window !== 'undefined') {
           localStorage.removeItem("persist-token-reservation");
-          useReservationStatusStore.getState().setToken(null);
+          useReservationClientStore.getState().setToken(null);
         }
         return;
       }

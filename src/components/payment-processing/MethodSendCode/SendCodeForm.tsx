@@ -10,14 +10,12 @@ import { IoBagCheck } from 'react-icons/io5';
 import { MdOutlinePayment } from 'react-icons/md';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
-import { CreateReservationResponseApi } from '@/interfaces/reservation.interface';
-import { redirect, usePathname, useRouter } from 'next/navigation';
-import { ModalTokenExpireOrReservationNoExists } from '@/components';
+import { PaymentStatus } from '@/interfaces/reservation.interface';
+import { usePathname, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
 type MethodSend = "sms" | "mail" | "";
 
-type StatusTransaction = "ACCEPTED" | "REJECTED" | "PENDING" | "FAILED"
 
 type FormInput = {
     phoneNumber: string
@@ -39,7 +37,7 @@ export const SendCodeForm = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<FormInput>();
     const [loadingExistTransactionId, setLoadingExistTransactionId] = useState(true);
 
-    const [statusTransaction, setStatusTransaction] = useState<StatusTransaction>("PENDING")
+    const [statusTransaction, setStatusTransaction] = useState<PaymentStatus>("pending")
     const [tokenTransaction, setTokenTransaction] = useState<string | null>(null);
 
 
@@ -358,7 +356,7 @@ export const SendCodeForm = () => {
 
                             {
                                 (transactionData?.mail || transactionData?.phoneNumber) && (
-                                    statusTransaction === "ACCEPTED"
+                                    statusTransaction === "accepted"
                                         ? (
                                             <div className='flex w-full py-4' >
                                                 <div className='bg-purple-600 p-2 flex w-full gap-2 rounded-lg justify-center items-center text-white' >

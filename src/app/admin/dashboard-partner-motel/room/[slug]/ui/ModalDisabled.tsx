@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import React, { useEffect, useState } from 'react'
 import { MdVisibilityOff } from 'react-icons/md';
 import toast, { Toaster } from 'react-hot-toast';
+import axios from 'axios';
+import { useSession } from 'next-auth/react';
 
 interface ModalProps {
     isOpen: boolean;
@@ -15,17 +17,29 @@ interface ModalProps {
 export const ModalDisabled = ({ isOpen, onClose, nameRoom, idRoom }: ModalProps) => {
 
     const [showLoading, setshowLoading] = useState(false);
+    const { data: session } = useSession();
 
     const OnDisabledRoom = async () => {
         setshowLoading(true);
-        // const resp = await disabledRoom(idRoom);
-        // if (!resp?.ok) {
-        //     setshowLoading(false);
-        //     toast.error("No se pudo desabilitar la habitacion")
-        //     return
-        // }
-        setshowLoading(false);
-        window.location.reload();
+
+
+        try {
+            await axios.patch(
+                `${process.env.NEXT_PUBLIC_API_ROUTE}room/disable/${idRoom}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${session?.accessToken}`,
+                    },
+                }
+            );
+            setshowLoading(false);
+            window.location.reload();
+        } catch (error: any) {
+            console.log(error)
+            setshowLoading(false);
+            toast.error("No se pudo desabilitar la habitacion")
+            return
+        }
     }
 
     useEffect(() => {

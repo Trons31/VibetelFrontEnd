@@ -16,7 +16,7 @@ import { RoomNotAvailable } from "./ui/RoomNotAvailable";
 import { BiSolidCarGarage } from "react-icons/bi";
 import { FaStar, FaCheckCircle } from "react-icons/fa";
 import { MdBedroomChild, MdTimer } from "react-icons/md";
-import { TbPointFilled } from "react-icons/tb";
+import { TbNotesOff, TbPointFilled } from "react-icons/tb";
 import { FaBuildingFlag } from "react-icons/fa6";
 import { IoLocationSharp } from "react-icons/io5";
 import { Lobster } from "@/config/fonts";
@@ -514,9 +514,25 @@ export default async function BedRoomPage({ params }: Props) {
           </p>
         </div>
         {
-          room.ratings.length > 0 && (
+          room.ratings.length > 0 ? (
             <div>
-              <CommentRoom ratings={room.ratings} />
+              <CommentRoom 
+              ratings={room.ratings} 
+              room={room}
+              />
+            </div>
+          ) : (
+            <div className="px-4 md:px-0" >
+              <div className="flex-row md:flex justify-center py-14">
+                <div className="flex gap-1 items-center border border-gray-300 rounded-3xl p-8">
+                  <TbNotesOff className="h-5 w-5 text-gray-700 flex-shrink-0" />
+                  <p className="text-center text-xs md:text-sm text-gray-800">
+                    Aún no existen reseñas para esta habitacion. Sé el primero en
+                    compartir tu experiencia y ayuda a otros usuarios a tomar una
+                    decisión informada.
+                  </p>
+                </div>
+              </div>
             </div>
           )
         }
