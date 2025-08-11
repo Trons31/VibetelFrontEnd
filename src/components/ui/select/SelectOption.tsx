@@ -58,7 +58,7 @@ export const SelectOption = ({ options, defaultOption, onOptionSelect,className,
           {options.map((option) => (
             <li
               key={option.value}
-              className="cursor-pointer px-3 py-2 text-sm  hover:bg-blue-500 hover:text-white"
+              className="cursor-pointer px-3 py-2 text-xs md:text-sm  hover:bg-blue-500 hover:text-white"
               onClick={() => handleOptionClick(option)}
             >
               {option.label}

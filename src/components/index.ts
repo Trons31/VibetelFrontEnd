@@ -167,6 +167,7 @@ export * from "./reservation/user-tracker-reservation/UserReservationTracker";
 export * from "./reservation/detail-booking-all/DetailBooking";
 export * from "./reservation/guide-steps/GuideSteps";
 export * from "./reservation/pending-exit/PendingExit";
+export * from "./reservation/tutorial-booking/TutorialBooking";
 
 export * from "./reservation-anonymous/side-menu-anonymous-booking/SideMenuAnonymousBooking";
 

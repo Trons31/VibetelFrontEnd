@@ -10,6 +10,7 @@ import {
   StateBooking,
   StateBookingMovil,
   TimerBooking,
+  TutorialBooking,
 } from "@/components";
 import { ReservationApi } from "@/interfaces/reservation.interface";
 import clsx from "clsx";
@@ -26,9 +27,11 @@ export const AnonymousBooking = ({ reservation }: Props) => {
 
   const [modalRating, setModalRating] = useState(true);
 
-
   return (
     <>
+
+      <TutorialBooking />
+
       {reservation.ServiceItem?.serviceTaken &&
         reservation.ServiceItem.serviceCompleted === false && (
           <TimerBooking departureDate={reservation.ServiceItem.departureDate} />
@@ -45,7 +48,7 @@ export const AnonymousBooking = ({ reservation }: Props) => {
           <div className="col-span-8 bg-gray-100 w-full py-5 px-0 md:px-5">
             {isVisibleAlert && (
               <motion.div
-                id="informational-banner"
+                id="privacy-section"
                 className="flex mt-20 md:mt-14  rounded-lg flex-col justify-between w-full p-4 border-b border-gray-200 md:flex-row bg-white "
                 initial={{ opacity: 0, y: -20 }} // Estado inicial (oculto)
                 animate={{ opacity: 1, y: 0 }} // Animación de entrada
@@ -95,14 +98,15 @@ export const AnonymousBooking = ({ reservation }: Props) => {
               <StateBooking reservation={reservation} />
             </div>
 
-            <div className={
-              clsx(
-                {
-                  "mt-24": !isVisibleAlert,
-                  "mt-6": isVisibleAlert
-                }
-              )
-            } >
+            <div
+              className={
+                clsx(
+                  {
+                    "mt-24": !isVisibleAlert,
+                    "mt-6": isVisibleAlert
+                  }
+                )
+              } >
               <StateBookingMovil reservation={reservation} />
             </div>
 

@@ -10,7 +10,7 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/pagination";
 
-import { FreeMode, Pagination } from "swiper/modules";
+import { Autoplay, FreeMode, Pagination } from "swiper/modules";
 import { currencyFormat } from "@/utils";
 import clsx from "clsx";
 import { BenefitItem, SelectOption } from "@/components";
@@ -380,10 +380,9 @@ export const SlidePricingMovil = () => {
 
     return (
         <div>
-
             <div className="flex justify-center mt-10">
                 <div>
-                    <p className='text-md text-center text-gray-600' >Duración de la suscripción</p>
+                    <p className='text-sm md:text-md text-center text-gray-600' >Duración de la suscripción</p>
                     <SelectOption
                         options={billingOptions}
                         defaultOption={billingOptions[0]}
@@ -398,8 +397,15 @@ export const SlidePricingMovil = () => {
                 slidesPerView={1}
                 spaceBetween={2}
                 freeMode={true}
-                pagination={true}
-                modules={[FreeMode, Pagination]}
+                autoplay={{
+                    delay: 3000,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: true,
+                }}
+                speed={1500}
+                loop={true}
+                pagination={{ clickable: true }}
+                modules={[FreeMode, Pagination, Autoplay]}
                 className="mySwiper"
             >
                 {plans.map((plan, index) => (

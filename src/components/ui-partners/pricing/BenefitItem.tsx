@@ -8,7 +8,7 @@ interface Props {
 export const BenefitItem = ({ text, tooltipText }: Props) => {
     return (
         <div className="relative group flex items-start">
-            <span className="ml-3 text-xs text-gray-700 cursor-pointer underline decoration-dotted">
+            <span className="ml-3 text-xs text-gray-700 cursor-pointer underline decoration-dotted" >
                 {text}
             </span>
             {tooltipText && (

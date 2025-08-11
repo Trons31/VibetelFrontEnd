@@ -12,7 +12,7 @@ interface Props {
 
 export const StateBookingMovil = ({ reservation }: Props) => {
 
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
@@ -20,8 +20,11 @@ export const StateBookingMovil = ({ reservation }: Props) => {
 
 
   return (
-    <div className='flex md:hidden' >
-      <div className='rounded-lg w-full bg-white shadow-sm h-fit' >
+    <div
+      id="state-section"
+      className='flex md:hidden' >
+      <div
+        className='rounded-lg w-full bg-white shadow-sm h-fit' >
         <div className="md:rounded-t-md px-2 w-full h-10 rounded-t-md bg-gray-300 " >
           <p className='pt-2 text-center text-xl font-medium' >Estado actual</p>
         </div>

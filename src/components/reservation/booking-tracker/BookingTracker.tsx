@@ -24,7 +24,9 @@ export const BookingTracker = ({ reservation }: Props) => {
     }, [])
 
     return (
-        <div className="mt-9 rounded-lg px-4 bg-white shadow-sm md:shadow-md mb-10">
+        <div 
+        id="tracker-section"
+        className="mt-9 rounded-lg px-4 bg-white shadow-sm md:shadow-md mb-10">
 
             <nav className="flex justify-between md:justify-start  md:gap-8">
                 <button

@@ -155,7 +155,9 @@ export const ActionsBooking = ({ reservation }: Props) => {
 
                             {
                                 isOpen && (
-                                    <div className="fixed z-10 right-0 top-1/2 transform -translate-y-1/2">
+                                    <div 
+                                    id="side-menu"
+                                    className="fixed z-10 right-0 top-1/2 transform -translate-y-1/2">
                                         <motion.div
                                             className={`bg-white shadow-lg rounded-l-lg overflow-hidden xs:w-52 md:w-72}`}
                                             initial={{ opacity: 0, x: 100 }}

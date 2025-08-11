@@ -9,11 +9,11 @@ import {
   StateBooking,
   StateBookingMovil,
   TimerBooking,
+  TutorialBooking,
 } from "@/components";
 import { ReservationApi } from "@/interfaces/reservation.interface";
 import { UserApi } from "@/interfaces/user.interface";
-import Pusher from "pusher-js";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface Props {
   user: UserApi;
@@ -23,37 +23,15 @@ interface Props {
 export const BookingPage = ({ user, reservation }: Props) => {
   const [modalRating, setModalRating] = useState(true);
 
-  // useEffect(() => {
-  //   const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
-  //     cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
-  //   });
-
-  //   const channel = pusher.subscribe("reservations");
-
-  //   channel.bind("completed-reservation-by-motel", (reservationId: string) => {
-  //     if (reservation.id === reservationId) {
-  //       window.location.replace(`/booking/${reservation.id}`);
-  //     }
-  //   });
-
-  //   channel.bind("confirm-reservation", (reservationId: string) => {
-  //     if (reservation.id === reservationId) {
-  //       window.location.replace(`/booking/${reservation.id}`);
-  //     }
-  //   });
-
-  //   return () => {
-  //     channel.unbind_all();
-  //     channel.unsubscribe();
-  //   };
-  // }, [reservation.id]);
-
   return (
     <>
-      {/* {reservation.ServiceItem?.serviceTaken &&
+
+      <TutorialBooking />
+
+      {reservation.ServiceItem?.serviceTaken &&
         reservation.ServiceItem.serviceCompleted === false && (
-          <TimerBooking departureDate={reservation.departureDate} />
-        )} */}
+          <TimerBooking departureDate={reservation.ServiceItem.departureDate} />
+        )}
 
       {reservation.ServiceItem?.dateUserConfirmServiceCompleted &&
         !reservation.ServiceItem.dateComplete && <PendingExit />}
@@ -72,15 +50,15 @@ export const BookingPage = ({ user, reservation }: Props) => {
 
       <ActionsBooking reservation={reservation} />
 
-      {/* {reservation.RoomRating?.rating === undefined &&
-        reservation.ServiceItem?.serviceCompleted && (
+      {reservation.ServiceItem.serviceCompleted &&
+        reservation.roomRating?.rating === undefined && (
           <MoldaRating
             isOpen={modalRating}
+            ratingRoom={reservation.roomRating}
             serviceId={reservation.id}
-            roomId={reservation.ServiceItem?.roomId!}
             onClose={() => setModalRating(false)}
           />
-        )} */}
+        )}
 
       {/* <motion.button
                 whileHover={{

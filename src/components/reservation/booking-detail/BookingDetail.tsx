@@ -39,7 +39,9 @@ export const BookingDetail = ({ reservation }: Props) => {
 
 
     return (
-        <div className='grid grid-cols md:grid-cols-2 mt-9 md:mt-5 md:gap-10 space-y-9 md:space-y-0' >
+        <div 
+        id="details-section"
+        className='grid grid-cols md:grid-cols-2 mt-9 md:mt-5 md:gap-10 space-y-9 md:space-y-0' >
             <div className='rounded-lg w-full bg-white shadow-sm md:shadow-md h-fit'>
 
                 {

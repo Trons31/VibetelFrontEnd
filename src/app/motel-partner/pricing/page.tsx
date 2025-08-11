@@ -17,7 +17,7 @@ export default function PricingPage() {
 
             <div className="h-screen flex items-center justify-center bg-red-600 px-4">
                 <div className="text-center text-white max-w-3xl leading-relaxed space-y-16">
-                    <h1 className="text-3xl md:text-5xl font-extrabold">
+                    <h1 className="text-2xl md:text-5xl font-extrabold">
                         ¡Prepárate para descubrir los precios de Vibetel!
                     </h1>
                     <p
@@ -58,42 +58,42 @@ export default function PricingPage() {
                         <h3 className="text-xl md:text-2xl font-semibold mb-2">
                             ¿En cuánto tiempo me convierto en un motel partner?
                         </h3>
-                        <p className="xs:text-xs md:text-md text-gray-700" >Una vez completes el registro, tu motel se activa en menos de 24 horas tras la validación.</p>
+                        <p className="xs:text-xs md:text-md text-gray-700" style={{ textAlign: 'justify'}} >Una vez completes el registro, tu motel se activa en menos de 24 horas tras la validación.</p>
                     </div>
 
                     <div>
                         <h3 className="text-xl md:text-2xl font-semibold mb-2">
                             ¿Cuál es el costo por registrarse en la plataforma?
                         </h3>
-                        <p className="xs:text-xs md:text-md text-gray-700">El registro es totalmente gratuito. Solo pagas comisiones por reserva confirmada.</p>
+                        <p className="xs:text-xs md:text-md text-gray-700" style={{ textAlign: 'justify' }}>El registro es totalmente gratuito. Solo pagas comisiones por reserva confirmada.</p>
                     </div>
 
                     <div>
                         <h3 className="text-xl md:text-2xl font-semibold mb-2">
                             ¿Qué comisión cobra la plataforma por cada reserva?
                         </h3>
-                        <p className="xs:text-xs md:text-md text-gray-700">La comisión varía según la localidad y se detalla al momento del registro.</p>
+                        <p className="xs:text-xs md:text-md text-gray-700" style={{ textAlign: 'justify' }}>La comisión varía según la localidad y se detalla al momento del registro.</p>
                     </div>
 
                     <div>
                         <h3 className="text-xl md:text-2xl font-semibold mb-2">
                             ¿Cómo puedo gestionar las reservas?
                         </h3>
-                        <p className="xs:text-xs md:text-md text-gray-700" >Desde el portal Vibetel puedes ver, editar y seguir todas las reservas en tiempo real.</p>
+                        <p className="xs:text-xs md:text-md text-gray-700" style={{ textAlign: 'justify'}}>Desde el portal Vibetel puedes ver, editar y seguir todas las reservas en tiempo real.</p>
+                    </div>
+
+                    <div>
+                        <h3 className="text-xl md:text-2xl font-semibold mb-2" >
+                            ¿Son legítimas y los pagos están garantizados?
+                        </h3>
+                        <p className="xs:text-xs md:text-md text-gray-700" style={{ textAlign: 'justify'}} >Todas las reservas son pagadas antes de confirmarse, usando pasarelas como ePayco y Davivienda.</p>
                     </div>
 
                     <div>
                         <h3 className="text-xl md:text-2xl font-semibold mb-2">
-                            ¿Cómo me aseguro de que las reservas son legítimas y los pagos están garantizados?
+                            ¿Puedo cambiar los precios según temporadas o días?
                         </h3>
-                        <p className="xs:text-xs md:text-md text-gray-700" >Todas las reservas son pagadas antes de confirmarse, usando pasarelas como ePayco y Davivienda.</p>
-                    </div>
-
-                    <div>
-                        <h3 className="text-xl md:text-2xl font-semibold mb-2">
-                            ¿Puedo establecer precios diferentes según temporadas o días?
-                        </h3>
-                        <p className="xs:text-xs md:text-md text-gray-700">Sí. Puedes personalizar precios por temporada, día de la semana o promociones especiales.</p>
+                        <p className="xs:text-xs md:text-md text-gray-700" style={{ textAlign: 'justify' }} >Sí. Puedes personalizar precios por temporada, día de la semana o promociones especiales.</p>
                     </div>
                 </div>
             </div>

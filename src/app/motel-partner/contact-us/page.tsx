@@ -17,7 +17,7 @@ export default function ContactUsPage() {
 
             <div className="h-screen flex items-center justify-center bg-red-600 px-4">
                 <div className="text-center text-white max-w-3xl leading-relaxed space-y-16">
-                    <h1 className="text-3xl md:text-5xl font-extrabold">
+                    <h1 className="text-2xl md:text-5xl font-extrabold">
                         Nos encantaría hablar sobre cómo podemos trabajar juntos
                     </h1>
                     <p
@@ -37,8 +37,8 @@ export default function ContactUsPage() {
                         <div className="absolute top-2 left-2 w-full h-full bg-gray-300 rounded-lg"></div>
 
                         {/* Tarjeta principal */}
-                        <div className="border border-black relative p-6 rounded-lg bg-white z-10 shadow-sm">
-                            <p className="text-lg font-semibold" >WhatsApp</p>
+                        <div className="border-2 border-black relative p-6 rounded-2xl bg-white z-10 shadow-sm">
+                            <p className="text-lg text-black font-semibold" >WhatsApp</p>
                             <div className="flex items-center gap-2 mt-4" >
                                 <IoLogoWhatsapp className="h-9 w-9 text-black" />
                                 <p className="text-gray-600" >(+57) 304 1201032</p>
@@ -52,7 +52,7 @@ export default function ContactUsPage() {
                         <div className="absolute top-2 left-2 w-full h-full bg-gray-300 rounded-lg"></div>
 
                         {/* Tarjeta principal */}
-                        <div className="border border-black relative p-6 rounded-lg bg-white z-10 shadow-sm">
+                        <div className="border-2 border-black relative p-6 rounded-2xl bg-white z-10 shadow-sm">
                             <p className="text-lg font-semibold" >Email</p>
                             <div className="flex items-center gap-2 mt-4" >
                                 <MdEmail className="h-9 w-9 text-black" />
@@ -67,7 +67,7 @@ export default function ContactUsPage() {
                         <div className="absolute top-2 left-2 w-full h-full bg-gray-300 rounded-lg"></div>
 
                         {/* Tarjeta principal */}
-                        <div className="border border-black relative p-6 rounded-lg bg-white z-10 shadow-sm">
+                        <div className="border-2 border-black relative p-6 rounded-2xl bg-white z-10 shadow-sm">
                             <p className="text-lg font-semibold" >Ubicación</p>
                             <div className="flex items-center gap-2 mt-4" >
                                 <MdLocationPin className="h-9 w-9 text-black" />
@@ -80,28 +80,28 @@ export default function ContactUsPage() {
 
             <div className="px-4 md:px-10 2xl:px-64 grid grid-cols md:grid-cols-2 mt-5 gap-5 py-10 mb-20" >
                 <div>
-                    <p className="text-2xl md:text-4xl font-bold" >Optimiza los procesos de tu motel y toma el control total con Vibetel, la plataforma integral de gestión y reservas</p>
-                    <p className="text-gray-600 mt-2 text-md" >Con Vibetel, transforma la operación de tu motel. controla, gestiona y optimiza cada proceso en un solo lugar.</p>
+                    <p className="text-xl md:text-4xl font-bold" style={{ textAlign: 'justify'}} >Optimiza los procesos de tu motel y toma el control total con Vibetel, la plataforma integral de gestión y reservas</p>
+                    <p className="text-gray-600 mt-2 text-base" >Con Vibetel, transforma la operación de tu motel. controla, gestiona y optimiza cada proceso en un solo lugar.</p>
                     <ul className="mt-10 space-y-7 md:space-y-4" >
                         <li className="flex items-center gap-3">
-                            <FaRegCheckCircle className="h-6 w-6 flex-shrink-0" />
-                            <p>Administra reservas, habitaciones, operaciones desde un solo panel intuitivo, en tiempo real y desde cualquier dispositivo.</p>
+                            <FaRegCheckCircle className="h-4 md:h-6 w-4 md:w-6 flex-shrink-0" />
+                            <p className=' text-sm md:text-base'  style={{ textAlign: 'justify'}} >Administra reservas, habitaciones, operaciones desde un solo panel intuitivo, en tiempo real y desde cualquier dispositivo.</p>
                         </li>
                         <li className="flex items-center gap-3">
-                            <FaRegCheckCircle className="h-6 w-6 flex-shrink-0" />
-                            <p>Desde el check-in hasta la limpieza de habitaciones, automatiza tareas repetitivas para reducir errores humanos y ahorrar tiempo al personal.</p>
+                            <FaRegCheckCircle className="h-4 md:h-6 w-4 md:w-6 flex-shrink-0" />
+                            <p className=' text-sm md:text-base' style={{ textAlign: 'justify'}} >Desde el check-in hasta la limpieza de habitaciones, automatiza tareas repetitivas para reducir errores humanos y ahorrar tiempo al personal.</p>
                         </li>
                         <li className="flex items-center gap-3">
-                            <FaRegCheckCircle className="h-6 w-6 flex-shrink-0" />
-                            <p>Monitorea el flujo de reservas, controla accesos y lleva el historial completo de todas las operaciones. Nada se escapa de tu supervisión.</p>
+                            <FaRegCheckCircle className="h-4 md:h-6 w-4 md:w-6 flex-shrink-0" />
+                            <p className=' text-sm md:text-base' style={{ textAlign: 'justify'}} >Monitorea el flujo de reservas, controla accesos y lleva el historial completo de todas las operaciones. Nada se escapa de tu supervisión.</p>
                         </li>
                         <li className="flex items-center gap-3">
-                            <FaRegCheckCircle className="h-6 w-6 flex-shrink-0" />
-                            <p>   Con Vibetel siempre sabrás qué habitaciones están disponibles, ocupadas o próximas a liberar. Así evitas confusiones, reservas duplicadas y pérdidas de dinero por mala organización.</p>
+                            <FaRegCheckCircle className="h-4 md:h-6 w-4 md:w-6 flex-shrink-0" />
+                            <p className=' text-sm md:text-base' style={{ textAlign: 'justify'}} >   Con Vibetel siempre sabrás qué habitaciones están disponibles, ocupadas o próximas a liberar. Así evitas confusiones, reservas duplicadas y pérdidas de dinero por mala organización.</p>
                         </li>
                         <li className="flex items-center gap-3">
-                            <FaRegCheckCircle className="h-6 w-6 flex-shrink-0" />
-                            <p>Acompañamos a tu motel en cada paso, con soporte dedicado y mejoras continuas en la plataforma para adaptarnos a tus necesidades reales.</p>
+                            <FaRegCheckCircle className="h-4 md:h-6 w-4 md:w-6 flex-shrink-0" />
+                            <p className=' text-sm md:text-base' style={{ textAlign: 'justify'}} >Acompañamos a tu motel en cada paso, con soporte dedicado y mejoras continuas en la plataforma para adaptarnos a tus necesidades reales.</p>
                         </li>
                     </ul>
                 </div>

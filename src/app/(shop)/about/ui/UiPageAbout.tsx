@@ -2,6 +2,9 @@ import { Accordion } from '@/components';
 import { Lobster } from '@/config/fonts';
 import Image from 'next/image';
 import Link from 'next/link';
+import { BsBuildingsFill } from 'react-icons/bs';
+import { FaMapLocation } from 'react-icons/fa6';
+import { IoBed, IoLogoWhatsapp } from 'react-icons/io5';
 
 interface Props {
   allRoom: number;
@@ -74,9 +77,8 @@ export const UiPageAbout = () => {
           <div className="absolute inset-0 bg-black opacity-80"></div>
 
           <div className="flex flex-col items-center justify-center h-full relative z-5 text-center text-white">
-            <h1 className="text-5xl font-medium mb-6">Bienvenido a <span className={`${Lobster.className} antialiased  font-bold`}>Vibe</span>
-              <span className={` ${Lobster.className} text-red-500 `}>Tel</span></h1>
-            <p className=" text-xl md:text-3xl mx-5 mb-12" style={{ textAlign: 'justify', textAlignLast: 'center' }}>
+            <h1 className="text-5xl font-medium mb-6">Bienvenido</h1>
+            <p className=" text-xl md:text-3xl mx-20 mb-12" style={{ textAlign: 'justify', textAlignLast: 'center' }}>
               ¡Tu escapada perfecta te está esperando! Reserva tu habitación de motel con un clic y sumérgete en una aventura llena de confort y emoción. No dejes que esta oportunidad se escape. ¡Empieza a explorar y vive momentos inolvidables!
             </p>
             <Link href="/home" className="bg-red-500 text-white py-4 px-12 rounded-full hover:bg-red-600 transition-all duration-150">
@@ -88,24 +90,43 @@ export const UiPageAbout = () => {
 
       <section className="text-gray-600 mt-24 mb-20 body-font">
         <div className="container px-5 mx-auto">
-          <div className="flex flex-wrap -m-4 text-center">
-            <div className="p-4 sm:w-1/4 w-1/2">
-              <h2 className="title-font font-medium sm:text-4xl text-3xl text-gray-900">2</h2>
-              <p className="leading-relaxed">Usuarios</p>
+          <div className="grid grid-cols md:grid-cols-3 gap-10">
+            <div className="">
+              <div className="relative">
+                <div className="absolute top-2 left-2 w-full h-full bg-gray-300 rounded-lg"></div>
+                <div className="border-2 border-black relative p-6 rounded-2xl bg-white z-10 shadow-sm">
+                  <p className="text-lg text-black font-semibold" >Habitaciones</p>
+                  <div className="flex items-center gap-2 mt-4" >
+                    <IoBed  className="h-9 w-9 text-black" />
+                    <p className="text-gray-600" >25 habitaciones registradas</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="p-4 sm:w-1/4 w-1/2">
-              <h2 className="title-font font-medium sm:text-4xl text-3xl text-gray-900">4</h2>
-              <p className="leading-relaxed">Reservas diarias</p>
+            <div className="">
+              <div className="relative">
+                <div className="absolute top-2 left-2 w-full h-full bg-gray-300 rounded-lg"></div>
+                <div className="border-2 border-black relative p-6 rounded-2xl bg-white z-10 shadow-sm">
+                  <p className="text-lg text-black font-semibold" >Moteles</p>
+                  <div className="flex items-center gap-2 mt-4" >
+                    <BsBuildingsFill  className="h-9 w-9 text-black" />
+                    <p className="text-gray-600" >1 motele registradas</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="p-4 sm:w-1/4 w-1/2">
-              <h2 className="title-font font-medium sm:text-4xl text-3xl text-gray-900">1 </h2>
-              <p className="leading-relaxed">Habitaciones</p>
+            <div className="">
+              <div className="relative">
+                <div className="absolute top-2 left-2 w-full h-full bg-gray-300 rounded-lg"></div>
+                <div className="border-2 border-black relative p-6 rounded-2xl bg-white z-10 shadow-sm">
+                  <p className="text-lg text-black font-semibold" >Ciudades</p>
+                  <div className="flex items-center gap-2 mt-4" >
+                    <FaMapLocation  className="h-9 w-9 text-black" />
+                    <p className="text-gray-600" >1 ciudad con presencia</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="p-4 sm:w-1/4 w-1/2">
-              <h2 className="title-font font-medium sm:text-4xl text-3xl text-gray-900">10</h2>
-              <p className="leading-relaxed">Moteles</p>
-            </div>
-
           </div>
         </div>
       </section>
@@ -125,7 +146,7 @@ export const UiPageAbout = () => {
             </div>
 
           </div>
-          <div className="lg:w-1/2 sm:w-1/3 w-full rounded-lg overflow-hidden mt-6 sm:mt-0 relative aspect-square">
+          <div className="lg:w-1/2 sm:w-1/3 w-full rounded-3xl overflow-hidden mt-6 sm:mt-0 relative aspect-square">
             <Image
               className="object-cover"
               src="/app/About.jpg"

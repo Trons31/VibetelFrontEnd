@@ -159,7 +159,7 @@ export default function HomePage() {
                                 <p className="text-sm text-gray-900">Ex CEO de Google</p>
                             </div>
                         </div>
-                        <p className="text-gray-700 text-md">
+                        <p className="text-gray-700 text-md" style={{ textAlign: 'justify' }}>
                             &quot;Cada industria que no se digitalice quedará atrás. La tecnología no solo
                             mejora la eficiencia, transforma por completo cómo operamos. Adoptar sistemas
                             como Vibetel no es una opción, es una necesidad para liderar el futuro.&quot;
