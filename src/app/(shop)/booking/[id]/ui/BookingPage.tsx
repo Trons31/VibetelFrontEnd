@@ -26,7 +26,8 @@ export const BookingPage = ({ user, reservation }: Props) => {
   return (
     <>
 
-      <TutorialBooking />
+      <TutorialBooking
+      />
 
       {reservation.ServiceItem?.serviceTaken &&
         reservation.ServiceItem.serviceCompleted === false && (
@@ -39,8 +40,10 @@ export const BookingPage = ({ user, reservation }: Props) => {
       <div className="w-full">
         <div className="grid grid-cols-8 sm:grid-cols-10">
           <SideMenu user={user} />
-          <div className="col-span-8 bg-gray-100 w-full py-5 px-0 md:px-2 ">
-            <StateBooking reservation={reservation} />
+          <div className="col-span-8 bg-gray-100 w-full py-5 px-0 md:px-5">
+            <div className="mt-24 md:mt-14" >
+              <StateBooking reservation={reservation} />
+            </div>
             <StateBookingMovil reservation={reservation} />
             <BookingDetail reservation={reservation} />
             <BookingTracker reservation={reservation} />
@@ -51,7 +54,7 @@ export const BookingPage = ({ user, reservation }: Props) => {
       <ActionsBooking reservation={reservation} />
 
       {reservation.ServiceItem.serviceCompleted &&
-        reservation.roomRating?.rating === undefined && (
+        reservation.roomRating === null && (
           <MoldaRating
             isOpen={modalRating}
             ratingRoom={reservation.roomRating}

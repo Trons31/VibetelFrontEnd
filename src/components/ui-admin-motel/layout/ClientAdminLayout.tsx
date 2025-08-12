@@ -78,11 +78,11 @@ export default function ClientAdminLayout({
 
 
         {/*Herramientas para plan gratuito*/}
-        {
+        {/* {
           motel.isApproved === "APPROVED" && motel.subscriptionTier === "FREE" && (
             <TotalReservationRequests />
           )
-        }
+        } */}
         {/*Herramientas para plan gratuito*/}
 
 

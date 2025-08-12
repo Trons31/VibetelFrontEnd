@@ -101,7 +101,7 @@ export const FavoritePage = ({ user, category, garage, rooms }: Props) => {
           />
           {isLoading ? (
             <>
-              <div className='grid grid-cols md:grid-cols-4 gap-5 px-2 py-10' >
+              <div className='grid grid-cols-2 md:grid-cols-4 gap-5 px-2 py-10' >
                 <SkeletonFavoritesRoom />
                 <SkeletonFavoritesRoom />
                 <SkeletonFavoritesRoom />

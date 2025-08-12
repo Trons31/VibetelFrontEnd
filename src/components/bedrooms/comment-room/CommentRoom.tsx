@@ -228,7 +228,7 @@ export const CommentRoom = ({ ratings,room }: Props) => {
         </div>
 
         <div className="hidden w-full md:block">
-          <div className="mt-10 space-y-4 grid grid-cols-3">
+          <div className="mt-10 space-y-4 md:space-y-0 gap-4 grid grid-cols-3">
             {ratings.slice(0, visibleComments).map((rating, index) => (
               <div key={index} className="relative mb-6"> {/* Contenedor padre para la sombra */}
 

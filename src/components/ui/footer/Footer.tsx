@@ -162,7 +162,7 @@ export const Footer = () => {
             </div>
             <div className="flex justify-center md:justify-end items-center gap-5 mt-4 md:mt-8 md:mr-4" >
               <a
-                href="https://www.instagram.com/vibe_tel/"
+                href="https://www.instagram.com/vibetel_/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex items-center gap-1"

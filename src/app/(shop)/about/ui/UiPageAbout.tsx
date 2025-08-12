@@ -78,7 +78,7 @@ export const UiPageAbout = () => {
 
           <div className="flex flex-col items-center justify-center h-full relative z-5 text-center text-white">
             <h1 className="text-5xl font-medium mb-6">Bienvenido</h1>
-            <p className=" text-xl md:text-3xl mx-20 mb-12" style={{ textAlign: 'justify', textAlignLast: 'center' }}>
+            <p className=" text-xl md:text-3xl mx-5 md:mx-20 mb-12" style={{ textAlign: 'justify', textAlignLast: 'center' }}>
               ¡Tu escapada perfecta te está esperando! Reserva tu habitación de motel con un clic y sumérgete en una aventura llena de confort y emoción. No dejes que esta oportunidad se escape. ¡Empieza a explorar y vive momentos inolvidables!
             </p>
             <Link href="/home" className="bg-red-500 text-white py-4 px-12 rounded-full hover:bg-red-600 transition-all duration-150">
@@ -94,11 +94,11 @@ export const UiPageAbout = () => {
             <div className="">
               <div className="relative">
                 <div className="absolute top-2 left-2 w-full h-full bg-gray-300 rounded-lg"></div>
-                <div className="border-2 border-black relative p-6 rounded-2xl bg-white z-10 shadow-sm">
+                <div className="border-2 border-black relative p-3 md:p-6 rounded-2xl bg-white z-10 shadow-sm">
                   <p className="text-lg text-black font-semibold" >Habitaciones</p>
                   <div className="flex items-center gap-2 mt-4" >
                     <IoBed  className="h-9 w-9 text-black" />
-                    <p className="text-gray-600" >25 habitaciones registradas</p>
+                    <p className="text-sm md:text-base text-gray-600" >25 habitaciones registradas</p>
                   </div>
                 </div>
               </div>
@@ -106,11 +106,11 @@ export const UiPageAbout = () => {
             <div className="">
               <div className="relative">
                 <div className="absolute top-2 left-2 w-full h-full bg-gray-300 rounded-lg"></div>
-                <div className="border-2 border-black relative p-6 rounded-2xl bg-white z-10 shadow-sm">
+                <div className="border-2 border-black relative p-3 md:p-6 rounded-2xl bg-white z-10 shadow-sm">
                   <p className="text-lg text-black font-semibold" >Moteles</p>
                   <div className="flex items-center gap-2 mt-4" >
                     <BsBuildingsFill  className="h-9 w-9 text-black" />
-                    <p className="text-gray-600" >1 motele registradas</p>
+                    <p className="text-sm md:text-base text-gray-600" >1 motele registradas</p>
                   </div>
                 </div>
               </div>
@@ -118,11 +118,11 @@ export const UiPageAbout = () => {
             <div className="">
               <div className="relative">
                 <div className="absolute top-2 left-2 w-full h-full bg-gray-300 rounded-lg"></div>
-                <div className="border-2 border-black relative p-6 rounded-2xl bg-white z-10 shadow-sm">
+                <div className="border-2 border-black relative p-3 md:p-6 rounded-2xl bg-white z-10 shadow-sm">
                   <p className="text-lg text-black font-semibold" >Ciudades</p>
                   <div className="flex items-center gap-2 mt-4" >
                     <FaMapLocation  className="h-9 w-9 text-black" />
-                    <p className="text-gray-600" >1 ciudad con presencia</p>
+                    <p className="text-sm md:text-base text-gray-600" >1 ciudad con presencia</p>
                   </div>
                 </div>
               </div>

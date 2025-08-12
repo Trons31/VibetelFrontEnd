@@ -310,6 +310,12 @@ export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom, motel, mo
                           ? "Sin calificacion"
                           : motel.averageRating
                       }
+
+                      {
+                        motel.averageRating > 0 &&
+                        " Calificacion"
+                      }
+
                     </p>
                     <TbPointFilled className="w-2 h-2 flex-shrink-0" />
                     <p className="flex items-center text-xs gap-2">

@@ -1,3 +1,4 @@
+import { RoomRating } from "./reservation.interface";
 import { CategoryRoomApi, GarageRoomApi, Image } from "./room.interface";
 
 export interface FavoriteRoomApi {
@@ -12,6 +13,7 @@ export interface FavoriteRoomApi {
     images: Image[];
     category: CategoryRoomApi;
     garage: GarageRoomApi | null;
+    ratings: RoomRating[]
     motel: {
         razonSocial: string;
     };

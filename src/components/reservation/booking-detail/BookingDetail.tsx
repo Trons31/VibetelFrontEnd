@@ -95,7 +95,7 @@ export const BookingDetail = ({ reservation }: Props) => {
                         <div className='flex gap-4' >
 
 
-                            <p className='text-md'> {reservation.reservationToken} </p>
+                            <p className='text-md'> {reservation.id} </p>
                             {copySuccess ? (
                                 <FaCheck size={16} color="green" className="transition duration-300 ease-in-out" />
                             ) : (

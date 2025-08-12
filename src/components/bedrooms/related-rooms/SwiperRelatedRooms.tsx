@@ -120,7 +120,7 @@ export const SwiperRelatedRooms = ({ rooms, className }: Props) => {
                           <RatingRoomCard ratings={room.ratings} />
                         )}
                       </div>
-                      <p className="text-sm text-gray-700 -mt-1">
+                      <p className="text-xs md:text-sm text-gray-700 -mt-1">
                         Motel{" "}
                         <button
                           onClick={() => setOpenModalLocationMotel(true)}
@@ -132,14 +132,14 @@ export const SwiperRelatedRooms = ({ rooms, className }: Props) => {
                       </p>
                       <div className="flex justify-start gap-1 items-center" >
                         <span
-                          className="text-sm text-gray-700 font-extralight inline-flex items-center
+                          className="text-xs md:text-sm text-gray-700 font-extralight inline-flex items-center
                 "
                         >
                           {room.category.name}
                         </span>
                         <TbPointFilled className="w-2 h-2 flex-shrink-0" />
                         <span
-                          className="text-sm text-gray-700 font-extralight inline-flex items-center
+                          className="text-xs md:text-sm text-gray-700 font-extralight inline-flex items-center
                 "
                         >
                           {room.timeLimit} horas

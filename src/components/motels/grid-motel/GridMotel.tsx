@@ -87,15 +87,19 @@ export const GridMotel = ({ motels }: Props) => {
                   <TbPointFilled className="w-2 h-2 flex-shrink-0 hidden md:block" />
                   <p className="flex items-center text-xs gap-2" >
                     <FaRegStar className="h-3.5 w-3.5" />
-                   {
-                   motel.averageRating === 0
-                   ? "Sin calificacion"
-                   : motel.averageRating
-                   }
+                    {
+                      motel.averageRating === 0
+                        ? "Sin calificacion"
+                        : motel.averageRating
+                    }
+                    {
+                      motel.averageRating > 0 &&
+                      " Calificacion"
+                    }
                   </p>
-                   <TbPointFilled className="w-2 h-2 flex-shrink-0 hidden md:block" />
+                  <TbPointFilled className="w-2 h-2 flex-shrink-0 hidden md:block" />
                   <p className="flex items-center text-xs gap-2" >
-                    <MdOutlineLocationOn   className="h-3.5 w-3.5" />
+                    <MdOutlineLocationOn className="h-3.5 w-3.5" />
                     {motel.city.name}
                   </p>
                   <TbPointFilled className="w-2 h-2 flex-shrink-0 hidden md:flex" />

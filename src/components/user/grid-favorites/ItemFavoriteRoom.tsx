@@ -1,7 +1,7 @@
 'use client';
 import { FavoriteRoomApi } from '@/interfaces/favoriteRoom.interface'
 import Link from 'next/link'
-import { RoomImage } from '@/components';
+import { RatingRoomCard, RoomImage } from '@/components';
 import { IoHeartDislike } from 'react-icons/io5';
 import { currencyFormat, sleep } from '@/utils';
 import toast, { Toaster } from 'react-hot-toast';
@@ -88,7 +88,6 @@ export const ItemFavoriteRoom = ({ favoriteRoom }: Props) => {
             </div>
           </div>
         </div>
-
         <div
           // onClick={() => addRoomSueggested()}
           // href={`/rooms/${favoriteRoom.slug}`}
@@ -96,34 +95,31 @@ export const ItemFavoriteRoom = ({ favoriteRoom }: Props) => {
           <div className="mt-1">
             <div className="flex justify-between items-center" >
               <h2 className="text-gray-900 title-font capitalize text-md md:text-lg font-medium">
-                {" "}
-                {favoriteRoom.title}{" "}
+                {favoriteRoom.title}
               </h2>
-              {/* {room.ratings.length > 0 && (
-                      <RatingRoomCard ratings={room.ratings} />
-                    )} */}
+              {favoriteRoom.ratings.length > 0 && (
+                <RatingRoomCard ratings={favoriteRoom.ratings} />
+              )}
             </div>
             <p className="text-xs md:text-sm text-gray-700 -mt-1">
-              Motel{" "}
+              Motel
               <button
                 // onClick={() => setOpenModalLocationMotel(true)}
                 className="underline inline-block max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis align-bottom"
-                title={favoriteRoom.motel.razonSocial} // Opcional: muestra el nombre completo al pasar el mouse
+                title={favoriteRoom.motel.razonSocial}
               >
                 {favoriteRoom.motel.razonSocial}
               </button>
             </p>
             <div className="flex justify-start gap-1 items-center" >
               <span
-                className="text-sm text-gray-700 font-extralight inline-flex items-center
-                      "
+                className="text-xs md:text-sm text-gray-700 font-extralight inline-flex items-center"
               >
                 {favoriteRoom.category.name}
               </span>
               <TbPointFilled className="w-2 h-2 flex-shrink-0" />
               <span
-                className="text-sm text-gray-700 font-extralight inline-flex items-center
-                      "
+                className="text-xs md:text-sm text-gray-700 font-extralight inline-flex items-center"
               >
                 {favoriteRoom.timeLimit} horas
               </span>

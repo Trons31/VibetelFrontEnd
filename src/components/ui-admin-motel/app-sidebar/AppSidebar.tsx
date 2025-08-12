@@ -74,7 +74,7 @@ const configItems: NavItem[] = [
     path: "/admin/dashboard-partner-motel/profile",
   },
   {
-    icon: <RiSendPlaneFill  />,
+    icon: <RiSendPlaneFill />,
     name: "Mi plan",
     path: "/admin/dashboard-partner-motel/my-plan",
   },
@@ -323,12 +323,14 @@ export const AppSidebar = ({ motelName, motelStatus, subscription, motelImage }:
 
           {isExpanded && nextTier && (
             <div className="mx-auto fade-in mt-5 mb-10 w-full max-w-60 rounded-2xl bg-gray-100 px-2 py-5 text-center">
-              <h3 className="mb-2 font-semibold text-gray-900">Pasa al plan {nextTier}</h3>
+              <h3 className="mb-2 font-semibold text-gray-900">Pasa al plan    
+                {nextTier === "BASIC" ? " Start" : nextTier === "PREMIUM" ? " Plus" : nextTier === "ENTERPRISE" ? " Élite" : nextTier}
+              </h3>
               <p className="mb-4 text-gray-500 text-xs">
-                Mejora tu experiencia accediendo a más beneficios con el plan <strong>{nextTier}</strong>.
+                Mejora tu experiencia accediendo a más beneficios con el plan <strong> {nextTier === "BASIC" ? "Start" : nextTier === "PREMIUM" ? "Plus" : nextTier === "ENTERPRISE" ? "Élite" : nextTier}</strong>.
               </p>
               <Link
-                href={`/admin/dashboard-partner-motel/upgrade?tier=${nextTier}`}
+                href={`/admin/dashboard-partner-motel/my-plan`}
                 className="flex items-center justify-center p-3 font-medium text-white rounded-lg bg-indigo-600 text-sm hover:bg-indigo-700"
               >
                 Actualizar a plan

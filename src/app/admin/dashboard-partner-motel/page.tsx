@@ -65,7 +65,7 @@ export default async function HomePage() {
   let RatingStats: CustomerSatisfaction;
   try {
     const response = await axios.get<CustomerSatisfaction>(
-      `${process.env.NEXT_PUBLIC_API_ROUTE}service/motel/financial-stats`,
+      `${process.env.NEXT_PUBLIC_API_ROUTE}service/motel/customer-satisfaction`,
       {
         headers: {
           Authorization: `Bearer ${session.accessToken}`,
@@ -77,7 +77,6 @@ export default async function HomePage() {
   } catch (error) {
     redirect("/auth/new-account-motel/register");
   }
-
 
   return (
     <>

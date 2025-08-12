@@ -59,7 +59,7 @@ export const MoldaRating = ({ isOpen, serviceId, onClose, ratingRoom }: ModalPro
     const [ratingService, setRatingService] = useState(0);
     const [hoverRatingService, setHoverRatingService] = useState(0);
 
-    const [roomComments, setRoomComments] = useState("");
+    const [roomComments, setRoomComments] = useState(ratingRoom?.comment);
     const [serviceComments, setServiceComments] = useState("");
 
     const visibleCriteria = showAll ? criteriaRoom : criteriaRoom.slice(0, 3);

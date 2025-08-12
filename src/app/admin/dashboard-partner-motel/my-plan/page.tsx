@@ -160,11 +160,11 @@ export default async function MyPlanPage() {
                                         ))}
                                     </ul>
 
-                                    <div className="mt-6 text-center">
+                                    {/* <div className="mt-6 text-center">
                                         <button className="flex items-center justify-center w-full bg-green-700 text-white py-2 px-4 rounded-lg hover:bg-green-800 transition-colors duration-300 shadow-md">
                                             Actualizar ahora <AiOutlineArrowRight className="ml-2" />
                                         </button>
-                                    </div>
+                                    </div> */}
                                 </div>
                             )
                         )}

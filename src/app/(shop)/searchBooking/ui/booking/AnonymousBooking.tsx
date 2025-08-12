@@ -10,7 +10,7 @@ import {
   StateBooking,
   StateBookingMovil,
   TimerBooking,
-  TutorialBooking,
+  TutorialBookingAnonymous,
 } from "@/components";
 import { ReservationApi } from "@/interfaces/reservation.interface";
 import clsx from "clsx";
@@ -30,7 +30,8 @@ export const AnonymousBooking = ({ reservation }: Props) => {
   return (
     <>
 
-      <TutorialBooking />
+      <TutorialBookingAnonymous
+      />
 
       {reservation.ServiceItem?.serviceTaken &&
         reservation.ServiceItem.serviceCompleted === false && (

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export const TutorialBooking = () => {
+export const TutorialBookingAnonymous = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [showTutorial, setShowTutorial] = useState(true);
   const [dontShowAgain, setDontShowAgain] = useState(false);
@@ -45,6 +45,12 @@ export const TutorialBooking = () => {
       description: "Acciones como confirmar salida o solicitar acceso.",
       target: "side-menu",
       position: "right"
+    },
+    {
+      title: "Protección de Privacidad",
+      description: "Recuerda hacer clic en 'Salir y proteger reserva'.",
+      target: "privacy-section",
+      position: "top"
     },
     {
       title: "Tutorial Completo",

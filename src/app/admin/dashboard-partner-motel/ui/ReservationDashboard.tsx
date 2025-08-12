@@ -90,7 +90,7 @@ export const ReservationDashboard = ({ stats, financialStats, subscription, sati
                             role="alert"
                         >
                             <div>
-                                <span className="font-semibold text-md md:text-lg ">¡Obtén más metricas de desempeño al cambiarte al Plan Basic!</span>
+                                <span className="font-semibold text-md md:text-lg ">¡Obtén más metricas de desempeño al mejorar tu plan</span>
                                 <div className="space-y-3 mt-4">
                                     <div className="text-xs md:text-sm" >1. Visualiza métricas detalladas de ocupación por habitación</div>
                                     <div className="text-xs md:text-sm" >2. Monitorea en tiempo real el estado de cada habitación</div>
@@ -109,7 +109,7 @@ export const ReservationDashboard = ({ stats, financialStats, subscription, sati
                 <div className="w-full mt-10">
                     <div className="bg-white shadow-md rounded-lg p-5">
                         <div className="flex justify-between items-center">
-                            <h2 className="text-xl font-bold">Reservas</h2>
+                            <h2 className="text-xl font-bold">Reservas  {formatDate(new Date())}</h2>
                             {/* Botón de toggle para la sección de Reservas */}
                             <button onClick={toggleReservations}>
                                 {reservationsOpen ? (
@@ -406,7 +406,9 @@ export const ReservationDashboard = ({ stats, financialStats, subscription, sati
                                         <div className="flex-1 md:pl-6">
                                             {[5, 4, 3, 2, 1].map((stars) => (
                                                 <div key={stars} className="flex items-center mb-2">
-                                                    <div className="w-10 text-gray-600">{stars} estrellas</div>
+                                                    <div className="w-10 flex gap-2 items-center text-gray-600">{stars} <FaStar
+                                                                    className="text-sm  text-yellow-400"
+                                                                /></div>
                                                     <div className="flex-1 mx-2">
                                                         <div className="w-full bg-gray-200 rounded-full h-2.5">
                                                             <div
@@ -445,7 +447,7 @@ export const ReservationDashboard = ({ stats, financialStats, subscription, sati
                                                         </div>
                                                         <span className="font-medium">{comment.userName}</span>
                                                         <span className="text-gray-500 text-sm ml-auto">
-                                                            {new Date(comment.date).toLocaleDateString()}
+                                                            {formatDate(comment.date)}
                                                         </span>
                                                     </div>
                                                     <p className="text-gray-600 text-sm">

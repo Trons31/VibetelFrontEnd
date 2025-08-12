@@ -35,7 +35,7 @@ export const ItemRoomSearch = ({ room, location }: Props) => {
         href={`/rooms/${room.slug}`} >
         <div
           className={`${styles["card-content"]} cursor-pointer bg-white border border-transparent mb-1
-              hover:border-gray-300 transition-all duration-300 hover:shadow-lg rounded-lg min-h-[390px] group`}
+              hover:border-gray-300 transition-all duration-300 hover:shadow-lg rounded-lg min-h-[370px] group`}
         >
           <div
             className={`${styles["image-container"]} relative`}>
@@ -78,14 +78,14 @@ export const ItemRoomSearch = ({ room, location }: Props) => {
           <div className="p-2">
             <div className="mt-1">
               <div className="flex justify-between items-center" >
-                <h2 className="text-gray-900 title-font capitalize text-lg font-medium">
+                <h2 className="text-gray-900 title-font capitalize text-md md:text-lg font-medium">
                   {room.title}
                 </h2>
                 {room.ratings.length > 0 && (
                   <RatingRoomCard ratings={room.ratings} />
                 )}
               </div>
-              <p className="text-sm text-gray-700 -mt-1">
+              <p className="text-xs md:text-sm text-gray-700 -mt-1">
                 Motel{" "}
                 <button
                   onClick={() => setOpenModalLocationMotel(true)}
@@ -97,14 +97,14 @@ export const ItemRoomSearch = ({ room, location }: Props) => {
               </p>
               <div className="flex justify-start gap-1 items-center" >
                 <span
-                  className="text-sm text-gray-700 font-extralight inline-flex items-center
+                  className="text-xs md:text-sm text-gray-700 font-extralight inline-flex items-center
                 "
                 >
                   {room.category.name}
                 </span>
                 <TbPointFilled className="w-2 h-2 flex-shrink-0" />
                 <span
-                  className="text-sm text-gray-700 font-extralight inline-flex items-center
+                  className="text-xs md:text-sm text-gray-700 font-extralight inline-flex items-center
                 "
                 >
                   {room.timeLimit} horas
@@ -114,10 +114,10 @@ export const ItemRoomSearch = ({ room, location }: Props) => {
                 {room.promoActive ? (
                   <>
                     <div className="flex">
-                      <p className="text-lg font-bold text-gray-900">
+                      <p className="text-md md:text-lg font-bold text-gray-900">
                         {currencyFormat(room.promoPrice!)}
                       </p>
-                      <del className="ml-1 align-super text-sm font-bold text-gray-600">
+                      <del className="ml-1 align-super text-xs md:text-sm font-bold text-gray-600">
                         {" "}
                         {currencyFormat(room.price)}{" "}
                       </del>
@@ -125,7 +125,7 @@ export const ItemRoomSearch = ({ room, location }: Props) => {
                   </>
                 ) : (
                   <>
-                    <p className="text-lg font-bold text-gray-900">
+                    <p className="text-md md:text-lg font-bold text-gray-900">
                       {currencyFormat(room.price)}
                     </p>
                   </>

@@ -84,7 +84,7 @@ export const ItemGridMotelBySlug = ({ room }: Props) => {
           <div className="p-2">
             <div className="mt-1">
               <div className="flex justify-between items-center" >
-                <h2 className="text-gray-900 title-font capitalize text-lg font-medium">
+                <h2 className="text-gray-900 title-font capitalize text-md md:text-lg font-medium">
                   {room.title}
                 </h2>
                 {room.ratings.length > 0 && (
@@ -93,14 +93,14 @@ export const ItemGridMotelBySlug = ({ room }: Props) => {
               </div>
               <div className="flex justify-start gap-1 items-center" >
                 <span
-                  className="text-sm text-gray-700 font-extralight inline-flex items-center
+                  className="text-xs md:text-sm text-gray-700 font-extralight inline-flex items-center
                 "
                 >
                   {room.category.name}
                 </span>
                 <TbPointFilled className="w-2 h-2 flex-shrink-0" />
                 <span
-                  className="text-sm text-gray-700 font-extralight inline-flex items-center
+                  className="text-xs md:text-sm text-gray-700 font-extralight inline-flex items-center
                 "
                 >
                   {room.timeLimit} horas
@@ -110,10 +110,10 @@ export const ItemGridMotelBySlug = ({ room }: Props) => {
                 {room.promoActive ? (
                   <>
                     <div className="flex">
-                      <p className="text-lg font-bold text-gray-900">
+                      <p className="text-md md:text-lg font-bold text-gray-900">
                         {currencyFormat(promotionPrice)}
                       </p>
-                      <del className="ml-1 align-super text-sm font-bold text-gray-600">
+                      <del className="ml-1 align-super text-xs md:text-sm font-bold text-gray-600">
                         {" "}
                         {currencyFormat(room.price)}{" "}
                       </del>
@@ -121,7 +121,7 @@ export const ItemGridMotelBySlug = ({ room }: Props) => {
                   </>
                 ) : (
                   <>
-                    <p className="text-lg font-bold text-gray-900">
+                    <p className="text-md md:text-lg font-bold text-gray-900">
                       {currencyFormat(room.price)}
                     </p>
                   </>

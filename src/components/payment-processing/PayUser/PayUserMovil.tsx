@@ -186,7 +186,7 @@ export const PayUserMovil = () => {
                                                         data-epayco-tax-ico='0.00'
                                                         data-epayco-tax-base={transactionData.total}
                                                         data-epayco-name='Test'
-                                                        data-epayco-description="Description"
+                                                        data-epayco-description="Reserva de habitacion"
                                                         data-epayco-currency='cop'
                                                         data-epayco-country='CO'
                                                         data-epayco-test='true'
