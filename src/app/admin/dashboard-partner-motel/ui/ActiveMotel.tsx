@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { IoBedOutline } from 'react-icons/io5';
 import { PiUserCirclePlusDuotone } from 'react-icons/pi';
 import { TbSettingsCheck } from 'react-icons/tb';
-import { RiBankCardFill } from 'react-icons/ri';
+import { RiBankCardFill, RiErrorWarningFill } from 'react-icons/ri';
 import { MdOutlineAccessTimeFilled } from 'react-icons/md';
 import { isApprovedStatus } from '@/interfaces';
 import { FaExclamationTriangle } from 'react-icons/fa';
@@ -46,6 +46,14 @@ export const ActiveMotel = ({ motelImage, totalRoom, configMotel, bankAccount, s
                     )
                     : (
                         <div className='bg-white p-3 md:p-10 rounded-xl'>
+
+                            <div className='hidden md:flex justify-end mb-2' >
+                                <div className='flex gap-2 items-center bg-indigo-600 w-fit px-2 py-1 rounded-full' >
+                                    <RiErrorWarningFill className='h-5 w-5 text-white' />
+                                    <p className='text-sm text-white' >Espere 24 horas despues de completar el registro para la activacion de su motel</p>
+                                </div>
+                            </div>
+
                             {
                                 isCompleted
                                     ? (
@@ -68,8 +76,12 @@ export const ActiveMotel = ({ motelImage, totalRoom, configMotel, bankAccount, s
                                                     <MdOutlineAccessTimeFilled className='text-purple-600 h-5 w-5' />
                                                 </div>
                                                 <div>
-                                                    <p className='text-black text-lg md:text-3xl'>Realize las configuraciones para activar su motel</p>
-                                                    <p className='text-gray-700 text-xs md:text-sm'>Complete todos los pasos acontinuacion y espere la activacion de su motel </p>
+                                                    <p className='text-black text-md md:text-3xl leading-tight'>
+                                                        Realice las configuraciones para activar su motel
+                                                    </p>
+                                                    <p className='text-gray-700 text-xs md:text-sm'>
+                                                        Complete todos los pasos a continuación y espere la activación de su motel.
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
@@ -103,7 +115,7 @@ export const ActiveMotel = ({ motelImage, totalRoom, configMotel, bankAccount, s
                             <div className='gap-2 justify-center md:grid grid-cols md:grid-cols-2 px-2 md:px-10'>
 
                                 <div className="flex flex-col max-w-sm mt-10 bg-gray-100 rounded-lg shadow">
-                                    <div className='flex md:px-4 py-2 justify-between gap-2'>
+                                    <div className='flex px-4 py-2 justify-between gap-2'>
                                         <div className='flex items-center gap-2' >
 
                                             <PiUserCirclePlusDuotone size={30} className='text-gray-500' />

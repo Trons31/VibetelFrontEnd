@@ -33,7 +33,7 @@ export const PromotionRooms = () => {
   return (
     <>
       <Link
-        href="#"
+        href="/rooms"
         className={`group fixed hidden md:flex items-center gap-4 z-10 bottom-5 left-1/2 -translate-x-1/2 bg-red-600 hover:bg-white hover:text-red-600 border border-red-600 p-3 rounded shadow-lg transition-all duration-300 ${
           isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}

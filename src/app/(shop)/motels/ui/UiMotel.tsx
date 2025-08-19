@@ -55,7 +55,7 @@ export const UiMotel = () => {
                         detectedLocation
                             ? (
                                 <div className='py-10' >
-                                    <div className="flex justify-center mb-6">
+                                    {/* <div className="flex justify-center mb-6">
                                         <div className="inline-flex rounded-md shadow-sm" role="group">
                                             <button
                                                 type="button"
@@ -88,7 +88,7 @@ export const UiMotel = () => {
                                                 </span>
                                             </button>
                                         </div>
-                                    </div>
+                                    </div> */}
 
                                     {
                                         step === 'motels' && (

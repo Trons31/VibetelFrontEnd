@@ -46,6 +46,7 @@ export default async function AdditionalSettingsPage() {
                 </div>
                 <div className="grid grid-cols">
                     <AdditionalSettingsForm
+                        subscriptionTier={motelExist.subscriptionTier}
                         motelConfig={motelExist.motelConfig}
                         accessToken={session.accessToken}
                     />

@@ -7,7 +7,7 @@ import { calculateTotalPrice, currencyFormat } from '@/utils';
 import axios from 'axios';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { redirect, usePathname } from 'next/navigation';
 import router from 'next/router';
 import Script from 'next/script';
 import React, { useEffect, useState } from 'react'
@@ -141,7 +141,11 @@ export const SendCodeFormMovil = () => {
                             mail: response.data.mail,
                             phoneNumber: response.data.phoneNumber,
                         });
-                        setStatusTransaction(response.data.paymentStatus)
+                        if (response.data.paymentStatus === "accepted") {
+                            redirect("/empty");
+                        } else {
+                            setStatusTransaction(response.data.paymentStatus)
+                        }
                     } else {
                         router.push(redirectUrl);
                     }

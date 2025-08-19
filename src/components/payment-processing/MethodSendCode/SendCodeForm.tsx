@@ -11,7 +11,7 @@ import { MdOutlinePayment } from 'react-icons/md';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { PaymentStatus } from '@/interfaces/reservation.interface';
-import { usePathname, useRouter } from 'next/navigation';
+import { redirect, usePathname, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
 type MethodSend = "sms" | "mail" | "";
@@ -145,7 +145,12 @@ export const SendCodeForm = () => {
                             mail: response.data.mail,
                             phoneNumber: response.data.phoneNumber,
                         });
-                        setStatusTransaction(response.data.paymentStatus)
+                        if (response.data.paymentStatus === "accepted") {
+                            redirect("/empty");
+                        } else {
+                            setStatusTransaction(response.data.paymentStatus)
+                        }
+
                     } else {
                         router.push(redirectUrl);
                     }

@@ -29,13 +29,11 @@ export const useReservationClientStore = create<ReservationStatusState>((set, ge
     const currentToken = get().currentToken;
 
     if (currentSocket && get().isConnected && currentToken === reservationToken) {
-      console.log('✅ Ya conectado al WebSocket con el mismo token.');
       return;
     }
 
     if (currentSocket && currentToken !== reservationToken) {
       currentSocket.disconnect();
-      console.log('⚠️ Desconectando socket anterior para nueva conexión.');
     } else if (currentSocket && !get().isConnected) {
       // Si el socket existe pero no está conectado (e.g., por una desconexión previa),
       // no lo desconectamos, solo lo reusamos si es el mismo token.
@@ -52,22 +50,18 @@ export const useReservationClientStore = create<ReservationStatusState>((set, ge
 
     newSocket.on('connect', () => {
       set({ isConnected: true });
-      console.log('✅ Reservation client WebSocket connected');
       newSocket.emit('joinReservationRoom', reservationToken);
     });
 
     newSocket.on('disconnect', () => {
       set({ isConnected: false });
-      console.log('⚠️ Reservation Status WebSocket disconnected');
     });
 
     newSocket.on('reservationUpdate', (data: any) => {
       set({ reservationStatus: data });
-      console.log('📢 Received reservation update:', data);
     });
 
     newSocket.on('accessConfirmed', (data: { token: string }) => {
-      console.log('📢 Received access confirmed:', data);
       if (data.token === get().currentToken) {
         set({ accessConfirmed: true });
       }

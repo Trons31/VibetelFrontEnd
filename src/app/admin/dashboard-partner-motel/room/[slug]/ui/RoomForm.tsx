@@ -13,6 +13,7 @@ import { IoInformationOutline } from "react-icons/io5";
 import toast, { Toaster } from "react-hot-toast";
 import Link from "next/link";
 import axios from "axios";
+import { sleep } from '../../../../../../utils/sleep';
 
 
 
@@ -241,6 +242,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, isNew
                 ? toast.success('Información guardada correctamente')
                 : toast.success('Información actualizada');
 
+            await sleep(3);
             setShowLoadingButton(false);
             setShowMessageError(false);
             setShowMessageErrorAmenities(false);

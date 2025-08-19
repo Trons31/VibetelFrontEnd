@@ -2,10 +2,11 @@
 import { useEffect, useState } from 'react';
 
 type Props = {
-  seconds: number; 
+  seconds: number;
+  onComplete?: () => void;
 };
 
-export const CountdownTimerSeconds = ({ seconds }:Props) => {
+export const CountdownTimerSeconds = ({ seconds,onComplete }: Props) => {
   const [timeLeft, setTimeLeft] = useState(seconds);
 
   useEffect(() => {
@@ -14,9 +15,12 @@ export const CountdownTimerSeconds = ({ seconds }:Props) => {
         setTimeLeft((prevTime) => prevTime - 1);
       }, 1000);
 
-      return () => clearInterval(timerId); 
+      return () => clearInterval(timerId);
+    } else {
+      // Cuando llega a 0, ejecuta la acción final
+      onComplete?.();
     }
-  }, [timeLeft]);
+  }, [timeLeft, onComplete]);
 
   return (
     <div>

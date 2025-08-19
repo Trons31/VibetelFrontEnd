@@ -45,12 +45,10 @@ export const useReservationStore = create<ReservationState>((set, get) => ({
 
     socket.on('connect', () => {
       set({ isConnected: true });
-      console.log('✅ Connected to WebSocket');
     });
 
     socket.on('disconnect', () => {
       set({ isConnected: false });
-      console.log('⚠️ Disconnected from WebSocket');
     });
 
     socket.on('newReservation', (reservation: ReservationPendingByMotelApi) => {

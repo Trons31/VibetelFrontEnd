@@ -4,7 +4,6 @@ import { reservationCheckInAdmin } from '@/interfaces/reservation.interface';
 import { formatDate, formatDateWithHours, sleep } from '@/utils';
 import { IoCloseOutline, IoSearchOutline } from 'react-icons/io5';
 import { SkeletonTableCheckIn } from '@/components';
-import Pusher from 'pusher-js';
 import { motion } from 'framer-motion';
 
 interface Props {
@@ -52,39 +51,39 @@ export const TableCheckIn = ({ motelId, totalReservation }: Props) => {
         setLoadingTotalBooking(false);
     }, [searchFilter]);
 
-    useEffect(() => {
-        const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
-            cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
-        });
+    // useEffect(() => {
+    //     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
+    //         cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+    //     });
 
-        const channel = pusher.subscribe('reservations');
-        channel.bind('new-reservation', (newReservation: reservationCheckInAdmin) => {
-            const currentSearchFilter = searchFilterRef.current;
-            if (currentSearchFilter === '') {
-                setReservations((prevReservations) => [newReservation, ...prevReservations]);
-            }
-            setTotalBooking((prevTotal) => prevTotal + 1);
-        });
+    //     const channel = pusher.subscribe('reservations');
+    //     channel.bind('new-reservation', (newReservation: reservationCheckInAdmin) => {
+    //         const currentSearchFilter = searchFilterRef.current;
+    //         if (currentSearchFilter === '') {
+    //             setReservations((prevReservations) => [newReservation, ...prevReservations]);
+    //         }
+    //         setTotalBooking((prevTotal) => prevTotal + 1);
+    //     });
 
-        channel.bind('cancel-reservation', (canceledReservation: reservationCheckInAdmin) => {
-            setReservations((prevReservations) =>
-                prevReservations.filter((reservation) => reservation.id !== canceledReservation.id)
-            );
-            setTotalBooking((prevTotal) => prevTotal - 1);
-        });
+    //     channel.bind('cancel-reservation', (canceledReservation: reservationCheckInAdmin) => {
+    //         setReservations((prevReservations) =>
+    //             prevReservations.filter((reservation) => reservation.id !== canceledReservation.id)
+    //         );
+    //         setTotalBooking((prevTotal) => prevTotal - 1);
+    //     });
 
-        channel.bind('confirm-reservation', (confirmedReservation: reservationCheckInAdmin) => {
-            setReservations((prevReservations) =>
-                prevReservations.filter((reservation) => reservation.id !== confirmedReservation.id)
-            );
-            setTotalBooking((prevTotal) => prevTotal - 1);
-        });
+    //     channel.bind('confirm-reservation', (confirmedReservation: reservationCheckInAdmin) => {
+    //         setReservations((prevReservations) =>
+    //             prevReservations.filter((reservation) => reservation.id !== confirmedReservation.id)
+    //         );
+    //         setTotalBooking((prevTotal) => prevTotal - 1);
+    //     });
 
-        return () => {
-            channel.unbind_all();
-            channel.unsubscribe();
-        };
-    }, []);
+    //     return () => {
+    //         channel.unbind_all();
+    //         channel.unsubscribe();
+    //     };
+    // }, []);
 
     useEffect(() => {
         fetchReservations();

@@ -18,6 +18,7 @@ export const authConfig: NextAuthConfig = {
         jwt({ token, user }) {
             if (user) {
                 token.accessToken = user.token;
+                token.expiresAt = user.expiresAt;
                 token.user = {
                     id: user.id,
                     name: user.name,
@@ -31,6 +32,7 @@ export const authConfig: NextAuthConfig = {
 
         session({ session, token }) {
             session.accessToken = token.accessToken as any;
+            session.expiresAt = token.expiresAt as number;
             session.user = token.user as any;
             return session;
         },
@@ -48,7 +50,6 @@ export const authConfig: NextAuthConfig = {
             clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
 
         }),
-
 
         Credentials({
             async authorize(credentials) {
@@ -77,7 +78,8 @@ export const authConfig: NextAuthConfig = {
                         lastName: user.lastname,
                         email: user.email,
                         roles: user.roles,
-                        token: user.token
+                        token: user.token,
+                        expiresAt: user.expiresAt,
                     };
                 } catch (error) {
                     if (axios.isAxiosError(error) && error.response?.status === 401) {

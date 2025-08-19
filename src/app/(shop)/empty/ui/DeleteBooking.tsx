@@ -16,12 +16,8 @@ export const DeleteBooking = () => {
 
     useEffect(() => {
         if (!isLoading) {
-            if (!roomInBooking) {
-                removeBooking();
-                localStorage.removeItem("persist-token-reservation");
-            }else{
-                
-            }
+            removeBooking();
+            localStorage.removeItem("persist-token-reservation");
         }
     }, [roomInBooking?.id])
 

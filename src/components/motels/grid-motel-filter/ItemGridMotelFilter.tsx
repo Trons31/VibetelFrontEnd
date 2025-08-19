@@ -100,14 +100,14 @@ export const ItemGridMotelFilter = ({ room }: Props) => {
               </p>
               <div className="flex justify-start gap-1 items-center" >
                 <span
-                  className="text-sm text-gray-700 font-extralight inline-flex items-center
+                  className="text-xs md:text-sm text-gray-700 font-extralight inline-flex items-center
                 "
                 >
                   {room.category.name}
                 </span>
                 <TbPointFilled className="w-2 h-2 flex-shrink-0" />
                 <span
-                  className="text-sm text-gray-700 font-extralight inline-flex items-center
+                  className="text-xs md:text-sm text-gray-700 font-extralight inline-flex items-center
                 "
                 >
                   {room.timeLimit} horas

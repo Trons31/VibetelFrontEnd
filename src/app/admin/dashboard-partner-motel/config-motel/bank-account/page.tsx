@@ -83,7 +83,7 @@ export default async function BanckAccountPage() {
 
     return (
         <>
-            <div className="bg-white rounded-xl mb-10">
+            <div className="bg-white rounded-lg mb-10">
                 <div className="py-10 px-5 md:mx-20" >
                     <div className="" >
                         <p className="text-lg md:text-2xl font-bold" >Cuenta bancaria</p>

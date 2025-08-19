@@ -7,7 +7,6 @@ import React, { useEffect, useState } from 'react';
 import { IoIosArrowForward, IoMdCalendar } from 'react-icons/io';
 import { CountdownTimer } from '../count-down-timer/CoundDownTimer';
 import { FaChevronDown, FaChevronUp, FaClock } from 'react-icons/fa';
-import Pusher from 'pusher-js';
 import clsx from 'clsx';
 import toast, { Toaster } from 'react-hot-toast';
 import { RiLoginCircleFill } from 'react-icons/ri';
@@ -72,22 +71,22 @@ export const DetailRoom = ({ isOpen, onClose, serviceId }: Props) => {
     }
   }, [currentService]);
 
-  useEffect(() => {
-    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
-      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
-    });
+  // useEffect(() => {
+  //   const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
+  //     cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+  //   });
 
-    const channel = pusher.subscribe('rooms');
+  //   const channel = pusher.subscribe('rooms');
 
-    channel.bind('add-time-room', (addTimeRoom: roomInSerciceDetailAdmin) => {
-      setCurrentService((prev) => prev ? { ...prev, departureDate: addTimeRoom.departureDate } : null);
+  //   channel.bind('add-time-room', (addTimeRoom: roomInSerciceDetailAdmin) => {
+  //     setCurrentService((prev) => prev ? { ...prev, departureDate: addTimeRoom.departureDate } : null);
 
-    });
+  //   });
 
-    return () => {
-      pusher.unsubscribe('rooms');
-    };
-  }, []);
+  //   return () => {
+  //     pusher.unsubscribe('rooms');
+  //   };
+  // }, []);
 
   useEffect(() => {
     if (isOpen) {

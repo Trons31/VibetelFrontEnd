@@ -217,7 +217,7 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                 reverseOrder={false}
             />
 
-            <div className="relative isolate bg-white px-4 md:px-6 py-24 mt-5 md:mt-20 sm:py-8 lg:px-8">
+            <div className="relative isolate bg-white px-4 md:px-6 py-24 mt-5 md:mt-20 sm:py-8 lg:px-14">
                 <div className="px-2">
                     <p className="text-xl md:text-3xl font-semibold">¡Estás a un paso de finalizar!</p>
                     <p className="text-sm mt-1 md:mt-0 text-gray-600">Completa este último paso para terminar el registro de tu motel. <strong className='text-red-600' >Afíliese al plan</strong>  que mejor se adapte a su motel y aproveche herramientas diseñadas para optimizar sus reservas, atraer más clientes y aumentar su rentabilidad.</p>
@@ -244,14 +244,14 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                 <div className="mt-10 md:mt-10 grid w-full grid-cols-1 items-stretch gap-7 sm:mt-10 sm:gap-y-0 lg:grid-cols-4">
 
                     {freePlan && (
-                        <div className="relative z-0 py-8 px-6 rounded-3xl shadow-lg ring-1 ring-red-600 hover:ring-red-700 transition-all duration-300">
-                            <h3 className="text-xl font-bold text-red-700 mb-4">Plan Free</h3>
+                        <div className="relative flex flex-col bg-gray-50 py-8 px-6 rounded-3xl shadow-lg ring-2 ring-red-200 hover:ring-red-600 transition-all duration-300 h-full">
+                            <h3 className="text-xl font-semibold text-black mb-4">Plan Free</h3>
                             <div className="mb-3 py-4 px-1">
                                 <div className="flex">
-                                    <p className="text-2xl font-extrabold text-red-600">{currencyFormat(getPrice(freePlan.price))}</p>
-                                    <p className="text-sm text-red-600 mt-1">{`/${selectedBillingOption.label.toLowerCase()}`}</p>
+                                    <p className="text-4xl font-bold text-black">{currencyFormat(getPrice(freePlan.price))}</p>
+                                    <p className="text-sm md:text-md text-black mt-2">{`/${selectedBillingOption.label.toLowerCase()}`}</p>
                                 </div>
-                                <p className="text-sm text-red-600">+ {formatCommission(freePlan.commissionPercentage)}% comisión por reserva</p>
+                                <p className="text-sm text-black">+ {formatCommission(freePlan.commissionPercentage)}% comisión por reserva</p>
                             </div>
 
                             <p className="text-gray-600 mb-3 text-xs leading-relaxed" style={{ textAlign: 'justify' }}>
@@ -264,8 +264,8 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                                 className={
                                     clsx(
                                         {
-                                            "flex justify-center items-center gap-2 w-full bg-red-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-300 transform shadow-md cursor-not-allowed": loadingPlanId !== null,
-                                            "flex justify-center items-center gap-2 w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-300 transform hover:scale-[1.02] shadow-md": loadingPlanId === null
+                                            "flex gap-2 justify-center w-full border-2 border-red-600 text-red-600 font-semibold py-3 px-6 rounded-xl transition-colors duration-300 transform hover:scale-[1.02] hover:bg-red-600 hover:text-white shadow-md cursor-not-allowed": loadingPlanId !== null,
+                                            "flex justify-center w-full border-2 border-red-600 text-red-600 font-semibold py-3 px-6 rounded-xl transition-colors duration-300 transform hover:scale-[1.02] hover:bg-red-600 hover:text-white shadow-md": loadingPlanId === null
                                         }
                                     )
                                 }
@@ -296,14 +296,14 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                     )}
 
                     {basicPlan && (
-                        <div className="relative z-0 py-8 px-6 rounded-3xl shadow-lg ring-1 ring-red-600 hover:ring-red-700 transition-all duration-300">
-                            <h3 className="text-xl font-bold text-red-700 mb-4">Plan Start</h3>
+                        <div className="relative flex flex-col bg-gray-50 py-8 px-6 rounded-3xl shadow-lg ring-2 ring-red-200 hover:ring-red-600 transition-all duration-300 h-full">
+                            <h3 className="text-xl font-semibold text-black mb-4">Plan Start</h3>
                             <div className="mb-3 py-4 px-1">
                                 <div className="flex">
-                                    <p className="text-2xl font-extrabold text-red-600">{currencyFormat(getPrice(basicPlan.price))}</p>
-                                    <p className="text-sm text-red-600 mt-1">{`/${selectedBillingOption.label.toLowerCase()}`}</p>
+                                    <p className="text-4xl font-bold text-black">{currencyFormat(getPrice(basicPlan.price))}</p>
+                                    <p className="text-sm md:text-md text-black mt-2">{`/${selectedBillingOption.label.toLowerCase()}`}</p>
                                 </div>
-                                <p className="text-sm text-red-600">+ {formatCommission(basicPlan.commissionPercentage)}% comisión por reserva</p>
+                                <p className="text-sm text-black">+ {formatCommission(basicPlan.commissionPercentage)}% comisión por reserva</p>
                             </div>
 
                             <p className="text-gray-600 mb-3 text-xs leading-relaxed" style={{ textAlign: 'justify' }}>
@@ -316,8 +316,8 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                                 className={
                                     clsx(
                                         {
-                                            "flex justify-center items-center gap-2 w-full bg-red-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-300 transform shadow-md cursor-not-allowed": loadingPlanId !== null,
-                                            "flex justify-center items-center gap-2 w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-300 transform hover:scale-[1.02] shadow-md": loadingPlanId === null
+                                            "flex gap-2 justify-center w-full border-2 border-red-600 text-red-600 font-semibold py-3 px-6 rounded-xl transition-colors duration-300 transform hover:scale-[1.02] hover:bg-red-600 hover:text-white shadow-md cursor-not-allowed": loadingPlanId !== null,
+                                            "flex justify-center w-full border-2 border-red-600 text-red-600 font-semibold py-3 px-6 rounded-xl transition-colors duration-300 transform hover:scale-[1.02] hover:bg-red-600 hover:text-white shadow-md": loadingPlanId === null
                                         }
                                     )
                                 }
@@ -348,17 +348,17 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                     )}
 
                     {premiumPlan && (
-                        <div className="relative py-8 px-6 rounded-3xl shadow-lg ring-1 ring-red-600 hover:ring-red-700 transition-all duration-300">
-                            <h3 className="text-xl font-bold text-red-700 mb-4">Plan Plus</h3>
+                        <div className="relative flex flex-col bg-gray-50 py-8 px-6 rounded-3xl shadow-lg ring-2 ring-red-200 hover:ring-red-600 transition-all duration-300 h-full">
+                            <h3 className="text-xl font-semibold text-black mb-4">Plan Plus</h3>
                             <div className="absolute top-0 right-0 -mt-3 mr-6 bg-red-600 text-white text-sm font-bold px-4 py-1 rounded-full shadow-md">
                                 Más popular
                             </div>
                             <div className="mb-3 py-4 px-1">
                                 <div className="flex">
-                                    <p className="text-2xl font-extrabold text-red-600">{currencyFormat(getPrice(premiumPlan.price))}</p>
-                                    <p className="text-sm text-red-600 mt-1">{`/${selectedBillingOption.label.toLowerCase()}`}</p>
+                                    <p className="text-4xl font-bold text-black">{currencyFormat(getPrice(premiumPlan.price))}</p>
+                                    <p className="text-sm md:text-md text-black mt-2">{`/${selectedBillingOption.label.toLowerCase()}`}</p>
                                 </div>
-                                <p className="text-sm text-red-600">+ {formatCommission(premiumPlan.commissionPercentage)}% comisión por reserva</p>
+                                <p className="text-sm text-black">+ {formatCommission(premiumPlan.commissionPercentage)}% comisión por reserva</p>
                             </div>
                             <p className="text-gray-600 mb-3 text-xs leading-relaxed" style={{ textAlign: 'justify' }}>
                                 {premiumPlan.description}
@@ -369,8 +369,8 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                                 className={
                                     clsx(
                                         {
-                                            "flex justify-center items-center gap-2 w-full bg-red-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-300 transform shadow-md cursor-not-allowed": loadingPlanId !== null,
-                                            "flex justify-center items-center gap-2 w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-300 transform hover:scale-[1.02] shadow-md": loadingPlanId === null
+                                            "flex gap-2 justify-center w-full border-2 border-red-600 text-red-600 font-semibold py-3 px-6 rounded-xl transition-colors duration-300 transform hover:scale-[1.02] hover:bg-red-600 hover:text-white shadow-md cursor-not-allowed": loadingPlanId !== null,
+                                            "flex justify-center w-full border-2 border-red-600 text-red-600 font-semibold py-3 px-6 rounded-xl transition-colors duration-300 transform hover:scale-[1.02] hover:bg-red-600 hover:text-white shadow-md": loadingPlanId === null
                                         }
                                     )
                                 }
@@ -401,14 +401,14 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                     )}
 
                     {enterprisePlan && (
-                        <div className="relative py-8 px-6 rounded-3xl shadow-lg ring-1 ring-red-600 hover:ring-red-700 transition-all duration-300">
-                            <h3 className="text-xl font-bold text-red-700 mb-4">Plan Élite</h3>
+                        <div className="relative flex flex-col bg-gray-50 py-8 px-6 rounded-3xl shadow-lg ring-2 ring-red-200 hover:ring-red-600 transition-all duration-300 h-full">
+                            <h3 className="text-xl font-semibold text-black mb-4">Plan Élite</h3>
                             <div className="mb-3 py-4 px-1">
                                 <div className="flex">
-                                    <p className="text-2xl font-extrabold text-red-600">{currencyFormat(getPrice(enterprisePlan.price))}</p>
-                                    <p className="text-sm mt-1 text-red-600">{`/${selectedBillingOption.label.toLowerCase()}`}</p>
+                                    <p className="text-4xl font-bold text-black">{currencyFormat(getPrice(enterprisePlan.price))}</p>
+                                    <p className="text-sm md:text-md text-black mt-2">{`/${selectedBillingOption.label.toLowerCase()}`}</p>
                                 </div>
-                                <p className="text-sm text-red-600">+ {formatCommission(enterprisePlan.commissionPercentage)}% comisión por reserva</p>
+                                <p className="text-sm text-black">+ {formatCommission(enterprisePlan.commissionPercentage)}% comisión por reserva</p>
                             </div>
                             <p className="text-gray-600 mb-3 text-xs leading-relaxed" style={{ textAlign: 'justify' }}>
                                 {enterprisePlan.description}
@@ -419,8 +419,8 @@ export const Pricing = ({ plans, tokenSession }: Props) => {
                                 className={
                                     clsx(
                                         {
-                                            "flex justify-center items-center gap-2 w-full bg-red-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-300 transform shadow-md cursor-not-allowed": loadingPlanId !== null,
-                                            "flex justify-center items-center gap-2 w-full bg-red-600 text-white hover:bg-red-700 font-semibold py-3 px-6 rounded-xl transition-colors duration-300 transform hover:scale-[1.02] shadow-md": loadingPlanId === null
+                                            "flex gap-2 justify-center w-full border-2 border-red-600 text-red-600 font-semibold py-3 px-6 rounded-xl transition-colors duration-300 transform hover:scale-[1.02] hover:bg-red-600 hover:text-white shadow-md cursor-not-allowed": loadingPlanId !== null,
+                                            "flex justify-center w-full border-2 border-red-600 text-red-600 font-semibold py-3 px-6 rounded-xl transition-colors duration-300 transform hover:scale-[1.02] hover:bg-red-600 hover:text-white shadow-md": loadingPlanId === null
                                         }
                                     )
                                 }

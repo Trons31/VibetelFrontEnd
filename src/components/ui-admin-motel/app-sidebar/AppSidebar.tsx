@@ -178,7 +178,7 @@ export const AppSidebar = ({ motelName, motelStatus, subscription, motelImage }:
 
   return (
     <aside
-      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-3 left-0 bg-white text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200
+      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-3 left-0 bg-white text-gray-900 h-screen transition-all duration-300 ease-in-out z-40 border-r border-gray-200
         ${isExpanded || isMobileOpen ? "w-[290px]" : "w-[90px]"}
         ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0`}
@@ -187,8 +187,8 @@ export const AppSidebar = ({ motelName, motelStatus, subscription, motelImage }:
         <Link href="/admin/dashboard-partner-motel">
           {isExpanded || isMobileOpen ? (
             <>
-              <span className={`${Lobster.className} text-xl md:text-xl antialiased font-bold`}>Motel</span>
-              <span className={`${Lobster.className} text-xl md:text-xl text-red-500`}> Partner </span>
+              <span className={`${Lobster.className} fade-in text-xl md:text-xl antialiased font-bold`}>Motel</span>
+              <span className={`${Lobster.className} fade-in text-xl md:text-xl text-red-500`}> Partner </span>
             </>
           ) : (
             <Image
@@ -323,7 +323,7 @@ export const AppSidebar = ({ motelName, motelStatus, subscription, motelImage }:
 
           {isExpanded && nextTier && (
             <div className="mx-auto fade-in mt-5 mb-10 w-full max-w-60 rounded-2xl bg-gray-100 px-2 py-5 text-center">
-              <h3 className="mb-2 font-semibold text-gray-900">Pasa al plan    
+              <h3 className="mb-2 font-semibold text-gray-900">Pasa al plan
                 {nextTier === "BASIC" ? " Start" : nextTier === "PREMIUM" ? " Plus" : nextTier === "ENTERPRISE" ? " Élite" : nextTier}
               </h3>
               <p className="mb-4 text-gray-500 text-xs">
@@ -341,17 +341,24 @@ export const AppSidebar = ({ motelName, motelStatus, subscription, motelImage }:
       ) : (
         motelStatus === "PENDING" || motelStatus === "DATA_CORRECTION"
           ? (
-            <div className="py-10">
-              <div className='border border-gray-200 rounded-xl p-2 bg-white shadow-md'>
-                <div className='flex justify-center'>
-                  <MdNotificationsActive size={20} />
+            isExpanded ?
+              (
+                <div className="fade-in py-10">
+                  <div className='border border-gray-200 rounded-xl p-2 bg-white shadow-md'>
+                    <div className='flex justify-center'>
+                      <MdNotificationsActive size={20} />
+                    </div>
+                    <div className='mt-2 justify-center text-center'>
+                      <h1 className='text-sm font-bold'>El motel no está activado</h1>
+                      <p className='text-xs text-gray-700 font-normal'>No tiene permisos suficientes. Debe completar los últimos pasos para activar su motel.</p>
+                    </div>
+                  </div>
                 </div>
-                <div className='mt-2 justify-center text-center'>
-                  <h1 className='text-sm font-bold'>El motel no está activado</h1>
-                  <p className='text-xs text-gray-700 font-normal'>No tiene permisos suficientes. Debe completar los últimos pasos para activar su motel.</p>
+              ) : (
+                <div className="flex py-4 justify-center items-center" >
+                  <MdNotificationsActive className="w-6 h-6" />
                 </div>
-              </div>
-            </div>
+              )
           ) : (
             <div className="py-10" >
               <div className='border border-gray-200 rounded-xl px-2 py-4 bg-white shadow-md'>

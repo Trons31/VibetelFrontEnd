@@ -25,7 +25,11 @@ export const TopMenuPartners = () => {
     <nav className='fixed flex top-0 z-20 bg-white border-b border-gray-100 px-2 md:px-5 justify-between items-center w-full' >
 
       <div className="flex h-full items-end space-x-2" >
-        <Link href="/" className="flex space-x-1 items-center" >
+        <Link
+          title="Volver al inicio"
+          href="/"
+          className="flex space-x-1 items-center"
+        >
           <Image
             src="/app/LogoApp.png"
             width={35}
@@ -110,6 +114,7 @@ export const TopMenuPartners = () => {
           )
         }
         <button
+          title="Abrir menú"
           onClick={openSideMenuMotelPartners}
           className='m-2 p-2 rounded-md transition-all hover:bg-gray-200'
         >

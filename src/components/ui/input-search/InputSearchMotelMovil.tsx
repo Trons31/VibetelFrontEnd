@@ -107,9 +107,9 @@ export const InputSearchMotelMovil = ({ onSearchTerm, location }: Props) => {
                         />
                     </div>
                     <button
-                        className='absolute items-center inset-y-0 right-2 focus:outline-none'
+                        className='absolute items-center inset-y-0 right-4 focus:outline-none'
                     >
-                        <IoSearchOutline size={20} />
+                        <IoSearchOutline className='h-4 w-4 text-gray-600' />
                     </button>
                 </div>
 

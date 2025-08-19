@@ -170,19 +170,18 @@ export const FilterRooms = ({ categoryRoom, garageRoom, amenitiesRoom }: Props) 
 
   // Función para obtener la mejor promoción
   const getBestPromotionRoom = (rooms: RoomAllApi[]) => {
-    const roomWithBestPromotion = rooms
+    const promoRooms = rooms
       .filter((room) => room.promoActive && room.promotionPercentage! > 0)
-      .sort((a, b) => b.promotionPercentage! - a.promotionPercentage!)[0];
+      .map((room) => {
+        const discount = (room.price * room.promotionPercentage!) / 100;
+        const finalPrice = room.price - discount;
+        return { ...room, discountedPrice: finalPrice };
+      });
 
-    if (!roomWithBestPromotion) return null;
+    if (promoRooms.length === 0) return null;
 
-    const discount = (roomWithBestPromotion.price * roomWithBestPromotion.promotionPercentage!) / 100;
-    const finalPrice = roomWithBestPromotion.price - discount;
-
-    return {
-      ...roomWithBestPromotion,
-      discountedPrice: finalPrice,
-    };
+    // Ordenar por el precio con descuento más bajo
+    return promoRooms.sort((a, b) => a.discountedPrice! - b.discountedPrice!)[0];
   };
 
   // Memoización de la mejor promoción

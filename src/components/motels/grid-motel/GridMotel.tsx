@@ -26,7 +26,7 @@ export const GridMotel = ({ motels }: Props) => {
     <>
       <div className="p-0 md:px-24 2xl:px-64 mt-10">
         {motels.map((motel) => (
-          <div key={motel.slug} className="p-2 mb-5">
+          <div key={motel.slug} className="p-2 md:p-0" >
             <ModalLocationMotel
               motelName={motel.razonSocial}
               motelLocationLatitude={motel.motelConfig!.locationLatitude!}

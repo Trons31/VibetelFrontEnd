@@ -91,11 +91,10 @@ export const InfoMotel = ({ motel }: Props) => {
             isLoading
               ? (
                 <>
-                  <div className="col-span-2 md:col-span-8 w-full" >
-                    <div className='block space-y-5'>
-                      <div className="w-full h-44  bg-gray-400  md:rounded-md animate-pulse"></div>
-                      <div className="w-full h-80  bg-gray-400 md:rounded-md animate-pulse"></div>
-                      <div className="w-full h-44  bg-gray-400 md:rounded-md animate-pulse"></div>
+                  <div className="w-full mt-4" >
+                    <div className='flex gap-10'>
+                      <div className="w-full h-64  bg-gray-400 rounded-md animate-pulse"></div>
+                      <div className="hidden md:block w-full h-64  bg-gray-400 md:rounded-md animate-pulse"></div>
                     </div>
                   </div >
                 </>

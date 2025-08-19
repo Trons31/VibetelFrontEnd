@@ -74,7 +74,9 @@ export const TopMenu = () => {
       >
 
         <div className="flex items-center gap-4  h-full" >
-          <Link href="/" className="flex space-x-1 items-center" >
+          <Link
+            title="Volver al inicio"
+            href="/" className="flex space-x-1 items-center" >
             <Image
               src="/app/LogoApp.png"
               width={35}

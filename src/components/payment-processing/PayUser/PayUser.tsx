@@ -92,7 +92,11 @@ export const PayUser = () => {
                             mail: response.data.mail,
                             phoneNumber: response.data.phoneNumber,
                         });
-                        setStatusTransaction(response.data.paymentStatus)
+                        if (response.data.paymentStatus === "accepted") {
+                            redirect("/empty");
+                        } else {
+                            setStatusTransaction(response.data.paymentStatus)
+                        }
                     } else {
                         redirect(redirectUrl);
                     }

@@ -18,7 +18,7 @@ export const SideInfo = ({ motel }: Props) => {
 
     return (
         <div className='px-3 md:col-span-3' >
-            <div className='bg-white shadow-md md:shadow-xl border border-gray-300 rounded-3xl p-8 flex  justify-between ' >
+            <div className='bg-white shadow-md md:shadow-md border border-gray-300 rounded-3xl p-8 flex  justify-between ' >
                 <div className='' >
                     <div className='flex justify-center w-full' >
                         <MotelImage

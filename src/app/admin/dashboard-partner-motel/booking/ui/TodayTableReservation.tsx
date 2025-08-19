@@ -3,7 +3,6 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { reservationCheckInAdmin, ReservationData } from '@/interfaces/reservation.interface';
 import { formatDate, formatDateWithHours, sleep } from '@/utils';
 import { motion } from 'framer-motion';
-import Pusher from 'pusher-js';
 import { SheedDetailService, SkeletonTableCheckIn } from '@/components';
 import { FilterTableReservation } from './FilterTableReservation';
 
@@ -82,59 +81,59 @@ export const TodayTableReservation = ({ motelId, totalReservation }: Props) => {
         setLoadingTotalBooking(false);
     }, [motelId])
 
-    useEffect(() => {
-        const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
-            cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
-        });
+    // useEffect(() => {
+    //     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
+    //         cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+    //     });
 
-        const channel = pusher.subscribe('reservations');
-        channel.bind('new-reservation', (newReservation: reservationCheckInAdmin) => {
-            const currentSearchFilter = searchFilterRef.current;
-            const currentStatusFilter = statusFilterrRef.current;
-            if (currentSearchFilter === '' && currentStatusFilter === '') {
-                setReservations((prevReservations) => [newReservation, ...prevReservations]);
-            }
-            setBookingEnEspera((prevTotal) => prevTotal + 1);
-            setTotalBooking((prevTotal) => prevTotal + 1)
-        });
+    //     const channel = pusher.subscribe('reservations');
+    //     channel.bind('new-reservation', (newReservation: reservationCheckInAdmin) => {
+    //         const currentSearchFilter = searchFilterRef.current;
+    //         const currentStatusFilter = statusFilterrRef.current;
+    //         if (currentSearchFilter === '' && currentStatusFilter === '') {
+    //             setReservations((prevReservations) => [newReservation, ...prevReservations]);
+    //         }
+    //         setBookingEnEspera((prevTotal) => prevTotal + 1);
+    //         setTotalBooking((prevTotal) => prevTotal + 1)
+    //     });
 
-        channel.bind('cancel-reservation', (reservationId: string) => {
-            setReservations((prevReservations) =>
-                prevReservations.map((r) =>
-                    r.id === reservationId ? { ...r, status: "cancelado" } : r
-                )
-            );
-            setBookingCancel((prevTotal) => prevTotal + 1);
-            setBookingEnEspera((prevTotal) => prevTotal - 1);
+    //     channel.bind('cancel-reservation', (reservationId: string) => {
+    //         setReservations((prevReservations) =>
+    //             prevReservations.map((r) =>
+    //                 r.id === reservationId ? { ...r, status: "cancelado" } : r
+    //             )
+    //         );
+    //         setBookingCancel((prevTotal) => prevTotal + 1);
+    //         setBookingEnEspera((prevTotal) => prevTotal - 1);
 
-        });
+    //     });
 
-        channel.bind('confirm-reservation', (reservationId: string) => {
-            setReservations((prevReservations) =>
-                prevReservations.map((r) =>
-                    r.id === reservationId ? { ...r, status: "iniciado" } : r
-                )
-            );
-            setBookingInciadas((prevTotal) => prevTotal + 1);
-            setBookingEnEspera((prevTotal) => prevTotal - 1);
+    //     channel.bind('confirm-reservation', (reservationId: string) => {
+    //         setReservations((prevReservations) =>
+    //             prevReservations.map((r) =>
+    //                 r.id === reservationId ? { ...r, status: "iniciado" } : r
+    //             )
+    //         );
+    //         setBookingInciadas((prevTotal) => prevTotal + 1);
+    //         setBookingEnEspera((prevTotal) => prevTotal - 1);
 
-        });
+    //     });
 
-        channel.bind('completed-reservation-by-motel', (reservationId: string) => {
-            setReservations((prevReservations) =>
-                prevReservations.map((r) =>
-                    r.id === reservationId ? { ...r, status: "completado" } : r
-                )
-            );
-            setBookingInciadas((prevTotal) => prevTotal - 1);
-            setBookingCompleted((prevTotal) => prevTotal + 1);
-        });
+    //     channel.bind('completed-reservation-by-motel', (reservationId: string) => {
+    //         setReservations((prevReservations) =>
+    //             prevReservations.map((r) =>
+    //                 r.id === reservationId ? { ...r, status: "completado" } : r
+    //             )
+    //         );
+    //         setBookingInciadas((prevTotal) => prevTotal - 1);
+    //         setBookingCompleted((prevTotal) => prevTotal + 1);
+    //     });
 
-        return () => {
-            channel.unbind_all();
-            channel.unsubscribe();
-        };
-    }, []);
+    //     return () => {
+    //         channel.unbind_all();
+    //         channel.unsubscribe();
+    //     };
+    // }, []);
 
 
 

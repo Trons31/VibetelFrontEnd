@@ -12,7 +12,6 @@ import "swiper/css/pagination";
 import { FreeMode, HashNavigation, Pagination } from "swiper/modules";
 import { currencyFormat } from "@/utils/currencyFormat";
 import { RoomImage } from "../room-image/RoomImage";
-import Pusher from "pusher-js";
 import { BiBuildings, BiSolidDiscount } from "react-icons/bi";
 import { useSuggestedRoomStore } from "@/store";
 import { calculateTotalPrice } from "@/utils";

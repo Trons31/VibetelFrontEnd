@@ -42,8 +42,8 @@ export default async function DashboardLayout({
 
   return (
     <ClientAdminLayout
-    motel={motelExist}
-    accessToken={session.accessToken}
+      motel={motelExist}
+      accessToken={session.accessToken}
     >
       {children}
     </ClientAdminLayout>

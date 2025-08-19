@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import Pusher from 'pusher-js';
 import { formatDateWithHours, sleep } from '@/utils';
 import { SkeletonReservationRealTime } from '@/components';
 
@@ -64,20 +63,20 @@ export const ReservationRealTime = ({ motelId }: ViewAndAccessReservationProps) 
     fetchReservations();
   }, [fetchReservations]);
 
-  useEffect(() => {
-    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
-      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
-    });
+  // useEffect(() => {
+  //   const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
+  //     cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+  //   });
 
-    const channel = pusher.subscribe('reservations');
-    channel.bind('new-reservation', (newReservation: Reservation) => {
-      setReservations(prev => [newReservation, ...prev]);
-    });
+  //   const channel = pusher.subscribe('reservations');
+  //   channel.bind('new-reservation', (newReservation: Reservation) => {
+  //     setReservations(prev => [newReservation, ...prev]);
+  //   });
 
-    return () => {
-      pusher.unsubscribe('reservations');
-    };
-  }, [motelId]);
+  //   return () => {
+  //     pusher.unsubscribe('reservations');
+  //   };
+  // }, [motelId]);
 
 
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {

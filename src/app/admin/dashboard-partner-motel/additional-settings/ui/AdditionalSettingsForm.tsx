@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { BreadCrumb, SelectOption } from "@/components";
-import { motelConfig } from "@/interfaces";
+import { motelConfig, SubscriptionTier } from "@/interfaces";
 import clsx from "clsx";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
@@ -43,9 +43,10 @@ const optionsTimeAddReservation = [
 interface Props {
     motelConfig: motelConfig | null;
     accessToken: string;
+    subscriptionTier: SubscriptionTier;
 }
 
-export const AdditionalSettingsForm = ({ motelConfig, accessToken }: Props) => {
+export const AdditionalSettingsForm = ({ motelConfig, accessToken, subscriptionTier }: Props) => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [optionTimeLimitAwait, setoptionTimeLimitAwait] = useState(motelConfig?.timeAwaitTakeReservation || 10);
@@ -57,7 +58,7 @@ export const AdditionalSettingsForm = ({ motelConfig, accessToken }: Props) => {
 
         const motelConfigData = {
             timeMinutesCleanRoom: optionTimeCleanRoom,
-            defaultReservationAddTime: optionTimeAddReservation,
+            defaultReservationAddTime: subscriptionTier !== "FREE" ? optionTimeAddReservation : null,
             inService: true,
             outOfServiceStart: null,
             outOfServiceEnd: null,
@@ -160,24 +161,29 @@ export const AdditionalSettingsForm = ({ motelConfig, accessToken }: Props) => {
 
             </div>
 
-            <div className="grid border-b py-6 sm:grid-cols-3">
-                <div className="col-span-2">
-                    <h2 className="text-md md:text-lg font-bold">Tiempo de Adición Estándar</h2>
-                    <p className="text-xs md:text-sm text-gray-800">
-                        El <strong>tiempo de adición estándar</strong>  es el intervalo de tiempo que el motel define para todas las habitaciones de manera uniforme. Este tiempo permite que los usuarios agreguen minutos adicionales a sus reservas actuales de manera incremental. Por ejemplo, si se define un tiempo de adición de 30 minutos, el usuario podrá extender su reserva en incrementos de 30 minutos cada vez. De igual forma, si el tiempo de adición es de una hora, el usuario podrá agregar tiempo en intervalos de una hora. El valor de esta adición se establece al momento de registrar cada habitación.
-                    </p>
-                </div>
+            {
+                subscriptionTier !== "FREE" && (
+                    <div className="grid border-b py-6 sm:grid-cols-3">
+                        <div className="col-span-2">
+                            <h2 className="text-md md:text-lg font-bold">Tiempo de Adición Estándar</h2>
+                            <p className="text-xs md:text-sm text-gray-800">
+                                El <strong>tiempo de adición estándar</strong>  es el intervalo de tiempo que el motel define para todas las habitaciones de manera uniforme. Este tiempo permite que los usuarios agreguen minutos adicionales a sus reservas actuales de manera incremental. Por ejemplo, si se define un tiempo de adición de 30 minutos, el usuario podrá extender su reserva en incrementos de 30 minutos cada vez. De igual forma, si el tiempo de adición es de una hora, el usuario podrá agregar tiempo en intervalos de una hora. El valor de esta adición se establece al momento de registrar cada habitación.
+                            </p>
+                        </div>
 
-                <div className="flex justify-end mt-12">
-                    <SelectOption
-                        options={optionsTimeAddReservation}
-                        onOptionSelect={handleOptionTimeAddReservation}
-                        defaultOption={optionsTimeAddReservation.find(option => option.value === optionTimeAddReservation)}
-                        className="w-32"
-                    />
-                </div>
+                        <div className="flex justify-end mt-12">
+                            <SelectOption
+                                options={optionsTimeAddReservation}
+                                onOptionSelect={handleOptionTimeAddReservation}
+                                defaultOption={optionsTimeAddReservation.find(option => option.value === optionTimeAddReservation)}
+                                className="w-32"
+                            />
+                        </div>
 
-            </div>
+                    </div>
+                )
+            }
+
 
             <div className="block md:grid md:grid-cols-3  mt-5  items-center pb-5 gap-5" >
                 <div className="border-l-8 col-span-2 rounded-l-lg  border-l-purple-600 bg-purple-100 p-4">

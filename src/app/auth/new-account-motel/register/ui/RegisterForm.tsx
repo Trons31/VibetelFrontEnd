@@ -913,7 +913,7 @@ export const RegisterForm = ({ motelPartner, departments, countries, cities, ame
                                     </div>
                                 </div>
 
-                                <div className="mt-14 mb-5" >
+                                {/* <div className="mt-14 mb-5" >
                                     <p className="text-black font-semibold text-lg mt-5 mb-1" >Otras comodidades</p>
                                     <p className="text-sm text-gray-700">
                                         Si no encuentras una comodidad específica en la lista, ¡siéntete libre de agregarla tú mismo!
@@ -945,7 +945,7 @@ export const RegisterForm = ({ motelPartner, departments, countries, cities, ame
                                     >
                                         Agregar comodidad
                                     </button>
-                                </div>
+                                </div> */}
 
                             </div>
 
