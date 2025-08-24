@@ -26,7 +26,7 @@ export const FilterTableMotel = ({
                         type="text"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
-                        className="h-14 w-full text-xs md:text-md rounded-md py-4 pr-12 pl-12 outline-none focus:ring-2"
+                        className="h-14 w-full text-xs md:text-base rounded-md py-4 pr-12 pl-12 outline-none focus:ring-2"
                         placeholder="Motel, departamento, ciudad..."
                     />
                     <div className='flex gap-2 items-center px-2'>

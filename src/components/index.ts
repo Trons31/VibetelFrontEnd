@@ -42,7 +42,6 @@ export * from "./ui/skeleton/SkeletonPaymentProcessing";
 export * from "./ui/skeleton/SkeletonImagesRoom";
 export * from "./ui/select/SelectOption";
 export * from "./ui/checkout/StatusCheckOut";
-export * from "./ui/support/ChatSupport";
 export * from "./ui/time-selector/TimeSelector";
 export * from "./ui/custom-date-picker/CustomDatePicker";
 export * from "./ui/toast-custom/ToastSuccessLocationUser";

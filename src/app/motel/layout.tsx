@@ -1,4 +1,4 @@
-import { ChatSupport, Footer, SideBar, ToastSuccessLocationUser, TopMenu } from "@/components";
+import {  Footer } from "@/components";
 
 export default function MotelLayout({ children }: {
     children: React.ReactNode;
