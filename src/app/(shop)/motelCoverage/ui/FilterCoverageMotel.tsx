@@ -119,7 +119,7 @@ export const FilterCoverageMotel = ({ onSearchTerm, departments }: Props) => {
               />
             )}
             <button className='focus:outline-none'>
-              <IoSearchOutline size={20} />
+              <IoSearchOutline className='h-5 w-5 text-gray-500' />
             </button>
           </div>
 
