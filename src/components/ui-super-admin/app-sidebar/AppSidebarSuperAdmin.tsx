@@ -217,7 +217,7 @@ export const AppSidebarSuperAdmin = () => {
         </div>
       </div>
 
-      <div className="flex mt-10 flex-col mb-10 overflow-y-auto duration-300 ease-linear custom-scrollbar-hidden px-2">
+      <div className="flex mt-10 flex-col mb-32 md:mb-10 overflow-y-auto duration-300 ease-linear custom-scrollbar-hidden px-2">
         <nav className="mb-6">
           <div className="flex flex-col gap-4">
 
@@ -257,8 +257,6 @@ export const AppSidebarSuperAdmin = () => {
               </h2>
               {renderMenuItems(locations, "main")}
             </div>
-
-
           </div>
         </nav>
 

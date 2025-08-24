@@ -178,7 +178,7 @@ export const AppSidebar = ({ motelName, motelStatus, subscription, motelImage }:
 
   return (
     <aside
-      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-3 left-0 bg-white text-gray-900 h-screen transition-all duration-300 ease-in-out z-40 border-r border-gray-200
+      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-3 left-0 bg-white text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200
         ${isExpanded || isMobileOpen ? "w-[290px]" : "w-[90px]"}
         ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0`}
@@ -227,7 +227,7 @@ export const AppSidebar = ({ motelName, motelStatus, subscription, motelImage }:
       </div>
 
       {motelStatus === "APPROVED" ? (
-        <div className="flex mt-10 flex-col mb-10 overflow-y-auto duration-300 ease-linear custom-scrollbar-hidden px-2">
+        <div className="flex mt-10 flex-col mb-32 md:mb-10 overflow-y-auto duration-300 ease-linear custom-scrollbar-hidden px-2">
           <nav className="mb-6">
             <div className="flex flex-col gap-4">
 

@@ -16,8 +16,8 @@ export default async function MotelPage() {
         <>
             <div className="bg-white rounded-lg"  >
                 <div className="py-10 " >
-                    <div className="md:mx-5 mb-10" >
-                        <p className={`text-2xl font-medium `} >Moteles</p>
+                    <div className="px-2 md:mx-5 mb-10" >
+                        <p className="text-lg md:text-2xl font-bold"  >Moteles</p>
                     </div>
                     <TableMotel
                         accessToken={session.accessToken}

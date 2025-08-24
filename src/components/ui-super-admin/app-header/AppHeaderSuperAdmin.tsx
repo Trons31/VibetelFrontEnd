@@ -40,7 +40,7 @@ export const AppHeaderSuperAdmin = () => {
 
 
       <header className="sticky top-0 flex w-full bg-white border-gray-200 z-40 lg:border-b">
-        <div className="flex  items-center justify-between w-full gap-2 px-2 py-3 border-b border-gray-200 sm:gap-4  lg:border-b-0 lg:px-5 lg:py-4">
+        <div className="flex  items-center justify-between w-full gap-2 px-4 py-3 border-b border-gray-200 sm:gap-4  lg:border-b-0 lg:px-5 lg:py-4">
           {/* Botón de alternar Sidebar (Visible en todas las pantallas, oculto en lg si el sidebar está siempre visible) */}
 
           <div className="flex items-center gap-2" >
@@ -87,11 +87,11 @@ export const AppHeaderSuperAdmin = () => {
           </div>
 
           <button
-            className="flex items-center underline gap-2"
+            className="flex items-center text-sm md:text-base underline gap-1"
             onClick={() => logout()}
           >
-            <IoMdLogOut className="h-5 w-5" />
             Salir
+            <IoMdLogOut className="w-4 h-4 md:h-5 md:w-5 text-gray-600" />
           </button>
 
         </div>

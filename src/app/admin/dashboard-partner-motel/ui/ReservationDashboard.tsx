@@ -104,18 +104,18 @@ export const ReservationDashboard = ({ stats, financialStats, subscription, sati
             }
 
 
-            <div className="mb-10" >
+            <div className="pb-20 md:mb-10" >
                 {/* Sección de Reservas */}
                 <div className="w-full mt-10">
                     <div className="bg-white shadow-md rounded-lg p-5">
                         <div className="flex justify-between items-center">
-                            <h2 className="text-xl font-bold">Reservas  {formatDate(new Date())}</h2>
+                            <h2 className="text-md md:text-xl font-bold">Reservas  {formatDate(new Date())}</h2>
                             {/* Botón de toggle para la sección de Reservas */}
                             <button onClick={toggleReservations}>
                                 {reservationsOpen ? (
-                                    <IoIosArrowUp className="w-6 h-6 text-gray-600" />
+                                    <IoIosArrowUp className="w-4 h-4 md:w-6 md:h-6 text-gray-600" />
                                 ) : (
-                                    <IoIosArrowDown className="w-6 h-6 text-gray-600" />
+                                    <IoIosArrowDown className="w-4 h-4 md:w-6 md:h-6 text-gray-600" />
                                 )}
                             </button>
                         </div>
@@ -218,13 +218,13 @@ export const ReservationDashboard = ({ stats, financialStats, subscription, sati
                 <div className="w-full mt-10">
                     <div className="bg-white shadow-md rounded-lg p-5">
                         <div className="flex justify-between items-center">
-                            <h2 className="text-xl font-bold">Ingresos Financieros</h2>
+                            <h2 className="text-md md:text-xl font-bold">Ingresos Financieros</h2>
                             {/* Botón de toggle para la sección de Ingresos */}
                             <button onClick={toggleFinancial}>
                                 {financialOpen ? (
-                                    <IoIosArrowUp className="w-6 h-6 text-gray-600" />
+                                    <IoIosArrowUp className="w-4 h-4 md:w-6 md:h-6 text-gray-600" />
                                 ) : (
-                                    <IoIosArrowDown className="w-6 h-6 text-gray-600" />
+                                    <IoIosArrowDown className="w-4 h-4 md:w-6 md:h-6 text-gray-600" />
                                 )}
                             </button>
                         </div>
@@ -345,15 +345,15 @@ export const ReservationDashboard = ({ stats, financialStats, subscription, sati
                 </div>
 
                 {/* Sección de Satisfacción de Clientes */}
-                <div className="w-full mt-10">
+                <div className="w-full mb-10 mt-10">
                     <div className="bg-white shadow-md rounded-lg p-5">
                         <div className="flex justify-between items-center">
-                            <h2 className="text-xl font-bold">Satisfacción de Clientes</h2>
+                            <h2 className="text-md md:text-xl font-bold">Satisfacción de Clientes</h2>
                             <button onClick={toggleSatisfaction}>
                                 {satisfactionOpen ? (
-                                    <IoIosArrowUp className="w-6 h-6 text-gray-600" />
+                                    <IoIosArrowUp className="w-4 h-4 md:w-6 md:h-6 text-gray-600" />
                                 ) : (
-                                    <IoIosArrowDown className="w-6 h-6 text-gray-600" />
+                                    <IoIosArrowDown className="w-4 h-4 md:w-6 md:h-6 text-gray-600" />
                                 )}
                             </button>
                         </div>
