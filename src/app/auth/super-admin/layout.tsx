@@ -9,7 +9,7 @@ export default async function AuthSuperAdminLayout({
 
     const session = await auth();
 
-    if (session?.user.roles.includes("SuperAdmin")) {
+    if (session?.user.roles.includes("superAdmin")) {
         redirect("/admin/dashboard-super-admin")
     }
 

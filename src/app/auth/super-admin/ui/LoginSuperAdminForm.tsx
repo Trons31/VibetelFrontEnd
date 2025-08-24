@@ -91,7 +91,7 @@ export const LoginSuperAdminForm = () => {
 
                         <div className="mb-3">
                             <div className="flex justify-end mt-2 mb-2">
-                                <Link href="/auth/recover-password" className="text-sm text-gray-400 focus:outline-none focus:text-indigo-500 hover:text-indigo-500 ">Olvidaste tu constraseña?</Link>
+                                <Link href="/auth/recover-password-super-admin/send-request" className="text-sm text-gray-400 focus:outline-none focus:text-indigo-500 hover:text-indigo-500 ">Olvidaste tu constraseña?</Link>
                             </div>
                             <div className="relative">
                                 <input
