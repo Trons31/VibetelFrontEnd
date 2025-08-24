@@ -1,7 +1,7 @@
 'use client';
 
 import { formatDate } from '@/utils';
-import { Document, Page, Text, View, StyleSheet, Image, PDFDownloadLink } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet, Image, PDFDownloadLink, BlobProvider } from '@react-pdf/renderer';
 import React, { useEffect, useState } from 'react';
 
 
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         borderBottomWidth: 1,
         borderBottomColor: 'gray',
-        borderBottomStyle:'dashed',
+        borderBottomStyle: 'dashed',
         paddingBottom: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -80,11 +80,11 @@ const styles = StyleSheet.create({
     },
 });
 
-interface PropsPDF{
-    nameMotel:string;
+interface PropsPDF {
+    nameMotel: string;
 }
 
-const PDFReport = ( {nameMotel}:PropsPDF ) => (
+const PDFReport = ({ nameMotel }: PropsPDF) => (
     <Document>
         <Page style={styles.page}>
             {/* Header */}
@@ -179,7 +179,7 @@ const PDFReport = ( {nameMotel}:PropsPDF ) => (
 );
 
 interface Props {
-    
+
 }
 
 export const Report = () => {
@@ -201,23 +201,26 @@ export const Report = () => {
                 <p className='mt-2 mb-2 text-gray-700 text-sm'>
                     Este reporte ofrece una visión detallada de las actividades de reserva en nuestro motel para el día de hoy. Incluye un resumen de las reservas realizadas, indicando la cantidad total, las completadas con éxito, las canceladas y las pendientes. Además, presenta un desglose de los ingresos generados y gráficos que destacan las horas pico, las habitaciones más reservadas y otros datos relevantes. Este informe proporciona a los administradores una herramienta valiosa para el análisis y la toma de decisiones
                 </p>
-                <PDFDownloadLink document={<PDFReport nameMotel="Carpe Diem" />} fileName="report.pdf">
-                    {({ loading }) => (loading ? (
-                        <button className="flex items-center gap-x-4 rounded-xl bg-blue-600 px-8 py-3 font-medium text-white">
-                            <svg className="h-5 w-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" ></circle>
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            <span>Generando PDF...</span>
-                        </button>
-                    ) : (
-                        <>
-                            <button className='bg-blue-600 hover:bg-blue-700 p-2 rounded-md text-white'>
+                <BlobProvider document={<PDFReport nameMotel="Carpe Diem" />}>
+                    {({ blob, url, loading, error }) => {
+                        if (loading) {
+                            return (
+                                <button className="flex items-center gap-x-4 rounded-xl bg-blue-600 px-8 py-3 font-medium text-white">
+                                    Generando PDF...
+                                </button>
+                            );
+                        }
+                        return (
+                            <a
+                                href={url || undefined}
+                                download="report.pdf"
+                                className="bg-blue-600 hover:bg-blue-700 p-2 rounded-md text-white"
+                            >
                                 Descargar PDF
-                            </button>
-                        </>
-                    ))}
-                </PDFDownloadLink>
+                            </a>
+                        );
+                    }}
+                </BlobProvider>
             </div>
             <div className="p-10 mt-24 bg-white rounded-md shadow-md">
                 <div className="p-8 font-sans">
@@ -284,8 +287,8 @@ export const Report = () => {
                                     <p className="text-sm text-gray-600">(20 reservas)</p>
                                 </div>
                                 <div className="bg-gray-100 p-4 rounded">
-                                <h3 className="text-xl font-bold">2:00 pm - 4:00 pm</h3>
-                                <p className="text-sm text-gray-600">(20 reservas)</p>
+                                    <h3 className="text-xl font-bold">2:00 pm - 4:00 pm</h3>
+                                    <p className="text-sm text-gray-600">(20 reservas)</p>
                                 </div>
                             </div>
                         </section>
