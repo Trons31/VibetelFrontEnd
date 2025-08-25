@@ -118,7 +118,7 @@ export const ModalLocationUserMovil = ({ isOpen, onClose }: ModalProps) => {
 
                 ),
                 {
-                    duration: 7000,
+                    duration: 2000,
                     position: 'top-right',
                     style: {
                         padding: '16px',
@@ -148,7 +148,7 @@ export const ModalLocationUserMovil = ({ isOpen, onClose }: ModalProps) => {
 
                 ),
                 {
-                    duration: 7000,
+                    duration: 2000,
                     position: 'top-right',
                     style: {
                         padding: '16px',

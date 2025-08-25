@@ -58,6 +58,7 @@ interface FormInputs {
 export const RoomForm = ({ accessToken, category, garage, amenities, room, isNew, priceAddTime, subscriptionTier }: Props) => {
 
     const AmenitiesRoom = room.amenities?.map(amenitie => amenitie.amenities.id);
+    const isFreePlan = subscriptionTier === 'FREE';
 
     const router = useRouter();
 
@@ -114,6 +115,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, isNew
             inAvailable: room.inAvailable ? true : true,
             promoActive: room.promoActive ? room.promoActive : false,
             amenities: room.amenities?.map(amenitie => amenitie.amenities),
+            priceAddTime: isFreePlan ? undefined : room.priceAddTime,
             images: undefined
         }
     });
@@ -168,7 +170,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, isNew
         formData.append('slug', slug);
         formData.append('description', description);
         formData.append('price', price.toString());
-        if (priceAddTime) {
+        if (!isFreePlan && priceAddTime) {
             formData.append('priceAddTime', priceAddTime.toString());
         }
         formData.append('promoActive', promoActive.toString());
@@ -349,7 +351,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, isNew
         }
     }
 
-    const isFreePlan = subscriptionTier === 'FREE';
+
 
     return (
 
@@ -598,7 +600,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, isNew
                                 clsx(
                                     "block text-sm text-black font-semibold",
                                     {
-                                        "text-red-500": errors.priceAddTime
+                                        "text-red-500": errors.priceAddTime && !isFreePlan,
                                     }
                                 )
                             }>
@@ -681,14 +683,18 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, isNew
                                         clsx(
                                             "bg-gray-300 border-2 text-black text-sm rounded-lg appearance-none focus:outline-none focus:ring-0 block w-full p-2.5 placeholder-black",
                                             {
-                                                'focus:border-red-600 border-red-500': errors.priceAddTime,
+                                                'focus:border-red-600 border-red-500': errors.priceAddTime && !isFreePlan,
                                                 'border-gray-300 focus:border-blue-600': !errors.priceAddTime && !isFreePlan, // Clases normales para cuando no hay error y no es free
                                                 'cursor-not-allowed': isFreePlan, // Cursor de "no permitido"
                                                 'bg-red-600 text-white border-red-500': isFreePlan // Fondo ligeramente diferente para deshabilitado
                                             }
                                         )
                                     }
-                                    {...register('priceAddTime', { required: isFreePlan ? false : true, min: 1, pattern: /^[0-9]*$/ })}
+                                    {...register('priceAddTime', {
+                                        required: isFreePlan ? false : true,
+                                        min: isFreePlan ? undefined : 1,
+                                        pattern: isFreePlan ? undefined : /^[0-9]*$/
+                                    })}
                                     disabled={isFreePlan} // Deshabilita el input si es plan FREE
                                     value={isFreePlan ? 'No disponible en Plan FREE' : undefined} // Muestra el mensaje o el valor
                                     placeholder={isFreePlan ? '' : 'Ingrese el precio'} // Puedes ajustar el placeholder

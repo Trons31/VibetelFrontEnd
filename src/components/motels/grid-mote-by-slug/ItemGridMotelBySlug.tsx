@@ -40,7 +40,7 @@ export const ItemGridMotelBySlug = ({ room }: Props) => {
       >
         <div
           className={`${styles["card-content"]} cursor-pointer bg-white border border-transparent mb-1
-           hover:border-gray-300 transition-all duration-300 hover:shadow-lg rounded-lg min-h-[370px] group `}
+           hover:border-gray-300 transition-all duration-300 hover:shadow-lg rounded-lg min-h-[360px] group `}
         >
           <div
             className={`${styles["image-container"]} relative`}
@@ -74,7 +74,7 @@ export const ItemGridMotelBySlug = ({ room }: Props) => {
                 roomId={room.id}
               />
             </div>
-            <div className="p-2 flex md:hidden md:group-hover:flex rounded-b-lg bg-red-600  justify-center  absolute right-0 bottom-0 w-full md:group-hover:bg-red-600 md:group-hover:transition-all md:group-hover:duration-300">
+            <div className="p-2 rounded-b-lg flex md:hidden md:group-hover:flex md:rounded-b-sm bg-red-600  justify-center  absolute right-0 bottom-0 w-full md:group-hover:bg-red-600 md:group-hover:transition-all md:group-hover:duration-300">
               <p className="text-white text-xs md:text-md md:text-red-600 md:group-hover:text-white font-normal">
                 Reservar ahora
               </p>

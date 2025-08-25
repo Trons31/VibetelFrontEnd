@@ -119,10 +119,17 @@ export const ItemReservationOnPayment = ({ reservationOnPayment }: Props) => {
         }
 
         <div className="p-4">
-          <div className="flex justify-between items-center mb-2">
+          <div className='flex justify-end py-1' >
+            {reservationOnPayment.isConfirmedCreatedAt && (
+              <p className="flex md:hidden text-gray-500 text-xs">
+                {formatTimeWithAmPm(reservationOnPayment.isConfirmedCreatedAt)}
+              </p>
+            )}
+          </div>
+          <div className="flex justify-start md:justify-between items-center mb-2">
             <p className="text-sm font-semibold text-blue-800">Reserva en proceso de pago</p>
             {reservationOnPayment.isConfirmedCreatedAt && (
-              <p className="text-gray-500 text-xs">
+              <p className="hidden md:flex text-gray-500 text-xs">
                 {formatTimeWithAmPm(reservationOnPayment.isConfirmedCreatedAt)}
               </p>
             )}

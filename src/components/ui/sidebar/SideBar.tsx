@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { clsx } from "clsx";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 
 import { useUIStore } from "@/store";
@@ -14,17 +14,14 @@ import {
   IoBedOutline,
   IoBusinessOutline,
   IoSearchCircleOutline,
-  IoCallOutline,
   IoGiftOutline,
 } from "react-icons/io5";
-import { logout } from "@/actions";
 import { PiHeartStraight, PiUsersThree } from "react-icons/pi";
 import { TbHomeShare, TbLocationSearch } from "react-icons/tb";
 import { LiaCalendarDaySolid } from "react-icons/lia";
 import { IoMdCloseCircle, IoMdHelpCircleOutline } from "react-icons/io";
 import { RiLoginCircleLine } from "react-icons/ri";
 import { Lobster } from "@/config/fonts";
-import { FaUsers } from "react-icons/fa";
 
 export const SideBar = () => {
   const router = useRouter();
@@ -208,7 +205,8 @@ export const SideBar = () => {
 
               <button
                 onClick={() => {
-                  logout(), closeSideMenu();
+                  signOut({ callbackUrl: "/" });
+                  closeSideMenu();
                 }}
                 className="flex w-full items-center mt-3 p-2 hover:bg-gray-200 rounded transition-all"
               >

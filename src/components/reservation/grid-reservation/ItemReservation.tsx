@@ -232,7 +232,7 @@ export const ItemReservation = ({ reservation }: Props) => {
                         <button className='px-4 py-2 text-xs border-gray-400 border rounded-md hover:border-red-600 hover:text-red-600 transition-all duration-200' >
                             Eliminar
                         </button>
-                        <Link href={`/room/${reservation.roomSlug}`} className="bg-gradient-to-r text-xs from-red-500 to-orange-500 text-white px-4 py-2 rounded-md hover:from-red-600 hover:to-orange-600 transition-all duration-200">
+                        <Link href={`/rooms/${reservation.roomSlug}`} className="bg-gradient-to-r text-xs from-red-500 to-orange-500 text-white px-4 py-2 rounded-md hover:from-red-600 hover:to-orange-600 transition-all duration-200">
                             Volver a reservar
                         </Link>
                     </div>

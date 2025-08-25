@@ -20,7 +20,7 @@ export const ToastSuccessLocationUser = () => {
                     </div>
                 ),
                 {
-                    duration: 4000,
+                    duration: 2000,
                     position: window.innerWidth <= 768 ? 'top-center' : 'top-right',
                     style: {
                         padding: '16px',

@@ -29,10 +29,9 @@ const navItems: NavItem[] = [
   {
     icon: <TiHomeOutline />,
     name: "Dashboard",
-    path: "/admin/dashboard-partner-motel",
+    path: "/admin/dashboard-super-admin",
   }
 ];
-
 
 const configItems: NavItem[] = [
   {
