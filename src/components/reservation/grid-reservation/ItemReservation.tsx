@@ -170,7 +170,7 @@ export const ItemReservation = ({ reservation }: Props) => {
 
                     <div className=' w-fit' >
                         <div className='flex gap-2 items-center justify-center' >
-                            <Link href={`/room/${reservation.roomSlug}`} className="text-sm flex gap-3 items-center hover:text-red-500 transition-all duration-150 px-2" >
+                            <Link href={`/rooms/${reservation.roomSlug}`} className="text-sm flex gap-3 items-center hover:text-red-500 transition-all duration-150 px-2" >
                                 <p className='py-2 text-xs' >{reservation.motelRazonSocial}</p>
                                 <IoIosArrowForward />
                                 <p className='text-xs' > {reservation.serviceItem?.room} </p>
@@ -192,7 +192,7 @@ export const ItemReservation = ({ reservation }: Props) => {
                     <div className='grid grid-cols space-y-2 px-5' >
                         <p className='text-center' >Total : {currencyFormat(reservation.total)}</p>
 
-                        <Link href={`/room/${reservation.roomSlug}`} className="bg-gradient-to-r from-red-600 to-orange-600 text-white px-4 py-2 rounded-md hover:from-red-700 hover:to-orange-700 transition-all duration-200">
+                        <Link href={`/rooms/${reservation.roomSlug}`} className="bg-gradient-to-r from-red-600 to-orange-600 text-white px-4 py-2 rounded-md hover:from-red-700 hover:to-orange-700 transition-all duration-200">
                             Volver a reservar
                         </Link>
 
