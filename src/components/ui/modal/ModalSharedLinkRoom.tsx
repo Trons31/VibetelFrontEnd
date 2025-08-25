@@ -38,7 +38,7 @@ export const ModalSharedLinkRoom = ({ isOpen, onClose, room }: ModalProps) => {
   };
 
   const handleCopyLink = () => {
-    const url = `https://vibetel.vercel.app/room/${room.slug}`;
+    const url = `https://vibetel.com.co/rooms/${room.slug}`;
     navigator.clipboard.writeText(url);
     toast.success("Enlace copiado al portapapeles");
   };
@@ -48,28 +48,28 @@ export const ModalSharedLinkRoom = ({ isOpen, onClose, room }: ModalProps) => {
       `¡Mira esta habitación en ${room.motel.razonSocial}!`
     );
     const body = encodeURIComponent(
-      `Echa un vistazo a esta habitación: https://vibetel.vercel.app/room/${room.slug}`
+      `Echa un vistazo a esta habitación: https://vibetel.com.co/rooms/${room.slug}`
     );
     window.open(`mailto:?subject=${subject}&body=${body}`, "_blank");
   };
 
   const handleWhatsAppShare = () => {
     const url = `https://wa.me/?text=${encodeURIComponent(
-      `https://vibetel.vercel.app/room/${room.slug}`
+      `https://vibetel.com.co/rooms/${room.slug}`
     )}`;
     window.open(url, "_blank");
   };
 
   const handleMessengerShare = () => {
     const url = `https://www.messenger.com/t/?link=${encodeURIComponent(
-      `https://vibetel.vercel.app/room/${room.slug}`
+      `https://vibetel.com.co/rooms/${room.slug}`
     )}`;
     window.open(url, "_blank");
   };
 
   const handleFacebookShare = () => {
     const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-      `https://vibetel.vercel.app/room/${room.slug}`
+      `https://vibetel.com.co/rooms/${room.slug}`
     )}`;
     window.open(url, "_blank");
   };
@@ -79,14 +79,14 @@ export const ModalSharedLinkRoom = ({ isOpen, onClose, room }: ModalProps) => {
       `¡Mira esta habitación en ${room.motel.razonSocial}!`
     );
     const url = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
-      `https://vibetel.vercel.app/room/${room.slug}`
+      `https://vibetel.com.co/rooms/${room.slug}`
     )}&text=${text}`;
     window.open(url, "_blank");
   };
 
   const handleInsertLink = () => {
     alert(`Usa este código HTML para insertar el widget: 
-<iframe src="https://vibetel.vercel.app/room/${room.slug}" width="600" height="400"></iframe>`);
+<iframe src="https://vibetel.com.co/rooms/${room.slug}" width="600" height="400"></iframe>`);
   };
 
   return (
