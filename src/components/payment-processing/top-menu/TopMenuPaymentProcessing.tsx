@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from 'next/image';
 import { Lobster } from "@/config/fonts";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
@@ -12,19 +12,14 @@ import { IoArrowBackOutline } from "react-icons/io5";
 export const TopMenuPaymentProcessing = () => {
 
   const pathName = usePathname();
-  const [redirectUrl, setRedirectUrl] = useState("/home");
 
-  useEffect(() => {
-    const storedRedirectUrl = localStorage.getItem("redirectUrl");
-    if (storedRedirectUrl) {
-      setRedirectUrl(storedRedirectUrl);
-    }
-  }, [pathName]);
+  const router = useRouter();
 
-  const handleClearRedirect = () => {
+  const handleBack = () => {
+    const redirectUrl = localStorage.getItem("redirectUrl") || "/home";
     localStorage.removeItem("redirectUrl");
+    router.push(redirectUrl);
   };
-
 
 
   return (
@@ -34,12 +29,12 @@ export const TopMenuPaymentProcessing = () => {
         pathName === "/payment-processing/user"
         && (
           <>
-            <Link href={redirectUrl}
-              onClick={handleClearRedirect}
+            <button
+              onClick={handleBack}
               className="hidden md:flex items-center gap-2" >
               <IoArrowBackOutline className="h-5 w-5" />
               <p className="font-medium text-lg" >Confirmacion de la reserva</p>
-            </Link>
+            </button>
 
             <Link href="/" target="_blank" className="hidden md:flex space-x-1 items-center" rel="noopener noreferrer" >
               <Image
@@ -55,12 +50,12 @@ export const TopMenuPaymentProcessing = () => {
             </Link>
 
 
-            <Link href={redirectUrl}
-              onClick={handleClearRedirect}
+            <button
+              onClick={handleBack}
               className="flex md:hidden gap-3 py-3 items-center" >
               <IoArrowBackOutline className="h-5 w-5" />
               <p className="font-medium text-md" >Confirmacion de la reserva</p>
-            </Link>
+            </button>
 
           </>
         )
@@ -70,12 +65,12 @@ export const TopMenuPaymentProcessing = () => {
         pathName === "/payment-processing/guest"
         && (
           <>
-            <Link href={redirectUrl}
-              onClick={handleClearRedirect}
+            <button
+              onClick={handleBack}
               className="hidden md:flex items-center gap-2" >
               <IoArrowBackOutline className="h-5 w-5" />
               <p className="font-medium text-lg" >Confirmacion de la reserva</p>
-            </Link>
+            </button>
 
             <Link href="/" target="_blank" className="hidden md:flex space-x-1 items-center" rel="noopener noreferrer" >
               <Image
@@ -91,12 +86,12 @@ export const TopMenuPaymentProcessing = () => {
             </Link>
 
 
-            <Link href={redirectUrl}
-              onClick={handleClearRedirect}
+            <button
+              onClick={handleBack}
               className="flex md:hidden gap-3 py-3 items-center" >
-             <IoArrowBackOutline className="h-5 w-5" />
+              <IoArrowBackOutline className="h-5 w-5" />
               <p className="font-medium text-md" >Confirmacion de la reserva</p>
-            </Link>
+            </button>
 
           </>
         )
@@ -106,12 +101,10 @@ export const TopMenuPaymentProcessing = () => {
         pathName === "/payment-processing/status" &&
         (
           <>
-            <Link href={redirectUrl}
-              onClick={handleClearRedirect}
+            <div
               className="hidden md:flex items-center gap-2" >
               <p className="font-medium text-lg" >Reserva finalizada correctamente</p>
-              <IoIosArrowForward className="w-5 h-5" />
-            </Link>
+            </div>
 
             <Link href="/" target="_blank" className="hidden md:flex space-x-1 items-center" rel="noopener noreferrer" >
               <Image

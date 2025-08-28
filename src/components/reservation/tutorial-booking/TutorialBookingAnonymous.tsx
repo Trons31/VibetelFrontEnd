@@ -154,22 +154,71 @@ export const TutorialBookingAnonymous = () => {
 
   return (
     <div className="fixed inset-0 z-[9999] overflow-hidden">
-      <div
-        className="absolute inset-0 bg-black bg-opacity-80 backdrop-blur-sm"
-      >
-        {highlightPosition && (
+      {/* Fondo oscurecido con agujero para el área resaltada */}
+      {highlightPosition && (
+        <>
+          {/* Parte superior del overlay */}
           <div
-            className={`fixed border-4 border-blue-500 rounded-xl z-10`}
+            className="absolute bg-black bg-opacity-80 backdrop-blur-sm"
             style={{
-              top: highlightPosition.top,
-              left: highlightPosition.left,
-              width: highlightPosition.width,
-              height: highlightPosition.height,
-              transition: 'all 0.3s ease-in-out'
+              top: 0,
+              left: 0,
+              right: 0,
+              height: highlightPosition.top,
             }}
           />
-        )}
-      </div>
+          {/* Parte izquierda del overlay */}
+          <div
+            className="absolute bg-black bg-opacity-80 backdrop-blur-sm"
+            style={{
+              top: highlightPosition.top,
+              left: 0,
+              width: highlightPosition.left,
+              height: highlightPosition.height,
+            }}
+          />
+          {/* Parte derecha del overlay */}
+          <div
+            className="absolute bg-black bg-opacity-80 backdrop-blur-sm"
+            style={{
+              top: highlightPosition.top,
+              left: highlightPosition.left + highlightPosition.width,
+              right: 0,
+              height: highlightPosition.height,
+            }}
+          />
+          {/* Parte inferior del overlay */}
+          <div
+            className="absolute bg-black bg-opacity-80 backdrop-blur-sm"
+            style={{
+              top: highlightPosition.top + highlightPosition.height,
+              left: 0,
+              right: 0,
+              bottom: 0,
+            }}
+          />
+        </>
+      )}
+
+      {/* Overlay completo para cuando no hay elemento resaltado */}
+      {!highlightPosition && (
+        <div className="absolute inset-0 bg-black bg-opacity-80 backdrop-blur-sm" />
+      )}
+
+      {/* Borde de resaltado */}
+      {highlightPosition && (
+        <div
+          className="fixed border-4 border-blue-500 rounded-xl z-10 pointer-events-none"
+          style={{
+            top: highlightPosition.top,
+            left: highlightPosition.left,
+            width: highlightPosition.width,
+            height: highlightPosition.height,
+            transition: 'all 0.3s ease-in-out',
+            boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.8)',
+          }}
+        />
+      )}
 
       {/* Viñeta explicativa - Sin cambios aquí, se ha copiado la tuya. */}
       <AnimatePresence>

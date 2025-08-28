@@ -1,58 +1,5 @@
 import { statusRoom } from "./room.interface";
 
-export interface BedRooms {
-    id: string;
-    title: string;
-    description: string;
-    images: string[];
-    price: number;
-    timeLimit: number;
-    promoPrice?: number | null;
-    promoActive: boolean;
-    slug: string;
-    status?: statusRoom;
-    tags: string[];
-    inAvailable: boolean;
-    roomNumber: string;
-    extraServicesActive: boolean;
-    extraServices?: number | null;
-    surcharge: number;
-    amenities: string[];
-    isFavorite?:boolean;
-    roomImage: {
-        id: number;
-        url: string;
-    }[];
-    category: {
-        name: string,
-        description: string,
-    };
-    garage: string;
-    motel: {
-        city?: {
-            name: string;
-        };
-        id: string;
-        title: string;
-        slug?: string;
-        contactPhone?: string;
-        address?: string;
-        neighborhood?: string;
-        department?: {
-            name: string;
-        };
-    },
-    city?: string,
-    department?: string,
-    country?: string,
-    ratings: {
-        createdAt: Date;
-        rating: number;
-        comment: string | null;
-    }[];
-}
-
-
 export interface BedroomBooking {
     id: string;
     title: string;
@@ -92,17 +39,6 @@ export interface RoomManagerProps {
     roomNumber: string;
     status: statusRoom;
     price: number;
-}
-
-export interface Rating {
-    id: string;
-    rating: number;
-    comment: string | null;
-    createdAt: Date;
-    room: {
-        title: string;
-        roomNumber: string;
-    };
 }
 
 

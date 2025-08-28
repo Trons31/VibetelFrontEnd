@@ -4,6 +4,8 @@ import { MdDelete } from 'react-icons/md';
 import toast, { Toaster } from 'react-hot-toast';
 import clsx from 'clsx';
 import { IoAlertCircleSharp } from 'react-icons/io5';
+import axios from 'axios';
+import { useSession } from 'next-auth/react';
 
 
 interface ModalProps {
@@ -15,6 +17,7 @@ interface ModalProps {
 
 export const ModalCancelBooking = ({ isOpen, onClose, idReservation, isAviable }: ModalProps) => {
     const [showLoading, setshowLoading] = useState(false);
+    const { data: session } = useSession();
 
     useEffect(() => {
         if (isOpen) {
@@ -41,18 +44,23 @@ export const ModalCancelBooking = ({ isOpen, onClose, idReservation, isAviable }
 
     const OnCanceledReservation = async () => {
         setshowLoading(true);
-        
-        // const resp = await canceledReservationByUser(idReservation);
-
-        // if (!resp.ok) {
-        //     toast.error("No se pudo cancelar la reserva");
-        //     setshowLoading(false);
-        //     return;
-        // }
 
 
-        toast.success("Reserva cancelada exitosamente")
-        window.location.replace(`/booking/${idReservation}`)
+        try {
+            await axios.patch(`${process.env.NEXT_PUBLIC_API_ROUTE}service/reservation/${idReservation}/cancel`);
+            toast.success("Reserva cancelada exitosamente");
+        } catch (error: any) {
+            console.log(error);
+            toast.error("No se pudo cancelar la reserva");
+            setshowLoading(false);
+            return;
+        }
+
+        if (session?.user.roles.includes("user")) {
+            window.location.replace(`/booking/${idReservation}`)
+        } else {
+            window.location.replace(`/searchBooking`);
+        }
 
     }
 

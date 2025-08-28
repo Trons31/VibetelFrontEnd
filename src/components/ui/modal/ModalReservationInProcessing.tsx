@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import { TiWarning } from 'react-icons/ti';
 import { useSession } from 'next-auth/react';
 import { useBookingStore } from '@/store';
+import { redirect } from 'next/navigation';
 
 interface ModalProps {
     isOpen: boolean;
@@ -45,6 +46,15 @@ export const ModalReservationInProcessing = ({ isOpen, onClose }: ModalProps) =>
         onClose();
     }
 
+    const redirectToPayment = () => {
+        localStorage.setItem("redirectUrl", window.location.pathname);
+        if (isAuthenticated) {
+            redirect("/payment-processing/user")
+        } else {
+            redirect("/payment-processing/guest")
+        }
+    }
+
     return (
         <>
             <div
@@ -75,9 +85,11 @@ export const ModalReservationInProcessing = ({ isOpen, onClose }: ModalProps) =>
                             Agregar nueva reserva
                         </button>
 
-                        <Link href={isAuthenticated ? "/payment-processing/user" : "/payment-processing/guest"} className='bg-blue-600 text-sm md:text-md text-center text-white p-2 rounded-lg' >
+                        <button
+                            onClick={redirectToPayment}
+                            className='bg-blue-600 text-sm md:text-md text-center text-white p-2 rounded-lg' >
                             Finalizar proceso de pago
-                        </Link>
+                        </button>
 
                     </div>
                 </div>

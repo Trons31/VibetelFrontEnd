@@ -28,17 +28,15 @@ export const UiContent = ({ CodeBooking }: Props) => {
         try {
             return btoa(token); // Codifica a Base64
         } catch (e) {
-            console.error("Error al codificar el token:", e);
-            return token; // Retorna sin codificar si hay un error
+            return token; 
         }
     };
 
     const decodeToken = (encodedToken: string): string => {
         try {
-            return atob(encodedToken); // Decodifica de Base64
+            return atob(encodedToken); 
         } catch (e) {
-            console.error("Error al decodificar el token:", e);
-            return encodedToken; // Retorna sin decodificar si hay un error
+            return encodedToken; 
         }
     };
 
@@ -116,7 +114,7 @@ export const UiContent = ({ CodeBooking }: Props) => {
 
                 ),
                 {
-                    duration: 7000,
+                    duration: 2000,
                     position: 'top-right',
                     style: {
                         padding: '16px',

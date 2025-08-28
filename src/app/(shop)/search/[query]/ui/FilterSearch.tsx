@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
   GridRoomSearch, NoFoundSearch, Pagination, SideBarMenuFilter, SideMenuFilter, SkeletonRooms, SortRooms,
-  SuggestedAndTopRoom
 } from "@/components";
 import { AmenitiesRoom, AmenitiesRoomApi, CategoryRoomApi, GarageRoomApi, LocationCity, RoomAllApi } from "@/interfaces";
 import { useLocationStore, useSearchStore, useSuggestedRoomStore, useUIStore } from "@/store";
@@ -265,9 +264,6 @@ export const FilterSearch = ({ garageRoom, amenitiesRoom, categoryRoom, query, }
       ) : initialSearchHadNoResults ? ( // Condición para cuando la búsqueda inicial NO retorna resultados
         <>
           <NoFoundSearch query={decodedSearchTerm} />
-          <div className="mt-20 md:mt-32">
-            <SuggestedAndTopRoom />
-          </div>
         </>
       ) : ( // Cuando hay datos cargados, o se están cargando elementos específicos, o no se encontró nada por filtros
         <div className="bg-white">

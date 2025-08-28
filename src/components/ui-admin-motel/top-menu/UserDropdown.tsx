@@ -18,14 +18,22 @@ export const UserDropdown = ({ subscriptionTier }: Props) => {
 
   const { data: session, status } = useSession();
 
-  function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  const toggleDropdown = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     setIsOpen((prev) => !prev);
   }
 
-  function closeDropdown() {
+  const closeDropdown = () => {
     setIsOpen(false);
   }
+
+
+  const formatEmail = (email: string) => {
+    const [user, domain] = email.split("@");
+    const shortUser = user.length > 12 ? user.slice(0, 12) + "…" : user;
+    return `${shortUser}@${domain}`;
+  }
+
   return (
     <div className="relative">
       <button
@@ -64,12 +72,12 @@ export const UserDropdown = ({ subscriptionTier }: Props) => {
               {session?.user.name} {session?.user.lastName}
             </span>
             <span className="mt-0.5 block text-xs text-gray-500 ">
-              {session?.user.email}
+              {session?.user.email ? formatEmail(session.user.email) : ""}
             </span>
           </div>
           <Link
             href="/admin/dashboard-partner-motel/my-plan"
-            className="py-2 px-3 h-fit rounded-full bg-indigo-600 text-white text-xs" >
+            className="py-1 px-1.5 h-fit rounded-full bg-indigo-600 text-white text-xs" >
             {subscriptionTier}
           </Link>
         </div>

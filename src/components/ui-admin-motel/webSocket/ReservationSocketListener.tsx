@@ -7,21 +7,12 @@ import { useReservationStore } from '@/store/reservation/adminWebsocket.store';
 export const ReservationSocketListener = () => {
   const { data: session, status } = useSession();
   const connectSocket = useReservationStore(state => state.connectSocket);
-  const isConnected = useReservationStore(state => state.isConnected);
 
   useEffect(() => {
     if (status === 'authenticated' && session?.accessToken) {
       connectSocket(session.accessToken);
     }
   }, [status, session?.accessToken, connectSocket]);
-
-  useEffect(() => {
-    if (isConnected) {
-      console.log('✅ WebSocket conectado');
-    } else {
-      console.log('🔴 WebSocket no conectado');
-    }
-  }, [isConnected]);
 
   return null;
 };

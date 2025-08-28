@@ -12,13 +12,6 @@ interface Props {
 
 export const StateBookingMovil = ({ reservation }: Props) => {
 
-  const [isExpanded, setIsExpanded] = useState(true);
-
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
-  };
-
-
   return (
     <div
       id="state-section"
@@ -40,7 +33,7 @@ export const StateBookingMovil = ({ reservation }: Props) => {
             </li>
             <motion.div
               initial={{ height: 0, opacity: 0 }}
-              animate={{ height: isExpanded ? 'auto' : 0, opacity: isExpanded ? 1 : 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
               transition={{ duration: 0.3 }}
               className="overflow-hidden space-y-5"
             >
@@ -176,11 +169,6 @@ export const StateBookingMovil = ({ reservation }: Props) => {
 
             </motion.div>
           </ul>
-          <div className="flex justify-center mt-4">
-            <button onClick={toggleExpand} className="focus:outline-none">
-              {isExpanded ? <FaChevronUp size={20} /> : <FaChevronDown size={20} />}
-            </button>
-          </div>
         </div>
       </div>
     </div>

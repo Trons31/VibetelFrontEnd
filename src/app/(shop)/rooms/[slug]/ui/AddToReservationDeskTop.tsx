@@ -173,7 +173,7 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
       await axios.post(`${process.env.NEXT_PUBLIC_API_ROUTE}service/validate-reservation`, validateDataForReservation);
     } catch (error: any) {
       console.log(error);
-      toast.error("Error ya existen reservas en este horario. selecciona otro", { duration: 7000 });
+      toast.error("Error ya existen reservas en este horario. selecciona otro", { duration: 4000 });
       setShowModalLoadingReservation(false);
       setShowLoading(false);
       return;

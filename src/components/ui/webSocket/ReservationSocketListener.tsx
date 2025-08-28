@@ -14,10 +14,8 @@ export const ResponseReservationSocketListener = () => {
         if (encodedCurrentToken) {
           try {
             const decodedToken = atob(encodedCurrentToken);
-            console.log("✅ Token de reserva en curso encontrado y decodificado.");
             return decodedToken;
           } catch (e) {
-            console.error('❌ Error decodificando token de reserva en curso:', e);
             return encodedCurrentToken;
           }
         }
@@ -27,10 +25,8 @@ export const ResponseReservationSocketListener = () => {
         if (encodedAnonymousToken) {
           try {
             const decodedToken = atob(encodedAnonymousToken);
-            console.log("✅ Token de reserva anónima encontrado y decodificado.");
             return decodedToken;
           } catch (e) {
-            console.error('❌ Error decodificando token de reserva anónima:', e);
             return encodedAnonymousToken;
           }
         }

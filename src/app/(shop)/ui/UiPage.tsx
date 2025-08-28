@@ -14,7 +14,7 @@ import {
   ModalLocationUserMovil,
   RoomImage,
 } from "@/components";
-import { BedRooms, LocationCity } from "@/interfaces";
+import {  LocationCity } from "@/interfaces";
 
 interface motels {
   id: string;
@@ -36,7 +36,7 @@ export const UiPage = () => {
   const [mostFrequentedMotels, setMostFrequentedMotels] = useState<motels[]>(
     []
   );
-  const [topRooms, setTopRooms] = useState<BedRooms[]>([]);
+  // const [topRooms, setTopRooms] = useState<BedRooms[]>([]);
 
   useEffect(() => {
     setIsLoading(false);
@@ -196,7 +196,7 @@ export const UiPage = () => {
           </div>
         </div>
       )}
-
+{/* 
       {topRooms.length > 0 && (
         <div className="p-3 md:px-24 py-5 mt-10 mb-10">
           <div>
@@ -228,7 +228,7 @@ export const UiPage = () => {
             ))}
           </div>
         </div>
-      )}
+      )} */}
 
       <div className="p-5 md:p-10 bg-gray-100">
         <h1 className=" text-3xl md:text-5xl font-bold text-center">

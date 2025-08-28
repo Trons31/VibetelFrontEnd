@@ -107,19 +107,6 @@ export interface ReservationPendingByMotelApi {
   };
 }
 
-export interface NewReservationNotification {
-  id: string;
-  createdAt: string;
-  serviceItem: {
-    id: string;
-    title: string;
-    roomNumber: string;
-    arrivalDate: string;
-    departureDate: string;
-  };
-}
-
-
 export interface Reservation {
   id: string;
   departureDate: Date;
@@ -163,26 +150,6 @@ export interface RoomRating {
   createdAt: Date;
 };
 
-export interface ReservationByUser {
-  id: string;
-  createdAt: Date;
-  status: StatusReservation | undefined;
-  roomSlug: string | undefined;
-  motelName: string | undefined;
-  room: string | undefined;
-  roomId: string | undefined;
-  roomImages: {
-    url: string;
-  }[] | undefined;
-  total: number;
-  ratings: {
-    id: string;
-    rating: number;
-  } | null
-  serviceRating: {
-    id: string;
-  } | null
-}
 
 export interface reservationCheckInAdmin {
   id: string | undefined,
@@ -208,15 +175,6 @@ export interface reservationsByRoom {
   roomNumber: string,
   status: statusRoom,
   totalReservation: number,
-}
-
-export interface BookingUser {
-  id: string | undefined,
-  title: string | undefined;
-  arrivalDate: Date | undefined;
-  roomNumber: number | undefined;
-  accessCode: string | null | undefined;
-  status: StatusReservation | undefined;
 }
 
 export interface ReservationData {

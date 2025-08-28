@@ -19,7 +19,7 @@ export default async function HelpPage() {
 
   return (
     <div className="mb-20">
-      <div className="px-4 mt-28 md:px-36 2xl:px-64">
+      {/* <div className="px-4 mt-28 md:px-36 2xl:px-64">
         <p className="text-xl font-medium">¿Con qué podemos ayudarte?</p>
         <div className="mt-5">
           <div className="mx-auto mt-8 flex w-full flex-col border-gray-600 bg-white sm:flex-row sm:rounded-lg sm:border">
@@ -34,8 +34,8 @@ export default async function HelpPage() {
             </button>
           </div>
         </div>
-      </div>
-      <div className="mt-16 px-4 md:px-36 2xl:px-64">
+      </div> */}
+      <div className="mt-36 px-4 md:px-36 2xl:px-64">
         <p className="text-xl font-medium">Reservas</p>
         <ul className="mt-8 md:mt-4 p-0 md:p-4 space-y-10">
           <li className="group cursor-pointer ">

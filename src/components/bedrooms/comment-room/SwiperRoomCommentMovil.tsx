@@ -12,7 +12,6 @@ import 'swiper/css/pagination';
 import { FreeMode, Pagination } from 'swiper/modules';
 import { formatDate } from '@/utils';
 import { ModalDetailReview } from '@/components';
-import { Rating } from '@/interfaces';
 import { RoomRating } from '@/interfaces/reservation.interface';
 
 

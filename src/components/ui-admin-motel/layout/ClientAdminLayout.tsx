@@ -4,7 +4,6 @@ import { AppHeader, AppSidebar, MenuOptions, ReservationSocketListener, ToastReq
 import Backdrop from "@/components/ui-admin-motel/back-drop/Backdrop";
 import { MotelApi } from "@/interfaces";
 import { useSidebarStore } from "@/store";
-import { useReservationStore } from "@/store/reservation/adminWebsocket.store";
 import React, { useEffect } from "react";
 import ReservationToast from "../toast/ReservationToast";
 import { Toaster } from "react-hot-toast";
@@ -28,17 +27,6 @@ export default function ClientAdminLayout({
       ? "lg:ml-[290px]"
       : "lg:ml-[90px]";
 
-
-
-  useEffect(() => {
-    const socket = useReservationStore.getState().socket;
-
-    if (socket) {
-      socket.on('newReservation', () => {
-        console.log('📥 Evento newReservation recibido directamente:');
-      });
-    }
-  }, []);
 
 
   return (
