@@ -56,7 +56,7 @@ export async function generateMetadata(
     openGraph: {
       title: room.title ?? "Habitacion no encontrada",
       description: room.description ?? "",
-      images: [`${room.images[0]}`],
+      images: [`${room.images[0].url}`],
     },
   };
 }

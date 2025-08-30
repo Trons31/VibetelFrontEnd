@@ -24,7 +24,6 @@ export const RelatedRooms = ({ category }: Props) => {
       setRelatedRooms(response.data);
     } catch (error: any) {
       setRelatedRooms([]);
-      console.error("Error al cargar habitaciones:", error);
     } finally {
       setIsLoading(false);
     }

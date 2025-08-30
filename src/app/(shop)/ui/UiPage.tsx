@@ -166,8 +166,8 @@ export const UiPage = () => {
             !isLoading && (
               locationUser !== null && detectedLocation && (
                 <div className="block md:flex items-center justify-center md:space-x-4 text-sm">
-                  <Link href="/home" className="text-red-600 p-2 rounded-lg bg-white font-medium">
-                    <span className="text-sm">Ver habitaciones</span>
+                  <Link href="/home" className="text-red-500 py-2 px-4 rounded-lg bg-white font-medium">
+                    <span className="text-sm font-normal">Ver habitaciones</span>
                   </Link>
                 </div>
               )

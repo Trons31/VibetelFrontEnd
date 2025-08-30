@@ -8,7 +8,7 @@ export default function NotFound() {
     <div className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden z-1">
       <div className="flex flex-col-reverse md:flex-row w-full justify-center items-center align-middle" >
 
-        <div className="text-center mt-10 md:mt-0" >
+        <div className="text-center px-2 md:px-0 mt-10 md:mt-0" >
           <h2 className={` antialiased font-bold text-5xl`}>
             ERROR
           </h2>

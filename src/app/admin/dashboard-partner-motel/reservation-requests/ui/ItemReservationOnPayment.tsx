@@ -77,11 +77,10 @@ export const ItemReservationOnPayment = ({ reservationOnPayment }: Props) => {
         }
       );
       removeReservationOnPayment(reservationOnPayment.id);
-      toast.success("Reserva confirmada")
+      toast.success("Reserva confirmada", { duration: 4000 })
       setIsLoading(false);
     } catch (error: any) {
-      console.log(error);
-      toast.error("No se pudo confirmar la reserva");
+      toast.error("No se pudo confirmar la reserva", { duration: 4000 });
       setIsLoading(false);
     }
   }

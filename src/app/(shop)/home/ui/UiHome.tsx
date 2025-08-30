@@ -28,8 +28,7 @@ export const UiHome = () => {
             setMotels(response.data.motels);
         } catch (error: any) {
             setMotels([]);
-            console.error("Error al los moteles con sus habitaciones:", error);
-            redirect("/")
+            redirect("/");
         } finally {
             setIsLoading(false);
         }
@@ -48,7 +47,7 @@ export const UiHome = () => {
             // Si no se ha cargado completamente, esperar
             setTimeout(() => {
                 setLocationLoaded(true);
-            }, 5000); // Tiempo máximo para cargar
+            }, 3000); // Tiempo máximo para cargar
         }
     }, [locationUser, locationLoaded]);
 

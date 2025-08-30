@@ -82,7 +82,7 @@ export const SwiperRelatedRooms = ({ rooms, className }: Props) => {
               >
                 <div
                   className={`${styles["card-content"]} group  fade-in bg-white border border-transparent mb-12
-               hover:border-gray-300 transition-all duration-300 h-[390px] rounded-lg hover:shadow-lg shadow-gray-200 `}
+               hover:border-gray-300 transition-all duration-300 h-[370px] rounded-lg hover:shadow-lg shadow-gray-200 `}
                 >
                   <div className={`${styles["image-container"]}`}> {/* Aplica la clase image-container aquí */}
                     {/* Aquí es donde la RoomImage debe llenar su contenedor */}

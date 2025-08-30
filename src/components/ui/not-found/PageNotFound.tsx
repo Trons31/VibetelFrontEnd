@@ -13,10 +13,10 @@ export const PageNotFound = () => {
           ¡Parece que no podemos encontrar la habitación que estás buscando!
         </p>
         <Link
-          href="/"
+          href="/rooms"
           className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-5 py-3.5 text-xs md:text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800"
         >
-          Volver a la página de inicio
+          Volver a la página de habitaciones
         </Link>
       </div>
 

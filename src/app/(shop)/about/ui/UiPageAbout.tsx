@@ -190,7 +190,7 @@ export const UiPageAbout = ({ generalStatistics }: Props) => {
         <div className="px-2 text-center" >
           <h1 className={`  text-3xl md:text-4xl `} >Preguntas frecuentes</h1>
         </div>
-        <div className="px-4 md:px-10 mt-5 mb-10" >
+        <div className="mx-auto container px-4 md:px-5 mt-5 mb-10" >
           <Accordion items={items} />
         </div>
       </div>
@@ -213,10 +213,8 @@ export const UiPageAbout = ({ generalStatistics }: Props) => {
               />
             </div>
             <div className="p-2">
-              <a href="#">
                 <h5 className="mb-2 text-lg text-center font-bold text-gray-800">Registra tu motel</h5>
-              </a>
-              <p className="mb-3 font-light text-xs text-center text-gray-700 " style={{ textAlign: 'justify' }}>Registra tu motel en nuestra plataforma y conecta con más clientes locales cada día. Aumenta tu visibilidad y optimiza tus reservas de manera fácil y eficiente. ¡Únete ahora y comienza a potenciar tus ingresos!</p>
+              <p className="mb-3 font-light text-xs text-center text-gray-700 " style={{ textAlign: 'justify', textAlignLast: 'center' }}>Registra tu motel en nuestra plataforma y conecta con más clientes locales cada día. Aumenta tu visibilidad y optimiza tus reservas de manera fácil y eficiente. ¡Únete ahora y comienza a potenciar tus ingresos!</p>
               <Link href="/motel-partner" >
                 <button className='w-full bg-red-100 p-3 transition-all duration-150 text-red-500 hover:bg-red-500 hover:text-white rounded' >
                   Conocer mas
@@ -236,10 +234,8 @@ export const UiPageAbout = ({ generalStatistics }: Props) => {
               />
             </div>
             <div className="p-2">
-              <a href="#">
                 <h5 className="mb-2 text-lg text-center font-bold text-gray-800">Registrate como usuario</h5>
-              </a>
-              <p className="mb-3 font-light text-xs text-center text-gray-700 " style={{ textAlign: 'justify' }}>Regístrate ahora y accede instantáneamente a las mejores ofertas de moteles en tu área. Disfruta de reservas fáciles, rápidas y seguras. ¡Empieza tu próxima escapada con nosotros!</p>
+              <p className="mb-3 font-light text-xs text-center text-gray-700 " style={{ textAlign: 'justify', textAlignLast: 'center' }}>Regístrate ahora y accede instantáneamente a las mejores ofertas de moteles en tu área. Disfruta de reservas fáciles, rápidas y seguras. ¡Empieza tu próxima escapada con nosotros!</p>
               <Link href="/auth/login" >
                 <button className='w-full bg-red-100 p-3 transition-all duration-150 text-red-500 hover:bg-red-500 hover:text-white rounded' >
                   Conocer mas
@@ -247,9 +243,7 @@ export const UiPageAbout = ({ generalStatistics }: Props) => {
               </Link>
             </div>
           </div>
-
         </div>
-
       </div>
     </>
   )

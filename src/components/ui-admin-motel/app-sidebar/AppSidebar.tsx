@@ -24,7 +24,8 @@ import {
 } from "react-icons/ri";
 import {
   TbPresentationAnalytics,
-  TbDeviceAnalytics
+  TbDeviceAnalytics,
+  TbDeviceDesktopAnalytics
 } from "react-icons/tb";
 import { TiHomeOutline } from "react-icons/ti";
 import { BsThreeDots } from "react-icons/bs";
@@ -56,6 +57,11 @@ const navItems: NavItem[] = [
     icon: <MdOutlineEventAvailable />,
     name: "Solicitud de reservas",
     path: "/admin/dashboard-partner-motel/reservation-requests",
+  },
+  {
+    icon: <TbDeviceDesktopAnalytics  />,
+    name: "Reportes",
+    path: "/admin/dashboard-partner-motel/reports",
   },
 ];
 

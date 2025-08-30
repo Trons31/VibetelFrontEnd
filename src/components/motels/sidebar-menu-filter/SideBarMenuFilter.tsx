@@ -295,7 +295,7 @@ export const SideBarMenuFilter = ({
         <div className="w-full h-px bg-gray-200 my-5" />
 
         {/* Comodidades */}
-        <div className='pb-10'>
+        <div className='pb-16'>
           <div className="flex justify-between items-center">
             <p className="font-extrabold text-md">Comodidades</p>
             <button onClick={() => setOpenSubMenuAmenities(!openSubMenuAmenities)}>

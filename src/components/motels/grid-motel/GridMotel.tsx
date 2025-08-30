@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { titleFont } from "@/config/fonts";
+import { Lobster } from "@/config/fonts";
 import { MotelApi } from "@/interfaces/motels.interface";
 import { ItemMotel } from "./ItemMotel";
 import { formatDate } from "@/utils";
@@ -43,7 +43,7 @@ export const GridMotel = ({ motels }: Props) => {
                       <BsPatchCheckFill />
                     </span>
                     <p
-                      className={` ${titleFont.className} antialiased capitalize text-xl font-semibold mr-2  `}
+                      className={` ${Lobster.className} antialiased capitalize text-xl font-semibold mr-2  `}
                     >
                       {motel.razonSocial}
                     </p>

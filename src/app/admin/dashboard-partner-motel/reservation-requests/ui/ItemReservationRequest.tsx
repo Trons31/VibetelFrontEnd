@@ -54,17 +54,16 @@ export const ItemReservationRequest = ({ reservationsPending }: Props) => {
         }
       );
       if (action === "accept") {
-        toast.success("Solicitud de reserva confirmada")
+        toast.success("Solicitud de reserva confirmada", { duration: 4000 })
         addReservationOnPayment(response.data);
       } else {
-        toast.success("Solicitud de reserva rechazada")
+        toast.success("Solicitud de reserva rechazada", { duration: 4000 })
       }
       removeReservation(reservationsPending.id);
       setIsLoading(false);
       setLoadingAction(null);
     } catch (error: any) {
-      console.log(error);
-      toast.error("No se actualizar el estado de la reserva");
+      toast.error("No se actualizar el estado de la reserva", { duration: 4000 });
       setIsLoading(false);
       setLoadingAction(null);
     }

@@ -30,6 +30,11 @@ const navItems: NavItem[] = [
     icon: <TiHomeOutline />,
     name: "Dashboard",
     path: "/admin/dashboard-super-admin",
+  },
+  {
+    icon: <TiHomeOutline />,
+    name: "Reportes",
+    path: "/admin/dashboard-super-admin/reports",
   }
 ];
 
@@ -71,7 +76,7 @@ const rooms: NavItem[] = [
     path: "/",
   },
   {
-    icon: <MdOutlineAddHome/>,
+    icon: <MdOutlineAddHome />,
     name: "Comodidades",
     path: "/",
   }
