@@ -158,7 +158,7 @@ export const ReservationPage = ({ user }: Props) => {
                                   <h1 className="text-xl font-extrabold tracking-tight leading-none text-gray-900 md:text-4xl ">¡No tiene reservas actualmente!</h1>
                                   <p className="mt-3 mb-3 md:mb-1 md:mt-1 text-sm font-normal text-gray-500  md:text-md px-2 lg:px-24 ">Para hacer una reserva, visite la sección de habitaciones.</p>
                                   <div className="flex justify-center">
-                                    <Link href="/room" className="inline-flex justify-center items-center  px-5 underline">
+                                    <Link href="/rooms" className="inline-flex justify-center items-center  px-5 underline">
                                       Ver habitaciones
                                     </Link>
                                   </div>

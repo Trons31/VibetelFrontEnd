@@ -37,6 +37,7 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
   const [isDateTimeModalOpen, setIsDateTimeModalOpen] = useState(false);
   const [dateTimeStep, setDateTimeStep] = useState<"date" | "time">("date");
   const [modalReservationInProcessing, setModalReservationInProcessing] = useState(false);
+  const [redirectToPayment, setRedirectToPayment] = useState(false);
 
   const reservationStatus = useReservationClientStore(state => state.reservationStatus);
   const [tokenTransaction, setTokenTransaction] = useState<string | null>(null);
@@ -56,7 +57,6 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
     try {
       return btoa(token); // Codifica a Base64
     } catch (e) {
-      console.error("Error al codificar el token:", e);
       return token; // Retorna sin codificar si hay un error
     }
   };
@@ -65,7 +65,6 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
     try {
       return atob(encodedToken); // Decodifica de Base64
     } catch (e) {
-      console.error("Error al decodificar el token:", e);
       return encodedToken; // Retorna sin decodificar si hay un error
     }
   };
@@ -172,7 +171,6 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
     try {
       await axios.post(`${process.env.NEXT_PUBLIC_API_ROUTE}service/validate-reservation`, validateDataForReservation);
     } catch (error: any) {
-      console.log(error);
       toast.error("Error ya existen reservas en este horario. selecciona otro", { duration: 4000 });
       setShowModalLoadingReservation(false);
       setShowLoading(false);
@@ -197,8 +195,9 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
         notifyTokenChange(response.data.reservationToken);
       }
 
+      setRedirectToPayment(true);
       setShowModalLoadingReservation(true);
-
+      localStorage.setItem("redirectUrl", window.location.pathname);
     } catch (error: any) {
       console.error("Error en la reserva:", error);
     }
@@ -219,14 +218,12 @@ export const AddToReservationDeskTop = ({ room, MotelConfig }: Props) => {
 
   useEffect(() => {
     if (reservationStatus) {
-      console.log("Manejando actualización de reserva en useEffect:", reservationStatus); // Este log ahora debería aparecer
-
       if (reservationStatus.isConfirmed) {
         const bookingBedroom = createBookingBedroom();
         addBedroomToBooking(bookingBedroom);
-        localStorage.setItem("redirectUrl", window.location.pathname);
-        router.push(isAuthenticated ? "/payment-processing/user" : "/payment-processing/guest");
-
+        if (redirectToPayment) {
+          router.push(isAuthenticated ? "/payment-processing/user" : "/payment-processing/guest");
+        }
       } else {
         toast.error("Error: Ya existen reservas en este horario. Por favor, selecciona otro.", { duration: 7000 });
         setShowModalLoadingReservation(false);

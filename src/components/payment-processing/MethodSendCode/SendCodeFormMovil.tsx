@@ -65,7 +65,6 @@ export const SendCodeFormMovil = () => {
         try {
             return atob(encodedToken); // Decodifica de Base64
         } catch (e) {
-            console.error("Error al decodificar el token:", e);
             return encodedToken; // Retorna sin decodificar si hay un error
         }
     };

@@ -15,6 +15,7 @@ export const TopMenuPaymentProcessing = () => {
 
   const router = useRouter();
 
+  console.log(localStorage.getItem("redirectUrl"));
   const handleBack = () => {
     const redirectUrl = localStorage.getItem("redirectUrl") || "/home";
     localStorage.removeItem("redirectUrl");

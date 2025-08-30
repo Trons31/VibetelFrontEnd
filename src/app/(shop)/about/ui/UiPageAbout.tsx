@@ -1,5 +1,6 @@
 import { Accordion } from '@/components';
 import { Lobster } from '@/config/fonts';
+import { GeneralStatistics } from '@/interfaces/statistics';
 import Image from 'next/image';
 import Link from 'next/link';
 import { BsBuildingsFill } from 'react-icons/bs';
@@ -7,9 +8,7 @@ import { FaMapLocation } from 'react-icons/fa6';
 import { IoBed, IoLogoWhatsapp } from 'react-icons/io5';
 
 interface Props {
-  allRoom: number;
-  allUser: number;
-  allMotel: number;
+  generalStatistics: GeneralStatistics;
 }
 
 const items = [
@@ -69,7 +68,7 @@ const items = [
 ];
 
 
-export const UiPageAbout = () => {
+export const UiPageAbout = ({ generalStatistics }: Props) => {
   return (
     <>
       <div className="h-screen flex items-center justify-center">
@@ -97,8 +96,8 @@ export const UiPageAbout = () => {
                 <div className="border-2 border-black relative p-3 md:p-6 rounded-2xl bg-white z-10 shadow-sm">
                   <p className="text-lg text-black font-semibold" >Habitaciones</p>
                   <div className="flex items-center gap-2 mt-4" >
-                    <IoBed  className="h-9 w-9 text-black" />
-                    <p className="text-sm md:text-base text-gray-600" >25 habitaciones registradas</p>
+                    <IoBed className="h-9 w-9 text-black" />
+                    <p className="text-sm md:text-base text-gray-600" >{generalStatistics.roomsWithApprovedMotels} habitaciones registradas</p>
                   </div>
                 </div>
               </div>
@@ -109,8 +108,8 @@ export const UiPageAbout = () => {
                 <div className="border-2 border-black relative p-3 md:p-6 rounded-2xl bg-white z-10 shadow-sm">
                   <p className="text-lg text-black font-semibold" >Moteles</p>
                   <div className="flex items-center gap-2 mt-4" >
-                    <BsBuildingsFill  className="h-9 w-9 text-black" />
-                    <p className="text-sm md:text-base text-gray-600" >1 motele registradas</p>
+                    <BsBuildingsFill className="h-9 w-9 text-black" />
+                    <p className="text-sm md:text-base text-gray-600" >{generalStatistics.motelsApproved} {generalStatistics.motelsApproved > 1 ? "moteles" : "motel"} {generalStatistics.motelsApproved > 1 ? "registrados" : "registrado"}</p>
                   </div>
                 </div>
               </div>
@@ -121,8 +120,8 @@ export const UiPageAbout = () => {
                 <div className="border-2 border-black relative p-3 md:p-6 rounded-2xl bg-white z-10 shadow-sm">
                   <p className="text-lg text-black font-semibold" >Ciudades</p>
                   <div className="flex items-center gap-2 mt-4" >
-                    <FaMapLocation  className="h-9 w-9 text-black" />
-                    <p className="text-sm md:text-base text-gray-600" >1 ciudad con presencia</p>
+                    <FaMapLocation className="h-9 w-9 text-black" />
+                    <p className="text-sm md:text-base text-gray-600" >{generalStatistics.citiesWithApprovedMotels} {generalStatistics.citiesWithApprovedMotels > 1 ? "ciudades" : "ciudad"} con presencia</p>
                   </div>
                 </div>
               </div>

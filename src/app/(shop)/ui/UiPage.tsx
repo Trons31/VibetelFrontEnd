@@ -14,7 +14,7 @@ import {
   ModalLocationUserMovil,
   RoomImage,
 } from "@/components";
-import {  LocationCity } from "@/interfaces";
+import { LocationCity } from "@/interfaces";
 
 interface motels {
   id: string;
@@ -100,10 +100,14 @@ export const UiPage = () => {
 
       <div className="h-screen flex items-center justify-center bg-red-600 rounded-lg">
         <div className="text-center text-white space-y-8 max-w-4xl">
-          <h1 className="text-lg md:text-2xl font-light">
-            Con <span className="font-bold">Vibetel</span>, reservar habitaciones de motel es más fácil, rápido y seguro.
-          </h1>
-          <div className="mt-6 px-2 md:px-0 flex items-center justify-center">
+          <div className="px-4 md:px-0" >
+            <h1 className="text-lg md:text-2xl font-light"
+              style={{ textAlign: 'justify', textAlignLast: 'center' }}
+            >
+              Con <span className="font-bold">Vibetel</span>, reservar habitaciones de motel es más fácil, rápido y seguro.
+            </h1>
+          </div>
+          <div className="mt-6 px-4 md:px-0 flex items-center justify-center">
             {!isLoading &&
               (locationUser !== null && detectedLocation ? (
                 <>
@@ -147,12 +151,12 @@ export const UiPage = () => {
                     </div>
 
                     <div className="flex items-center w-full">
-                      <input
+                      <div
                         onClick={() => setModalLocationUser(true)}
-                        type="text"
-                        className="w-full rounded-md text-gray-900 text-xs focus:outline-none ps-14 p-5 pr-10"
-                        placeholder="¡Cuéntanos tu ubicación y encuentra los moteles más cercanos para ti!"
-                      />
+                        className="w-full rounded-md text-gray-500 text-xs ps-14 p-5 pr-10 cursor-pointer border border-gray-300 bg-white"
+                      >
+                        ¡Cuéntanos tu ubicación!
+                      </div>
                     </div>
                   </div>
                 </>
@@ -196,7 +200,7 @@ export const UiPage = () => {
           </div>
         </div>
       )}
-{/* 
+      {/* 
       {topRooms.length > 0 && (
         <div className="p-3 md:px-24 py-5 mt-10 mb-10">
           <div>
@@ -251,11 +255,9 @@ export const UiPage = () => {
               />
             </div>
             <div className="p-2">
-              <a href="#">
-                <h5 className="mb-2 text-lg text-center font-bold text-gray-800">
-                  Registra tu motel
-                </h5>
-              </a>
+              <h5 className="mb-2 text-lg text-center font-bold text-gray-800">
+                Registra tu motel
+              </h5>
               <p
                 className="mb-3 font-light text-xs text-center text-gray-700 "
                 style={{ textAlign: 'justify', textAlignLast: 'center' }}
@@ -284,11 +286,9 @@ export const UiPage = () => {
               />
             </div>
             <div className="p-2">
-              <a href="#">
-                <h5 className="mb-2 text-lg text-center font-bold text-gray-800">
-                  Registrate como usuario
-                </h5>
-              </a>
+              <h5 className="mb-2 text-lg text-center font-bold text-gray-800">
+                Registrate como usuario
+              </h5>
               <p
                 className="mb-3 font-light text-xs text-center text-gray-700 "
                 style={{ textAlign: 'justify', textAlignLast: 'center' }}

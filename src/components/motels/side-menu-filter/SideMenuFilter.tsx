@@ -272,7 +272,7 @@ export const SideMenuFilter = ({ categoryRoom, garageRoom, BestPromotion, amenit
                           <button
                             onClick={() => handleSelectionCategory(categoryItem)}
                             className={clsx(
-                              'text-gray-800 text-sm hover:border-l-4 px-1 capitalize hover:border-red-500',
+                              'text-gray-800 text-sm px-1 py-1 capitalize hover:bg-red-600 hover:text-white hover:px-3 rounded-lg',
                               { 'bg-red-500 text-white rounded-lg py-1 px-3': selectedCategory === categoryItem.name }
                             )}
                           >
@@ -392,13 +392,10 @@ export const SideMenuFilter = ({ categoryRoom, garageRoom, BestPromotion, amenit
 
           </div>
 
-          <div className='w-full h-px bg-gray-200 my-5' />
+          {/* <div className='w-full h-px bg-gray-200 my-5' /> */}
 
         </div>
-
       </div>
-
     </>
-
   )
 }

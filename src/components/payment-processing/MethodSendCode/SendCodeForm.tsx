@@ -61,14 +61,10 @@ export const SendCodeForm = () => {
 
 
     const [transactionData, setTransactionData] = useState<transactionData | undefined>(undefined);
-
-    console.log(transactionData);
-
     const decodeToken = (encodedToken: string): string => {
         try {
             return atob(encodedToken); // Decodifica de Base64
         } catch (e) {
-            console.error("Error al decodificar el token:", e);
             return encodedToken; // Retorna sin decodificar si hay un error
         }
     };
@@ -99,7 +95,6 @@ export const SendCodeForm = () => {
             toast.success("Realiza el pago para completar la reserva");
             setLoading(false);
         } catch (error: any) {
-            console.error("Error en la reserva:", error);
             toast.error("Error realiaron una reserva en este horario antes que tu.");
             setLoading(false);
         }

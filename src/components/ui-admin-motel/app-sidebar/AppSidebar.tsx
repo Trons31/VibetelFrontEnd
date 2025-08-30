@@ -219,9 +219,17 @@ export const AppSidebar = ({ motelName, motelStatus, subscription, motelImage }:
         <div className="text-center">
           <h5 className={`${fontPoppins.className} text-xl font-bold mt-2`}>{motelName}</h5>
           {motelImage ? (
-            <Link className="underline text-center text-xs" href="/admin/dashboard-partner-motel/config-motel/motel-cover">Editar portada</Link>
+            <Link
+              className="underline text-center text-xs"
+              href="/admin/dashboard-partner-motel/config-motel/motel-cover"
+              onClick={() => isMobileOpen && setIsMobileOpen(false)}
+            >Editar portada</Link>
           ) : (
-            <Link className="underline text-xs" href="/admin/dashboard-partner-motel/config-motel/motel-cover">Agregar portada</Link>
+            <Link
+              className="underline text-xs"
+              href="/admin/dashboard-partner-motel/config-motel/motel-cover"
+              onClick={() => isMobileOpen && setIsMobileOpen(false)}
+            >Agregar portada</Link>
           )}
         </div>
       </div>

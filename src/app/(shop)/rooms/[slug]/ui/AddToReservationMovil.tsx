@@ -9,7 +9,7 @@ import { IoArrowForwardOutline } from "react-icons/io5";
 import { useBookingStore } from "@/store";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { CustomDatePicker, ModalLoadingReservation, TimeSelector } from "@/components";
+import { CustomDatePicker, ModalLoadingReservation, ModalReservationInProcessing, TimeSelector } from "@/components";
 import { currencyFormat, formatDate, formatTimeWithAmPm } from "@/utils";
 import { FaRegEdit } from "react-icons/fa";
 import { TbClockExclamation } from "react-icons/tb";
@@ -29,6 +29,7 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
     const isAuthenticated = !!session?.user;
 
     const [isExpanded, setIsExpanded] = useState(false);
+    const [redirectToPayment, setRedirectToPayment] = useState(false);
 
     const [isLoading, setIsLoading] = useState(true);
     const [showLoading, setshowLoading] = useState(false);
@@ -81,7 +82,6 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
             return encodedToken; // Retorna sin decodificar si hay un error
         }
     };
-
 
 
     useEffect(() => {
@@ -157,7 +157,7 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
         };
     }, [room, selectedDate, departureDate, MotelConfig]);
 
-    const handleReservation = async (isAnonymous: boolean) => {
+    const handleReservation = async () => {
         if (tokenTransaction) {
             setShowModalReservationProcessing(true);
             return;
@@ -180,7 +180,6 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
         try {
             await axios.post(`${process.env.NEXT_PUBLIC_API_ROUTE}service/validate-reservation`, validateDataForReservation);
         } catch (error: any) {
-            console.log(error);
             toast.error("Error ya existen reservas en este horario. selecciona otro", { duration: 7000 });
             setShowModalLoadingReservation(false);
             setshowLoading(false);
@@ -205,8 +204,9 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
                 notifyTokenChange(response.data.reservationToken);
             }
 
+            setRedirectToPayment(true);
             setShowModalLoadingReservation(true);
-
+            localStorage.setItem("redirectUrl", window.location.pathname);
         } catch (error: any) {
             console.error("Error en la reserva:", error);
         }
@@ -220,14 +220,12 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
 
     useEffect(() => {
         if (reservationStatus) {
-            console.log("Manejando actualización de reserva en useEffect:", reservationStatus); // Este log ahora debería aparecer
-
             if (reservationStatus.isConfirmed) {
                 const bookingBedroom = createBookingBedroom();
                 addBedroomToBooking(bookingBedroom);
-                localStorage.setItem("redirectUrl", window.location.pathname);
-                router.push(isAuthenticated ? "/payment-processing/user" : "/payment-processing/guest");
-
+                if (redirectToPayment) {
+                    router.push(isAuthenticated ? "/payment-processing/user" : "/payment-processing/guest");
+                }
             } else {
                 toast.error("Error: Ya existen reservas en este horario. Por favor, selecciona otro.", { duration: 7000 });
                 setShowModalLoadingReservation(false);
@@ -301,6 +299,12 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
 
     return (
         <>
+
+            <ModalReservationInProcessing
+                isOpen={modalReservationInProcessing}
+                onClose={() => setModalReservationInProcessing(false)}
+            />
+
 
             <ModalLoadingReservation
                 isOpen={showModalLoadingReservation}
@@ -510,7 +514,7 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
                                     <button
                                         type="submit"
                                         disabled={showLoading || !selectedDate}
-                                        onClick={() => handleReservation(false)}
+                                        onClick={() => handleReservation()}
                                         className={clsx({
                                             "flex items-center gap-x-4 w-full mt-2 justify-center rounded-lg bg-red-600 hover:bg-red-700 px-7 py-2 font-medium text-white":
                                                 !showLoading,
@@ -625,7 +629,7 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
                                                                 </div>
                                                             )}
 
-                                                            <button onClick={() => handleReservation(true)}>
+                                                            <button onClick={() => handleReservation()}>
                                                                 <label className="inline-flex items-center md:gap-2 justify-between w-full p-3 md:p-5 text-gray-900 bg-white border border-gray-500 rounded-lg cursor-pointer hover:border-red-500 hover:text-red-500 text-start">
                                                                     <div className="block">
                                                                         <div className="w-full text-md font-semibold">

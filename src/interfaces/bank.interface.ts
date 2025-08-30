@@ -17,6 +17,16 @@ export interface BankAccountApi {
     accountNumber: string;
     createdAt: Date;
     updatedAt: Date;
-    accountTypeId: string;
-    bankId: string;
+    accountType: AccountTypeByMotel;
+    bank: BankByMotel;
+}
+
+interface BankByMotel {
+    id:string,
+    name:string
+}
+
+interface AccountTypeByMotel {
+    id:string,
+    name:string
 }

@@ -254,7 +254,7 @@ export const SideBarMenuFilter = ({
                     onClick={() => handleSelectionCategory(categoryItem)}
                     className={clsx('text-sm px-1 capitalize', {
                       'bg-red-500 text-white rounded-lg py-1 px-3': selectedCategory === categoryItem.name,
-                      'text-gray-800 hover:border-l-4 hover:border-red-500': selectedCategory !== categoryItem.name,
+                      'text-gray-800 hover:bg-red-600 hover:text-white hover:px-3 rounded-lg': selectedCategory !== categoryItem.name,
                     })}
                   >
                     {categoryItem.name}
@@ -295,7 +295,7 @@ export const SideBarMenuFilter = ({
         <div className="w-full h-px bg-gray-200 my-5" />
 
         {/* Comodidades */}
-        <div>
+        <div className='pb-10'>
           <div className="flex justify-between items-center">
             <p className="font-extrabold text-md">Comodidades</p>
             <button onClick={() => setOpenSubMenuAmenities(!openSubMenuAmenities)}>

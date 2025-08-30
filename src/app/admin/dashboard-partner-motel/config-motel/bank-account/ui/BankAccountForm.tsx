@@ -36,8 +36,8 @@ export const BankAccountForm = ({ accountType, bank, bankAccount, accessToken }:
       accountHolderId: bankAccount?.accountHolderId,
       accountHolderName: bankAccount?.accountHolderName,
       accountNumber: bankAccount?.accountNumber,
-      accountTypeId: bankAccount?.accountTypeId,
-      bankId: bankAccount?.bankId
+      accountTypeId: bankAccount?.accountType.id,
+      bankId: bankAccount?.bank.id
     }
   });
 
@@ -46,7 +46,7 @@ export const BankAccountForm = ({ accountType, bank, bankAccount, accessToken }:
 
     if (bankAccount) {
       try {
-        await axios.patch(`${process.env.NEXT_PUBLIC_API_ROUTE}bank-accounts`, data,
+        await axios.patch(`${process.env.NEXT_PUBLIC_API_ROUTE}bank-accounts/${bankAccount.id}`, data,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
