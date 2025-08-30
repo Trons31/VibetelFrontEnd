@@ -206,9 +206,11 @@ export const AddToReservationMovil = ({ room, MotelConfig }: Props) => {
 
             setRedirectToPayment(true);
             setShowModalLoadingReservation(true);
-            localStorage.setItem("redirectUrl", window.location.pathname);
         } catch (error: any) {
             console.error("Error en la reserva:", error);
+        }
+        if (typeof window !== "undefined") {
+            localStorage.setItem("redirectUrl", window.location.pathname);
         }
     };
 

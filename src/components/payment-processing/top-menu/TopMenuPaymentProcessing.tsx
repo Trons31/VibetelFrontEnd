@@ -1,5 +1,4 @@
 'use client';
-import { useEffect, useState } from "react";
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -15,7 +14,6 @@ export const TopMenuPaymentProcessing = () => {
 
   const router = useRouter();
 
-  console.log(localStorage.getItem("redirectUrl"));
   const handleBack = () => {
     const redirectUrl = localStorage.getItem("redirectUrl") || "/home";
     localStorage.removeItem("redirectUrl");

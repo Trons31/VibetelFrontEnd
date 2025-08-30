@@ -33,14 +33,18 @@ export const ModalReservationInProcessing = ({ isOpen, onClose }: ModalProps) =>
     if (!isOpen) return null;
 
     const OnNewReservation = async () => {
-        localStorage.removeItem("persist-token-reservation");
+        if (typeof window !== "undefined") {
+            localStorage.removeItem("persist-token-reservation");
+        }
         window.location.reload();
         removeBooking();
         onClose();
     }
 
     const redirectToPayment = () => {
-        localStorage.setItem("redirectUrl", window.location.pathname);
+        if (typeof window !== "undefined") {
+            localStorage.setItem("redirectUrl", window.location.pathname);
+        }
         if (isAuthenticated) {
             router.push("/payment-processing/user")
         } else {
