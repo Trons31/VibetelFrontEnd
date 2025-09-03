@@ -117,17 +117,17 @@ export const AdminDashboardReport = ({ accessToken }: Props) => {
   }, [startDate, endDate, accessToken]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-slate-50">
+    <div className="min-h-screen rounded-lg bg-white">
       {/* Header */}
-      <div className="sticky top-0 z-10 backdrop-blur supports-[backdrop-filter]:bg-white/70 border-b border-slate-200">
+      <div className="sticky top-0 z-10 backdrop-blur rounded-t-xl supports-[backdrop-filter]:bg-white/70 border-b border-slate-200">
         <div className="mx-auto max-w-7xl px-6 py-4 block md:flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-2xl bg-black text-white">
               <BsFillBarChartLineFill className="h-5 w-5" />
             </div>
             <div>
-              <h1 className="text-lg md:text-2xl font-semibold tracking-tight">Reportes de Administración</h1>
-              <p className="text-slate-500 text-sm">Resumen de todos los moteles · Filtra y exporta</p>
+              <h1 className="text-lg md:text-2xl font-semibold tracking-tight leading-tight m-0">Reportes de Administración</h1>
+              <p className="text-slate-500 text-xs md:text-sm">Resumen de todos los moteles, filtra y exporta</p>
             </div>
           </div>
           <div className="flex justify-end md:justify-start mt-3 md:mt-0 items-center gap-2">
@@ -142,7 +142,7 @@ export const AdminDashboardReport = ({ accessToken }: Props) => {
       </div>
 
       {/* Controls */}
-      <section className="mx-auto max-w-7xl px-6 pt-6">
+      <section className="mx-auto w-full px-3 md:px-20 pt-6">
         <div className="rounded-3xl border border-slate-200 bg-white p-4 md:p-6 shadow-sm">
           <div className="flex flex-wrap items-center gap-2 md:gap-3">
             <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
@@ -196,13 +196,13 @@ export const AdminDashboardReport = ({ accessToken }: Props) => {
       </section>
 
       {/* KPI Cards */}
-      <section className="mx-auto max-w-7xl px-6 pt-6">
+      <section className="mx-auto w-full px-3 md:px-20 pt-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
             title="Total Reservas"
             value={report?.totals.totalReservations ?? 0}
             icon={<IoReceipt className="h-5 w-5" />}
-            caption={`${report?.startDate ?? ''} → ${report?.endDate ?? ''}`}
+            caption={`${report?.startDate ?? ''} a ${report?.endDate ?? ''}`}
           />
           <StatCard
             title="Ingresos brutos totales"
@@ -226,23 +226,23 @@ export const AdminDashboardReport = ({ accessToken }: Props) => {
       </section>
 
       {/* Detailed table */}
-      <section className="mx-auto max-w-7xl px-6 pt-6 pb-16">
+      <section className="mx-auto w-full px-3 md:px-20 pt-6 pb-16">
         <div className="rounded-3xl border border-slate-200 bg-white p-0 shadow-sm overflow-hidden">
           <div className="px-4 md:px-6 py-4 flex items-center justify-between border-b border-slate-200">
-            <h3 className="text-sm font-medium text-slate-700">Detalle por motel</h3>
+            <h3 className="text-xs md:text-sm font-medium text-slate-700">Detalle por motel</h3>
             <span className="text-xs text-slate-500">{report?.reports.length ?? 0} moteles</span>
           </div>
           <div className="overflow-x-auto">
             <table className="min-w-full text-sm">
               <thead className="bg-slate-50 text-slate-600">
                 <tr>
-                  <Th>Motel</Th>
-                  <Th>Ubicación</Th>
-                  <Th className="text-right">Reservas</Th>
-                  <Th className="text-right">Ingresos brutos</Th>
-                  <Th className="text-right">Comisión</Th>
-                  <Th className="text-right">% Comisión</Th>
-                  <Th className="text-right">Ingreso neto</Th>
+                  <Th className='text-xs md:text-sm' >Motel</Th>
+                  <Th className='text-xs md:text-sm' >Ubicación</Th>
+                  <Th className="text-xs md:text-sm text-right">Reservas</Th>
+                  <Th className="text-xs md:text-sm text-right">Ingresos brutos</Th>
+                  <Th className="text-xs md:text-sm text-right">Comisión</Th>
+                  <Th className="text-xs md:text-sm text-right">% Comisión</Th>
+                  <Th className="text-xs md:text-sm text-right">Ingreso neto</Th>
                 </tr>
               </thead>
               <tbody>
@@ -253,20 +253,20 @@ export const AdminDashboardReport = ({ accessToken }: Props) => {
                 )}
                 {!loading && report?.reports.map((motel) => (
                   <tr key={motel.motelId} className="border-t border-slate-200 hover:bg-slate-50/60">
-                    <Td className="font-medium">{motel.motelName}</Td>
-                    <Td>{motel.location}</Td>
-                    <Td className="text-right">{motel.totalReservations}</Td>
-                    <Td className="text-right">{fmtCOP(motel.grossRevenue)}</Td>
-                    <Td className="text-right">{fmtCOP(motel.commission)}</Td>
-                    <Td className="text-right">{motel.commissionPercentage}%</Td>
-                    <Td className="text-right">{fmtCOP(motel.netRevenue)}</Td>
+                    <Td className="text-xs md:text-sm font-medium col-span-2">{motel.motelName}</Td>
+                    <Td className='text-xs md:text-sm' >{motel.location}</Td>
+                    <Td className="text-xs md:text-sm text-right">{motel.totalReservations}</Td>
+                    <Td className="text-xs md:text-sm text-right">{fmtCOP(motel.grossRevenue)}</Td>
+                    <Td className="text-xs md:text-sm text-right">{fmtCOP(motel.commission)}</Td>
+                    <Td className="text-xs md:text-sm text-right">{motel.commissionPercentage}%</Td>
+                    <Td className="text-xs md:text-sm text-right">{fmtCOP(motel.netRevenue)}</Td>
                   </tr>
                 ))}
               </tbody>
               {report && (
                 <tfoot>
                   <tr className="border-t-2 border-slate-300 bg-slate-50">
-                    <td colSpan={2} className="font-semibold">Totales</td>
+                    <td colSpan={2} className="font-semibold px-4">Totales</td>
                     <Td className="text-right font-semibold">{report.totals.totalReservations}</Td>
                     <Td className="text-right font-semibold">{fmtCOP(report.totals.totalGrossRevenue)}</Td>
                     <Td className="text-right font-semibold">{fmtCOP(report.totals.totalCommission)}</Td>
@@ -284,7 +284,7 @@ export const AdminDashboardReport = ({ accessToken }: Props) => {
           <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
             <MiniStat
               label="Reserva promedio"
-              value={fmtCOP(report.totals.totalGrossRevenue / report.totals.totalReservations)}
+              value={fmtCOP(report.totals.totalGrossRevenue / report.totals.totalReservations > 0 ? report.totals.totalGrossRevenue / report.totals.totalReservations : 0 )}
               icon={<IoReceipt className="h-4 w-4" />}
             />
             <MiniStat
@@ -349,7 +349,7 @@ function MiniStat({ label, value, icon }: { label: string; value: string | numbe
     <div className="rounded-2xl border border-slate-200 bg-white p-4 flex items-center justify-between">
       <div>
         <p className="text-xs text-slate-500">{label}</p>
-        <p className="text-sm md:text-lg font-semibold tracking-tight">{value}</p>
+        <p className="text-sm md:text-md font-semibold tracking-tight">{value}</p>
       </div>
       <div className="p-2 rounded-xl bg-slate-900 text-white">{icon}</div>
     </div>

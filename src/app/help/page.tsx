@@ -13,9 +13,19 @@ import {
 } from "react-icons/md";
 import { RiRefund2Fill } from "react-icons/ri";
 
+export async function generateMetadata() {
+  return {
+    title: 'Centro de Ayuda',
+    description:
+      'Encuentra respuestas a tus dudas sobre reservas, pagos, reembolsos y configuración de tu cuenta en vibetel. Accede a nuestras guías y preguntas frecuentes para resolver cualquier inconveniente de forma rápida y sencilla.',
+  };
+}
+
+
+
 export default async function HelpPage() {
 
-   const session = await auth();
+  const session = await auth();
 
   return (
     <div className="mb-20">
@@ -237,8 +247,8 @@ export default async function HelpPage() {
           <li className="group cursor-pointer">
             <div className="flex justify-between gap-2 md:gap-10 items-center">
               <Link
-               href={session?.user ? "/profile" : "/auth/login"}
-               className="flex gap-4">
+                href={session?.user ? "/profile" : "/auth/login"}
+                className="flex gap-4">
                 <FaRegUser className="w-4 h-4 md:w-6 md:h-6 text-red-600 flex-shrink-0" />
                 <div>
                   <p className="text-md group-hover:text-red-600 font-semibold">

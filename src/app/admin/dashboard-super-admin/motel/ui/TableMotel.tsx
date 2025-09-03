@@ -295,6 +295,7 @@ export const TableMotel = ({ accessToken }: Props) => {
                 {
                     !isLoading && paginatedMotels.length > 0 && ( // Mostrar paginación solo si hay moteles y no está cargando
                         <PaginationTable
+                            nameData='moteles'
                             currentPage={currentPage}
                             totalItems={totalCountResultsFilter} // totalItems ahora es el total de moteles filtrados
                             onItemsPerPageChange={(value) => handleItemsPerPageChange(value)}

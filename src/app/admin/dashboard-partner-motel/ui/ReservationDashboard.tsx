@@ -107,110 +107,98 @@ export const ReservationDashboard = ({ stats, financialStats, subscription, sati
             <div className="pb-20 md:mb-10" >
                 {/* Sección de Reservas */}
                 <div className="w-full mt-10">
-                    <div className="bg-white shadow-md rounded-lg p-5">
-                        <div className="flex justify-between items-center">
-                            <h2 className="text-md md:text-xl font-bold">Reservas  {formatDate(new Date())}</h2>
-                            {/* Botón de toggle para la sección de Reservas */}
-                            <button onClick={toggleReservations}>
-                                {reservationsOpen ? (
-                                    <IoIosArrowUp className="w-4 h-4 md:w-6 md:h-6 text-gray-600" />
-                                ) : (
-                                    <IoIosArrowDown className="w-4 h-4 md:w-6 md:h-6 text-gray-600" />
-                                )}
-                            </button>
+                    <div className="">
+                        <div className="block px-2">
+                            <h2 className="text-xl md:text-3xl font-bold text-gray-900 mb-2 tracking-tight leading-tight">Reservas  {formatDate(new Date())}</h2>
+                            <p className="text-sm md:text-base text-gray-600">
+                                Resumen general de las reservas
+                            </p>
                         </div>
-                        {/* Motion.div ahora usa reservationsOpen */}
-                        <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: reservationsOpen ? 'auto' : 0, opacity: reservationsOpen ? 1 : 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="overflow-hidden"
-                        >
-                            <div className="mt-4">
-                                <div className="my-6">
-                                    <div className="grid grid-cols md:grid-cols-3 gap-5">
-                                        <div className="w-full md:px-2">
-                                            <div className="flex items-center px-5 py-6 shadow-sm rounded-md bg-slate-100">
-                                                <div className="p-3 rounded-full bg-green-600 bg-opacity-75">
-                                                    <FaCalendarPlus className="h-7 w-7 text-white" />
-                                                </div>
 
-                                                <div className="mx-5">
-                                                    <h4 className="text-2xl font-semibold text-gray-700">{stats.dailyRequests}</h4>
-                                                    <div className="text-gray-500 text-xs md:text-sm">Reservas solicitadas</div>
-                                                </div>
+                        <div className="mt-4">
+                            <div className="my-6">
+                                <div className="grid grid-cols md:grid-cols-3 gap-5">
+                                    <div className="w-full md:px-2">
+                                        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+                                            <div className="p-3 w-fit rounded-xl bg-green-600 bg-opacity-75">
+                                                <FaCalendarPlus className="h-7 w-7 text-white" />
+                                            </div>
+
+                                            <div className="mt-4">
+                                                <h4 className="text-2xl font-semibold text-gray-700">{stats.dailyRequests}</h4>
+                                                <div className="text-gray-500 text-xs md:text-sm">Reservas solicitadas</div>
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <div className="w-full md:px-2">
-                                            <div className="flex items-center px-5 py-6 shadow-sm rounded-md bg-slate-100">
-                                                <div className="p-3 rounded-full bg-orange-600 bg-opacity-75">
-                                                    <FaCalendarCheck className="h-7 w-7 text-white" />
-                                                </div>
+                                    <div className="w-full md:px-2">
+                                        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+                                            <div className="p-3 w-fit rounded-xl bg-orange-600 bg-opacity-75">
+                                                <FaCalendarCheck className="h-7 w-7 text-white" />
+                                            </div>
 
-                                                <div className="mx-5">
-                                                    <h4 className="text-2xl font-semibold text-gray-700">{stats.confirmedToday}</h4>
-                                                    <div className="text-gray-500 text-xs md:text-sm">Reservas confirmadas</div>
-                                                </div>
+                                            <div className="mt-4">
+                                                <h4 className="text-2xl font-semibold text-gray-700">{stats.confirmedToday}</h4>
+                                                <div className="text-gray-500 text-xs md:text-sm">Reservas confirmadas</div>
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <div className="w-full md:px-2">
-                                            <div className="flex items-center px-5 py-6 shadow-sm rounded-md bg-slate-100">
-                                                <div className="p-3 rounded-full bg-blue-600 bg-opacity-75">
-                                                    <MdPaid className="h-7 w-7 text-white" />
-                                                </div>
+                                    <div className="w-full md:px-2">
+                                        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+                                            <div className="p-3 w-fit rounded-xl bg-blue-600 bg-opacity-75">
+                                                <MdPaid className="h-7 w-7 text-white" />
+                                            </div>
 
-                                                <div className="mx-5">
-                                                    <h4 className="text-2xl font-semibold text-gray-700">{stats.paidToday}</h4>
-                                                    <div className="text-gray-500 text-xs md:text-sm">Reservas pagadas</div>
-                                                </div>
+                                            <div className="mt-4">
+                                                <h4 className="text-2xl font-semibold text-gray-700">{stats.paidToday}</h4>
+                                                <div className="text-gray-500 text-xs md:text-sm">Reservas pagadas</div>
                                             </div>
                                         </div>
+                                    </div>
 
 
-                                        <div className="w-full md:px-2">
-                                            <div className="flex items-center px-5 py-6 shadow-sm rounded-md bg-slate-100">
-                                                <div className="p-3 rounded-full bg-purple-600 bg-opacity-75">
-                                                    <LuCalendarClock className="h-7 w-7 text-white" />
-                                                </div>
+                                    <div className="w-full md:px-2">
+                                        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+                                            <div className="p-3 w-fit rounded-xl bg-purple-600 bg-opacity-75">
+                                                <LuCalendarClock className="h-7 w-7 text-white" />
+                                            </div>
 
-                                                <div className="mx-5">
-                                                    <h4 className="text-2xl font-semibold text-gray-700">{stats.pendingToday}</h4>
-                                                    <div className="text-gray-500 text-xs md:text-sm">Reservas en espera para tomar servicio</div>
-                                                </div>
+                                            <div className="mt-4">
+                                                <h4 className="text-2xl font-semibold text-gray-700">{stats.pendingToday}</h4>
+                                                <div className="text-gray-500 text-xs md:text-sm">Reservas en espera para tomar servicio</div>
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <div className="w-full md:px-2">
-                                            <div className="flex items-center px-5 py-6 shadow-sm rounded-md bg-slate-100">
-                                                <div className="p-3 rounded-full bg-red-600 bg-opacity-75">
-                                                    <BiSolidCalendarExclamation className="h-7 w-7 text-white" />
-                                                </div>
+                                    <div className="w-full md:px-2">
+                                        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+                                            <div className="p-3 w-fit rounded-xl bg-red-600 bg-opacity-75">
+                                                <BiSolidCalendarExclamation className="h-7 w-7 text-white" />
+                                            </div>
 
-                                                <div className="mx-5">
-                                                    <h4 className="text-2xl font-semibold text-gray-700">{stats.notRespondedToday}</h4>
-                                                    <div className="text-gray-500 text-xs md:text-sm">Reservas solicitadas no respondidas</div>
-                                                </div>
+                                            <div className="mt-4">
+                                                <h4 className="text-2xl font-semibold text-gray-700">{stats.notRespondedToday}</h4>
+                                                <div className="text-gray-500 text-xs md:text-sm">Reservas solicitadas no respondidas</div>
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <div className="w-full md:px-2">
-                                            <div className="flex items-center px-5 py-6 shadow-sm rounded-md bg-slate-100">
-                                                <div className="p-3 rounded-full bg-pink-600 bg-opacity-75">
-                                                    <LuCalendarCheck2 className="h-7 w-7 text-white" />
-                                                </div>
+                                    <div className="w-full md:px-2">
+                                        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+                                            <div className="p-3 w-fit rounded-xl bg-pink-600 bg-opacity-75">
+                                                <LuCalendarCheck2 className="h-7 w-7 text-white" />
+                                            </div>
 
-                                                <div className="mx-5">
-                                                    <h4 className="text-2xl font-semibold text-gray-700">{stats.completedToday}</h4>
-                                                    <div className="text-gray-500 text-xs md:text-sm">Reservas finalizadas correctamente</div>
-                                                </div>
+                                            <div className="mt-4">
+                                                <h4 className="text-2xl font-semibold text-gray-700">{stats.completedToday}</h4>
+                                                <div className="text-gray-500 text-xs md:text-sm">Reservas finalizadas correctamente</div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </motion.div>
+                        </div>
                     </div>
                 </div>
 
@@ -407,8 +395,8 @@ export const ReservationDashboard = ({ stats, financialStats, subscription, sati
                                             {[5, 4, 3, 2, 1].map((stars) => (
                                                 <div key={stars} className="flex items-center mb-2">
                                                     <div className="w-10 flex gap-2 items-center text-gray-600">{stars} <FaStar
-                                                                    className="text-sm  text-yellow-400"
-                                                                /></div>
+                                                        className="text-sm  text-yellow-400"
+                                                    /></div>
                                                     <div className="flex-1 mx-2">
                                                         <div className="w-full bg-gray-200 rounded-full h-2.5">
                                                             <div

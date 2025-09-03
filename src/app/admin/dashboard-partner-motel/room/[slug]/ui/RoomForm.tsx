@@ -244,7 +244,6 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, isNew
                 ? toast.success('Información guardada correctamente')
                 : toast.success('Información actualizada');
 
-            await sleep(3);
             setShowLoadingButton(false);
             setShowMessageError(false);
             setShowMessageErrorAmenities(false);
@@ -356,10 +355,7 @@ export const RoomForm = ({ accessToken, category, garage, amenities, room, isNew
     return (
 
         <>
-            <Toaster
-                position="top-right"
-                reverseOrder={false}
-            />
+            
 
             <form onSubmit={handleSubmit(OnSubmit)} className="grid mb-16 grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="w-full ">

@@ -1,9 +1,8 @@
 "use client";
 import { useSidebarStore } from "@/store";
+import { signOut } from "next-auth/react";
 import React, { useState, useEffect, useRef } from "react";
-import { IoIosArrowDown, IoMdLogOut } from "react-icons/io";
-import { formatDate } from "@/utils";
-import { logout } from "@/actions";
+import {  IoMdLogOut } from "react-icons/io";
 
 export const AppHeaderSuperAdmin = () => {
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } =
@@ -88,7 +87,7 @@ export const AppHeaderSuperAdmin = () => {
 
           <button
             className="flex items-center text-sm md:text-base underline gap-1"
-            onClick={() => logout()}
+            onClick={() => signOut({ callbackUrl: "/" })}
           >
             Salir
             <IoMdLogOut className="w-4 h-4 md:h-5 md:w-5 text-gray-600" />

@@ -1,8 +1,18 @@
+import { auth } from "@/auth.config";
+import DashboardStatsComponent from "./ui/DashboardStatsComponent";
+import { redirect } from "next/navigation";
 
-export default function SuperAdminHomePage() {
+
+export default async function SuperAdminHomePage() {
+
+  const session = await auth();
+  if (!session?.user.roles.includes("superAdmin")) {
+    redirect("/motel-partner")
+  }
+
+
   return (
-    <div>
-      <h1>Hello Page</h1>
-    </div>
+    <DashboardStatsComponent
+      accessToken={session.accessToken} />
   );
 }

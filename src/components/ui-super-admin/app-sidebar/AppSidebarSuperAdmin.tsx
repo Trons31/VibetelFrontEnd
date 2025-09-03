@@ -14,10 +14,11 @@ import Image from "next/image";
 import { LuUserCog } from "react-icons/lu";
 import { Lobster } from "@/config/fonts";
 import { useSession } from "next-auth/react";
-import { FaBuildingFlag } from "react-icons/fa6";
-import { FaRegCalendarAlt, FaUserCog } from "react-icons/fa";
+import { FaRegCalendarAlt } from "react-icons/fa";
 import { MdOutlineAddHome, MdOutlineAddHomeWork, MdOutlineAddLocationAlt, MdOutlineCategory } from "react-icons/md";
 import { BiSolidCarGarage } from "react-icons/bi";
+import { TbDeviceDesktopAnalytics } from "react-icons/tb";
+import { FaUserGear } from "react-icons/fa6";
 
 type NavItem = {
   name: string;
@@ -32,7 +33,7 @@ const navItems: NavItem[] = [
     path: "/admin/dashboard-super-admin",
   },
   {
-    icon: <TiHomeOutline />,
+    icon: <TbDeviceDesktopAnalytics />,
     name: "Reportes",
     path: "/admin/dashboard-super-admin/reports",
   }
@@ -47,12 +48,7 @@ const configItems: NavItem[] = [
   {
     icon: <FaRegCalendarAlt />,
     name: "Reservas",
-    path: "/",
-  },
-  {
-    icon: <FaUserCog />,
-    name: "Usuarios",
-    path: "/",
+    path: "/admin/dashboard-super-admin/reservation",
   }
 ];
 
@@ -60,7 +56,7 @@ const motels: NavItem[] = [
   {
     icon: <MdOutlineAddHomeWork />,
     name: "Comodidades",
-    path: "/",
+    path: "/admin/dashboard-super-admin/motels/amenities",
   }
 ];
 
@@ -68,17 +64,17 @@ const rooms: NavItem[] = [
   {
     icon: <MdOutlineCategory />,
     name: "Categorias",
-    path: "/",
+    path: "/admin/dashboard-super-admin/room/categorys",
   },
   {
     icon: <BiSolidCarGarage />,
     name: "Garages",
-    path: "/",
+    path: "/admin/dashboard-super-admin/room/garages",
   },
   {
     icon: <MdOutlineAddHome />,
     name: "Comodidades",
-    path: "/",
+    path: "/admin/dashboard-super-admin/room/amenities",
   }
 ];
 
@@ -86,17 +82,17 @@ const locations: NavItem[] = [
   {
     icon: <MdOutlineAddLocationAlt />,
     name: "Pais",
-    path: "/",
+    path: "/admin/dashboard-super-admin/locations/countrys",
   },
   {
     icon: <MdOutlineAddLocationAlt />,
     name: "Departamento",
-    path: "/",
+    path: "/admin/dashboard-super-admin/locations/departments",
   },
   {
     icon: <MdOutlineAddLocationAlt />,
     name: "Ciudad",
-    path: "/",
+    path: "/admin/dashboard-super-admin/locations/citys",
   }
 ];
 
@@ -182,7 +178,7 @@ export const AppSidebarSuperAdmin = () => {
         ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0`}
     >
-      <div className={`py-8 hidden md:flex ${!isExpanded ? "lg:justify-center" : "justify-start"}`}>
+      <div className={`py-8  md:px-2  hidden md:flex items-center ${!isExpanded ? "lg:justify-center" : "justify-between"}`}>
         <Link href="/admin/dashboard-partner-motel">
           {isExpanded || isMobileOpen ? (
             <>
@@ -198,6 +194,12 @@ export const AppSidebarSuperAdmin = () => {
             />
           )}
         </Link>
+
+        {
+          isExpanded && (
+            <FaUserGear className="h-5 w-5 " />
+          )
+        }
       </div>
 
       <div className={

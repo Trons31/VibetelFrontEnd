@@ -345,6 +345,7 @@ export const TableRoom = ({ accessToken, garageRoom, categoryRoom }: Props) => {
 
                 {!isLoading && allRooms.length > 0 && (
                     <PaginationTable
+                        nameData='habitaciones'
                         currentPage={currentPage}
                         totalItems={filteredRooms.length}
                         onItemsPerPageChange={handleItemsPerPageChange}

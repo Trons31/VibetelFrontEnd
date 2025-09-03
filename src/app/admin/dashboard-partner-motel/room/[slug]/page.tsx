@@ -7,6 +7,7 @@ import { FaCircleCheck } from "react-icons/fa6";
 import { BiBlock } from "react-icons/bi";
 import { AmenitiesRoomApi, CategoryRoomApi, GarageRoomApi, MotelApi, RoomApi } from "@/interfaces";
 import axios from "axios";
+import { Toaster } from "react-hot-toast";
 
 interface Props {
   params: {
@@ -103,15 +104,53 @@ export default async function BedroomPage({ params }: Props) {
   }
 
   return (
-    <div className="bg-white rounded-xl pb-20 mb-20" >
+    <>
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+      />
+
+      <div className="bg-white rounded-xl pb-20 mb-20" >
 
 
 
-      <div className="py-14 px-5 md:mx-10">
-        <div className="mb-8">
-          <div className="flex justify-between items-center" >
-            <p className="text-md md:text-3xl font-semibold capitalize" >
+        <div className="py-14 px-5 md:mx-10">
+          <div className="mb-8">
+            <div className="flex justify-between items-center" >
+              <p className="text-md md:text-3xl font-semibold capitalize" >
+                {
+                  room
+                    ? (
+                      room.title
+                    )
+                    : (
+                      "Registrar habitacion"
+                    )
+                }
+              </p>
               {
+                !isNew && (
+                  <div className="flex justify-start" >
+                    {
+                      room?.status === "DISABLED"
+                        ? (
+                          <div className="flex gap-2 items-center bg-gray-200 py-1 px-3 rounded w-fit" >
+                            <BiBlock className="h-3 w-3 md:h-4 md:w-4" />
+                            <p className="text-black text-sm md:text-lg font-semibold" >Desabilitada</p>
+                          </div>
+                        ) : (
+                          <div className="flex gap-2 items-center bg-gray-200 py-1 px-3 rounded w-fit" >
+                            <FaCircleCheck className="h-3 w-3 md:h-4 md:w-4" />
+                            <p className="text-black text-sm md:text-lg font-semibold" >Habilitada</p>
+                          </div>
+                        )
+                    }
+                  </div>
+                )
+              }
+            </div>
+            <BreadCrumb
+              breadcrumbCurrent={
                 room
                   ? (
                     room.title
@@ -120,67 +159,36 @@ export default async function BedroomPage({ params }: Props) {
                     "Registrar habitacion"
                   )
               }
-            </p>
-            {
-              !isNew && (
-                <div className="flex justify-start" >
-                  {
-                    room?.status === "DISABLED"
-                      ? (
-                        <div className="flex gap-2 items-center bg-gray-200 py-1 px-3 rounded w-fit" >
-                          <BiBlock className="h-3 w-3 md:h-4 md:w-4" />
-                          <p className="text-black text-sm md:text-lg font-semibold" >Desabilitada</p>
-                        </div>
-                      ) : (
-                        <div className="flex gap-2 items-center bg-gray-200 py-1 px-3 rounded w-fit" >
-                          <FaCircleCheck className="h-3 w-3 md:h-4 md:w-4" />
-                          <p className="text-black text-sm md:text-lg font-semibold" >Habilitada</p>
-                        </div>
-                      )
-                  }
-                </div>
-              )
-            }
-          </div>
-          <BreadCrumb
-            breadcrumbCurrent={
-              room
-                ? (
-                  room.title
-                )
-                : (
-                  "Registrar habitacion"
-                )
-            }
-            urlCurrent="/admin/dashboard-partner-motel/config-motel/motel-cover"
+              urlCurrent="/admin/dashboard-partner-motel/config-motel/motel-cover"
 
-            breadcrumbStart="Habitaciones"
-            urlStart="/admin/dashboard-partner-motel/room"
-          />
-        </div>
-
-        <RoomForm
-          priceAddTime={motelExist.motelConfig?.defaultReservationAddTime!}
-          subscriptionTier={motelExist.subscriptionTier}
-          category={category}
-          garage={garage}
-          amenities={amenities}
-          room={room ?? {}}
-          amenitiesByRoom={amenitiesRoom}
-          accessToken={session.accessToken}
-          isNew={isNew} />
-
-        {
-          !isNew && (
-            <StatusRoom
-              nameRoom={room!.title}
-              idRoom={room!.id}
-              status={room?.status!}
+              breadcrumbStart="Habitaciones"
+              urlStart="/admin/dashboard-partner-motel/room"
             />
-          )
-        }
+          </div>
 
+          <RoomForm
+            priceAddTime={motelExist.motelConfig?.defaultReservationAddTime!}
+            subscriptionTier={motelExist.subscriptionTier}
+            category={category}
+            garage={garage}
+            amenities={amenities}
+            room={room ?? {}}
+            amenitiesByRoom={amenitiesRoom}
+            accessToken={session.accessToken}
+            isNew={isNew} />
+
+          {
+            !isNew && (
+              <StatusRoom
+                nameRoom={room!.title}
+                idRoom={room!.id}
+                status={room?.status!}
+              />
+            )
+          }
+
+        </div>
       </div>
-    </div>
+    </>
   );
 }

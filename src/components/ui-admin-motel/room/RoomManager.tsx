@@ -266,8 +266,8 @@ export const RoomManager = ({ motelId }: Props) => {
                             )}
                           </td>
                           {room.status === "CLEANING" &&
-                          room.RoomCleaning?.createdAt &&
-                          timeMinutesCleamRoom > 0 ? (
+                            room.RoomCleaning?.createdAt &&
+                            timeMinutesCleamRoom > 0 ? (
                             <td className="flex justify-center py-4">
                               <div className="flex justify-center items-center gap-2 rounded px-2 py-1 bg-red-600 w-fit">
                                 <FaClock className="text-white" />
@@ -325,6 +325,7 @@ export const RoomManager = ({ motelId }: Props) => {
 
         {rooms.length > 0 && (
           <PaginationTable
+            nameData="habitaciones"
             currentPage={currentPage}
             totalItems={rooms.length}
             onItemsPerPageChange={(value) => handleItemsPerPageChange(value)}

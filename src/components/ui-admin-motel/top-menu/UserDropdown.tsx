@@ -1,9 +1,8 @@
 "use client";
-import { logout } from "@/actions";
 import { Dropdown } from "@/components/ui/dropdown/Dropdown";
 import { DropdownItem } from "@/components/ui/dropdown/DropdownItem";
 import { SubscriptionTier } from "@/interfaces";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useState } from "react";
 import { FaRegUserCircle } from "react-icons/fa";
@@ -96,7 +95,7 @@ export const UserDropdown = ({ subscriptionTier }: Props) => {
           </li>
         </ul>
         <button
-          onClick={() => logout()}
+          onClick={() => signOut({ callbackUrl: "/" })}
           className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700"
         >
           <TbLogout2 className="h-4 w-4" />

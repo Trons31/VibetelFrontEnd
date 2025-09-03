@@ -3,6 +3,7 @@
 interface Props {
   currentPage: number;
   totalPages: number;
+  nameData:string;
   onPageChange: (page: number) => void;
   itemsPerPage: number;
   totalItems: number;
@@ -16,6 +17,7 @@ export const PaginationTable = ({
   itemsPerPage,
   totalItems,
   onItemsPerPageChange,
+  nameData
 }: Props) => {
   const getVisiblePageNumbers = () => {
     const maxVisiblePages = 3;
@@ -107,7 +109,7 @@ export const PaginationTable = ({
 
         <div className="hidden md:block" >
           <p className="text-sm text-gray-600 sm:text-sm">
-            Mostrando {showingFrom} a {showingTo} de {totalItems} habitaciones
+            Mostrando {showingFrom} a {showingTo} de {totalItems} {nameData}
           </p>
         </div>
 

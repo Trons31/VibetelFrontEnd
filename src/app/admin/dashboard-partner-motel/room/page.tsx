@@ -68,7 +68,6 @@ export default async function RoomAllPage({ searchParams }: Props) {
 
     return (
         <>
-
             <div className="bg-white rounded-xl mb-10"  >
                 <div className="pb-10 py-10" >
                     <div className="px-2 md:mx-5" >
@@ -81,7 +80,7 @@ export default async function RoomAllPage({ searchParams }: Props) {
                             urlStart="/admin/dashboard-partner-motel"
                         />
                         <p className="text-xs md:text-sm mt-1" style={{ textAlign: 'justify' }}>
-                            En esta sección podrás gestionar todas las habitaciones de tu motel. Asegúrate de mantener la información de disponibilidad, características y tarifas siempre actualizada para ofrecer una mejor experiencia a tus clientes y optimizar la administración de las reservas.
+                            En esta sección podrás gestionar todas las comodidades de las habitaciones de los moteles.
                         </p>
                     </div>
 

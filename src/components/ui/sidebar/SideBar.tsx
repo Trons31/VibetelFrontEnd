@@ -90,7 +90,7 @@ export const SideBar = () => {
       <nav
         className={
           clsx(
-            "fade-in fixed p-5 right-0 top-0 w-full md:w-[300px] h-screen bg-white z-40 shadow-2xl transform transition-all duration-300 overflow-y-auto custom-scrollbar",
+            "fade-in fixed p-5 right-0 top-0 w-[300px] h-screen bg-white z-40 shadow-2xl transform transition-all duration-300 overflow-y-auto custom-scrollbar",
             {
               "translate-x-full": !isSideMenuOpen,
             }
